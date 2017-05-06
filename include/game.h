@@ -36,7 +36,7 @@ class game : public state{
     void load_sprites();
     void load_world();
 
-    void create_box(float newX, float newY, float newWidth, float newHeight, bool newBodyType, bool newIsSensor);
+    void create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY, bool newBodyType, bool newIsSensor);
     void create_character(float newX, float newY);
 
     // Game variables

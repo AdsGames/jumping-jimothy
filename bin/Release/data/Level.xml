@@ -2,15 +2,19 @@
 <data>
 
 	<Object type="Tile">
-		<x>5</x>
+		<x>15</x>
 		<y>-5</y>
-		<bodytype>Static</bodytype>
+		<bodytype>er naw</bodytype>
+		<vel_x>-5</vel_x>
+		<vel_y>10</vel_y>
 	</Object>
 	
 	<Object type="Tile">
-		<x>7.5</x>
+		<x>18</x>
 		<y>-5</y>
-		<bodytype>Static</bodytype>
+		<bodytype>naw</bodytype>
+		<vel_x>5</vel_x>
+		<vel_y>-10</vel_y>
 	</Object>
 	
 	<Object type="Character">

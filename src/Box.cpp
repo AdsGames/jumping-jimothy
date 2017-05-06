@@ -13,7 +13,7 @@ Box::~Box(){
 
 }
 
-void Box::init(float newX, float newY, float newWidth, float newHeight, bool newBodyType,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
+void Box::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
 
   std::cout << "Created Box\n";
 
@@ -44,6 +44,7 @@ void Box::init(float newX, float newY, float newWidth, float newHeight, bool new
 
 	bodyDef.position.Set(newX, newY);
 	body = gameWorld -> CreateBody(&bodyDef);
+	body -> SetLinearVelocity(b2Vec2(newVelX,newVelY));
 	//body ->SetLinearDamping(1);
 	//body ->SetAngularDamping(1);
 
@@ -145,16 +146,23 @@ void Box::draw(){
 
   b2Vec2 draw_velocity = b2Vec2(0,0);
 
-  if( static_mode)
-    draw_velocity = b2Vec2( static_velocity.x, static_velocity.y);
-  else
-    draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
+  if(!static_box){
 
-  al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
+    if( static_mode)
+      draw_velocity = b2Vec2( static_velocity.x, static_velocity.y);
+    else
+      draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
+
+    al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
                 al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0));
 
-  al_draw_line( 0, 0, draw_velocity.x * 10, draw_velocity.y * 10,
+    al_draw_line( 0, 0, draw_velocity.x * 10, draw_velocity.y * 10,
                al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0), 3);
+
+  }else{
+      al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
+                al_map_rgb(255,255,0));
+  }
 
   al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 
