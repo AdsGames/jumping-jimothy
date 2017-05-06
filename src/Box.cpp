@@ -102,8 +102,15 @@ void Box::setDynamic(){
   if(!static_box){
     static_mode = false;
     body -> SetType( b2_dynamicBody);
-    body -> SetLinearVelocity( static_velocity);
-    body -> SetAngularVelocity( static_angular_velocity);
+
+    if(static_velocity.Length()==0 && static_angular_velocity<=0.1f && static_angular_velocity>=-0.1f ){
+      body -> SetAwake(false);
+      body -> SetLinearVelocity(b2Vec2(0,0));
+    }
+    else{
+      body -> SetLinearVelocity( static_velocity);
+      body -> SetAngularVelocity( static_angular_velocity);
+    }
   }
 }
 
