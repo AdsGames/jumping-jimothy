@@ -2,9 +2,23 @@
 <data>
 
 	<Object type="Tile">
-		<x>10</x>
-		<y>20</y>
+		<x>5</x>
+		<y>-5</y>
+		<bodytype>Static</bodytype>
 	</Object>
+	
+	<Object type="Tile">
+		<x>7.5</x>
+		<y>-5</y>
+		<bodytype>Static</bodytype>
+	</Object>
+	
+	<Object type="Character">
+		<x>9</x>
+		<y>-10</y>
+		<bodytype>idek dude</bodytype>
+	</Object>
+
 
 	
 </data>

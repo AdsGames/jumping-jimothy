@@ -23,10 +23,9 @@
 // A function to streamline error reporting in file loading
 
 // Convert char to float
- int tools::char_to_float( std::string newChar){
+ int tools::string_to_float( std::string newChar){
     float number;
-    std::stringstream stream1;
-    stream1 >> number;
+    std::stringstream(newChar) >> number;
     return number;
 }
 

@@ -23,6 +23,9 @@ void Box::init(float newX, float newY, float newWidth, float newHeight, bool new
 
   gameWorld = newGameWorld;
   b2BodyDef bodyDef;
+
+  static_box=!newBodyType;
+
   if(newBodyType)
     bodyDef.type = b2_dynamicBody;
 	else
@@ -72,20 +75,22 @@ b2Body* Box::getBody(){
 }
 void Box::setStatic(){
 
+  if(!static_box){
     static_velocity=body -> GetLinearVelocity();
     static_angular_velocity = body -> GetAngularVelocity();
-
-
     body -> SetType(b2_staticBody);
+  }
 
 
 
 }
 void Box::setDynamic(){
 
+  if(!static_box){
     body -> SetType(b2_dynamicBody);
     body -> ApplyLinearImpulse(static_velocity, body -> GetPosition());
     body -> ApplyAngularImpulse(static_angular_velocity);
+  }
 
 }
 
