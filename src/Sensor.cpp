@@ -5,14 +5,14 @@ Sensor::Sensor(){
 
 
 }
-void Sensor::init(float newX, float newY, float newWidth, float newHeight, b2World *newGameWorld, b2Body *parentBody){
+void Sensor::init(float newX, float newY, float newWidth, float newHeight, ALLEGRO_COLOR newColor, b2World *newGameWorld, b2Body *parentBody){
 
-  std::cout<<"Created Box\n";
+  std::cout<<"Created Sensor\n";
 
   type = BOX;
   width = newWidth;
   height = newHeight;
-  color = al_map_rgb(255,0,0);
+  color = newColor;
 
   gameWorld = newGameWorld;
   b2BodyDef bodyDef;

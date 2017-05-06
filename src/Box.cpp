@@ -71,8 +71,11 @@ b2Body* Box::getBody(){
 void Box::setStatic(){
 
     static_velocity=body -> GetLinearVelocity();
+    static_angular_velocity = body -> GetAngularVelocity();
+
 
     body -> SetType(b2_staticBody);
+
 
 
 }
@@ -80,16 +83,12 @@ void Box::setDynamic(){
 
     body -> SetType(b2_dynamicBody);
     body -> ApplyLinearImpulse(static_velocity, body -> GetPosition());
+    body -> ApplyAngularImpulse(static_angular_velocity);
 
 }
 
 
 void Box::update(){
-
-
-
-
-
 
 }
 
