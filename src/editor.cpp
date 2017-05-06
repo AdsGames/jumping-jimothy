@@ -5,12 +5,19 @@ editor::editor(){
   image_box[0] = tools::load_bitmap_ex( "DynamicBlock.png");
   image_box[1] = tools::load_bitmap_ex( "StaticBlock.png");
   image_box[2] = tools::load_bitmap_ex( "character.png");
+  image_box[3] = tools::load_bitmap_ex( "DisgoatSpriteMap.png");
 
   for( int i = 0; i < 4; i++){
     for( int t = 0; t < 10; t++){
       tiles[0][i + t*4] = al_create_sub_bitmap( image_box[0], i * 32, t * 32, 32, 32);
       tiles[1][i + t*4] = al_create_sub_bitmap( image_box[1], i * 32, t * 32, 32, 32);
       tiles[2][i + t*4] = al_create_sub_bitmap( image_box[2], 0, 0, 32, 32);
+    }
+  }
+
+  for( int i = 0; i < 4; i++){
+    for( int t = 0; t < 4; t++){
+        tiles[3][i + t*4] = al_create_sub_bitmap( image_box[3], i * 32, t * 64, 32, 64);
     }
   }
 
@@ -48,6 +55,8 @@ void editor::update(){
       newBox.bodyType = "Static";
     else if( tile_type == 2)
       newBox.bodyType = "Character";
+    else if( tile_type == 3)
+      newBox.bodyType = "Finish";
 
     editorBoxes.push_back( newBox);
   }
@@ -66,6 +75,8 @@ void editor::update(){
     tile_type = 1;
   if( keyListener::keyPressed[ALLEGRO_KEY_3])
     tile_type = 2;
+  if( keyListener::keyPressed[ALLEGRO_KEY_4])
+    tile_type = 3;
 
   // Grid toggle
   if( keyListener::keyPressed[ALLEGRO_KEY_G])
@@ -99,119 +110,123 @@ void editor::draw(){
 
   // Boxes
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-    int type = 0;
-    // LEFT
-    if( box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y))
-      type += 1;
-    // RIGHT
-    if( box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y))
-      type += 2;
-    // UP
-    if( box_at( editorBoxes.at(i).x, editorBoxes.at(i).y - 32))
-      type += 4;
-    // DOWN
-    if( box_at( editorBoxes.at(i).x, editorBoxes.at(i).y + 32))
-      type += 8;
+    if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
+      int type = 0;
+      // LEFT
+      if( box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y))
+        type += 1;
+      // RIGHT
+      if( box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y))
+        type += 2;
+      // UP
+      if( box_at( editorBoxes.at(i).x, editorBoxes.at(i).y - 32))
+        type += 4;
+      // DOWN
+      if( box_at( editorBoxes.at(i).x, editorBoxes.at(i).y + 32))
+        type += 8;
 
-    // EMPTY TOP LEFT
-    if(type == 5 && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
-        type = 21;
+      // EMPTY TOP LEFT
+      if(type == 5 && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+          type = 21;
 
-    // EMPTY TOP RIGHT
-    if(type == 6 && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32)))
-        type = 22;
+      // EMPTY TOP RIGHT
+      if(type == 6 && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32)))
+          type = 22;
 
-    // EMPTY BOTTOM LEFT
-    if(type == 9 && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-        type = 25;
+      // EMPTY BOTTOM LEFT
+      if(type == 9 && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+          type = 25;
 
-    // EMPTY BOTTOM RIGHT
-    if(type == 10 && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
-        type = 26;
+      // EMPTY BOTTOM RIGHT
+      if(type == 10 && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+          type = 26;
 
-    // CLOSED ON RIGHT
-    if(type == 13) {
-        // EMPTY TOP LEFT
-        if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
-           && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-            type = 16;
-        // EMPTY BOTTOM LEFT
-        else if((box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
-           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-           type = 17;
-        //BOTH EMPTY
-        else if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
-           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-            type = 29;
+      // CLOSED ON RIGHT
+      if(type == 13) {
+          // EMPTY TOP LEFT
+          if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+             && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+              type = 16;
+          // EMPTY BOTTOM LEFT
+          else if((box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+             type = 17;
+          //BOTH EMPTY
+          else if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+              type = 29;
+      }
+
+      //CLOSED ON LEFT
+      if(type == 14) {
+          // EMPTY TOP RIGHT
+          if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+              type = 18;
+          // EMPTY BOTTOM RIGHT
+          else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+             type = 19;
+          // BOTH EMPTY
+          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+              type = 30;
+      }
+
+      //CLOSED ON BOTTOM
+      if(type == 7) {
+          // EMPTY TOP RIGHT
+          if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+              type = 31;
+          // EMPTY TOP LEFT
+          else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+             type = 20;
+          // BOTH EMPTY
+          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+              type = 23;
+      }
+
+      //CLOSED ON TOP
+      if(type == 11) {
+          // EMPTY BOTTOM RIGHT
+          if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+             && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+              type = 24;
+          // EMPTY BOTTOM LEFT
+          else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+             type = 28;
+          // BOTH EMPTY
+          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+              type = 27;
+      }
+
+      if(type == 15){
+          // BLOCK AT TOP LEFT
+          if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+              type = 32;
+          // BLOCK AT TOP RIGHT
+          else if(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+              type = 33;
+          // BLOCK AT BOTTOM LEFT
+          else if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+              type = 34;
+          // BLOCK AT BOTTOM RIGHT
+          else if(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+              type = 35;
+          else
+              type = 39;
+      }
+      al_draw_bitmap( tiles[editorBoxes.at(i).type][type], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     }
-
-    //CLOSED ON LEFT
-    if(type == 14) {
-        // EMPTY TOP RIGHT
-        if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-           && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
-            type = 18;
-        // EMPTY BOTTOM RIGHT
-        else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-           && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
-           type = 19;
-        // BOTH EMPTY
-        else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-           && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
-            type = 30;
-    }
-
-    //CLOSED ON BOTTOM
-    if(type == 7) {
-        // EMPTY TOP RIGHT
-        if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-           && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
-            type = 31;
-        // EMPTY TOP LEFT
-        else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
-           type = 20;
-        // BOTH EMPTY
-        else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
-            type = 23;
-    }
-
-    //CLOSED ON TOP
-    if(type == 11) {
-        // EMPTY BOTTOM RIGHT
-        if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-           && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-            type = 24;
-        // EMPTY BOTTOM LEFT
-        else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-           type = 28;
-        // BOTH EMPTY
-        else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-            type = 27;
-    }
-
-    if(type == 15){
-        // BLOCK AT TOP LEFT
-        if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
-            type = 32;
-        // BLOCK AT TOP RIGHT
-        else if(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            type = 33;
-        // BLOCK AT BOTTOM LEFT
-        else if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            type = 34;
-        // BLOCK AT BOTTOM RIGHT
-        else if(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            type = 35;
-        else
-            type = 39;
-    }
-
-    al_draw_bitmap( tiles[editorBoxes.at(i).type][type], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
-
+    else if( editorBoxes.at(i).type == 2)
+      al_draw_bitmap( tiles[editorBoxes.at(i).type][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+    else if( editorBoxes.at(i).type == 3)
+      al_draw_bitmap( tiles[editorBoxes.at(i).type][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
   }
 
   // Tile type
@@ -298,6 +313,8 @@ void editor::load_map( std::string mapName){
       newBox.type = 1;
     else if( newBox.bodyType == "Character")
       newBox.type = 2;
+    else if( newBox.bodyType == "Finish")
+      newBox.type = 3;
 
     editorBoxes.push_back( newBox);
   }
@@ -322,8 +339,11 @@ void editor::save_map( std::string mapName){
     rapidxml::xml_node<>* object_node = doc.allocate_node( rapidxml::node_element, node_name);
 
     std::string xml_type = "Tile";
+
     if( editorBoxes.at(i).type == 2)
       xml_type = "Character";
+    else if( editorBoxes.at(i).type == 3)
+      xml_type = "Finish";
 
     object_node -> append_attribute( doc.allocate_attribute("type", doc.allocate_string(xml_type.c_str())));
     root_node -> append_node( object_node);
