@@ -24,6 +24,8 @@ class Box{
 
   protected:
 
+    bool static_box;
+
     ALLEGRO_BITMAP *sprite;
 
     bool static_mode;

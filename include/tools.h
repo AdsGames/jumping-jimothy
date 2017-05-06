@@ -12,7 +12,7 @@
 class tools{
     public:
         // Convert char to float
-        static int char_to_float( std::string newChar);
+        static int string_to_float( std::string newChar);
         static void abort_on_error(std::string);
 
         static ALLEGRO_BITMAP * load_bitmap_ex( std::string file);

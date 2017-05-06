@@ -108,27 +108,46 @@ void load_world(){
   // Find our root node
   root_node = doc.first_node("data");
 
-  std::string type;
 
   // Iterate over the brewerys
   for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
+    std::string type;
+    std::string x;
+    std::string y;
+    std::string bodytype;
     // Interate over the beers
    // int generatedNumberResult = atoi( generated_node -> first_attribute("number") -> value());
   //  if( generatedNumberResult == random_number){
       //for(rapidxml::xml_node<> * tile_node = object_node -> first_node("x"); tile_node; tile_node = tile_node -> next_sibling()){
-        type = object_node->first_attribute("type")->value();
+    type = object_node->first_attribute("type")->value();
 
-          for(rapidxml::xml_node<> * beer_node = object_node->first_node("x"); beer_node; beer_node = beer_node->next_sibling())
-          {
-            std::cout<<beer_node->value();
-            std::cout<<"\n";
-          }
-      //}
+    int i=0;
+    for(rapidxml::xml_node<> * beer_node = object_node->first_node("x"); beer_node; beer_node = beer_node->next_sibling()){
+
+      if(i==0){
+        x=beer_node->value();
+      }
+      if(i==1){
+        y=beer_node->value();
+      }
+      if(i==2){
+        bodytype=beer_node->value();
+      }
+      i++;
     }
-    std::cout<<type;
-    std::cout<<"\n";
-    create_box(5,-5,1.6,1.6,true,false);
+    if(type=="Tile"){
+      if(bodytype=="Static")
+        create_box(tools::string_to_float(x),tools::string_to_float(y),1.6,1.6,false,false);
+      else
+        create_box(tools::string_to_float(x),tools::string_to_float(y),1.6,1.6,true,false);
+    }
+    if(type=="Character"){
+
+      create_character(tools::string_to_float(x),tools::string_to_float(y));
+    }
   }
+
+}
 
 
 void load_sprites(){
