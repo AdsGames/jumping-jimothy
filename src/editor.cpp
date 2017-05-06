@@ -18,10 +18,11 @@ void editor::update(){
     newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;;
     editorBoxes.push_back( newBox);
   }
-  if( mouseListener::mouse_released & 1){
+  if( mouseListener::mouse_pressed & 2){
     for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-      if( )
-      al_draw_bitmap( image_box, editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+      if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, mouseListener::mouse_x, mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, mouseListener::mouse_y, mouseListener::mouse_y )){
+        editorBoxes.erase( editorBoxes.begin() + i);
+      }
     }
   }
 }

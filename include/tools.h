@@ -17,9 +17,25 @@ class tools{
         static float string_to_float( std::string newChar);
         static void abort_on_error(std::string);
 
-        template <class T> static T clamp( T min_val, T max_val, T value);
-
         static ALLEGRO_BITMAP * load_bitmap_ex( std::string file);
+
+        // Clamp values
+        template <class T> static T clamp( T min_val, T max_val, T value) {
+            if( value < min_val)
+              return min_val;
+            if( value > max_val)
+              return max_val;
+            return value;
+        }
+
+        // Function to check for collision
+        template <class T> static bool collision( T xMin1, T xMax1, T xMin2, T xMax2, T yMin1, T yMax1, T yMin2, T yMax2){
+          if (xMin1 < xMax2 && yMin1 < yMax2 && xMin2 < xMax1 && yMin2 < yMax1){
+            return true;
+          }
+          return false;
+        }
+
 
     protected:
 
