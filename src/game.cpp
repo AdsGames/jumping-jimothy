@@ -47,7 +47,7 @@ void game::b2_setup(){
 	// Call the body factory which allocates memory for the ground body
 	// from a pool and creates the ground box shape (also from a pool).
 	// The body is also added to the world.
-	b2Body* groundBody = gameWorld -> CreateBody(&groundBodyDef);
+	groundBody = gameWorld -> CreateBody(&groundBodyDef);
 
 	// Define the ground box shape.
 	b2PolygonShape groundBox;
@@ -62,6 +62,8 @@ void game::b2_setup(){
 
 // Load world from xml
 void game::load_world(){
+
+  gameWorld ->DestroyBody(groundBody);
   // Doc
   rapidxml::xml_document<> doc;
   rapidxml::xml_node<> * root_node;
