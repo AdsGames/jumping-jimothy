@@ -14,9 +14,12 @@ void Character::update(){
 
 //std::cout<<"Character updated\n";
 
+  int number_thingin=5;
+  if(!sensor_box -> isColliding())
+    number_thingin=2;
 
   tick++;
-  if(tick>=5){
+  if(tick>=number_thingin){
     frame++;
     tick=0;
   }
@@ -36,6 +39,7 @@ void Character::update(){
 
 
     if(keyListener::key[ALLEGRO_KEY_A]){
+        direction=false;
         if(sensor_box -> isColliding())
             {
             body -> SetLinearVelocity(b2Vec2(-5, yVel));
@@ -48,6 +52,7 @@ void Character::update(){
     }
 
     else if(keyListener::key[ALLEGRO_KEY_D]){
+        direction=true;
       if(sensor_box -> isColliding()){
             body -> SetLinearVelocity(b2Vec2(5, yVel));
 
@@ -133,7 +138,7 @@ void Character::init(float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *
 
   sprite = tools::load_bitmap_ex("anim.png");
 
-  for( int i = 0; i < 14; i++){
+  for( int i = 0; i < 15; i++){
 
       sprites[i] = al_create_sub_bitmap( sprite, i * 32, 0, 32, 64);
 
@@ -167,7 +172,21 @@ void Character::draw(){
 
   al_use_transform(&trans);
 
-    al_draw_bitmap(sprites[frame],-(width/2)*20,(-(height/2)*20)-24,0);
+  if(direction){
+    if(body -> GetLinearVelocity().Length()>0.1f)
+      al_draw_bitmap(sprites[frame],-(width/2)*20,(-(height/2)*20)-24,0);
+
+    else
+      al_draw_bitmap(sprites[14],-(width/2)*20,(-(height/2)*20)-24,0);
+
+  }else{
+    if(body -> GetLinearVelocity().Length()>0.1f)
+      al_draw_bitmap(sprites[frame],-(width/2)*20,(-(height/2)*20)-24,ALLEGRO_FLIP_HORIZONTAL);
+
+    else
+      al_draw_bitmap(sprites[14],-(width/2)*20,(-(height/2)*20)-24,ALLEGRO_FLIP_HORIZONTAL);
+
+  }
 
  // al_draw_bitmap(sprite,-(width/2)*20,(-(height/2)*20)-24,0);
 
