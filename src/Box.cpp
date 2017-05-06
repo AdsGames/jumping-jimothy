@@ -7,12 +7,15 @@
 
 Box::Box(){
 
+}
+
+Box::~Box(){
 
 }
 
 void Box::init(float newX, float newY, float newWidth, float newHeight, bool newBodyType,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
 
-  std::cout<<"Created Box\n";
+  std::cout << "Created Box\n";
 
   sprite = newSprite;
 
@@ -53,63 +56,63 @@ void Box::init(float newX, float newY, float newWidth, float newHeight, bool new
 
 	// Add the shape to the body.
 	body->CreateFixture(&fixtureDef);
-
-
-
-
-
 }
+
+// Return type
 int Box::getType(){
   return type;
 }
+
+// Return X
 float Box::getX(){
   return x;
 }
 
+// Return Y
 float Box::getY(){
   return y;
 }
+
+// Return body
 b2Body* Box::getBody(){
   b2Body *newBody = body;
   return newBody;
 }
-void Box::setStatic(){
 
+// Set state
+void Box::setStatic(){
   if(!static_box){
     static_velocity=body -> GetLinearVelocity();
     static_angular_velocity = body -> GetAngularVelocity();
     body -> SetType(b2_staticBody);
   }
-
-
-
 }
-void Box::setDynamic(){
 
+// Set whether dynamic
+void Box::setDynamic(){
   if(!static_box){
     body -> SetType(b2_dynamicBody);
     body -> ApplyLinearImpulse(static_velocity, body -> GetPosition());
     body -> ApplyAngularImpulse(static_angular_velocity);
   }
-
 }
 
-
+// Update box
 void Box::update(){
 
 }
 
+// Draw box to screen
 void Box::draw(){
-
-
   // If the object is a character, the position is updated in the
   // update loop rather than in draw
-  if(type==BOX){
+  if(type == BOX){
     b2Vec2 position = body -> GetPosition();
     x = position.x;
     y = position.y;
     angle = body -> GetAngle();
- }
+  }
+
   ALLEGRO_TRANSFORM trans, prevTrans;
 
   // back up the current transform
@@ -123,17 +126,14 @@ void Box::draw(){
 
   al_use_transform(&trans);
 
-  //al_draw_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20,al_map_rgb(0,0,0),3);
+  al_draw_rectangle( -(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20, al_map_rgb(0,0,0), 3);
 
-  //al_draw_filled_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20,color);
-  al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
+  al_draw_filled_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20, al_map_rgb( body -> GetLinearVelocity().y * -10, 255 - body -> GetLinearVelocity().y * -10, 0));
+  std::cout << body -> GetLinearVelocity().y << "\n";
+
+  //al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 
   // restore the old transform
   al_use_transform(&prevTrans);
-
-}
-
-Box::~Box(){
-
 
 }

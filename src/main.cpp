@@ -6,17 +6,16 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
-#include <Box2D/Box2D.h>
 
-#include "rapidxml.hpp"
-#include "rapidxml_print.hpp"
-
-#include <Box.h>
-#include <Character.h>
 #include <mouseListener.h>
 #include <keyListener.h>
 #include <joystickListener.h>
-#include <tools.h>
+
+#include "state.h"
+#include "game.h"
+
+// Current state object
+state *currentState = nullptr;
 
 // FPS system variables
 int fps;
@@ -34,130 +33,55 @@ ALLEGRO_EVENT_QUEUE* event_queue = nullptr;
 ALLEGRO_TIMER* timer = nullptr;
 ALLEGRO_DISPLAY *display;
 
-// Box2D world parameters
-b2Vec2 gravity(0.0f, -10.0f);
-float32 timeStep = 1.0f / 60.0f;
-int32 velocityIterations = 6;
-int32 positionIterations = 2;
-bool doSleep = true;
-
-// Box2D game world
-b2World gameWorld(gravity, doSleep);
 
 // Input listener wrapper classes
 mouseListener m_listener;
 keyListener k_listener;
 joystickListener j_listener;
 
-// Game variables
-std::vector<Box*> gameBoxes;
-bool static_mode = false;
+// Functions
+void clean_up();
+void change_state();
+void setup();
+void update();
+void draw();
 
-ALLEGRO_BITMAP *box;
-
-
-
-void create_box(float newX, float newY, float newWidth, float newHeight, bool newBodyType, bool newIsSensor){
-  Box *newBox = new Box();
-  newBox -> init(newX,newY,newWidth,newHeight,newBodyType,box,&gameWorld);
-  gameBoxes.push_back(newBox);
+// Delete game state and free state resources
+void clean_up(){
+  delete currentState;
 }
 
-void create_character(float newX, float newY){
-  Character *newCharacter = new Character();
-  newCharacter -> init(newX,newY,&gameWorld, &k_listener);
-  gameBoxes.push_back(newCharacter);
-}
-
-// Sets up Box2D world
-void b2_setup(){
-
-	// Define the ground body.
-	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set(0.0f, -40.0f);
-
-	// Call the body factory which allocates memory for the ground body
-	// from a pool and creates the ground box shape (also from a pool).
-	// The body is also added to the world.
-	b2Body* groundBody = gameWorld.CreateBody(&groundBodyDef);
-
-	// Define the ground box shape.
-	b2PolygonShape groundBox;
-
-	// The extents are the half-widths of the box.
-	groundBox.SetAsBox(50.0f, 10.0f);
-
-	// Add the ground fixture to the ground body.
-	groundBody->CreateFixture(&groundBox, 0.0f);
-
-}
-void load_world(){
-
-  rapidxml::xml_document<> doc;
-  rapidxml::xml_node<> * root_node;
-
-
-  // Make an xml object
-  std::ifstream theFile ("data/Level.xml");
-  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
-  xml_buffer.push_back('\0');
-
-  // Parse the buffer using the xml file parsing library into doc
-  doc.parse<0>(&xml_buffer[0]);
-
-  // Find our root node
-  root_node = doc.first_node("data");
-
-
-  // Iterate over the brewerys
-  for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
-    std::string type;
-    std::string x;
-    std::string y;
-    std::string bodytype;
-    // Interate over the beers
-   // int generatedNumberResult = atoi( generated_node -> first_attribute("number") -> value());
-  //  if( generatedNumberResult == random_number){
-      //for(rapidxml::xml_node<> * tile_node = object_node -> first_node("x"); tile_node; tile_node = tile_node -> next_sibling()){
-    type = object_node->first_attribute("type")->value();
-
-    int i=0;
-    for(rapidxml::xml_node<> * beer_node = object_node->first_node("x"); beer_node; beer_node = beer_node->next_sibling()){
-
-      if(i==0){
-        x=beer_node->value();
-      }
-      if(i==1){
-        y=beer_node->value();
-      }
-      if(i==2){
-        bodytype=beer_node->value();
-      }
-      i++;
+// Change game screen
+void change_state(){
+  //If the state needs to be changed
+  if( nextState != STATE_NULL ){
+    //Delete the current state
+    if( nextState != STATE_EXIT ){
+      delete currentState;
     }
-    if(type=="Tile"){
-      if(bodytype=="Static")
-        create_box(tools::string_to_float(x),tools::string_to_float(y),1.6,1.6,false,false);
-      else
-        create_box(tools::string_to_float(x),tools::string_to_float(y),1.6,1.6,true,false);
-    }
-    if(type=="Character"){
 
-      create_character(tools::string_to_float(x),tools::string_to_float(y));
+    //Change the state
+    switch( nextState ){
+      case STATE_GAME:
+        currentState = new game();
+        break;
+      case STATE_EXIT:
+        closing = true;
+        break;
+      default:
+        currentState = new game();
     }
+
+    //Change the current state ID
+    stateID = nextState;
+
+    //NULL the next state ID
+    nextState = STATE_NULL;
   }
-
-}
-
-
-void load_sprites(){
-  box = tools::load_bitmap_ex("box.png");
-
 }
 
 // Setup Allegro stuffs
 void al_setup(){
-
   al_init();
 
   al_install_keyboard();
@@ -182,53 +106,22 @@ void al_setup(){
 }
 
 void update(){
-
-
-    // Event checking
+  // Event checking
   ALLEGRO_EVENT ev;
   al_wait_for_event( event_queue, &ev);
 
   // Timer
   if( ev.type == ALLEGRO_EVENT_TIMER){
+    // Change state (if needed)
+    change_state();
 
+    // Update listeners
     m_listener.update();
     k_listener.update();
     j_listener.update();
 
-    if(m_listener.mouse_pressed & 1)
-      create_box(m_listener.mouse_x/20,-m_listener.mouse_y/20,1.6,1.6,true,false);
-
-    if(m_listener.mouse_pressed & 2)
-      create_character(m_listener.mouse_x/20,-m_listener.mouse_y/20);
-
-    // Update the Box2D game world
-    gameWorld.Step(timeStep, velocityIterations, positionIterations);
-
-    for(int i=0; i<gameBoxes.size(); i++){
-
-      if(gameBoxes[i] -> getType()==CHARACTER){
-        gameBoxes[i] -> update();
-      }
-    }
-
-    if(k_listener.lastKeyPressed==ALLEGRO_KEY_SPACE){
-      static_mode=!static_mode;
-      if(static_mode){
-        for(int i=0; i<gameBoxes.size(); i++){
-          if(gameBoxes[i] -> getType()==BOX){
-            // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
-            gameBoxes[i] -> setStatic();
-          }
-        }
-      }else{
-        for(int i=0; i<gameBoxes.size(); i++){
-          if(gameBoxes[i] -> getType()==BOX){
-            // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
-            gameBoxes[i] -> setDynamic();
-          }
-        }
-      }
-    }
+    // Update state
+    currentState -> update();
   }
   // Exit
   else if( ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
@@ -249,20 +142,10 @@ void update(){
     joystick_enabled = (al_get_num_joysticks() > 0);
   }
 
-
+  // Drawing
   if( al_is_event_queue_empty(event_queue)){
-
-    // Draw
-    al_clear_to_color( al_map_rgb(200,200,255));
-
-    //draw();
-    for(int i=0; i<gameBoxes.size(); i++){
-
-
-      gameBoxes[i] -> draw();
-      }
-
-
+    al_clear_to_color( al_map_rgb(0,0,0));
+    currentState -> draw();
     al_flip_display();
 
     // Update fps buffer
@@ -282,17 +165,18 @@ void update(){
 
 
 int main(int argc, char **argv){
-
   al_setup();
-  b2_setup();
-  load_sprites();
-  load_world();
+
+  //Set the current state ID
+  stateID = STATE_GAME;
+
+  //Set the current game state object
+  currentState = new game();
 
   while(!closing)
     update();
 
   al_destroy_display(display);
-
 
   return 0;
 }

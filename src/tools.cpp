@@ -23,9 +23,28 @@
 // A function to streamline error reporting in file loading
 
 // Convert char to float
- int tools::string_to_float( std::string newChar){
-    float number;
-    std::stringstream(newChar) >> number;
-    return number;
+float tools::string_to_float( std::string newChar){
+  float number = 0.0f;
+  int sign = 1;
+  // Parse string
+  // Negative
+  if( newChar[0] == '-'){
+    sign = -1;
+    newChar = newChar.substr(1, newChar.length());
+  }
+  // Location of decimal
+  int decimal_loc = newChar.length();
+  for( int i = 0; i < newChar.length(); i++){
+    if( newChar[i] == '.'){
+      decimal_loc = i;
+      newChar = newChar.substr(0, i) + newChar.substr(i + 1, newChar.length() - i);
+    }
+  }
+  // Numbers
+  for( int i = 0; i < newChar.length(); i++){
+    int tempNumber = int(newChar[i]) - 48;
+    number += tempNumber * pow(10, (newChar.length()) - (i + 1));
+  }
+  return (number / float(pow(10, newChar.length() - decimal_loc))) * sign;
 }
 
