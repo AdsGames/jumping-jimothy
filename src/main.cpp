@@ -5,6 +5,7 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_image.h>
 #include <Box2D/Box2D.h>
 
 #include "rapidxml.hpp"
@@ -15,6 +16,7 @@
 #include <mouseListener.h>
 #include <keyListener.h>
 #include <joystickListener.h>
+#include <tools.h>
 
 // FPS system variables
 int fps;
@@ -57,7 +59,7 @@ ALLEGRO_BITMAP *box;
 
 void create_box(float newX, float newY, float newWidth, float newHeight, bool newBodyType, bool newIsSensor){
   Box *newBox = new Box();
-  newBox -> init(newX,newY,newWidth,newHeight,newBodyType,&gameWorld);
+  newBox -> init(newX,newY,newWidth,newHeight,newBodyType,box,&gameWorld);
   gameBoxes.push_back(newBox);
 }
 
@@ -121,7 +123,7 @@ void load_world(){
 
 
 void load_sprites(){
-  box = load_bitmap_ex( "filepath/someth");
+  box = tools::load_bitmap_ex("box.png");
 
 }
 
@@ -134,6 +136,7 @@ void al_setup(){
   al_install_mouse();
   al_install_joystick();
 
+  al_init_image_addon();
   al_init_primitives_addon();
 
   timer = al_create_timer(1.0 / MAX_FPS);
@@ -254,6 +257,7 @@ int main(int argc, char **argv){
 
   al_setup();
   b2_setup();
+  load_sprites();
 
   while(!closing)
     update();
