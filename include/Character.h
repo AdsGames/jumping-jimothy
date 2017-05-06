@@ -26,6 +26,7 @@ class Character : public Box{
     int frame;
 
     bool direction;
+
     Sensor *sensor_box;
 
     ALLEGRO_BITMAP *sprite;
