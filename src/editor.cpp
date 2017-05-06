@@ -2,7 +2,7 @@
 
 editor::editor(){
   // Load box image
-  image_box = tools::load_bitmap_ex( "tiles.png");
+  image_box = tools::load_bitmap_ex( "DynamicBlock.png");
 
   for( int i = 0; i < 4; i++){
     for( int t = 0; t < 4; t++){
@@ -20,7 +20,7 @@ editor::~editor(){
 
 // Override parent
 void editor::update(){
-  if( mouseListener::mouse_pressed & 1){
+  if( mouseListener::mouse_button & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y)){
     editor_box newBox;
     newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
     newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
@@ -29,7 +29,7 @@ void editor::update(){
     newBox.bodyType = "static";
     editorBoxes.push_back( newBox);
   }
-  if( mouseListener::mouse_pressed & 2){
+  if( mouseListener::mouse_button & 2){
     for( unsigned int i = 0; i < editorBoxes.size(); i ++){
       if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, mouseListener::mouse_x, mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, mouseListener::mouse_y, mouseListener::mouse_y )){
         editorBoxes.erase( editorBoxes.begin() + i);
