@@ -22,8 +22,7 @@ void Sensor::init(float newX, float newY, float newWidth, float newHeight, b2Wor
 
 	bodyDef.position.Set(newX, newY);
 	body = gameWorld -> CreateBody(&bodyDef);
-	body ->SetLinearDamping(1);
-	body ->SetAngularDamping(1);
+
 
 	// Define another box shape for our dynamic body.
 	b2PolygonShape dynamicBox;
@@ -35,7 +34,7 @@ void Sensor::init(float newX, float newY, float newWidth, float newHeight, b2Wor
 
 
 	// Set the box density to be non-zero, so it will be dynamic.
-	fixtureDef.density = 0.001f;
+	fixtureDef.density = 0.0001f;
 
 	// Override the default friction.
 	fixtureDef.friction = 0.0f;

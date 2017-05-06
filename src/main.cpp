@@ -43,7 +43,7 @@ int32 positionIterations = 2;
 	//B2_NOT_USED(argv);
 
 	// Define the gravity vector.
-b2Vec2 gravity(0.0f, 0.0f);
+b2Vec2 gravity(0.0f, -10.0f);
 
 	// Do we want to let bodies sleep?
 bool doSleep = true;

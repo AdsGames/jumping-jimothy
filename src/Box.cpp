@@ -28,8 +28,8 @@ void Box::init(float newX, float newY, float newWidth, float newHeight, bool new
 
 	bodyDef.position.Set(newX, newY);
 	body = gameWorld -> CreateBody(&bodyDef);
-	body ->SetLinearDamping(1);
-	body ->SetAngularDamping(1);
+	//body ->SetLinearDamping(1);
+	//body ->SetAngularDamping(1);
 
 	// Define another box shape for our dynamic body.
 	b2PolygonShape dynamicBox;
