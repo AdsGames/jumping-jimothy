@@ -4,6 +4,7 @@ editor::editor(){
   // Load box image
   image_box[0] = tools::load_bitmap_ex( "DynamicBlock.png");
   image_box[1] = tools::load_bitmap_ex( "StaticBlock.png");
+  player = tools::load_bitmap_ex( "character.png");
 
   for( int i = 0; i < 4; i++){
     for( int t = 0; t < 4; t++){
@@ -21,6 +22,8 @@ editor::editor(){
 
   if (!edit_font)
     tools::abort_on_error("Could not load 'pixelart.ttf'.\n");
+
+  grid_on = false;
 }
 
 editor::~editor(){
@@ -34,8 +37,8 @@ void editor::update(){
     editor_box newBox;
     newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
     newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
-    newBox.x_str = tools::toString( float(newBox.x) / 20.0f);
-    newBox.y_str = tools::toString( -1 * float(newBox.y) / 20.0f);
+    newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
+    newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
     newBox.type = tile_type;
 
     if( tile_type == 1)
@@ -58,10 +61,16 @@ void editor::update(){
     tile_type = 0;
   if( keyListener::keyPressed[ALLEGRO_KEY_2])
     tile_type = 1;
+  if( keyListener::keyPressed[ALLEGRO_KEY_3])
+    tile_type = 2;
+
+  // Grid toggle
+  if( keyListener::keyPressed[ALLEGRO_KEY_G])
+    grid_on = !grid_on;
 
   // Save map
   if( keyListener::keyPressed[ALLEGRO_KEY_S]){
-    save_map("data/level2.xml");
+    save_map("data/level.xml");
   }
 }
 
@@ -71,12 +80,14 @@ void editor::draw(){
   al_clear_to_color( al_map_rgb(200,200,255));
 
   // Grid
-  for( int i = 0; i < 1024; i += 32){
-    //al_draw_line( i, 0, i, 768, al_map_rgb( 0, 0, 0), 1);
-  }
+  if( grid_on){
+    for( int i = 0; i < 1024; i += 32){
+      al_draw_line( i, 0, i, 768, al_map_rgb( 0, 0, 0), 1);
+    }
 
-  for( int i = 0; i < 768; i += 32){
-    //al_draw_line( 0,tile_type i, 1024, i, al_map_rgb( 0, 0, 0), 1);
+    for( int i = 0; i < 768; i += 32){
+      al_draw_line( 0, i, 1024, i, al_map_rgb( 0, 0, 0), 1);
+    }
   }
 
   // Boxes
