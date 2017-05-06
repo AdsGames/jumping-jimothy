@@ -15,6 +15,7 @@ class b2WeldJointDef;
 
 class Sensor : public Box{
   public:
+    void draw();
     Sensor();
     ~Sensor();
     bool isColliding();

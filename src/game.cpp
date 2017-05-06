@@ -22,7 +22,7 @@ void game::create_box( float newX, float newY, float newWidth, float newHeight, 
 // Add character to world
 void game::create_character( float newX, float newY){
   Character *newCharacter = new Character();
-  newCharacter -> init( newX, newY, gameWorld);
+  newCharacter -> init( newX, newY,character, gameWorld);
   gameBoxes.push_back(newCharacter);
 }
 
@@ -125,6 +125,7 @@ void game::load_world(){
 // Load all sprites for in game
 void game::load_sprites(){
   box = tools::load_bitmap_ex( "box.png");
+  character = tools::load_bitmap_ex( "character.png");
 }
 
 // Update game logic

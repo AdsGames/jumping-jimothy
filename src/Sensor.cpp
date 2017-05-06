@@ -1,5 +1,7 @@
 #include <Box2D/Box2D.h>
 #include "Sensor.h"
+#include <allegro5/allegro_color.h>
+#include <allegro5/allegro_primitives.h>
 
 Sensor::Sensor(){
 
@@ -65,6 +67,42 @@ bool Sensor::isColliding(){
 
 
 }
+
+// Draw box to screen
+void Sensor::draw(){
+  // If the object is a character, the position is updated in the
+  // update loop rather than in draw
+  if(type == BOX){
+    b2Vec2 position = body -> GetPosition();
+    x = position.x;
+    y = position.y;
+    angle = body -> GetAngle();
+  }
+
+  ALLEGRO_TRANSFORM trans, prevTrans;
+
+  // back up the current transform
+  al_copy_transform(&prevTrans, al_get_current_transform());
+
+  // scale using the new transform
+  al_identity_transform(&trans);
+
+  al_rotate_transform(&trans, -angle);
+  al_translate_transform(&trans, x * 20, y * -20);
+
+  al_use_transform(&trans);
+
+
+    al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
+                al_map_rgb(255,255,0));
+
+ // al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
+
+  // restore the old transform
+  al_use_transform(&prevTrans);
+
+}
+
 
 Sensor::~Sensor(){
 
