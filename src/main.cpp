@@ -13,6 +13,7 @@
 
 #include "state.h"
 #include "game.h"
+#include "menu.h"
 #include "editor.h"
 
 // Current state object
@@ -68,6 +69,9 @@ void change_state(){
         break;
       case STATE_EDIT:
         currentState = new editor();
+        break;
+      case STATE_MENU:
+        currentState = new menu();
         break;
       case STATE_EXIT:
         closing = true;
@@ -125,6 +129,10 @@ void update(){
     if( keyListener::key[ALLEGRO_KEY_O]){
       set_next_state( STATE_GAME);
     }
+    // Change state?
+    if( keyListener::key[ALLEGRO_KEY_I]){
+      set_next_state( STATE_MENU);
+    }
 
     // Change state (if needed)
     change_state();
@@ -162,7 +170,7 @@ void update(){
     currentState -> draw();
     al_flip_display();
 
-    // Update fps buffer
+    // Update fps bufferset_next_state(STATE_MENU);
     for( int i = 99; i > 0; i--)
       frames_array[i] = frames_array[i - 1];
     frames_array[0] = (1.0/(al_get_time() - old_time));
