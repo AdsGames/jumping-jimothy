@@ -36,11 +36,15 @@ class game : public state{
     void load_sprites();
     void load_world();
 
-    void create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY, bool newBodyType, bool newIsSensor);
+    Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY, bool newBodyType, bool newIsSensor);
     void create_character(float newX, float newY);
 
     // Game variables
     std::vector<Box*> gameBoxes;
+    Box *newBox = nullptr;
+    Box *rootBox = nullptr;
+    b2Body* groundBody;
+
     bool static_mode = false;
 
     ALLEGRO_BITMAP *box;

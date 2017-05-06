@@ -19,46 +19,40 @@ void Character::update(){
   y = position.y;
   angle = body -> GetAngle();
 
-  int x_movement=10;
-  int x_accel=35;
-  int x_initial=200;
-  int x_air_accel=25;
-  int friction=200;
-  int friction_tolerance=5;
+  int x_movement=6;
+  float x_air_movement=0.4;
+  time_move_jump_timer_thingy++;
 
-  if(keyListener::key[ALLEGRO_KEY_A]){
-      if(sensor_box -> isColliding()){
-        body -> ApplyForce(b2Vec2(-x_accel,0),position);
-        if(body->GetLinearVelocity().x>-x_movement)
-          body->ApplyForce(b2Vec2(-x_initial,0),position);
-      }else{
-          body -> ApplyForce(b2Vec2(-x_air_accel,0),position);
-      }
-  }
 
-  if(keyListener::key[ALLEGRO_KEY_D]){
-    if(sensor_box -> isColliding()){
-      body -> ApplyForce(b2Vec2(x_accel,0),position);
-      if(body->GetLinearVelocity().x<x_movement)
-          body->ApplyForce(b2Vec2(x_initial,0),position);
-    }else{
-      body -> ApplyForce(b2Vec2(x_air_accel,0),position);
+    if(keyListener::key[ALLEGRO_KEY_A]){
+        if(sensor_box -> isColliding() && time_move_jump_timer_thingy>30){
+            body -> SetLinearVelocity(b2Vec2(-x_movement,body ->GetLinearVelocity().y));
+
+
+         }else{
+          body -> ApplyLinearImpulse(b2Vec2(-x_air_movement,0),position);
+        }
     }
-  }
-  // Homemade friction
-  if(sensor_box -> isColliding()){
-    if(body -> GetLinearVelocity().x>friction_tolerance || body -> GetLinearVelocity().x<-friction_tolerance  )
-      body ->ApplyForce(b2Vec2(-friction,0),position);
-     if(body -> GetLinearVelocity().x<-friction_tolerance)
-      body ->ApplyForce(b2Vec2(friction,0),position);
 
-  }
+    else if(keyListener::key[ALLEGRO_KEY_D]){
+      if(sensor_box -> isColliding() && time_move_jump_timer_thingy>30){
+            body -> SetLinearVelocity(b2Vec2(x_movement,body ->GetLinearVelocity().y));
+
+        }else{
+          body -> ApplyLinearImpulse(b2Vec2(x_air_movement,0),position);
+
+        }
+    }else if(sensor_box -> isColliding())
+       body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
+    // Homemade friction
+
 
 
 
   if(keyListener::key[ALLEGRO_KEY_W] && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
-    body -> SetLinearVelocity(b2Vec2(body -> GetLinearVelocity().x,0));
-    body -> ApplyForce(b2Vec2(0,2000),position);
+    body -> SetLinearVelocity(b2Vec2(0,6.5));
+    time_move_jump_timer_thingy=0;
+
   }
 
 

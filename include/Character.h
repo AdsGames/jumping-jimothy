@@ -21,6 +21,8 @@ class Character : public Box{
     void update();
 
   private:
+    int time_move_jump_timer_thingy;
+
     bool direction;
     Sensor *sensor_box;
     ALLEGRO_BITMAP *sprite;
