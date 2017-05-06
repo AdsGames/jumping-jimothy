@@ -126,14 +126,14 @@ void Box::draw(){
 
   al_use_transform(&trans);
 
-  al_draw_rectangle( -(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20, al_map_rgb(0,0,0), 3);
+  //al_draw_rectangle( -(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20, al_map_rgb(0,0,0), 3);
 
-  al_draw_filled_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20,
+  al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
                            al_map_rgb( tools::clamp( 0, 255, int(body -> GetLinearVelocity().y * -10)),
                                        tools::clamp( 0, 255, 255 - int(body -> GetLinearVelocity().y * -10)),
                                        0));
 
-  //al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
+  al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 
   // restore the old transform
   al_use_transform(&prevTrans);
