@@ -13,6 +13,7 @@
 
 #include "state.h"
 #include "game.h"
+#include "menu.h"
 #include "editor.h"
 
 // Current state object
@@ -69,6 +70,9 @@ void change_state(){
       case STATE_EDIT:
         currentState = new editor();
         break;
+      case STATE_MENU:
+        currentState = new menu();
+        break;
       case STATE_EXIT:
         closing = true;
         break;
@@ -124,6 +128,10 @@ void update(){
     // Change state?
     if( keyListener::key[ALLEGRO_KEY_O]){
       set_next_state( STATE_GAME);
+    }
+    // Change state?
+    if( keyListener::key[ALLEGRO_KEY_I]){
+      set_next_state( STATE_MENU);
     }
 
     // Change state (if needed)
