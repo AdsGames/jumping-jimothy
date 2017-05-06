@@ -79,7 +79,7 @@ void Character::init(float newX, float newY, b2World *newGameWorld, keyListener 
 
   sensor_box = new Sensor();
   //ALLEGRO_COLOR newColour =
-  sensor_box -> init(newX,newY-1,width*0.6,1,al_map_rgb(255,255,0),gameWorld,body);
+  sensor_box -> init(newX,newY-0.5,width*0.6,1,al_map_rgb(255,255,0),gameWorld,body);
 
 
 
@@ -116,8 +116,7 @@ void Character::draw(){
   // restore the old transform
   al_use_transform(&prevTrans);
 
-  sensor_box -> draw();
-  std::cout<<"Drawing\n";
+  //sensor_box -> draw();
 
 }
 
