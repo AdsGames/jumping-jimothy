@@ -130,7 +130,7 @@ void game::update(){
   gameWorld -> Step( timeStep, velocityIterations, positionIterations);
 
   // Update character
-  for(int i = 0; i < gameBoxes.size(); i++){
+  for( unsigned int i = 0; i < gameBoxes.size(); i++){
     if( gameBoxes[i] -> getType() == CHARACTER){
       gameBoxes[i] -> update();
     }
@@ -140,7 +140,7 @@ void game::update(){
   if(keyListener::lastKeyPressed==ALLEGRO_KEY_SPACE){
     static_mode =! static_mode;
     if(static_mode){
-      for( int i = 0; i < gameBoxes.size(); i++){
+      for( unsigned int i = 0; i < gameBoxes.size(); i++){
         if( gameBoxes[i] -> getType()==BOX){
           // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
           gameBoxes[i] -> setStatic();
@@ -148,7 +148,7 @@ void game::update(){
       }
     }
     else{
-      for( int i = 0; i < gameBoxes.size(); i++){
+      for( unsigned int i = 0; i < gameBoxes.size(); i++){
         if( gameBoxes[i] -> getType()==BOX){
           // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
           gameBoxes[i] -> setDynamic();
@@ -164,7 +164,7 @@ void game::draw(){
   al_clear_to_color( al_map_rgb(200,200,255));
 
   // Draw boxes
-  for( int i = 0; i < gameBoxes.size(); i++){
+  for( unsigned int i = 0; i < gameBoxes.size(); i++){
     gameBoxes[i] -> draw();
   }
 }

@@ -128,7 +128,10 @@ void Box::draw(){
 
   al_draw_rectangle( -(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20, al_map_rgb(0,0,0), 3);
 
-  al_draw_filled_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20, al_map_rgb( body -> GetLinearVelocity().y * -10, 255 - body -> GetLinearVelocity().y * -10, 0));
+  al_draw_filled_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20,
+                           al_map_rgb( tools::clamp( 0, 255, int(body -> GetLinearVelocity().y * -10)),
+                                       tools::clamp( 0, 255, 255 - int(body -> GetLinearVelocity().y * -10)),
+                                       0));
   std::cout << body -> GetLinearVelocity().y << "\n";
 
   //al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);

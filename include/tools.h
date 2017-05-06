@@ -17,6 +17,15 @@ class tools{
         static float string_to_float( std::string newChar);
         static void abort_on_error(std::string);
 
+        template <class T>
+          static T clamp( T min_val, T max_val, T value) {
+              if( value < min_val)
+                return min_val;
+              if( value > max_val)
+                return max_val;
+              return value;
+          }
+
         static ALLEGRO_BITMAP * load_bitmap_ex( std::string file);
 
     protected:
