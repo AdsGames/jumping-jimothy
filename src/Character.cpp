@@ -18,6 +18,7 @@ void Character::update(){
   x = position.x;
   y = position.y;
   angle = body -> GetAngle();
+  double yVel = getBody() -> GetLinearVelocity().y;
 
   int x_movement=6;
   float x_air_movement=0.4;
@@ -25,21 +26,26 @@ void Character::update(){
 
 
     if(keyListener::key[ALLEGRO_KEY_A]){
-        if(sensor_box -> isColliding() && time_move_jump_timer_thingy>30){
-            body -> SetLinearVelocity(b2Vec2(-x_movement,body ->GetLinearVelocity().y));
-
-
-         }else{
-          body -> ApplyLinearImpulse(b2Vec2(-x_air_movement,0),position);
+        if(sensor_box -> isColliding())
+            {
+            body -> SetLinearVelocity(b2Vec2(-5, yVel));
+            }
+         else
+         {
+            if(getBody() -> GetLinearVelocity().x > -5)
+                body -> ApplyLinearImpulse(b2Vec2(-2, 0),position);
         }
     }
 
     else if(keyListener::key[ALLEGRO_KEY_D]){
-      if(sensor_box -> isColliding() && time_move_jump_timer_thingy>30){
-            body -> SetLinearVelocity(b2Vec2(x_movement,body ->GetLinearVelocity().y));
+      if(sensor_box -> isColliding()){
+            body -> SetLinearVelocity(b2Vec2(5, yVel));
 
-        }else{
-          body -> ApplyLinearImpulse(b2Vec2(x_air_movement,0),position);
+        }
+        else
+        {
+            if(getBody() -> GetLinearVelocity().x < 5)
+          body -> ApplyLinearImpulse(b2Vec2(2, 0),position);
 
         }
     }else if(sensor_box -> isColliding())
@@ -50,10 +56,14 @@ void Character::update(){
 
 
   if(keyListener::key[ALLEGRO_KEY_W] && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
-    body -> SetLinearVelocity(b2Vec2(0,6.5));
-    time_move_jump_timer_thingy=0;
-
+    body -> ApplyLinearImpulse(b2Vec2(0, 30),position);
   }
+
+
+
+
+
+//Fixed Danny's poop code by getting rid if it =)
 
 
   if(sensor_box -> isColliding()){
