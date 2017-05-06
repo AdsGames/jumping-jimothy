@@ -36,6 +36,18 @@ class tools{
           return false;
         }
 
+        // Convert
+        template <class T> static std::string toString( T value){
+          std::stringstream ss;
+          ss << value;
+          return ss.str();
+        }
+
+        // Random number
+        static int random_int( int min, int max){
+          return (rand() % (max + 1 - min)) + min;
+        }
+
 
     protected:
 
