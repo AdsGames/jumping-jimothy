@@ -26,11 +26,11 @@ void Character::update(){
   if(gameKeyListener -> key[ALLEGRO_KEY_D])
     body -> ApplyForce(b2Vec2(100,0),position);
 
-  if(gameKeyListener -> key[ALLEGRO_KEY_W])
-    body -> ApplyForce(b2Vec2(0,100),position);
+  if(gameKeyListener -> key[ALLEGRO_KEY_W] && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
+    body -> SetLinearVelocity(b2Vec2(body -> GetLinearVelocity().x,0));
+    body -> ApplyForce(b2Vec2(0,2000),position);
+  }
 
-  if(gameKeyListener -> key[ALLEGRO_KEY_S])
-    body -> ApplyForce(b2Vec2(0,-100),position);
 
   if(sensor_box -> isColliding()){
     color = al_map_rgb(50,100,255);
@@ -55,7 +55,6 @@ void Character::init(float newX, float newY, b2World *newGameWorld, keyListener 
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(newX, newY);
 	body = gameWorld -> CreateBody(&bodyDef);
-	body ->SetLinearDamping(1);
 
 	// Define another box shape for our dynamic body.
 	b2PolygonShape dynamicBox;
@@ -77,7 +76,7 @@ void Character::init(float newX, float newY, b2World *newGameWorld, keyListener 
   body ->SetFixedRotation(true);
 
   sensor_box = new Sensor();
-  sensor_box -> init(newX,newY,5,5,gameWorld,body);
+  sensor_box -> init(newX,newY-1,2,1,gameWorld,body);
 
 
 
