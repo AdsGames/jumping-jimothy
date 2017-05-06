@@ -23,11 +23,19 @@ void Box::init(float newX, float newY, float newWidth, float newHeight, bool new
   width = newWidth;
   height = newHeight;
   color = al_map_rgb(255,0,0);
+  static_mode = false;
+  static_box = false;
+  angle = 0;
+  x = 0;
+  y = 0;
+
+  static_velocity = b2Vec2( 0, 0);
+  static_angular_velocity = 0;
 
   gameWorld = newGameWorld;
   b2BodyDef bodyDef;
 
-  static_box=!newBodyType;
+  static_box = !newBodyType;
 
   if(newBodyType)
     bodyDef.type = b2_dynamicBody;
@@ -39,7 +47,7 @@ void Box::init(float newX, float newY, float newWidth, float newHeight, bool new
 	//body ->SetLinearDamping(1);
 	//body ->SetAngularDamping(1);
 
-	// Define another box shape for our dynamic body.
+	// Define another box shape for o0ur dynamic body.
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(width/2, height/2);
 
@@ -55,7 +63,7 @@ void Box::init(float newX, float newY, float newWidth, float newHeight, bool new
 
 
 	// Add the shape to the body.
-	body->CreateFixture(&fixtureDef);
+	body -> CreateFixture(&fixtureDef);
 }
 
 // Return type
@@ -82,20 +90,20 @@ b2Body* Box::getBody(){
 // Set state
 void Box::setStatic(){
   if(!static_box){
-    static_mode=false;
-    static_velocity=body -> GetLinearVelocity();
+    static_mode = true;
+    static_velocity = body -> GetLinearVelocity();
     static_angular_velocity = body -> GetAngularVelocity();
-    body -> SetType(b2_staticBody);
+    body -> SetType( b2_staticBody);
   }
 }
 
 // Set whether dynamic
 void Box::setDynamic(){
   if(!static_box){
-    static_mode=true;
-    body -> SetType(b2_dynamicBody);
-    body -> ApplyLinearImpulse(static_velocity, body -> GetPosition());
-    body -> ApplyAngularImpulse(static_angular_velocity);
+    static_mode = false;
+    body -> SetType( b2_dynamicBody);
+    body -> SetLinearVelocity( static_velocity);
+    body -> SetAngularVelocity( static_angular_velocity);
   }
 }
 
@@ -124,22 +132,22 @@ void Box::draw(){
   al_identity_transform(&trans);
 
   al_rotate_transform(&trans, -angle);
-  al_translate_transform(&trans, (x)*20, -(y)*20);
+  al_translate_transform(&trans, x * 20, y * -20);
 
   al_use_transform(&trans);
 
-  //al_draw_rectangle( -(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20, al_map_rgb(0,0,0), 3);
-  if(static_mode)
+  b2Vec2 draw_velocity = b2Vec2(0,0);
+
+  if( static_mode)
+    draw_velocity = b2Vec2( static_velocity.x, static_velocity.y);
+  else
+    draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
 
   al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
-                           al_map_rgb( tools::clamp( 0, 255, int(body -> GetLinearVelocity().y * -10)),
-                                       tools::clamp( 0, 255, 255 - int(body -> GetLinearVelocity().y * -10)),
-                                       0));
-  else
-     al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
-                           al_map_rgb( tools::clamp( 0, 255, int(static_velocity.y * -10)),
-                                       tools::clamp( 0, 255, 255 - int(static_velocity.y * -10)),
-                                       0));
+                al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0));
+
+  al_draw_line( 0, 0, draw_velocity.x * 10, draw_velocity.y * 10,
+               al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0), 3);
 
   al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 

@@ -39,7 +39,7 @@ class Box{
     float x;
     float y;
     float angle;
-    ALLEGRO_COLOR color = al_map_rgb(0,0,0);
+    ALLEGRO_COLOR color;
 
     float width;
     float height;
