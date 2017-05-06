@@ -4,12 +4,13 @@ editor::editor(){
   // Load box image
   image_box[0] = tools::load_bitmap_ex( "DynamicBlock.png");
   image_box[1] = tools::load_bitmap_ex( "StaticBlock.png");
-  player = tools::load_bitmap_ex( "character.png");
+  image_box[2] = tools::load_bitmap_ex( "character.png");
 
   for( int i = 0; i < 4; i++){
     for( int t = 0; t < 4; t++){
-      tiles[0][i + t*4] = al_create_sub_bitmap( image_box[0]  , i * 32, t * 32, 32, 32);
+      tiles[0][i + t*4] = al_create_sub_bitmap( image_box[0], i * 32, t * 32, 32, 32);
       tiles[1][i + t*4] = al_create_sub_bitmap( image_box[1], i * 32, t * 32, 32, 32);
+      tiles[2][i + t*4] = al_create_sub_bitmap( image_box[2], 0, 0, 32, 32);
     }
   }
 
@@ -41,10 +42,12 @@ void editor::update(){
     newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
     newBox.type = tile_type;
 
-    if( tile_type == 1)
-      newBox.bodyType = "Static";
-    else
+    if( tile_type == 0)
       newBox.bodyType = "Dynamic";
+    else if( tile_type == 1)
+      newBox.bodyType = "Static";
+    else if( tile_type == 2)
+      newBox.bodyType = "Character";
 
     editorBoxes.push_back( newBox);
   }
@@ -140,7 +143,12 @@ void editor::save_map( std::string mapName){
     // Object
     char *node_name = doc.allocate_string("Object");
     rapidxml::xml_node<>* object_node = doc.allocate_node( rapidxml::node_element, node_name);
-    object_node -> append_attribute( doc.allocate_attribute("type", "Tile"));
+
+    std::string xml_type = "Tile";
+    if( editorBoxes.at(i).type == 2)
+      xml_type = "Character";
+
+    object_node -> append_attribute( doc.allocate_attribute("type", doc.allocate_string(xml_type.c_str())));
     root_node -> append_node( object_node);
 
     // X/Y/Bodytype
