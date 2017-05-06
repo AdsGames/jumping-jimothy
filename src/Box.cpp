@@ -15,7 +15,7 @@ Box::~Box(){
 
 void Box::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
 
-  std::cout << "Created Box\n";
+  //std::cout << "Created Box\n";
 
   sprite = newSprite;
 
