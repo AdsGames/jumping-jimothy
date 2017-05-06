@@ -24,8 +24,8 @@ void editor::update(){
     editor_box newBox;
     newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
     newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
-    newBox.x_str = tools::toString( newBox.x);
-    newBox.y_str = tools::toString( newBox.y);
+    newBox.x_str = tools::toString( float(newBox.x) / 20.0f);
+    newBox.y_str = tools::toString( -1 * float(newBox.y) / 20.0f);
     newBox.bodyType = "static";
     editorBoxes.push_back( newBox);
   }
@@ -107,7 +107,7 @@ void editor::save_map( std::string mapName){
     // Object
     char *node_name = doc.allocate_string("Object");
     xml_node<>* object_node = doc.allocate_node( node_element, node_name);
-    object_node -> append_attribute( doc.allocate_attribute("type", "tile"));
+    object_node -> append_attribute( doc.allocate_attribute("type", "Tile"));
     root_node -> append_node( object_node);
 
     // X/Y/Bodytype
@@ -115,9 +115,6 @@ void editor::save_map( std::string mapName){
     object_node -> append_node( doc.allocate_node(node_element, "y", (editorBoxes.at(i).y_str).c_str()));
     object_node -> append_node( doc.allocate_node(node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
   }
-
-  // Convert doc to string if needed
-  std::cout << doc;
 
   // Save to file
   std::ofstream file_stored(mapName);

@@ -1,0 +1,874 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<Object type="Tile">
+		<x>576</x>
+		<y>480</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>576</x>
+		<y>448</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>608</x>
+		<y>448</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>640</x>
+		<y>448</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>416</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>448</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>384</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>384</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>384</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>352</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>288</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>512</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>480</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>448</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>416</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>384</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>352</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>352</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>384</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>416</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>448</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>480</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>544</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>576</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>576</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>544</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>512</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>608</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>640</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>160</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>192</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>224</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>256</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>256</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>288</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>320</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>352</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>544</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>576</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>608</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>640</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>160</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>192</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>224</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>640</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>608</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>512</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>480</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>448</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>416</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>384</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>352</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>320</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>160</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>192</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>224</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>256</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>288</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>320</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>352</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>192</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>320</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>320</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>160</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>320</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>288</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>256</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>224</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>192</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>160</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>320</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>352</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>384</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>416</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>448</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>448</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>448</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>416</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>384</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>416</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>448</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>480</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>480</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>640</x>
+		<y>480</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>608</x>
+		<y>480</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>480</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>480</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>480</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>416</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>416</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>384</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>352</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>320</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>288</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>256</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>64</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>96</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>128</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>160</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>192</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>224</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>288</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>320</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>352</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>448</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>480</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>224</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>256</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>512</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>544</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>576</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>608</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>640</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>512</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>608</x>
+		<y>320</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>576</x>
+		<y>320</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>544</x>
+		<y>320</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>352</x>
+		<y>224</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>384</x>
+		<y>224</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>416</x>
+		<y>224</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>64</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>96</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>128</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>160</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>192</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>224</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>256</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>288</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>320</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>352</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>384</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>416</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>320</x>
+		<y>704</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>352</x>
+		<y>704</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>352</x>
+		<y>672</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>384</x>
+		<y>672</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>384</x>
+		<y>640</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>416</x>
+		<y>640</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>416</x>
+		<y>608</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>448</x>
+		<y>608</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>448</x>
+		<y>576</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>480</x>
+		<y>576</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>480</x>
+		<y>544</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>512</x>
+		<y>544</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>448</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>480</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>512</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>544</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>576</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>608</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>640</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>672</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>704</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>736</x>
+		<y>736</y>
+		<bodytype>static</bodytype>
+	</Object>
+</data>
+

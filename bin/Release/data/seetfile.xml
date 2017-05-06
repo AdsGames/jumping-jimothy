@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<Object type="Tile">
+		<x>11.2</x>
+		<y>-6.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>9.6</x>
+		<y>-6.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>9.6</x>
+		<y>-8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>9.6</x>
+		<y>-9.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>8</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>8</x>
+		<y>-12.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>8</x>
+		<y>-14.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>9.6</x>
+		<y>-14.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>11.2</x>
+		<y>-16</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>12.8</x>
+		<y>-16</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>14.4</x>
+		<y>-16</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>16</x>
+		<y>-16</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>17.6</x>
+		<y>-16</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>19.2</x>
+		<y>-14.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>20.8</x>
+		<y>-12.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>22.4</x>
+		<y>-12.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>22.4</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>22.4</x>
+		<y>-9.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>22.4</x>
+		<y>-8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>20.8</x>
+		<y>-8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>19.2</x>
+		<y>-6.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>17.6</x>
+		<y>-6.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>16</x>
+		<y>-6.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>14.4</x>
+		<y>-6.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>12.8</x>
+		<y>-6.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>12.8</x>
+		<y>-8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>11.2</x>
+		<y>-8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>8</x>
+		<y>-9.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>9.6</x>
+		<y>-12.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>14.4</x>
+		<y>-14.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>20.8</x>
+		<y>-16</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>22.4</x>
+		<y>-16</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>12.8</x>
+		<y>-14.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>11.2</x>
+		<y>-12.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>14.4</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>19.2</x>
+		<y>-8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>17.6</x>
+		<y>-8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>16</x>
+		<y>-9.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>14.4</x>
+		<y>-9.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>17.6</x>
+		<y>-9.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>20.8</x>
+		<y>-9.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>19.2</x>
+		<y>-9.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>16</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>12.8</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>9.6</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>11.2</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>11.2</x>
+		<y>-9.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>14.4</x>
+		<y>-8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>17.6</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>17.6</x>
+		<y>-12.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>17.6</x>
+		<y>-14.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>17.6</x>
+		<y>-17.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>19.2</x>
+		<y>-16</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>20.8</x>
+		<y>-14.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>24</x>
+		<y>-14.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>27.2</x>
+		<y>-12.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>30.4</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>32</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>36.8</x>
+		<y>-9.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>35.2</x>
+		<y>-11.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>33.6</x>
+		<y>-14.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>32</x>
+		<y>-17.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>28.8</x>
+		<y>-20.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>24</x>
+		<y>-24</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>20.8</x>
+		<y>-25.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>19.2</x>
+		<y>-25.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>17.6</x>
+		<y>-25.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>22.4</x>
+		<y>-22.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>28.8</x>
+		<y>-19.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>35.2</x>
+		<y>-17.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>40</x>
+		<y>-16</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>41.6</x>
+		<y>-16</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>38.4</x>
+		<y>-17.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>32</x>
+		<y>-20.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>24</x>
+		<y>-20.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>19.2</x>
+		<y>-22.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>20.8</x>
+		<y>-22.4</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>27.2</x>
+		<y>-20.8</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>35.2</x>
+		<y>-19.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>43.2</x>
+		<y>-19.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>44.8</x>
+		<y>-19.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>38.4</x>
+		<y>-19.2</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>30.4</x>
+		<y>-17.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>24</x>
+		<y>-17.6</y>
+		<bodytype>static</bodytype>
+	</Object>
+</data>
+
