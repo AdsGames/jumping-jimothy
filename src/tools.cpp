@@ -34,17 +34,16 @@ float tools::string_to_float( std::string newChar){
   }
   // Location of decimal
   int decimal_loc = newChar.length();
-  for( int i = 0; i < newChar.length(); i++){
+  for( unsigned int i = 0; i < newChar.length(); i++){
     if( newChar[i] == '.'){
       decimal_loc = i;
       newChar = newChar.substr(0, i) + newChar.substr(i + 1, newChar.length() - i);
     }
   }
   // Numbers
-  for( int i = 0; i < newChar.length(); i++){
+  for( unsigned int i = 0; i < newChar.length(); i++){
     int tempNumber = int(newChar[i]) - 48;
     number += tempNumber * pow(10, (newChar.length()) - (i + 1));
   }
   return (number / float(pow(10, newChar.length() - decimal_loc))) * sign;
 }
-
