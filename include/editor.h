@@ -46,6 +46,7 @@ class editor : public state{
     bool box_at( int x, int y);
 
     void save_map( std::string mapName);
+    void load_map( std::string mapName);
 
     bool grid_on;
 
