@@ -108,17 +108,26 @@ void load_world(){
   // Find our root node
   root_node = doc.first_node("data");
 
-  int x;
+  std::string type;
 
   // Iterate over the brewerys
-  for (rapidxml::xml_node<> * generated_node = root_node -> first_node("Tile"); generated_node; generated_node = generated_node -> next_sibling()){
+  for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
     // Interate over the beers
    // int generatedNumberResult = atoi( generated_node -> first_attribute("number") -> value());
   //  if( generatedNumberResult == random_number){
-      for(rapidxml::xml_node<> * batter_node = generated_node -> first_node("x"); batter_node; batter_node = batter_node -> next_sibling()){
-      //  x = batter_node -> value();
-      }
+      //for(rapidxml::xml_node<> * tile_node = object_node -> first_node("x"); tile_node; tile_node = tile_node -> next_sibling()){
+        type = object_node->first_attribute("type")->value();
+
+          for(rapidxml::xml_node<> * beer_node = object_node->first_node("x"); beer_node; beer_node = beer_node->next_sibling())
+          {
+            std::cout<<beer_node->value();
+            std::cout<<"\n";
+          }
+      //}
     }
+    std::cout<<type;
+    std::cout<<"\n";
+    create_box(5,-5,1.6,1.6,true,false);
   }
 
 
@@ -258,6 +267,7 @@ int main(int argc, char **argv){
   al_setup();
   b2_setup();
   load_sprites();
+  load_world();
 
   while(!closing)
     update();
