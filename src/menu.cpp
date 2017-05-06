@@ -1,12 +1,14 @@
 #include "menu.h"
 
 menu::menu(){
-  //ctor
+  // Title image
+  ALLEGRO_BITMAP title = tools::load_bitmap_ex("images/title.png");
+
+  title_images[170]
+
 }
 
-menu::~menu()
-{
-  //dtor
+menu::~menu(){
 }
 
 void menu::update(){
