@@ -20,13 +20,13 @@ void Character::update(){
   y = position.y;
   angle = body -> GetAngle();
 
-  if(gameKeyListener -> key[ALLEGRO_KEY_A])
+  if(keyListener::key[ALLEGRO_KEY_A])
     body -> ApplyForce(b2Vec2(-100,0),position);
 
-  if(gameKeyListener -> key[ALLEGRO_KEY_D])
+  if(keyListener::key[ALLEGRO_KEY_D])
     body -> ApplyForce(b2Vec2(100,0),position);
 
-  if(gameKeyListener -> key[ALLEGRO_KEY_W] && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
+  if(keyListener::key[ALLEGRO_KEY_W] && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
     body -> SetLinearVelocity(b2Vec2(body -> GetLinearVelocity().x,0));
     body -> ApplyForce(b2Vec2(0,2000),position);
   }
@@ -45,7 +45,7 @@ void Character::update(){
 
 }
 
-void Character::init(float newX, float newY, b2World *newGameWorld, keyListener *newKeyListener){
+void Character::init(float newX, float newY, b2World *newGameWorld){
 
   type = CHARACTER;
   width = 2;

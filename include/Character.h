@@ -16,17 +16,12 @@ class Character : public Box{
   public:
     Character();
     ~Character();
-    void init(float, float, b2World *, keyListener *);
+    void init(float, float, b2World *);
     void draw();
     void update();
 
   private:
-    keyListener *gameKeyListener;
     Sensor *sensor_box;
-
-
-
-
 };
 
 

@@ -2,7 +2,9 @@
 #define TOOLS_H
 
 #include <string>
+#include <math.h>
 #include <sstream>
+#include <iostream>
 #include <fstream>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
@@ -12,7 +14,7 @@
 class tools{
     public:
         // Convert char to float
-        static int string_to_float( std::string newChar);
+        static float string_to_float( std::string newChar);
         static void abort_on_error(std::string);
 
         static ALLEGRO_BITMAP * load_bitmap_ex( std::string file);
