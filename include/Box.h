@@ -14,6 +14,8 @@ class Box{
     ~Box();
     void init(float, float, float, float, bool, b2World *);
     void draw();
+    void setStatic();
+    void setDynamic();
     virtual void update();
     int getType();
     float getX();
@@ -22,7 +24,10 @@ class Box{
 
   protected:
 
+    bool static_mode;
     int type;
+
+    b2Vec2 static_velocity;
 
     float x;
     float y;

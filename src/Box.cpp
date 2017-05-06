@@ -68,13 +68,27 @@ b2Body* Box::getBody(){
   b2Body *newBody = body;
   return newBody;
 }
+void Box::setStatic(){
+
+    static_velocity=body -> GetLinearVelocity();
+
+    body -> SetType(b2_staticBody);
 
 
-// polymorpism haxx until I figure out nice casting and identification
+}
+void Box::setDynamic(){
+
+    body -> SetType(b2_dynamicBody);
+    body -> ApplyLinearImpulse(static_velocity, body -> GetPosition());
+
+}
+
+
 void Box::update(){
 
-  // If you see this, you have a problem
-  std::cout<<"Houston, we have a problem\n";
+
+
+
 
 
 }

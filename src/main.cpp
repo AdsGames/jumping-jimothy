@@ -34,6 +34,8 @@ int frame_index = 0;
 bool closing = false;
 bool joystick_enabled = false;
 
+bool static_mode;
+
 float32 timeStep = 1.0f / 60.0f;
 int32 velocityIterations = 6;
 int32 positionIterations = 2;
@@ -147,13 +149,38 @@ void update(){
         j_listener.update();
 
         if(m_listener.mouse_pressed & 1)
-          create_box(m_listener.mouse_x/20,-m_listener.mouse_y/20,1,1,true,false);
+          create_box(m_listener.mouse_x/20,-m_listener.mouse_y/20,1.6,1.6,true,false);
 
         if(m_listener.mouse_pressed & 2)
           create_character(m_listener.mouse_x/20,-m_listener.mouse_y/20);
         // Update
     		gameWorld.Step(timeStep, velocityIterations, positionIterations);
 
+        for(int i=0; i<gameBoxes.size(); i++){
+
+            if(gameBoxes[i] -> getType()==CHARACTER){
+                // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
+                gameBoxes[i] -> update();
+            }
+        }
+
+        if(k_listener.lastKeyPressed==ALLEGRO_KEY_J){
+         for(int i=0; i<gameBoxes.size(); i++){
+            if(gameBoxes[i] -> getType()==BOX){
+            // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
+                gameBoxes[i] -> setStatic();
+            }
+         }
+        }
+
+        if(k_listener.lastKeyPressed==ALLEGRO_KEY_K){
+         for(int i=0; i<gameBoxes.size(); i++){
+            if(gameBoxes[i] -> getType()==BOX){
+            // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
+                gameBoxes[i] -> setDynamic();
+            }
+         }
+        }
 
 
   }
@@ -188,13 +215,10 @@ void update(){
     //draw();
     for(int i=0; i<gameBoxes.size(); i++){
 
-      if(gameBoxes[i] -> getType()==CHARACTER){
-       // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
-        gameBoxes[i] -> update();
-      }
-      gameBoxes[i] -> draw();
 
-    }
+      gameBoxes[i] -> draw();
+      }
+
 
     al_flip_display();
 
