@@ -1,9 +1,14 @@
 #include <stdio.h>
 #include <vector>
+#include <fstream>
+#include <iostream>
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <Box2D/Box2D.h>
+
+#include "rapidxml.hpp"
+#include "rapidxml_print.hpp"
 
 #include <Box.h>
 #include <Character.h>
@@ -11,19 +16,7 @@
 #include <keyListener.h>
 #include <joystickListener.h>
 
-
-
-
-// Events
-ALLEGRO_EVENT_QUEUE* event_queue = nullptr;
-ALLEGRO_TIMER* timer = nullptr;
-ALLEGRO_DISPLAY *display;
-
-mouseListener m_listener;
-keyListener k_listener;
-joystickListener j_listener;
-
-// Fps timer
+// FPS system variables
 int fps;
 double old_time = 0;
 const float MAX_FPS = 60;
@@ -34,28 +27,29 @@ int frame_index = 0;
 bool closing = false;
 bool joystick_enabled = false;
 
-bool static_mode = false;
+// Allegro events
+ALLEGRO_EVENT_QUEUE* event_queue = nullptr;
+ALLEGRO_TIMER* timer = nullptr;
+ALLEGRO_DISPLAY *display;
 
+// Box2D world parameters
+b2Vec2 gravity(0.0f, -10.0f);
 float32 timeStep = 1.0f / 60.0f;
 int32 velocityIterations = 6;
 int32 positionIterations = 2;
-
-
-  //B2_NOT_USED(argc);
-	//B2_NOT_USED(argv);
-
-	// Define the gravity vector.
-b2Vec2 gravity(0.0f, -10.0f);
-
-	// Do we want to let bodies sleep?
 bool doSleep = true;
 
-	// Construct a world object, which will hold and simulate the rigid bodies.
+// Box2D game world
 b2World gameWorld(gravity, doSleep);
 
-b2Body* body;
+// Input listener wrapper classes
+mouseListener m_listener;
+keyListener k_listener;
+joystickListener j_listener;
 
+// Game variables
 std::vector<Box*> gameBoxes;
+bool static_mode = false;
 
 
 void create_box(float newX, float newY, float newWidth, float newHeight, bool newBodyType, bool newIsSensor){
@@ -70,10 +64,8 @@ void create_character(float newX, float newY){
   gameBoxes.push_back(newCharacter);
 }
 
-
-
+// Sets up Box2D world
 void b2_setup(){
-
 
 	// Define the ground body.
 	b2BodyDef groundBodyDef;
@@ -93,17 +85,41 @@ void b2_setup(){
 	// Add the ground fixture to the ground body.
 	groundBody->CreateFixture(&groundBox, 0.0f);
 
-	// Define the dynamic body. We set its position and call the body factory.
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(0.0f, 0.0f);
-	body = gameWorld.CreateBody(&bodyDef);
-
-
-
-
 }
+void load_world(){
 
+  rapidxml::xml_document<> doc;
+  rapidxml::xml_node<> * root_node;
+
+
+  // Make an xml object
+  std::ifstream theFile ("data/Level.xml");
+  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
+  xml_buffer.push_back('\0');
+
+  // Parse the buffer using the xml file parsing library into doc
+  doc.parse<0>(&xml_buffer[0]);
+
+  // Find our root node
+  root_node = doc.first_node("data");
+
+  int x;
+
+  // Iterate over the brewerys
+  for (rapidxml::xml_node<> * generated_node = root_node -> first_node("Tile"); generated_node; generated_node = generated_node -> next_sibling()){
+    // Interate over the beers
+   // int generatedNumberResult = atoi( generated_node -> first_attribute("number") -> value());
+  //  if( generatedNumberResult == random_number){
+      for(rapidxml::xml_node<> * batter_node = generated_node -> first_node("x"); batter_node; batter_node = batter_node -> next_sibling()){
+        x = batter_node -> value();
+      }
+    }
+  }
+
+
+
+
+// Setup Allegro stuffs
 void al_setup(){
 
   al_init();
@@ -113,7 +129,6 @@ void al_setup(){
   al_install_joystick();
 
   al_init_primitives_addon();
-
 
   timer = al_create_timer(1.0 / MAX_FPS);
 
@@ -129,11 +144,6 @@ void al_setup(){
 
 }
 
-
-
-void draw(){
-}
-
 void update(){
 
 
@@ -144,51 +154,48 @@ void update(){
   // Timer
   if( ev.type == ALLEGRO_EVENT_TIMER){
 
-        m_listener.update();
-        k_listener.update();
-        j_listener.update();
+    m_listener.update();
+    k_listener.update();
+    j_listener.update();
 
-        if(m_listener.mouse_pressed & 1)
-          create_box(m_listener.mouse_x/20,-m_listener.mouse_y/20,1.6,1.6,true,false);
+    if(m_listener.mouse_pressed & 1)
+      create_box(m_listener.mouse_x/20,-m_listener.mouse_y/20,1.6,1.6,true,false);
 
-        if(m_listener.mouse_pressed & 2)
-          create_character(m_listener.mouse_x/20,-m_listener.mouse_y/20);
-        // Update
-    		gameWorld.Step(timeStep, velocityIterations, positionIterations);
+    if(m_listener.mouse_pressed & 2)
+      create_character(m_listener.mouse_x/20,-m_listener.mouse_y/20);
 
+    // Update the Box2D game world
+    gameWorld.Step(timeStep, velocityIterations, positionIterations);
+
+    for(int i=0; i<gameBoxes.size(); i++){
+
+      if(gameBoxes[i] -> getType()==CHARACTER){
+        gameBoxes[i] -> update();
+      }
+    }
+
+    if(k_listener.lastKeyPressed==ALLEGRO_KEY_SPACE){
+      static_mode=!static_mode;
+      if(static_mode){
         for(int i=0; i<gameBoxes.size(); i++){
-
-          if(gameBoxes[i] -> getType()==CHARACTER){
+          if(gameBoxes[i] -> getType()==BOX){
             // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
-            gameBoxes[i] -> update();
+            gameBoxes[i] -> setStatic();
           }
         }
-
-        if(k_listener.lastKeyPressed==ALLEGRO_KEY_SPACE){
-          static_mode=!static_mode;
-          if(static_mode){
-            for(int i=0; i<gameBoxes.size(); i++){
-              if(gameBoxes[i] -> getType()==BOX){
-                // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
-                gameBoxes[i] -> setStatic();
-              }
-            }
-          }else{
-            for(int i=0; i<gameBoxes.size(); i++){
-              if(gameBoxes[i] -> getType()==BOX){
-                // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
-                gameBoxes[i] -> setDynamic();
-              }
-            }
+      }else{
+        for(int i=0; i<gameBoxes.size(); i++){
+          if(gameBoxes[i] -> getType()==BOX){
+            // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
+            gameBoxes[i] -> setDynamic();
           }
         }
-
-
+      }
+    }
   }
   // Exit
   else if( ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
     closing = true;
-
   }
 
    // Keyboard
@@ -209,9 +216,7 @@ void update(){
   if( al_is_event_queue_empty(event_queue)){
 
     // Draw
-
-
-    al_clear_to_color( al_map_rgb(0,255,0));
+    al_clear_to_color( al_map_rgb(200,200,255));
 
     //draw();
     for(int i=0; i<gameBoxes.size(); i++){
