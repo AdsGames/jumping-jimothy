@@ -1,6 +1,8 @@
 #ifndef BOX_H
 #define BOX_H
 #include <allegro5/allegro.h>
+#include <tools.h>
+
 #define BOX 0
 
 class b2World;
