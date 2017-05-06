@@ -134,7 +134,9 @@ void game::update(){
     if( gameBoxes[i] -> getType() == CHARACTER){
       gameBoxes[i] -> update();
     }
-  }
+  }{
+
+}
 
   // Pause/Play time
   if(keyListener::lastKeyPressed==ALLEGRO_KEY_SPACE){
