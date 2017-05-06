@@ -41,7 +41,7 @@ void game::b2_setup(){
 
 	// Define the ground body.
 	b2BodyDef groundBodyDef;
-	groundBodyDef.position.Set( 0.0f, -40.0f);
+	groundBodyDef.position.Set( 0.0f, -48.4f);
 
 	// Call the body factory which allocates memory for the ground body
 	// from a pool and creates the ground box shape (also from a pool).
@@ -52,7 +52,7 @@ void game::b2_setup(){
 	b2PolygonShape groundBox;
 
 	// The extents are the half-widths of the box.
-	groundBox.SetAsBox( 50.0f, 10.0f);
+	groundBox.SetAsBox( 80.0f, 10.0f);
 
 	// Add the ground fixture to the ground body.
 	groundBody -> CreateFixture( &groundBox, 0.0f);

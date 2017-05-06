@@ -97,7 +97,7 @@ void al_setup(){
 
   timer = al_create_timer(1.0 / MAX_FPS);
 
-  display = al_create_display(800, 600);
+  display = al_create_display(1024, 768);
 
   event_queue = al_create_event_queue();
   al_register_event_source( event_queue, al_get_display_event_source(display));
