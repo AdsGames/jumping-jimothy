@@ -38,8 +38,8 @@ class editor : public state{
     void update();
     void draw();
   protected:
-    ALLEGRO_BITMAP *image_box[2];
-    ALLEGRO_BITMAP *tiles[2][16];
+    ALLEGRO_BITMAP *image_box[3];
+    ALLEGRO_BITMAP *tiles[3][16];
     ALLEGRO_BITMAP *player;
 
     std::vector<editor_box> editorBoxes;
