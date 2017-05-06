@@ -22,10 +22,14 @@ class Character : public Box{
 
   private:
     int time_move_jump_timer_thingy;
+    int tick;
+    int frame;
 
     bool direction;
     Sensor *sensor_box;
+
     ALLEGRO_BITMAP *sprite;
+    ALLEGRO_BITMAP *sprites[20];
 };
 
 

@@ -14,6 +14,16 @@ void Character::update(){
 
 //std::cout<<"Character updated\n";
 
+
+  tick++;
+  if(tick>=5){
+    frame++;
+    tick=0;
+  }
+  if(frame==14)
+    frame=0;
+
+
   b2Vec2 position = body -> GetPosition();
   x = position.x;
   y = position.y;
@@ -81,6 +91,9 @@ void Character::update(){
 
 void Character::init(float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
 
+  tick=0;
+  frame=0;
+
   direction = false;
   sprite = newSprite;
   type = CHARACTER;
@@ -118,6 +131,14 @@ void Character::init(float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *
   //ALLEGRO_COLOR newColour =
   sensor_box -> init(newX,newY-0.55,width*0.7,0.6,al_map_rgb(255,255,0),gameWorld,body);
 
+  sprite = tools::load_bitmap_ex("anim.png");
+
+  for( int i = 0; i < 14; i++){
+
+      sprites[i] = al_create_sub_bitmap( sprite, i * 32, 0, 32, 64);
+
+  }
+
 
 
 }
@@ -146,7 +167,9 @@ void Character::draw(){
 
   al_use_transform(&trans);
 
-  al_draw_bitmap(sprite,-(width/2)*20,(-(height/2)*20)-24,0);
+    al_draw_bitmap(sprites[frame],-(width/2)*20,(-(height/2)*20)-24,0);
+
+ // al_draw_bitmap(sprite,-(width/2)*20,(-(height/2)*20)-24,0);
 
  // al_draw_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20,al_map_rgb(0,0,0),3);
 
