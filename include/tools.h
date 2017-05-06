@@ -1,11 +1,14 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
+#include <string>
+#include <sstream>
+
 
 class tools{
     public:
-        static int char_to_float( char *newChar);
-
+        // Convert char to float
+        static int char_to_float( std::string newChar);
     protected:
 
     private:
