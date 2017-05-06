@@ -12,11 +12,17 @@ editor::~editor(){
 
 // Override parent
 void editor::update(){
-  if( mouseListener::mouse_button & 1){
+  if( mouseListener::mouse_pressed & 1){
     editor_box newBox;
     newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
     newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;;
     editorBoxes.push_back( newBox);
+  }
+  if( mouseListener::mouse_released & 1){
+    for( unsigned int i = 0; i < editorBoxes.size(); i ++){
+      if( )
+      al_draw_bitmap( image_box, editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+    }
   }
 }
 

@@ -48,3 +48,20 @@ float tools::string_to_float( std::string newChar){
   return (number / float(pow(10, newChar.length() - decimal_loc))) * sign;
 }
 
+template <class T> T tools::clamp( T min_val, T max_val, T value) {
+    if( value < min_val)
+      return min_val;
+    if( value > max_val)
+      return max_val;
+    return value;
+}
+
+// Function to check for collision
+bool tools::collision(float xMin1, float xMax1, float xMin2, float xMax2, float yMin1, float yMax1, float yMin2, float yMax2){
+  if (xMin1 < xMax2 && yMin1 < yMax2 && xMin2 < xMax1 && yMin2 < yMax1){
+    return true;
+  }
+  return false;
+}
+
+
