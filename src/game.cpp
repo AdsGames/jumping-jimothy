@@ -13,10 +13,11 @@ game::~game(){
 }
 
 // Creates box in world
-void game::create_box( float newX, float newY, float newWidth, float newHeight, float newVelX, float newVelY, bool newBodyType, bool newIsSensor){
+Box *game::create_box( float newX, float newY, float newWidth, float newHeight, float newVelX, float newVelY, bool newBodyType, bool newIsSensor){
   Box *newBox = new Box();
   newBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, box, gameWorld);
   gameBoxes.push_back( newBox);
+  return newBox;
 }
 
 // Add character to world
@@ -81,9 +82,11 @@ void game::load_world(){
     std::string type = "";
     std::string x = "";
     std::string y = "";
-    std::string bodytype = "Dynamic";
+    std::string group = "";
+    std::string bodytype = "totally not static";
     std::string vel_x = "0";
     std::string vel_y = "0";
+
 
     // Interate over
     // int generatedNumberResult = atoi( generated_node -> first_attribute("number") -> value());
@@ -104,9 +107,12 @@ void game::load_world(){
           bodytype = map_item -> value();
           break;
         case 3:
-          vel_x = map_item -> value();
+          group = map_item -> value();
           break;
         case 4:
+          vel_x = map_item -> value();
+          break;
+        case 5:
           vel_y = map_item -> value();
           break;
 
@@ -116,9 +122,26 @@ void game::load_world(){
       i++;
     }
     if( type == "Tile")
-      create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6,tools::string_to_float(vel_x),tools::string_to_float(vel_y), bodytype != "Static", false);
+      newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6,tools::string_to_float(vel_x),tools::string_to_float(vel_y), bodytype != "Static", false);
     if( type == "Character")
       create_character( tools::string_to_float(x),tools::string_to_float(y));
+    if(group=="1"){
+      if(rootBox==nullptr)
+        rootBox=newBox;
+      else{
+        b2Vec2 FeetAnchor(0,0);
+
+
+        b2WeldJointDef *jointDef = new b2WeldJointDef();
+        jointDef -> Initialize(newBox -> getBody(), rootBox -> getBody(), FeetAnchor);
+        jointDef -> collideConnected = false;
+        jointDef  -> referenceAngle = 0;
+        gameWorld -> CreateJoint(jointDef);
+      }
+
+
+    }
+
   }
 }
 

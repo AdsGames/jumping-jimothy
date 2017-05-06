@@ -23,7 +23,7 @@ void Character::update(){
   int x_accel=35;
   int x_initial=200;
   int x_air_accel=25;
-  int friction=50;
+  int friction=200;
   int friction_tolerance=5;
 
   if(keyListener::key[ALLEGRO_KEY_A]){
@@ -47,7 +47,7 @@ void Character::update(){
   }
   // Homemade friction
   if(sensor_box -> isColliding()){
-    if(body -> GetLinearVelocity().x>friction_tolerance)
+    if(body -> GetLinearVelocity().x>friction_tolerance || body -> GetLinearVelocity().x<-friction_tolerance  )
       body ->ApplyForce(b2Vec2(-friction,0),position);
      if(body -> GetLinearVelocity().x<-friction_tolerance)
       body ->ApplyForce(b2Vec2(friction,0),position);
