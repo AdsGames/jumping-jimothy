@@ -71,6 +71,10 @@ void editor::update(){
   if( keyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
+  // Load map
+  if( keyListener::keyPressed[ALLEGRO_KEY_L])
+    load_map("data/level.xml");
+
   // Save map
   if( keyListener::keyPressed[ALLEGRO_KEY_S]){
     save_map("data/level.xml");
@@ -95,8 +99,8 @@ void editor::draw(){
 
   // Boxes
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-    // LEFT
     int type = 0;
+    // LEFT
     if( box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y))
       type += 1;
     // RIGHT
@@ -124,6 +128,80 @@ bool editor::box_at( int x, int y){
     }
   }
   return false;
+}
+
+// Load map from xml
+void editor::load_map( std::string mapName){
+  // Doc
+  rapidxml::xml_document<> doc;
+
+  // Make an xml object
+  std::ifstream theFile( mapName);
+  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
+  xml_buffer.push_back('\0');
+
+  // Parse the buffer using the xml file parsing library into doc
+  doc.parse<0>(&xml_buffer[0]);
+
+  // Find our root node
+  rapidxml::xml_node<> * root_node;
+  root_node = doc.first_node("data");
+
+  // Iterate over the nodes
+  for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
+    std::string type = "";
+    std::string x = "";
+    std::string y = "";
+    std::string group = "";
+    std::string bodytype = "totally not static";
+    std::string vel_x = "0";
+    std::string vel_y = "0";
+
+    type = object_node -> first_attribute("type") -> value();
+
+    int i = 0;
+    for( rapidxml::xml_node<> * map_item = object_node->first_node("x"); map_item; map_item = map_item->next_sibling()){
+      switch( i ){
+        case 0:
+          x = map_item -> value();
+          break;
+        case 1:
+          y = map_item -> value();
+          break;
+        case 2:
+          bodytype = map_item -> value();
+          break;
+        case 3:
+          group = map_item -> value();
+          break;
+        case 4:
+          vel_x = map_item -> value();
+          break;
+        case 5:
+          vel_y = map_item -> value();
+          break;
+        default:
+          break;
+      }
+      i++;
+    }
+
+    editor_box newBox;
+    newBox.x = (tools::string_to_float(x) * 20) - 16;
+    newBox.y = (tools::string_to_float(y) * -20) - 16;
+    newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
+    newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
+    newBox.bodyType = bodytype;
+
+    if( newBox.bodyType == "Dynamic")
+      newBox.type = 0;
+    else if( newBox.bodyType == "Static")
+      newBox.type = 1;
+    else if( newBox.bodyType == "Character")
+      newBox.type = 2;
+
+    editorBoxes.push_back( newBox);
+  }
 }
 
 // Save map to xml
