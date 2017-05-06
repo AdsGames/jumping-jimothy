@@ -82,6 +82,7 @@ b2Body* Box::getBody(){
 // Set state
 void Box::setStatic(){
   if(!static_box){
+    static_mode=false;
     static_velocity=body -> GetLinearVelocity();
     static_angular_velocity = body -> GetAngularVelocity();
     body -> SetType(b2_staticBody);
@@ -91,6 +92,7 @@ void Box::setStatic(){
 // Set whether dynamic
 void Box::setDynamic(){
   if(!static_box){
+    static_mode=true;
     body -> SetType(b2_dynamicBody);
     body -> ApplyLinearImpulse(static_velocity, body -> GetPosition());
     body -> ApplyAngularImpulse(static_angular_velocity);
@@ -127,10 +129,16 @@ void Box::draw(){
   al_use_transform(&trans);
 
   //al_draw_rectangle( -(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20, al_map_rgb(0,0,0), 3);
+  if(static_mode)
 
   al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
                            al_map_rgb( tools::clamp( 0, 255, int(body -> GetLinearVelocity().y * -10)),
                                        tools::clamp( 0, 255, 255 - int(body -> GetLinearVelocity().y * -10)),
+                                       0));
+  else
+     al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
+                           al_map_rgb( tools::clamp( 0, 255, int(static_velocity.y * -10)),
+                                       tools::clamp( 0, 255, 255 - int(static_velocity.y * -10)),
                                        0));
 
   al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
