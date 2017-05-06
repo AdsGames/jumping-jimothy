@@ -1,7 +1,6 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <Box2D/Box2D.h>
-#include <tools.h>
 #include <iostream>
 
 #include "Box.h"
@@ -11,7 +10,7 @@ Box::Box(){
 
 }
 
-void Box::init(float newX, float newY, float newWidth, float newHeight, bool newBodyType, b2World *newGameWorld){
+void Box::init(float newX, float newY, float newWidth, float newHeight, bool newBodyType,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
 
   std::cout<<"Created Box\n";
 

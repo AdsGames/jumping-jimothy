@@ -12,7 +12,7 @@ class Box{
   public:
     Box();
     ~Box();
-    void init(float, float, float, float, bool, b2World *);
+    void init(float, float, float, float, bool,ALLEGRO_BITMAP*, b2World *);
     virtual void draw();
     void setStatic();
     void setDynamic();
@@ -23,6 +23,8 @@ class Box{
     b2Body *getBody();
 
   protected:
+
+    ALLEGRO_BITMAP *sprite;
 
     bool static_mode;
     int type;
