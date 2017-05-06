@@ -2,15 +2,25 @@
 
 editor::editor(){
   // Load box image
-  image_box = tools::load_bitmap_ex( "DynamicBlock.png");
+  image_box[0] = tools::load_bitmap_ex( "DynamicBlock.png");
+  image_box[1] = tools::load_bitmap_ex( "StaticBlock.png");
 
   for( int i = 0; i < 4; i++){
     for( int t = 0; t < 4; t++){
-      edges[i + t*4] = al_create_sub_bitmap( image_box, i * 32, t * 32, 32, 32);
+      tiles[0][i + t*4] = al_create_sub_bitmap( image_box[0]  , i * 32, t * 32, 32, 32);
+      tiles[1][i + t*4] = al_create_sub_bitmap( image_box[1], i * 32, t * 32, 32, 32);
     }
   }
 
+  tile_type = 0;
+
   srand(time(NULL));
+
+  al_init_ttf_addon();
+  edit_font = al_load_ttf_font("pixelart.ttf",14,0);
+
+  if (!edit_font)
+    tools::abort_on_error("Could not load 'pixelart.ttf'.\n");
 }
 
 editor::~editor(){
@@ -26,7 +36,13 @@ void editor::update(){
     newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
     newBox.x_str = tools::toString( float(newBox.x) / 20.0f);
     newBox.y_str = tools::toString( -1 * float(newBox.y) / 20.0f);
-    newBox.bodyType = "static";
+    newBox.type = tile_type;
+
+    if( tile_type == 1)
+      newBox.bodyType = "Static";
+    else
+      newBox.bodyType = "Dynamic";
+
     editorBoxes.push_back( newBox);
   }
   if( mouseListener::mouse_button & 2){
@@ -37,9 +53,15 @@ void editor::update(){
     }
   }
 
+  // Tile types
+  if( keyListener::keyPressed[ALLEGRO_KEY_1])
+    tile_type = 0;
+  if( keyListener::keyPressed[ALLEGRO_KEY_2])
+    tile_type = 1;
+
   // Save map
   if( keyListener::keyPressed[ALLEGRO_KEY_S]){
-    save_map("seetfile.xml");
+    save_map("data/level2.xml");
   }
 }
 
@@ -54,13 +76,13 @@ void editor::draw(){
   }
 
   for( int i = 0; i < 768; i += 32){
-    //al_draw_line( 0, i, 1024, i, al_map_rgb( 0, 0, 0), 1);
+    //al_draw_line( 0,tile_type i, 1024, i, al_map_rgb( 0, 0, 0), 1);
   }
 
   // Boxes
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-    int type = 0;
     // LEFT
+    int type = 0;
     if( box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y))
       type += 1;
     // RIGHT
@@ -72,8 +94,11 @@ void editor::draw(){
     // DOWN
     if( box_at( editorBoxes.at(i).x, editorBoxes.at(i).y + 32))
       type += 8;
-    al_draw_bitmap( edges[type], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+    al_draw_bitmap( tiles[editorBoxes.at(i).type][type], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
   }
+
+  // Tile type
+  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type %i", tile_type);
 }
 
 
@@ -90,30 +115,27 @@ bool editor::box_at( int x, int y){
 // Save map to xml
 void editor::save_map( std::string mapName){
   // Write xml file
-  using namespace rapidxml;
-
-  // Write xml file
-  xml_document<> doc;
-  xml_node<>* decl = doc.allocate_node(node_declaration);
+  rapidxml::xml_document<> doc;
+  rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);
   decl->append_attribute(doc.allocate_attribute("version", "1.0"));
   decl->append_attribute(doc.allocate_attribute("encoding", "utf-8"));
   doc.append_node(decl);
 
-  xml_node<>* root_node = doc.allocate_node(node_element, "data");
+  rapidxml::xml_node<>* root_node = doc.allocate_node( rapidxml::node_element, "data");
   doc.append_node(root_node);
 
   // Tiles
   for( unsigned int i = 0; i < editorBoxes.size(); i++){
     // Object
     char *node_name = doc.allocate_string("Object");
-    xml_node<>* object_node = doc.allocate_node( node_element, node_name);
+    rapidxml::xml_node<>* object_node = doc.allocate_node( rapidxml::node_element, node_name);
     object_node -> append_attribute( doc.allocate_attribute("type", "Tile"));
     root_node -> append_node( object_node);
 
     // X/Y/Bodytype
-    object_node -> append_node( doc.allocate_node(node_element, "x", (editorBoxes.at(i).x_str).c_str()));
-    object_node -> append_node( doc.allocate_node(node_element, "y", (editorBoxes.at(i).y_str).c_str()));
-    object_node -> append_node( doc.allocate_node(node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
+    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "x", (editorBoxes.at(i).x_str).c_str()));
+    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "y", (editorBoxes.at(i).y_str).c_str()));
+    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
   }
 
   // Save to file
