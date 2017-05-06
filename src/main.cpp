@@ -116,6 +116,16 @@ void update(){
 
   // Timer
   if( ev.type == ALLEGRO_EVENT_TIMER){
+    // Change state?
+    if( keyListener::key[ALLEGRO_KEY_P]){
+      set_next_state( STATE_EDIT);
+
+    }
+    // Change state?
+    if( keyListener::key[ALLEGRO_KEY_O]){
+      set_next_state( STATE_GAME);
+    }
+
     // Change state (if needed)
     change_state();
 
@@ -123,11 +133,6 @@ void update(){
     m_listener.update();
     k_listener.update();
     j_listener.update();
-
-    // Change state?
-    if( keyListener::key[ALLEGRO_KEY_P]){
-      stateID = STATE_EDIT;
-    }
 
     // Update state
     currentState -> update();
@@ -177,10 +182,10 @@ int main(int argc, char **argv){
   al_setup();
 
   //Set the current state ID
-  stateID = STATE_EDIT;
+  stateID = STATE_GAME;
 
   //Set the current game state object
-  currentState = new editor();
+  currentState = new game();
 
   while(!closing)
     update();
