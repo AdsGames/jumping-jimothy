@@ -29,6 +29,8 @@ class menu : public state{
   protected:
     ALLEGRO_BITMAP *title_images[170];
 
+    int counter;
+
   private:
 };
 
