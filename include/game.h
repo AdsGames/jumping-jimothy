@@ -44,6 +44,7 @@ class game : public state{
     bool static_mode = false;
 
     ALLEGRO_BITMAP *box;
+    ALLEGRO_BITMAP *character;
 
     // Box2D world parameters
     b2Vec2 gravity;

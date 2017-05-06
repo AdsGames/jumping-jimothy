@@ -16,12 +16,14 @@ class Character : public Box{
   public:
     Character();
     ~Character();
-    void init(float, float, b2World *);
+    void init(float, float,ALLEGRO_BITMAP*, b2World *);
     void draw();
     void update();
 
   private:
+    bool direction;
     Sensor *sensor_box;
+    ALLEGRO_BITMAP *sprite;
 };
 
 
