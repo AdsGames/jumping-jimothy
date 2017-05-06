@@ -42,7 +42,8 @@ class game : public state{
     // Game variables
     std::vector<Box*> gameBoxes;
     Box *newBox = nullptr;
-   Box *rootBox = nullptr;
+    Box *rootBox = nullptr;
+    b2Body* groundBody;
 
     bool static_mode = false;
 
