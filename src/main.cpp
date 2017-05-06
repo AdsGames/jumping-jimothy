@@ -51,6 +51,9 @@ joystickListener j_listener;
 std::vector<Box*> gameBoxes;
 bool static_mode = false;
 
+ALLEGRO_BITMAP *box;
+
+
 
 void create_box(float newX, float newY, float newWidth, float newHeight, bool newBodyType, bool newIsSensor){
   Box *newBox = new Box();
@@ -111,13 +114,16 @@ void load_world(){
    // int generatedNumberResult = atoi( generated_node -> first_attribute("number") -> value());
   //  if( generatedNumberResult == random_number){
       for(rapidxml::xml_node<> * batter_node = generated_node -> first_node("x"); batter_node; batter_node = batter_node -> next_sibling()){
-        x = batter_node -> value();
+      //  x = batter_node -> value();
       }
     }
   }
 
 
+void load_sprites(){
+  box = load_bitmap_ex( "filepath/someth");
 
+}
 
 // Setup Allegro stuffs
 void al_setup(){
