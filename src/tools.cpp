@@ -1,6 +1,6 @@
 #include "tools.h"
 
-
+// A function to streamline error reporting in file loading
  void tools::abort_on_error( std::string message){
   al_show_native_message_box( nullptr, "Error", "Warning", message.c_str(), nullptr, ALLEGRO_MESSAGEBOX_YES_NO);
 	 //set_window_title("Error!");
@@ -20,7 +20,6 @@
 
   return temp_image;
 }
-// A function to streamline error reporting in file loading
 
 // Convert char to float
 float tools::string_to_float( std::string newChar){

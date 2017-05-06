@@ -4,6 +4,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
 #include <vector>
 #include <string>
@@ -24,6 +26,7 @@ struct editor_box{
   std::string x_str;
   std::string y_str;
   std::string bodyType;
+  int type;
 };
 
 class editor : public state{
@@ -35,13 +38,17 @@ class editor : public state{
     void update();
     void draw();
   protected:
-    ALLEGRO_BITMAP *image_box;
-    ALLEGRO_BITMAP *edges[16];
+    ALLEGRO_BITMAP *image_box[2];
+    ALLEGRO_BITMAP *tiles[2][16];
 
     std::vector<editor_box> editorBoxes;
     bool box_at( int x, int y);
 
     void save_map( std::string mapName);
+
+    int tile_type;
+
+    ALLEGRO_FONT *edit_font;
 
 
   private:
