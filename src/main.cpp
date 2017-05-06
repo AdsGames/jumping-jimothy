@@ -13,6 +13,7 @@
 
 #include "state.h"
 #include "game.h"
+#include "editor.h"
 
 // Current state object
 state *currentState = nullptr;
@@ -64,6 +65,9 @@ void change_state(){
     switch( nextState ){
       case STATE_GAME:
         currentState = new game();
+        break;
+      case STATE_EDIT:
+        currentState = new editor();
         break;
       case STATE_EXIT:
         closing = true;

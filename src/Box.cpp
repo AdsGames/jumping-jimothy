@@ -132,7 +132,6 @@ void Box::draw(){
                            al_map_rgb( tools::clamp( 0, 255, int(body -> GetLinearVelocity().y * -10)),
                                        tools::clamp( 0, 255, 255 - int(body -> GetLinearVelocity().y * -10)),
                                        0));
-  std::cout << body -> GetLinearVelocity().y << "\n";
 
   //al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 
