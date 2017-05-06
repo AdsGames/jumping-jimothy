@@ -76,7 +76,7 @@ void game::load_world(){
   // Find our root node
   root_node = doc.first_node("data");
 
-  // Iteratboole over the brewerys
+  // Iteratboole over the nodes
   for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
     std::string type = "";
     std::string x = "";
