@@ -7,7 +7,7 @@ editor::editor(){
   image_box[2] = tools::load_bitmap_ex( "character.png");
 
   for( int i = 0; i < 4; i++){
-    for( int t = 0; t < 4; t++){
+    for( int t = 0; t < 10; t++){
       tiles[0][i + t*4] = al_create_sub_bitmap( image_box[0], i * 32, t * 32, 32, 32);
       tiles[1][i + t*4] = al_create_sub_bitmap( image_box[1], i * 32, t * 32, 32, 32);
       tiles[2][i + t*4] = al_create_sub_bitmap( image_box[2], 0, 0, 32, 32);
@@ -112,7 +112,106 @@ void editor::draw(){
     // DOWN
     if( box_at( editorBoxes.at(i).x, editorBoxes.at(i).y + 32))
       type += 8;
+
+    // EMPTY TOP LEFT
+    if(type == 5 && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+        type = 21;
+
+    // EMPTY TOP RIGHT
+    if(type == 6 && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32)))
+        type = 22;
+
+    // EMPTY BOTTOM LEFT
+    if(type == 9 && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+        type = 25;
+
+    // EMPTY BOTTOM RIGHT
+    if(type == 10 && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+        type = 26;
+
+    // CLOSED ON RIGHT
+    if(type == 13) {
+        // EMPTY TOP LEFT
+        if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+           && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+            type = 16;
+        // EMPTY BOTTOM LEFT
+        else if((box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+           type = 17;
+        //BOTH EMPTY
+        else if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+            type = 29;
+    }
+
+    //CLOSED ON LEFT
+    if(type == 14) {
+        // EMPTY TOP RIGHT
+        if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+           && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+            type = 18;
+        // EMPTY BOTTOM RIGHT
+        else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+           && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+           type = 19;
+        // BOTH EMPTY
+        else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+           && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+            type = 30;
+    }
+
+    //CLOSED ON BOTTOM
+    if(type == 7) {
+        // EMPTY TOP RIGHT
+        if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+           && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            type = 31;
+        // EMPTY TOP LEFT
+        else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+           type = 20;
+        // BOTH EMPTY
+        else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            type = 23;
+    }
+
+    //CLOSED ON TOP
+    if(type == 11) {
+        // EMPTY BOTTOM RIGHT
+        if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+           && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+            type = 24;
+        // EMPTY BOTTOM LEFT
+        else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+           type = 28;
+        // BOTH EMPTY
+        else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+           && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+            type = 27;
+    }
+
+    if(type == 15){
+        // BLOCK AT TOP LEFT
+        if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+            type = 32;
+        // BLOCK AT TOP RIGHT
+        else if(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            type = 33;
+        // BLOCK AT BOTTOM LEFT
+        else if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            type = 34;
+        // BLOCK AT BOTTOM RIGHT
+        else if(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            type = 35;
+        else
+            type = 39;
+    }
+
     al_draw_bitmap( tiles[editorBoxes.at(i).type][type], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+
   }
 
   // Tile type
