@@ -40,11 +40,14 @@ class editor : public state{
   protected:
     ALLEGRO_BITMAP *image_box[2];
     ALLEGRO_BITMAP *tiles[2][16];
+    ALLEGRO_BITMAP *player;
 
     std::vector<editor_box> editorBoxes;
     bool box_at( int x, int y);
 
     void save_map( std::string mapName);
+
+    bool grid_on;
 
     int tile_type;
 
