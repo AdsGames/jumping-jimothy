@@ -124,6 +124,11 @@ void update(){
     k_listener.update();
     j_listener.update();
 
+    // Change state?
+    if( keyListener::key[ALLEGRO_KEY_P]){
+      stateID = STATE_EDIT;
+    }
+
     // Update state
     currentState -> update();
   }
@@ -172,10 +177,10 @@ int main(int argc, char **argv){
   al_setup();
 
   //Set the current state ID
-  stateID = STATE_GAME;
+  stateID = STATE_EDIT;
 
   //Set the current game state object
-  currentState = new game();
+  currentState = new editor();
 
   while(!closing)
     update();
