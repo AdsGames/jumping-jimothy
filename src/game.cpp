@@ -13,9 +13,9 @@ game::~game(){
 }
 
 // Creates box in world
-void game::create_box( float newX, float newY, float newWidth, float newHeight, bool newBodyType, bool newIsSensor){
+void game::create_box( float newX, float newY, float newWidth, float newHeight, float newVelX, float newVelY, bool newBodyType, bool newIsSensor){
   Box *newBox = new Box();
-  newBox -> init( newX, newY, newWidth, newHeight, newBodyType, box, gameWorld);
+  newBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, box, gameWorld);
   gameBoxes.push_back( newBox);
 }
 
@@ -81,7 +81,9 @@ void game::load_world(){
     std::string type = "";
     std::string x = "";
     std::string y = "";
-    std::string bodytype = "";
+    std::string bodytype = "Dynamic";
+    std::string vel_x = "0";
+    std::string vel_y = "0";
 
     // Interate over
     // int generatedNumberResult = atoi( generated_node -> first_attribute("number") -> value());
@@ -101,13 +103,20 @@ void game::load_world(){
         case 2:
           bodytype = map_item -> value();
           break;
+        case 3:
+          vel_x = map_item -> value();
+          break;
+        case 4:
+          vel_y = map_item -> value();
+          break;
+
         default:
           break;
       }
       i++;
     }
     if( type == "Tile")
-      create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, bodytype != "Static", false);
+      create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6,tools::string_to_float(vel_x),tools::string_to_float(vel_y), bodytype != "Static", false);
     if( type == "Character")
       create_character( tools::string_to_float(x),tools::string_to_float(y));
   }
@@ -121,7 +130,7 @@ void game::load_sprites(){
 // Update game logic
 void game::update(){
   if( mouseListener::mouse_pressed & 1)
-    create_box( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20, 1.6, 1.6, true, false);
+    create_box( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20, 1.6, 1.6,0,0, true, false);
 
   if( mouseListener::mouse_pressed & 2)
     create_character( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20);
