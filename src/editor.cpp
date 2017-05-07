@@ -1,6 +1,8 @@
 #include "editor.h"
 
 editor::editor(){
+
+  level_number=1;
   // Load box image
   image_box[0] = tools::load_bitmap_ex( "DynamicBlock.png");
   image_box[1] = tools::load_bitmap_ex( "StaticBlock.png");
@@ -67,28 +69,39 @@ void editor::update(){
       }
     }
   }
-
+  for(int i=0; i<10; i++){
+    if( keyListener::keyPressed[i+27])
+    level_number = i;
+  }
   // Tile types
-  if( keyListener::keyPressed[ALLEGRO_KEY_1])
+  if( keyListener::keyPressed[ALLEGRO_KEY_Q])
     tile_type = 0;
-  if( keyListener::keyPressed[ALLEGRO_KEY_2])
+  if( keyListener::keyPressed[ALLEGRO_KEY_W])
     tile_type = 1;
-  if( keyListener::keyPressed[ALLEGRO_KEY_3])
+  if( keyListener::keyPressed[ALLEGRO_KEY_E])
     tile_type = 2;
-  if( keyListener::keyPressed[ALLEGRO_KEY_4])
+  if( keyListener::keyPressed[ALLEGRO_KEY_R])
     tile_type = 3;
 
   // Grid toggle
   if( keyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
+  if( keyListener::keyPressed[ALLEGRO_KEY_R]){
+
+
+  }
+
   // Load map
-  if( keyListener::keyPressed[ALLEGRO_KEY_L])
-    load_map("data/level.xml");
+  if( keyListener::keyPressed[ALLEGRO_KEY_L]){
+    editorBoxes.clear();
+    load_map("data/level_"+tools::convertIntToString(level_number)+".xml");
+  }
 
   // Save map
   if( keyListener::keyPressed[ALLEGRO_KEY_S]){
-    save_map("data/level.xml");
+      editorBoxes.clear();
+    save_map("data/level_"+tools::convertIntToString(level_number)+".xml");
   }
 }
 
@@ -299,7 +312,14 @@ void editor::draw(){
   }
 
   // Tile type
-  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type %i", tile_type);
+  if(tile_type==0)al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Dynamic");
+  if(tile_type==1)al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Static");
+  if(tile_type==2)al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Character spawn");
+  if(tile_type==3)al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Endgame goat");
+
+  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 20, 0, "Level: level_%i.xml",level_number);
+
+
 }
 
 

@@ -6,6 +6,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_native_dialog.h>
 
 #include <vector>
 #include <string>
@@ -50,6 +51,7 @@ class editor : public state{
     bool grid_on;
 
     int tile_type;
+    int level_number;
 
     ALLEGRO_FONT *edit_font;
 
