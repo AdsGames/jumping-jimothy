@@ -205,6 +205,7 @@ void editor::draw(){
               type = 27;
       }
 
+      // COVERED ON ALL SIDES
       if(type == 15){
           // BLOCK AT TOP LEFT
           if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
@@ -219,7 +220,7 @@ void editor::draw(){
           else if(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
               type = 35;
           else
-              type = 39;
+              type = 36;
       }
       al_draw_bitmap( tiles[editorBoxes.at(i).type][type], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     }
