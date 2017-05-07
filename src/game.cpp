@@ -192,6 +192,17 @@ void game::update(){
     level++;
     reset();
   }
+  if(gameCharacter->getX()<-1)
+    reset();
+
+if(gameCharacter->getX()>40)
+    reset();
+
+  if(gameCharacter->getY()>2)
+    reset();
+
+  if(gameCharacter->getY()<-40)
+   reset();
 
 
 
