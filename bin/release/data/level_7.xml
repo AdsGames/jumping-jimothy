@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<Object type="Tile">
+		<x>10.4</x>
+		<y>-31.2</y>
+		<bodytype>Dynamic</bodytype>
+		<orientation>2</orientation>
+	</Object>
+	<Object type="Tile">
+		<x>12</x>
+		<y>-31.2</y>
+		<bodytype>Dynamic</bodytype>
+		<orientation>3</orientation>
+	</Object>
+	<Object type="Tile">
+		<x>13.6</x>
+		<y>-31.2</y>
+		<bodytype>Dynamic</bodytype>
+		<orientation>3</orientation>
+	</Object>
+	<Object type="Tile">
+		<x>15.2</x>
+		<y>-31.2</y>
+		<bodytype>Dynamic</bodytype>
+		<orientation>3</orientation>
+	</Object>
+	<Object type="Tile">
+		<x>16.8</x>
+		<y>-31.2</y>
+		<bodytype>Dynamic</bodytype>
+		<orientation>3</orientation>
+	</Object>
+	<Object type="Tile">
+		<x>18.4</x>
+		<y>-31.2</y>
+		<bodytype>Dynamic</bodytype>
+		<orientation>1</orientation>
+	</Object>
+	<Object type="Character">
+		<x>10.4</x>
+		<y>-28</y>
+		<bodytype>Character</bodytype>
+		<orientation>0</orientation>
+	</Object>
+	<Object type="Finish">
+		<x>16.8</x>
+		<y>-28</y>
+		<bodytype>Finish</bodytype>
+		<orientation>0</orientation>
+	</Object>
+</data>
+
