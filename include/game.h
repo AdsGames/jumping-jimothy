@@ -13,6 +13,8 @@
 #include "state.h"
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
+#include <allegro5/allegro.h>
+#include <allegro5/bitmap.h>
 
 #include <Box.h>
 #include <tools.h>
@@ -39,7 +41,7 @@ class game : public state{
     void load_world();
     void reset();
 
-    Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY, bool newBodyType, bool newIsSensor);
+    Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,ALLEGRO_BITMAP* newSprite, bool newBodyType, bool newIsSensor);
     Character *create_character(float newX, float newY);
     Box *create_goat(float,float);
 
@@ -57,6 +59,8 @@ class game : public state{
     ALLEGRO_BITMAP *box;
     ALLEGRO_BITMAP *character;
     ALLEGRO_BITMAP *goat_sprite;
+    ALLEGRO_BITMAP *static_tileset;
+    ALLEGRO_BITMAP *tiles[4][48];
 
     // Box2D world parameters
     b2Vec2 gravity;

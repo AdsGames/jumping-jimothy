@@ -50,7 +50,8 @@ void editor::update(){
     newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
     newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
     newBox.type = tile_type;
-    newBox.orientation = 1;
+    newBox.orientation = 12;
+    newBox.orientation_str = "12";
 
     if( tile_type == 0)
       newBox.bodyType = "Dynamic";
@@ -84,7 +85,7 @@ void editor::update(){
   if( keyListener::keyPressed[ALLEGRO_KEY_R])
     tile_type = 3;
 
-  if( keyListener::keyPressed[ALLEGRO_KEY_T])
+ // if( keyListener::keyPressed[ALLEGRO_KEY_T])
     calculate_orientation_global();
 
   // Grid toggle
@@ -114,8 +115,11 @@ void editor::update(){
   }
 }
 void editor::calculate_orientation_global(){
-  for( unsigned int i = 0; i < editorBoxes.size(); i ++)
-    editorBoxes.at(i).orientation = calculate_orientation(i);
+  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
+    int orientation = calculate_orientation(i);
+    editorBoxes.at(i).orientation = orientation;
+    editorBoxes.at(i).orientation_str = tools::convertIntToString(orientation);
+  }
 
 
 
@@ -419,8 +423,8 @@ void editor::load_map( std::string mapName){
     newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
     newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
     newBox.orientation = (tools::convertStringToInt(orientation));
-    newBox.orientation_str = tools::convertIntToString( newBox.orientation);
-    std::cout<<newBox.orientation_str<<"\n";
+    newBox.orientation_str = orientation;
+
 
     newBox.bodyType = bodytype;
 
@@ -439,6 +443,7 @@ void editor::load_map( std::string mapName){
 
 // Save map to xml
 void editor::save_map( std::string mapName){
+
   // Write xml file
   rapidxml::xml_document<> doc;
   rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);
@@ -470,6 +475,7 @@ void editor::save_map( std::string mapName){
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "y", (editorBoxes.at(i).y_str).c_str()));
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation",editorBoxes.at(i).orientation_str.c_str() ));
+
   }
 
   // Save to file

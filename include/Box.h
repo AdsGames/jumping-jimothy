@@ -23,6 +23,7 @@ class Box{
     virtual void draw();
     void setStatic();
     void setDynamic();
+    void setOrientation(int);
     virtual void update();
     int getType();
     float getX();
@@ -40,6 +41,7 @@ class Box{
 
     bool static_mode;
     int type;
+    int orientation;
 
     b2Vec2 static_velocity;
     float static_angular_velocity;

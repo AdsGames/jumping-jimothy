@@ -1,4 +1,5 @@
 #include "game.h"
+#include <allegro5/bitmap.h>
 
 // Constructor
 game::game(){
@@ -21,9 +22,9 @@ Box *game::create_goat( float newX, float newY){
 }
 
 // Creates box in world
-Box *game::create_box( float newX, float newY, float newWidth, float newHeight, float newVelX, float newVelY, bool newBodyType, bool newIsSensor){
+Box *game::create_box( float newX, float newY, float newWidth, float newHeight, float newVelX,float newVelY, ALLEGRO_BITMAP *newSprite, bool newBodyType, bool newIsSensor){
   Box *newBox = new Box();
-  newBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, box, gameWorld);
+  newBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, newSprite, gameWorld);
   gameBoxes.push_back( newBox);
   return newBox;
 }
@@ -93,7 +94,7 @@ void game::load_world(){
     std::string type = "";
     std::string x = "";
     std::string y = "";
-    std::string group = "";
+    std::string orientation = "0";
     std::string bodytype = "totally not static";
     std::string vel_x = "0";
     std::string vel_y = "0";
@@ -118,7 +119,7 @@ void game::load_world(){
           bodytype = map_item -> value();
           break;
         case 3:
-          group = map_item -> value();
+          orientation = map_item -> value();
           break;
         case 4:
           vel_x = map_item -> value();
@@ -132,28 +133,32 @@ void game::load_world(){
       }
       i++;
     }
-    if( type == "Tile")
-      newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6,tools::string_to_float(vel_x),tools::string_to_float(vel_y), bodytype != "Static", false);
+    if( type == "Tile"){
+      if(bodytype=="Static")
+        newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6,tools::string_to_float(vel_x),tools::string_to_float(vel_y), tiles[1][tools::convertStringToInt(orientation)], bodytype != "Static", false);
+      else
+        newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6,tools::string_to_float(vel_x),tools::string_to_float(vel_y),box, bodytype != "Static", false);
+    }
     if( type == "Character")
       gameCharacter = create_character( tools::string_to_float(x),tools::string_to_float(y));
     if( type == "Finish")
       goat = create_goat( tools::string_to_float(x),tools::string_to_float(y));
-    if(group=="1"){
-      if(rootBox==nullptr)
-        rootBox=newBox;
-      else{
-        b2Vec2 FeetAnchor(0,0);
-
-
-        b2WeldJointDef *jointDef = new b2WeldJointDef();
-        jointDef -> Initialize(newBox -> getBody(), rootBox -> getBody(), FeetAnchor);
-        jointDef -> collideConnected = false;
-        jointDef  -> referenceAngle = 0;
-        gameWorld -> CreateJoint(jointDef);
-      }
-
-
-    }
+//    if(group=="1"){
+//      if(rootBox==nullptr)
+//        rootBox=newBox;
+//      else{
+//        b2Vec2 FeetAnchor(0,0);
+//
+//
+//        b2WeldJointDef *jointDef = new b2WeldJointDef();
+//        jointDef -> Initialize(newBox -> getBody(), rootBox -> getBody(), FeetAnchor);
+//        jointDef -> collideConnected = false;
+//        jointDef  -> referenceAngle = 0;
+//        gameWorld -> CreateJoint(jointDef);
+//      }
+//
+//
+//    }
 
   }
 }
@@ -176,6 +181,14 @@ void game::load_sprites(){
   box = tools::load_bitmap_ex( "box.png");
   goat_sprite = tools::load_bitmap_ex( "goat.png");
   character = tools::load_bitmap_ex( "character.png");
+  static_tileset = tools::load_bitmap_ex( "StaticBlock.png");
+
+
+  for( int i = 0; i < 4; i++){
+    for( int t = 0; t < 12; t++){
+      tiles[1][i + t*4] = al_create_sub_bitmap( static_tileset, i * 32, t * 32, 32, 32);
+    }
+  }
 }
 
 // Update game logic
@@ -187,7 +200,7 @@ void game::update(){
 
 
   if( mouseListener::mouse_pressed & 1)
-    create_box( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20, 1.6, 1.6,0,0, true, false);
+    create_box( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20, 1.6, 1.6,0,0,0, true, false);
 
   if( mouseListener::mouse_pressed & 2)
     create_character( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20);
