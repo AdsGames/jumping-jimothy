@@ -167,6 +167,7 @@ void game::reset(){
    b2_setup();
   load_sprites();
   load_world(level);
+  static_mode=false;
 
 }
 
@@ -240,6 +241,7 @@ if(gameCharacter->getX()>40)
 
   // Pause/Play time
   if(keyListener::lastKeyPressed==ALLEGRO_KEY_SPACE){
+
     static_mode =! static_mode;
     if(static_mode){
       for( unsigned int i = 0; i < gameBoxes.size(); i++){
@@ -254,10 +256,12 @@ if(gameCharacter->getX()>40)
         if( gameBoxes[i] -> getType()==BOX){
           // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
           gameBoxes[i] -> setDynamic();
+
         }
       }
     }
   }
+
 }
 
 // Draw to screen

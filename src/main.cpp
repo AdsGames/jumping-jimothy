@@ -101,6 +101,7 @@ void al_setup(){
 
   timer = al_create_timer(1.0 / MAX_FPS);
 
+  al_set_new_display_flags(ALLEGRO_FULLSCREEN);
   display = al_create_display(1024, 768);
 
   event_queue = al_create_event_queue();
@@ -150,7 +151,7 @@ void update(){
 
   }
   // Exit
-  else if( ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+  else if( ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE || k_listener.key[ALLEGRO_KEY_ESCAPE]){
     closing = true;
   }
 
