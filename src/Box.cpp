@@ -171,14 +171,14 @@ void Box::setDynamic(){
     static_mode = false;
     body -> SetType( b2_dynamicBody);
 
-    if(static_velocity.y<=0.01f && static_velocity.y>=-0.01f && static_velocity.x<=0.1f && static_velocity.x>=-0.1f && static_angular_velocity<=0.1f && static_angular_velocity>=-0.1f ){
-      body -> SetAwake(false);
-      body -> SetLinearVelocity(b2Vec2(0,0));
-    }
-    else{
+   // if(static_velocity.y<=0.01f && static_velocity.y>=-0.01f && static_velocity.x<=0.1f && static_velocity.x>=-0.1f && static_angular_velocity<=0.1f && static_angular_velocity>=-0.1f ){
+      //body -> SetAwake(false);
+      //body -> SetLinearVelocity(b2Vec2(0,0));
+   // }
+   // else{
       body -> SetLinearVelocity( static_velocity);
       body -> SetAngularVelocity( static_angular_velocity);
-    }
+   // }
   }
 }
 

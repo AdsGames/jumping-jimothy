@@ -195,11 +195,11 @@ void game::update(){
 
 
 
-  if( mouseListener::mouse_pressed & 1)
-    create_box( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20, 1.6, 1.6,0,0,0, true, false);
+  //if( mouseListener::mouse_pressed & 1)
+ //   create_box( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20, 1.6, 1.6,0,0,0, true, false);
 
-  if( mouseListener::mouse_pressed & 2)
-    create_character( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20);
+ // if( mouseListener::mouse_pressed & 2)
+  //  create_character( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20);
 
   // Update the Box2D game world
   gameWorld -> Step( timeStep, velocityIterations, positionIterations);
