@@ -162,15 +162,15 @@ void game::load_world(int newLevel){
 }
 void game::reset(){
   gameBoxes.clear();
-   b2_setup();
+  b2_setup();
   load_sprites();
   load_world(level);
   static_mode=true;
   first_play=true;
-  for( unsigned int i = 0; i < gameBoxes.size(); i++){
-    if( gameBoxes[i] -> getType()==BOX){
-      gameBoxes[i] -> setStatic();
-    }
+ for( unsigned int i = 0; i < gameBoxes.size(); i++){
+   if( gameBoxes[i] -> getType()==BOX){
+     gameBoxes[i] -> setStatic();
+ }
 
   }
 
@@ -209,7 +209,7 @@ void game::update(){
   if(gameCharacter->getX()<-1)
     reset();
 
-if(gameCharacter->getX()>40)
+if(gameCharacter->getX()>51.5f)
     reset();
 
   if(gameCharacter->getY()>2)

@@ -17,6 +17,8 @@ Box::~Box(){
 // We'll use this for the goat
 void Box::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGameWorld, Character *newCharacter){
 
+    goat_frame=0;
+    goat_tick=0;
     sprite = newSprite;
     gameCharacter = newCharacter;
     for( int i = 0; i < 16; i++){
@@ -247,7 +249,7 @@ void Box::draw(){
   }
   if(type==GOAT)
     al_draw_bitmap(goat_images[goat_frame],-(width/2)*20,-(height/2)*20,0);
-  else
+ else
     al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 
 
