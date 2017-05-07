@@ -170,11 +170,14 @@ void game::load_world(int newLevel){
 }
 void game::reset(){
   gameBoxes.clear();
+   goat = nullptr;
+   gameCharacter = nullptr;
   b2_setup();
   load_sprites();
   load_world(level);
   static_mode=true;
   first_play=true;
+
  for( unsigned int i = 0; i < gameBoxes.size(); i++){
    if( gameBoxes[i] -> getType()==BOX){
      gameBoxes[i] -> setStatic();
