@@ -8,7 +8,7 @@ editor::editor(){
   image_box[3] = tools::load_bitmap_ex( "DisgoatSpriteMap.png");
 
   for( int i = 0; i < 4; i++){
-    for( int t = 0; t < 10; t++){
+    for( int t = 0; t < 12; t++){
       tiles[0][i + t*4] = al_create_sub_bitmap( image_box[0], i * 32, t * 32, 32, 32);
       tiles[1][i + t*4] = al_create_sub_bitmap( image_box[1], i * 32, t * 32, 32, 32);
       tiles[2][i + t*4] = al_create_sub_bitmap( image_box[2], 0, 0, 32, 32);
@@ -118,7 +118,7 @@ void editor::draw(){
       // RIGHT
       if( box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y))
         type += 2;
-      // UP
+      // UP(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)
       if( box_at( editorBoxes.at(i).x, editorBoxes.at(i).y - 32))
         type += 4;
       // DOWN
@@ -207,21 +207,41 @@ void editor::draw(){
 
       // COVERED ON ALL SIDES
       if(type == 15){
+
           // BLOCK AT TOP LEFT
-          if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+          if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
               type = 32;
           // BLOCK AT TOP RIGHT
-          else if(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32)))
               type = 33;
           // BLOCK AT BOTTOM LEFT
-          else if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+          else if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
               type = 34;
           // BLOCK AT BOTTOM RIGHT
+          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+                type = 35;
+
+          // BLOCK AT TOP LEFT
+          if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+              type = 42;
+          // BLOCK AT TOP RIGHT
+          else if(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+              type = 43;
+          // BLOCK AT BOTTOM LEFT
+          else if(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+              type = 44;
+          // BLOCK AT BOTTOM RIGHT
           else if(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-              type = 35;
-          else
-              type = 36;
+                type = 45;
+          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+              type = 46;
       }
+
+;
+
       al_draw_bitmap( tiles[editorBoxes.at(i).type][type], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     }
     else if( editorBoxes.at(i).type == 2)
