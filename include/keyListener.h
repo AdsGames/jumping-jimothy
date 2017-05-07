@@ -18,12 +18,15 @@ class keyListener
     keyListener();
     virtual ~keyListener();
 
+    static bool anyKeyPressed;
+
     void on_event( ALLEGRO_EVENT_TYPE event_type, int keycode);
     void update();
 
     static bool key[ALLEGRO_KEY_MAX];
     static bool keyPressed[ALLEGRO_KEY_MAX];
     static bool keyReleased[ALLEGRO_KEY_MAX];
+    //
 
     static int lastKeyPressed;
     static int lastKeyReleased;

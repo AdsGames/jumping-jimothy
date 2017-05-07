@@ -31,6 +31,10 @@ class state{
     // Deconstructor
     virtual ~state() {};
 
+    int getStateID(){
+      return stateID;
+    }
+
     // Draw to screen
     virtual void draw() = 0;
 
