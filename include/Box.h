@@ -22,7 +22,7 @@ class Box{
     bool getGoatWin();
     virtual void draw();
     void setStatic();
-    void setDynamic();
+    void setDynamic(bool);
     void setOrientation(int);
     virtual void update();
     int getType();

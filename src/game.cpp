@@ -3,9 +3,7 @@
 
 // Constructor
 game::game(){
-  b2_setup();
-  load_sprites();
-  load_world(1);
+  reset();
 }
 
 // Destructor
@@ -167,7 +165,16 @@ void game::reset(){
    b2_setup();
   load_sprites();
   load_world(level);
-  static_mode=false;
+  static_mode=true;
+  first_play=true;
+  for( unsigned int i = 0; i < gameBoxes.size(); i++){
+    if( gameBoxes[i] -> getType()==BOX){
+      gameBoxes[i] -> setStatic();
+    }
+
+  }
+
+
 
 }
 
@@ -261,10 +268,12 @@ if(gameCharacter->getX()>40)
       for( unsigned int i = 0; i < gameBoxes.size(); i++){
         if( gameBoxes[i] -> getType()==BOX){
           // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
-          gameBoxes[i] -> setDynamic();
+          gameBoxes[i] -> setDynamic(!first_play);
 
         }
+
       }
+      first_play=false;
     }
   }
 
