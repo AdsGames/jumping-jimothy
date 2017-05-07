@@ -43,6 +43,7 @@ class joystickListener
     static bool button[JOY_MAX_BUTTONS];
     static bool buttonPressed[JOY_MAX_BUTTONS];
     static bool buttonReleased[JOY_MAX_BUTTONS];
+    static bool anyButtonPressed;
 
     static int lastButtonPressed;
     static int lastButtonReleased;

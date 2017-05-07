@@ -145,7 +145,7 @@ void update(){
     }
 
 
-    if( keyListener::anyKeyPressed && currentState -> getStateID()==STATE_MENU){
+    if( (keyListener::anyKeyPressed || joystickListener::anyButtonPressed) && currentState -> getStateID()==STATE_MENU ){
 
       set_next_state(STATE_GAME);
     }
