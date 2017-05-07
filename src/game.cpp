@@ -1,6 +1,7 @@
 #include "game.h"
 #include <allegro5/bitmap.h>
 #include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_native_dialog.h>
 
 // Constructor
 game::game(){
@@ -218,7 +219,11 @@ void game::update(){
 
   if(goat ->getGoatWin()){
     level++;
-    reset();
+    if(level>=10){
+      al_show_native_message_box( nullptr, "Hurrah!", "Victory", "Will you accept your prize?", nullptr, ALLEGRO_MESSAGEBOX_YES_NO);
+      gameCharacter -> getBody() -> SetTransform(b2Vec2(100,100),0);
+    }else
+      reset();
   }
   if(gameCharacter->getX()<-1)
     reset();
