@@ -6,6 +6,7 @@ bool joystickListener::buttonReleased[JOY_MAX_BUTTONS] = { false};
 bool joystickListener::lastTicksButton[JOY_MAX_BUTTONS] = { false};
 int joystickListener::lastButtonPressed = -1;
 int joystickListener::lastButtonReleased = -1;
+bool joystickListener::anyButtonPressed=false;
 
 
 // Constructor
@@ -37,8 +38,13 @@ void joystickListener::update(){
   lastButtonPressed = -1;
   lastButtonReleased = -1;
 
+  anyButtonPressed = false;
   // Check button just pressed
   for( int i = 0; i < JOY_MAX_BUTTONS; i++){
+
+    if(button[i])
+      anyButtonPressed=true;
+
     // Clear old values
     buttonPressed[i] = false;
     buttonReleased[i] = false;
