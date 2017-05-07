@@ -128,98 +128,99 @@ void editor::calculate_orientation_global(){
 int editor::calculate_orientation(int i){
   // Boxes
     int orientation = 0;
+    int box_type = editorBoxes.at(i).type;
     if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
 
       // LEFT
-      if( box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y))
+      if( box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y))
         orientation += 1;
       // RIGHT
-      if( box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y))
+      if( box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y))
         orientation += 2;
-      // UP(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)
-      if( box_at( editorBoxes.at(i).x, editorBoxes.at(i).y - 32))
+      // UP(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)
+      if( box_at_with_type(box_type, editorBoxes.at(i).x, editorBoxes.at(i).y - 32))
         orientation += 4;
       // DOWN
-      if( box_at( editorBoxes.at(i).x, editorBoxes.at(i).y + 32))
+      if( box_at_with_type(box_type, editorBoxes.at(i).x, editorBoxes.at(i).y + 32))
         orientation += 8;
 
       // EMPTY TOP LEFT
-      if(orientation == 5 && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+      if(orientation == 5 && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
           orientation = 21;
 
       // EMPTY TOP RIGHT
-      if(orientation == 6 && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32)))
+      if(orientation == 6 && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32)))
           orientation = 22;
 
       // EMPTY BOTTOM LEFT
-      if(orientation == 9 && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+      if(orientation == 9 && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
           orientation = 25;
 
       // EMPTY BOTTOM RIGHT
-      if(orientation == 10 && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+      if(orientation == 10 && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
           orientation = 26;
 
       // CLOSED ON RIGHT
       if(orientation == 13) {
           // EMPTY TOP LEFT
-          if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
-             && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+          if(!(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+             && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
               orientation = 16;
           // EMPTY BOTTOM LEFT
-          else if((box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
-             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+          else if((box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+             && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
              orientation = 17;
           //BOTH EMPTY
-          else if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
-             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+          else if(!(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+             && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
               orientation = 29;
       }
 
       //CLOSED ON LEFT
       if(orientation == 14) {
           // EMPTY TOP RIGHT
-          if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-             && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+          if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && (box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
               orientation = 18;
           // EMPTY BOTTOM RIGHT
-          else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-             && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+          else if((box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
              orientation = 19;
           // BOTH EMPTY
-          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-             && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+          else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
               orientation = 30;
       }
 
       //CLOSED ON BOTTOM
       if(orientation == 7) {
           // EMPTY TOP RIGHT
-          if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-             && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+          if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
               orientation = 31;
           // EMPTY TOP LEFT
-          else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+          else if((box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
              orientation = 20;
           // BOTH EMPTY
-          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+          else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+             && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
               orientation = 23;
       }
 
       //CLOSED ON TOP
       if(orientation == 11) {
           // EMPTY BOTTOM RIGHT
-          if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-             && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+          if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+             && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
               orientation = 24;
           // EMPTY BOTTOM LEFT
-          else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+          else if((box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+             && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
              orientation = 28;
           // BOTH EMPTY
-          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-             && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+          else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+             && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
               orientation = 27;
       }
 
@@ -228,81 +229,81 @@ int editor::calculate_orientation(int i){
         {
 
             // EMPTY AT TOP LEFT
-            if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            if(!(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 32;
             // EMPTY AT TOP RIGHT
-            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32)))
+            else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32)))
                 orientation = 33;
             // EMPTY AT BOTTOM LEFT
-            else if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+            else if(!(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
                 orientation = 34;
             // EMPTY AT BOTTOM RIGHT
-            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+            else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
                 orientation = 35;
 
-            if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            if((box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 36;
 
-            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 37;
 
-            else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            else if((box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 38;
 
-            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 39;
 
-            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 40;
-            else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            else if((box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 41;
 
             // BLOCK AT TOP LEFT
-            if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 42;
             // BLOCK AT TOP RIGHT
-            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 43;
             // BLOCK AT BOTTOM LEFT
-            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && (box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 44;
             // BLOCK AT BOTTOM RIGHT
-            else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            else if((box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 45;
-            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+            else if(!(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at_with_type(box_type, editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 orientation = 46;
         }
 
@@ -352,7 +353,17 @@ void editor::draw(){
 
 
 // Check if box is at location
-bool editor::box_at( int x, int y){
+bool editor::box_at_with_type( int newType,int x, int y){
+  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
+    if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, x, x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, y, y + 1) && editorBoxes.at(i).type==newType){
+      return true;
+    }
+  }
+  return false;
+}
+
+// Check if box is at location
+bool editor::box_at(int x, int y){
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
     if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, x, x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, y, y + 1)){
       return true;
@@ -360,7 +371,6 @@ bool editor::box_at( int x, int y){
   }
   return false;
 }
-
 // Load map from xml
 void editor::load_map( std::string mapName){
   // Doc
