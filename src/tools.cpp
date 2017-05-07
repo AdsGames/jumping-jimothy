@@ -27,6 +27,13 @@ int tools::convertStringToInt( std::string newString){
 	 exit(-1);
 }
 
+ALLEGRO_SAMPLE *tools::load_sample_ex( std::string file){
+  ALLEGRO_SAMPLE *temp_sample = nullptr;
+  if( !(temp_sample = al_load_sample( file.c_str())))
+    abort_on_error( std::string("Cannot find sample " + file + "\nTry reinstalling from adsgames.net/download/robotflier"));
+  return temp_sample;
+}
+
 // Checks if file exists
  ALLEGRO_BITMAP * tools::load_bitmap_ex( std::string file){
   ALLEGRO_BITMAP *temp_image = nullptr;

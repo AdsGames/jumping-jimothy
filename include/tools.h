@@ -9,6 +9,7 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_audio.h>
 
 
 class tools{
@@ -20,6 +21,8 @@ class tools{
         static int convertStringToInt(std::string);
 
         static ALLEGRO_BITMAP * load_bitmap_ex( std::string file);
+        static ALLEGRO_SAMPLE * load_sample_ex( std::string file);
+
 
         // Clamp values
         template <class T> static T clamp( T min_val, T max_val, T value) {
