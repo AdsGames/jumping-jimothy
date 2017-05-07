@@ -1,9 +1,17 @@
 #include "game.h"
 #include <allegro5/bitmap.h>
+#include <allegro5/allegro_audio.h>
 
 // Constructor
 game::game(){
+
   reset();
+    //music = tools::load_sample_ex( "music/tojam.ogg");
+  //K is for kill me
+   music = al_load_sample("music/tojam1.ogg");
+
+  al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &currentMusic);
+
 }
 
 // Destructor
@@ -188,6 +196,7 @@ void game::load_sprites(){
   static_tileset = tools::load_bitmap_ex( "StaticBlock.png");
   play = tools::load_bitmap_ex( "play.png");
   pause = tools::load_bitmap_ex( "pause.png");
+
 
 
 

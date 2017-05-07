@@ -30,7 +30,7 @@ int tools::convertStringToInt( std::string newString){
 ALLEGRO_SAMPLE *tools::load_sample_ex( std::string file){
   ALLEGRO_SAMPLE *temp_sample = nullptr;
   if( !(temp_sample = al_load_sample( file.c_str())))
-    abort_on_error( std::string("Cannot find sample " + file + "\nTry reinstalling from adsgames.net/download/robotflier"));
+    abort_on_error( std::string("Cannot find sample " + file + "\nYou suck"));
   return temp_sample;
 }
 
