@@ -57,6 +57,7 @@ class game : public state{
     Box *rootBox = nullptr;
     b2Body* groundBody;
 
+    bool first_play=true;
     bool static_mode = false;
 
     ALLEGRO_BITMAP *box;
