@@ -96,12 +96,17 @@ void editor::update(){
   if( keyListener::keyPressed[ALLEGRO_KEY_L]){
     editorBoxes.clear();
     load_map("data/level_"+tools::convertIntToString(level_number)+".xml");
+    std::string path = "data/level_"+tools::convertIntToString(level_number)+".xml";
+    al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ",path.c_str(), nullptr, 0);
+
   }
 
   // Save map
   if( keyListener::keyPressed[ALLEGRO_KEY_S]){
-      editorBoxes.clear();
     save_map("data/level_"+tools::convertIntToString(level_number)+".xml");
+    std::string path = "data/level_"+tools::convertIntToString(level_number)+".xml";
+    al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ",path.c_str(), nullptr, 0);
+
   }
 }
 
