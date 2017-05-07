@@ -246,7 +246,7 @@ if(gameCharacter->getX()>51.5f)
   }{
 
 }
-   if(keyListener::lastKeyPressed==ALLEGRO_KEY_Z)
+   if(keyListener::lastKeyPressed==ALLEGRO_KEY_Z || keyListener::lastKeyPressed==ALLEGRO_KEY_Z ||  joystickListener::buttonPressed[JOY_XBOX_B] )
     reset();
 
   if(keyListener::lastKeyPressed==ALLEGRO_KEY_C){
