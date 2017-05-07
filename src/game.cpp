@@ -195,6 +195,8 @@ void game::load_sprites(){
   goat_sprite = tools::load_bitmap_ex( "goat.png");
   goat_map = tools::load_bitmap_ex( "goat_map.png");
 
+  help = tools::load_bitmap_ex( "help.png");
+
   character = tools::load_bitmap_ex( "character.png");
   static_tileset = tools::load_bitmap_ex( "StaticBlock.png");
   play = tools::load_bitmap_ex( "play.png");
@@ -294,7 +296,13 @@ if(gameCharacter->getX()>51.5f)
 // Draw to screen
 void game::draw(){
   // Background
+
+
+
   al_clear_to_color( al_map_rgb(40,40,60));
+
+  if(level==1)
+        al_draw_bitmap(help,0,0,0);
 
   // Draw boxes
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
