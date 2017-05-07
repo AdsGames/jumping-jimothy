@@ -16,7 +16,7 @@ game::~game(){
 // Creates box in world
 Box *game::create_goat( float newX, float newY){
   Box *newBox = new Box();
-  newBox -> init( newX, newY,goat_sprite, gameWorld,gameCharacter);
+  newBox -> init( newX, newY,goat_map, gameWorld,gameCharacter);
   gameBoxes.push_back( newBox);
   return newBox;
 }
@@ -175,6 +175,8 @@ void game::reset(){
 void game::load_sprites(){
   box = tools::load_bitmap_ex( "box.png");
   goat_sprite = tools::load_bitmap_ex( "goat.png");
+  goat_map = tools::load_bitmap_ex( "goat_map.png");
+
   character = tools::load_bitmap_ex( "character.png");
   static_tileset = tools::load_bitmap_ex( "StaticBlock.png");
   play = tools::load_bitmap_ex( "play.png");

@@ -62,6 +62,7 @@ class game : public state{
     ALLEGRO_BITMAP *box;
     ALLEGRO_BITMAP *character;
     ALLEGRO_BITMAP *goat_sprite;
+    ALLEGRO_BITMAP *goat_map;
     ALLEGRO_BITMAP *static_tileset;
     ALLEGRO_BITMAP *tiles[4][48];
     ALLEGRO_BITMAP *play;
