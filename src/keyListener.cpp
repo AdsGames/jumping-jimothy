@@ -6,6 +6,7 @@ bool keyListener::keyReleased[ALLEGRO_KEY_MAX] = { false};
 bool keyListener::lastTicksKey[ALLEGRO_KEY_MAX] = { false};
 int keyListener::lastKeyPressed = -1;
 int keyListener::lastKeyReleased = -1;
+bool keyListener::anyKeyPressed=false;
 
 // Constructor
 keyListener::keyListener(){
@@ -34,11 +35,19 @@ void keyListener::update(){
   lastKeyPressed = -1;
   lastKeyReleased = -1;
 
+  anyKeyPressed=false;
   // Check key just pressed
   for( int i = 0; i < ALLEGRO_KEY_MAX; i++){
     // Clear old values
     keyPressed[i] = false;
     keyReleased[i] = false;
+
+
+    if(key[i])
+      anyKeyPressed=true;
+
+
+
 
     // Pressed since last tick?
     if( key[i] == true && lastTicksKey[i] == false){

@@ -27,9 +27,12 @@ class menu : public state{
     void draw();
 
   protected:
+    ALLEGRO_BITMAP *play_images[50];
     ALLEGRO_BITMAP *title_images[170];
+    ALLEGRO_BITMAP *pressthing_images[1];
 
-    int counter;
+    int counter_title;
+    int counter_play;
 
   private:
 };

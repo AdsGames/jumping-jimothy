@@ -101,7 +101,7 @@ void al_setup(){
 
   timer = al_create_timer(1.0 / MAX_FPS);
 
-  al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+  //al_set_new_display_flags(ALLEGRO_FULLSCREEN);
   display = al_create_display(1024, 768);
 
   event_queue = al_create_event_queue();
@@ -135,6 +135,12 @@ void update(){
     // Change state?
     if( keyListener::key[ALLEGRO_KEY_I]){
       set_next_state( STATE_MENU);
+    }
+
+
+    if( keyListener::anyKeyPressed && currentState -> getStateID()==STATE_MENU){
+
+      set_next_state(STATE_GAME);
     }
 
     // Change state (if needed)
@@ -195,10 +201,10 @@ int main(int argc, char **argv){
   al_setup();
 
   //Set the current state ID
-  stateID = STATE_GAME;
+  stateID = STATE_MENU;
 
   //Set the current game state object
-  currentState = new game();
+  currentState = new menu();
 
   while(!closing)
     update();
