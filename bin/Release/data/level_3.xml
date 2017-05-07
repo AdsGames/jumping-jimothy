@@ -48,18 +48,6 @@
 		<bodytype>Static</bodytype>
 		<orientation>1</orientation>
 	</Object>
-	<Object type="Finish">
-		<x>20</x>
-		<y>-20</y>
-		<bodytype>Finish</bodytype>
-		<orientation>0</orientation>
-	</Object>
-	<Object type="Character">
-		<x>20</x>
-		<y>-15.2</y>
-		<bodytype>Character</bodytype>
-		<orientation>0</orientation>
-	</Object>
 	<Object type="Tile">
 		<x>18.4</x>
 		<y>-18.4</y>
@@ -88,6 +76,18 @@
 		<x>24.8</x>
 		<y>-16.8</y>
 		<bodytype>Dynamic</bodytype>
+		<orientation>0</orientation>
+	</Object>
+	<Object type="Character">
+		<x>18.4</x>
+		<y>-15.2</y>
+		<bodytype>Character</bodytype>
+		<orientation>0</orientation>
+	</Object>
+	<Object type="Finish">
+		<x>20</x>
+		<y>-20</y>
+		<bodytype>Finish</bodytype>
 		<orientation>0</orientation>
 	</Object>
 </data>
