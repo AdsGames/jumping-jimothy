@@ -135,7 +135,7 @@ void game::load_world(int newLevel){
     }
     if( type == "Tile"){
       if(bodytype=="Static")
-        newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6,tools::string_to_float(vel_x),tools::string_to_float(vel_y), tiles[1][tools::convertStringToInt(orientation)], bodytype != "Static", false);
+        newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.5, 1.5,tools::string_to_float(vel_x),tools::string_to_float(vel_y), tiles[1][tools::convertStringToInt(orientation)], bodytype != "Static", false);
       else
         newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6,tools::string_to_float(vel_x),tools::string_to_float(vel_y),box, bodytype != "Static", false);
     }
@@ -177,6 +177,10 @@ void game::load_sprites(){
   goat_sprite = tools::load_bitmap_ex( "goat.png");
   character = tools::load_bitmap_ex( "character.png");
   static_tileset = tools::load_bitmap_ex( "StaticBlock.png");
+  play = tools::load_bitmap_ex( "play.png");
+  pause = tools::load_bitmap_ex( "pause.png");
+
+
 
 
   for( int i = 0; i < 4; i++){
@@ -240,7 +244,7 @@ if(gameCharacter->getX()>40)
   }
 
   // Pause/Play time
-  if(keyListener::lastKeyPressed==ALLEGRO_KEY_SPACE){
+  if(keyListener::lastKeyPressed==ALLEGRO_KEY_SPACE  || joystickListener::buttonPressed[JOY_XBOX_X] ||  joystickListener::buttonPressed[JOY_XBOX_Y] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_LEFT] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_RIGHT]  ){
 
     static_mode =! static_mode;
     if(static_mode){
@@ -273,4 +277,11 @@ void game::draw(){
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
     gameBoxes[i] -> draw();
   }
+  if(static_mode)
+      al_draw_bitmap(pause,10,10,0);
+  if(!static_mode)
+      al_draw_bitmap(play,10,10,0);
+
+
+
 }

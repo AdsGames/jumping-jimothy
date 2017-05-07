@@ -30,6 +30,7 @@ void joystickListener::on_event( ALLEGRO_EVENT_TYPE event_type, int buttoncode){
   }
 }
 
+
 // Check those button!
 void joystickListener::update(){
   // Reset last button

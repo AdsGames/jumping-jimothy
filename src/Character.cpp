@@ -38,7 +38,7 @@ void Character::update(){
   time_move_jump_timer_thingy++;
 
 
-    if(keyListener::key[ALLEGRO_KEY_A]){
+    if(keyListener::key[ALLEGRO_KEY_A] || joystickListener::button[JOY_XBOX_PAD_LEFT]){
         direction=false;
         if(sensor_box -> isColliding())
             {
@@ -51,7 +51,7 @@ void Character::update(){
         }
     }
 
-    else if(keyListener::key[ALLEGRO_KEY_D]){
+    else if(keyListener::key[ALLEGRO_KEY_D] || joystickListener::button[JOY_XBOX_PAD_RIGHT]){
         direction=true;
       if(sensor_box -> isColliding()){
             body -> SetLinearVelocity(b2Vec2(5, yVel));
@@ -70,7 +70,7 @@ void Character::update(){
 
 
 
-  if(keyListener::key[ALLEGRO_KEY_W] && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
+  if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
     body -> ApplyLinearImpulse(b2Vec2(0, 15),position);
   }
 
@@ -134,7 +134,7 @@ void Character::init(float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *
 
   sensor_box = new Sensor();
   //ALLEGRO_COLOR newColour =
-  sensor_box -> init(newX,newY-0.55,width*0.7,0.6,al_map_rgb(255,255,0),gameWorld,body);
+  sensor_box -> init(newX,newY-0.55,width*0.5,0.6,al_map_rgb(255,255,0),gameWorld,body);
 
   sprite = tools::load_bitmap_ex("anim.png");
 

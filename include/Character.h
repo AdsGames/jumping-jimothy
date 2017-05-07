@@ -4,6 +4,7 @@
 #include "globals.h"
 #include "Box.h"
 #include "keyListener.h"
+#include "joystickListener.h"
 
 class b2World;
 class b2Body;
