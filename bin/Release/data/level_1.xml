@@ -1098,5 +1098,17 @@
 		<bodytype>Finish</bodytype>
 		<orientation>0</orientation>
 	</Object>
+	<Object type="Tile">
+		<x>24.8</x>
+		<y>-12</y>
+		<bodytype>Dynamic</bodytype>
+		<orientation>0</orientation>
+	</Object>
+	<Object type="Finish">
+		<x>26.4</x>
+		<y>-16.8</y>
+		<bodytype>Finish</bodytype>
+		<orientation>0</orientation>
+	</Object>
 </data>
 

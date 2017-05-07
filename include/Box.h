@@ -43,6 +43,8 @@ class Box{
     bool static_mode;
     int type;
     int orientation;
+    int goat_frame;
+    int goat_tick;
 
     b2Vec2 static_velocity;
     float static_angular_velocity;

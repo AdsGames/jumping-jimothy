@@ -17,8 +17,13 @@ Box::~Box(){
 // We'll use this for the goat
 void Box::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGameWorld, Character *newCharacter){
 
-    gameCharacter = newCharacter;
     sprite = newSprite;
+    gameCharacter = newCharacter;
+    for( int i = 0; i < 16; i++){
+
+        goat_images[i] = al_create_sub_bitmap( newSprite, i * 32,0, 32, 64);
+      }
+
     type = GOAT;
     width = 1.6;
     height =3.2;
@@ -197,6 +202,13 @@ void Box::draw(){
     x = position.x;
     y = position.y;
     angle = body -> GetAngle();
+    goat_tick++;
+    if(goat_tick>10){
+      goat_frame++;
+      goat_tick=0;
+    }
+    if(goat_frame>14)
+      goat_frame=0;
   }
 
   ALLEGRO_TRANSFORM trans, prevTrans;
@@ -222,19 +234,23 @@ void Box::draw(){
       draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
 
     // Haxxx im sorry tho
-    if(type!=GOAT)
-    al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
+    if(type!=GOAT){
+
+      al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
                 al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0));
 
-   // al_draw_line( 0, 0, draw_velocity.x * 10, draw_velocity.y * 10,
-        //       al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0), 3);
 
+    }
   }else{
       al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
                 al_map_rgb(255,255,0));
   }
+  if(type==GOAT)
+    al_draw_bitmap(goat_images[goat_frame],-(width/2)*20,-(height/2)*20,0);
+  else
+    al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 
-  al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
+
 
   // restore the old transform
   al_use_transform(&prevTrans);
