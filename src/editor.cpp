@@ -205,52 +205,88 @@ void editor::draw(){
               type = 27;
       }
 
-      // COVERED ON ALL SIDES
-      if(type == 15){
+        // COVERED ON ALL SIDES
+        if(type == 15)
+        {
 
-          // EMPTY AT TOP LEFT
-          if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
-              type = 32;
-          // EMPTY AT TOP RIGHT
-          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32)))
-              type = 33;
-          // EMPTY AT BOTTOM LEFT
-          else if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-              type = 34;
-          // EMPTY AT BOTTOM RIGHT
-          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
+            // EMPTY AT TOP LEFT
+            if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+                type = 32;
+            // EMPTY AT TOP RIGHT
+            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32)))
+                type = 33;
+            // EMPTY AT BOTTOM LEFT
+            else if(!(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+                type = 34;
+            // EMPTY AT BOTTOM RIGHT
+            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32)))
                 type = 35;
 
-          // BLOCK AT TOP LEFT
-          if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+            if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
             && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-                type = 42;
-          // BLOCK AT TOP RIGHT
-          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-                type = 43;
-          // BLOCK AT BOTTOM LEFT
-          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+                type = 36;
+
+            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
             && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+                type = 37;
+
+            else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+                type = 38;
+
+            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+                type = 39;
+
+            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+                type = 40;
+            else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+                type = 41;
+
+            // BLOCK AT TOP LEFT
+            if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+                type = 42;
+            // BLOCK AT TOP RIGHT
+            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && (box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+                type = 43;
+            // BLOCK AT BOTTOM LEFT
+            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 type = 44;
-          // BLOCK AT BOTTOM RIGHT
-          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+            // BLOCK AT BOTTOM RIGHT
+            else if((box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
             && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && (box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
                 type = 45;
-          else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32))
+            else if(!(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32))
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32))
             && !(box_at( editorBoxes.at(i).x + 32, editorBoxes.at(i).y - 32))
-            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y + 32)))
-              type = 46;
-      }
+            && !(box_at( editorBoxes.at(i).x - 32, editorBoxes.at(i).y - 32)))
+                type = 46;
+        }
 
 ;
 
