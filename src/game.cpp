@@ -198,7 +198,7 @@ void game::update(){
 // Draw to screen
 void game::draw(){
   // Background
-  al_clear_to_color( al_map_rgb(200,200,255));
+  al_clear_to_color( al_map_rgb(40,40,60));
 
   // Draw boxes
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
