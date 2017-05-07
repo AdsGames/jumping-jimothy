@@ -125,6 +125,7 @@ void Box::init(float newX, float newY, float newWidth, float newHeight,float new
 	body -> CreateFixture(&fixtureDef);
 }
 
+
 // Return type
 int Box::getType(){
   return type;
@@ -231,7 +232,6 @@ void Box::draw(){
       al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
                 al_map_rgb(255,255,0));
   }
-
 
   al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 
