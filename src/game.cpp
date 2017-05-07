@@ -78,7 +78,7 @@ void game::load_world(){
   rapidxml::xml_node<> * root_node;
 
   // Make an xml object
-  std::ifstream theFile( "data/Level.xml");
+  std::ifstream theFile( "data/level_1.xml");
   std::vector<char> xml_buffer( (std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
   xml_buffer.push_back('\0');
 

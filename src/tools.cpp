@@ -1,8 +1,14 @@
 #include "tools.h"
 
+
+std::string tools::convertIntToString( int number){
+  std::stringstream ss;
+  ss << number;
+  return ss.str();
+}
 // A function to streamline error reporting in file loading
  void tools::abort_on_error( std::string message){
-  al_show_native_message_box( nullptr, "Error", "Warning", message.c_str(), nullptr, ALLEGRO_MESSAGEBOX_YES_NO);
+  al_show_native_message_box( nullptr, "Error", "Warning", message.c_str(), nullptr, ALLEGRO_MESSAGEBOX_ERROR);
 	 //set_window_title("Error!");
 	 //if (screen != NULL){
 	 //   set_gfx_mode(GFX_TEXT, 0, 0, 0, 0);
