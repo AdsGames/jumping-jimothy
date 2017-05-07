@@ -69,6 +69,10 @@ class game : public state{
     ALLEGRO_BITMAP *play;
     ALLEGRO_BITMAP *pause;
 
+    ALLEGRO_SAMPLE *music;
+
+    ALLEGRO_SAMPLE_ID currentMusic;
+
     // Box2D world parameters
     b2Vec2 gravity;
     float32 timeStep;

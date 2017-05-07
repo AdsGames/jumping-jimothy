@@ -6,6 +6,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 
 #include <mouseListener.h>
 #include <keyListener.h>
@@ -98,6 +100,11 @@ void al_setup(){
 
   al_init_image_addon();
   al_init_primitives_addon();
+
+    // KILLME I forgot these for the longest time and tried to do audio
+  al_install_audio();
+  al_init_acodec_addon();
+  al_reserve_samples( 20);
 
   timer = al_create_timer(1.0 / MAX_FPS);
 
