@@ -13,6 +13,14 @@ game::~game(){
 }
 
 // Creates box in world
+Box *game::create_goat( float newX, float newY){
+  Box *newBox = new Box();
+  newBox -> init( newX, newY,goat_sprite, gameWorld,gameCharacter);
+  gameBoxes.push_back( newBox);
+  return newBox;
+}
+
+// Creates box in world
 Box *game::create_box( float newX, float newY, float newWidth, float newHeight, float newVelX, float newVelY, bool newBodyType, bool newIsSensor){
   Box *newBox = new Box();
   newBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, box, gameWorld);
@@ -21,10 +29,11 @@ Box *game::create_box( float newX, float newY, float newWidth, float newHeight, 
 }
 
 // Add character to world
-void game::create_character( float newX, float newY){
+Character *game::create_character( float newX, float newY){
   Character *newCharacter = new Character();
   newCharacter -> init( newX, newY,character, gameWorld);
   gameBoxes.push_back(newCharacter);
+  return newCharacter;
 }
 
 // Sets up Box2D world
@@ -126,7 +135,9 @@ void game::load_world(){
     if( type == "Tile")
       newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6,tools::string_to_float(vel_x),tools::string_to_float(vel_y), bodytype != "Static", false);
     if( type == "Character")
-      create_character( tools::string_to_float(x),tools::string_to_float(y));
+      gameCharacter = create_character( tools::string_to_float(x),tools::string_to_float(y));
+    if( type == "Finish")
+      goat = create_goat( tools::string_to_float(x),tools::string_to_float(y));
     if(group=="1"){
       if(rootBox==nullptr)
         rootBox=newBox;
@@ -146,15 +157,35 @@ void game::load_world(){
 
   }
 }
+void game::reset(){
+  gameBoxes.clear();
+   b2_setup();
+  load_sprites();
+  load_world();
 
+}
+bool game::level_complete(){
+  if(goat!=nullptr){
+    if(goat -> getGoatWin())
+      return true;
+  }
+  return false;
+}
 // Load all sprites for in game
 void game::load_sprites(){
   box = tools::load_bitmap_ex( "box.png");
+  goat_sprite = tools::load_bitmap_ex( "goat.png");
   character = tools::load_bitmap_ex( "character.png");
 }
 
 // Update game logic
 void game::update(){
+
+  if(goat ->getGoatWin())
+    reset();
+
+
+
   if( mouseListener::mouse_pressed & 1)
     create_box( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20, 1.6, 1.6,0,0, true, false);
 

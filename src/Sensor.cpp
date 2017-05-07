@@ -54,15 +54,21 @@ void Sensor::init(float newX, float newY, float newWidth, float newHeight, ALLEG
   jointDef  -> referenceAngle = 0;
   gameWorld -> CreateJoint(jointDef);
 
-
-
-
-
-
 }
+
+
 bool Sensor::isColliding(){
   for(b2ContactEdge *contact = body -> GetContactList(); contact; contact = contact ->next)
     return true;
+  return false;
+
+
+}
+bool Sensor::isCollidingWithBody(b2Body *newBody){
+  for(b2ContactEdge *contact = body -> GetContactList(); contact; contact = contact ->next){
+      if(contact -> other==newBody)
+      return true;
+  }
   return false;
 
 

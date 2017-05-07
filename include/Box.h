@@ -4,17 +4,22 @@
 #include <tools.h>
 
 #define BOX 0
+#define GOAT 2
 
 class b2World;
 class b2Body;
 class b2BodyDef;
 class b2Vec2;
+class Sensor;
+class Character;
 
 class Box{
   public:
     Box();
     ~Box();
     void init(float, float, float, float,float,float,bool,ALLEGRO_BITMAP*, b2World *);
+    void init(float, float, ALLEGRO_BITMAP*, b2World *,Character*);
+    bool getGoatWin();
     virtual void draw();
     void setStatic();
     void setDynamic();
@@ -26,7 +31,10 @@ class Box{
 
   protected:
 
+    Sensor *sensor_box = nullptr;
     bool static_box;
+
+    Character *gameCharacter;
 
     ALLEGRO_BITMAP *sprite;
 

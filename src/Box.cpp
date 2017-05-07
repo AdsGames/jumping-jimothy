@@ -4,12 +4,70 @@
 #include <iostream>
 
 #include "Box.h"
+#include "Sensor.h"
+#include "Character.h"
 
 Box::Box(){
 
 }
 
 Box::~Box(){
+
+}
+// We'll use this for the goat
+void Box::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGameWorld, Character *newCharacter){
+
+    gameCharacter = newCharacter;
+    sprite = newSprite;
+    type = GOAT;
+    width = 1.6;
+    height =3.2;
+    //color = al_map_rgb(255,0,0);
+    static_mode = false;
+    static_box = false;
+    angle = 0;
+    x = 0;
+    y = 0;
+
+    static_velocity = b2Vec2( 0, 0);
+    static_angular_velocity = 0;
+
+    gameWorld = newGameWorld;
+    b2BodyDef bodyDef;
+
+    static_box = !true;
+
+
+    bodyDef.type = b2_dynamicBody;
+
+
+    bodyDef.position.Set(newX, newY);
+    body = gameWorld -> CreateBody(&bodyDef);
+    //body -> SetLinearVelocity(b2Vec2(newVelX,newVelY));
+    //body ->SetLinearDamping(1);
+    //body ->SetAngularDamping(1);
+
+    // Define another box shape for o0ur dynamic body.
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(width/2, height/2);
+
+    // Define the dynamic body fixture.
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &dynamicBox;
+
+    // Set the box density to be non-zero, so it will be dynamic.
+    fixtureDef.density = 1.0f;
+
+    // Override the default friction.
+    fixtureDef.friction = 0.3f;
+
+
+    // Add the shape to the body.
+    body -> CreateFixture(&fixtureDef);
+
+    sensor_box = new Sensor();
+    //ALLEGRO_COLOR newColour =
+    sensor_box -> init(newX,newY,width,height,al_map_rgb(255,255,0),gameWorld,body);
 
 }
 
@@ -81,6 +139,14 @@ float Box::getX(){
 float Box::getY(){
   return y;
 }
+bool Box::getGoatWin(){
+  if(type==GOAT){
+    if(sensor_box -> isCollidingWithBody(gameCharacter -> getBody()))
+      return true;
+  }
+  return false;
+
+}
 
 // Return body
 b2Body* Box::getBody(){
@@ -124,7 +190,7 @@ void Box::update(){
 void Box::draw(){
   // If the object is a character, the position is updated in the
   // update loop rather than in draw
-  if(type == BOX){
+  if(type == BOX || type==GOAT){
     b2Vec2 position = body -> GetPosition();
     x = position.x;
     y = position.y;
@@ -153,6 +219,8 @@ void Box::draw(){
     else
       draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
 
+    // Haxxx im sorry tho
+    if(type!=GOAT)
     al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
                 al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0));
 
@@ -163,6 +231,13 @@ void Box::draw(){
       al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
                 al_map_rgb(255,255,0));
   }
+  if(type==GOAT){
+    if(sensor_box->isColliding())
+      al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
+                al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0));
+
+  }
+
 
   al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 

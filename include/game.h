@@ -27,6 +27,8 @@ class game : public state{
     // Override parent
     void update();
     void draw();
+    bool level_complete();
+
 
   protected:
 
@@ -35,9 +37,14 @@ class game : public state{
     void b2_setup();
     void load_sprites();
     void load_world();
+    void reset();
 
     Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY, bool newBodyType, bool newIsSensor);
-    void create_character(float newX, float newY);
+    Character *create_character(float newX, float newY);
+    Box *create_goat(float,float);
+
+    Box *goat;
+    Character *gameCharacter;
 
     // Game variables
     std::vector<Box*> gameBoxes;
@@ -49,6 +56,7 @@ class game : public state{
 
     ALLEGRO_BITMAP *box;
     ALLEGRO_BITMAP *character;
+    ALLEGRO_BITMAP *goat_sprite;
 
     // Box2D world parameters
     b2Vec2 gravity;

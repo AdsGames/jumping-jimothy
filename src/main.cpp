@@ -142,8 +142,10 @@ void update(){
     k_listener.update();
     j_listener.update();
 
+
     // Update state
     currentState -> update();
+
   }
   // Exit
   else if( ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){

@@ -19,6 +19,7 @@ class Sensor : public Box{
     Sensor();
     ~Sensor();
     bool isColliding();
+    bool isCollidingWithBody(b2Body*);
     void init(float, float,float,float,ALLEGRO_COLOR, b2World *, b2Body *);
 
 
