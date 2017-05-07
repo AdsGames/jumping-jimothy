@@ -38,6 +38,7 @@ class Box{
     Character *gameCharacter;
 
     ALLEGRO_BITMAP *sprite;
+    ALLEGRO_BITMAP *goat_images[17];
 
     bool static_mode;
     int type;
