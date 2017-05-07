@@ -71,7 +71,7 @@ void Character::update(){
 
 
   if(keyListener::key[ALLEGRO_KEY_W] && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
-    body -> ApplyLinearImpulse(b2Vec2(0, 30),position);
+    body -> ApplyLinearImpulse(b2Vec2(0, 15),position);
   }
 
 
@@ -102,7 +102,7 @@ void Character::init(float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *
   direction = false;
   sprite = newSprite;
   type = CHARACTER;
-  width = 2;
+  width = 1;
   height = 2;
   color = al_map_rgb(0,0,255);
 
