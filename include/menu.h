@@ -29,10 +29,11 @@ class menu : public state{
   protected:
     ALLEGRO_BITMAP *play_images[50];
     ALLEGRO_BITMAP *title_images[170];
-    ALLEGRO_BITMAP *pressthing_images[1];
+    ALLEGRO_BITMAP *pressthing_images[2];
 
     int counter_title;
     int counter_play;
+    bool counter_pressthing;
 
   private:
 };
