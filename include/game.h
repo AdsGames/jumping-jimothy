@@ -68,6 +68,7 @@ class game : public state{
     ALLEGRO_BITMAP *tiles[4][48];
     ALLEGRO_BITMAP *play;
     ALLEGRO_BITMAP *pause;
+    ALLEGRO_BITMAP *help;
 
     ALLEGRO_SAMPLE *music;
 
