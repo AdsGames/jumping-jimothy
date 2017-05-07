@@ -38,7 +38,7 @@ class game : public state{
     // Functions
     void b2_setup();
     void load_sprites();
-    void load_world();
+    void load_world(int);
     void reset();
 
     Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,ALLEGRO_BITMAP* newSprite, bool newBodyType, bool newIsSensor);
@@ -47,6 +47,8 @@ class game : public state{
 
     Box *goat;
     Character *gameCharacter;
+
+    int level=1;
 
     // Game variables
     std::vector<Box*> gameBoxes;

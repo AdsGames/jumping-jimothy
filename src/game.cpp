@@ -5,7 +5,7 @@
 game::game(){
   b2_setup();
   load_sprites();
-  load_world();
+  load_world(1);
 }
 
 // Destructor
@@ -71,7 +71,7 @@ void game::b2_setup(){
 }
 
 // Load world from xml
-void game::load_world(){
+void game::load_world(int newLevel){
 
   gameWorld ->DestroyBody(groundBody);
   // Doc
@@ -79,7 +79,7 @@ void game::load_world(){
   rapidxml::xml_node<> * root_node;
 
   // Make an xml object
-  std::ifstream theFile( "data/level_1.xml");
+  std::ifstream theFile( "data/level_"+tools::convertIntToString(newLevel) +".xml");
   std::vector<char> xml_buffer( (std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
   xml_buffer.push_back('\0');
 
@@ -166,16 +166,10 @@ void game::reset(){
   gameBoxes.clear();
    b2_setup();
   load_sprites();
-  load_world();
+  load_world(level);
 
 }
-bool game::level_complete(){
-  if(goat!=nullptr){
-    if(goat -> getGoatWin())
-      return true;
-  }
-  return false;
-}
+
 // Load all sprites for in game
 void game::load_sprites(){
   box = tools::load_bitmap_ex( "box.png");
@@ -194,8 +188,10 @@ void game::load_sprites(){
 // Update game logic
 void game::update(){
 
-  if(goat ->getGoatWin())
+  if(goat ->getGoatWin()){
+    level++;
     reset();
+  }
 
 
 
@@ -216,6 +212,20 @@ void game::update(){
   }{
 
 }
+   if(keyListener::lastKeyPressed==ALLEGRO_KEY_Z)
+    reset();
+
+  if(keyListener::lastKeyPressed==ALLEGRO_KEY_C){
+
+    level++;
+    reset();
+  }
+
+   if(keyListener::lastKeyPressed==ALLEGRO_KEY_X){
+    if(level>1)
+    level--;
+    reset();
+  }
 
   // Pause/Play time
   if(keyListener::lastKeyPressed==ALLEGRO_KEY_SPACE){
