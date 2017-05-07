@@ -111,6 +111,8 @@ void al_setup(){
 
   al_start_timer(timer);
 
+  al_set_window_title(display,"Jumping Jimothy");
+
 }
 
 void update(){
