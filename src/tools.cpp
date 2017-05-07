@@ -6,6 +6,15 @@ std::string tools::convertIntToString( int number){
   ss << number;
   return ss.str();
 }
+
+// Convert string to int
+int tools::convertStringToInt( std::string newString){
+  int result;
+  std::stringstream(newString) >> result;
+  return result;
+}
+
+
 // A function to streamline error reporting in file loading
  void tools::abort_on_error( std::string message){
   al_show_native_message_box( nullptr, "Error", "Warning", message.c_str(), nullptr, ALLEGRO_MESSAGEBOX_ERROR);

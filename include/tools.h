@@ -17,6 +17,7 @@ class tools{
         static float string_to_float( std::string newChar);
         static void abort_on_error(std::string);
         static std::string convertIntToString( int number);
+        static int convertStringToInt(std::string);
 
         static ALLEGRO_BITMAP * load_bitmap_ex( std::string file);
 

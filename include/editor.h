@@ -28,6 +28,8 @@ struct editor_box{
   std::string y_str;
   std::string bodyType;
   int type;
+  int orientation;
+  std::string orientation_str;
 };
 
 class editor : public state{
@@ -41,6 +43,9 @@ class editor : public state{
   protected:
     ALLEGRO_BITMAP *image_box[4];
     ALLEGRO_BITMAP *tiles[4][48];
+
+    int calculate_orientation(int);
+    void calculate_orientation_global();
 
     std::vector<editor_box> editorBoxes;
     bool box_at( int x, int y);
