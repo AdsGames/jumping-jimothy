@@ -231,12 +231,6 @@ void Box::draw(){
       al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
                 al_map_rgb(255,255,0));
   }
-  if(type==GOAT){
-    if(sensor_box->isColliding())
-      al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
-                al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0));
-
-  }
 
 
   al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
