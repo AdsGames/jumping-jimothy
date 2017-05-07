@@ -31,6 +31,7 @@ class game : public state{
     void draw();
     bool level_complete();
   //DANNNNNNYYYYYYYYYYYYYYYY
+  //SULLLYYYYYYYYYYYYYYYYYYY
 
   protected:
 
@@ -63,6 +64,8 @@ class game : public state{
     ALLEGRO_BITMAP *goat_sprite;
     ALLEGRO_BITMAP *static_tileset;
     ALLEGRO_BITMAP *tiles[4][48];
+    ALLEGRO_BITMAP *play;
+    ALLEGRO_BITMAP *pause;
 
     // Box2D world parameters
     b2Vec2 gravity;
