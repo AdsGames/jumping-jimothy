@@ -148,16 +148,16 @@ void Box::draw(){
 
   if(!static_box){
 
-    //if( static_mode)
-    //  draw_velocity = b2Vec2( static_velocity.x, static_velocity.y);
-    //else
-    //  draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
+    if( static_mode)
+      draw_velocity = b2Vec2( static_velocity.x, static_velocity.y);
+    else
+      draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
 
     al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
                 al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0));
 
-    al_draw_line( 0, 0, draw_velocity.x * 10, draw_velocity.y * 10,
-               al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0), 3);
+   // al_draw_line( 0, 0, draw_velocity.x * 10, draw_velocity.y * 10,
+        //       al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0), 3);
 
   }else{
       al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
