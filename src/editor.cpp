@@ -92,10 +92,7 @@ void editor::update(){
   if( keyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
-  if( keyListener::keyPressed[ALLEGRO_KEY_R]){
 
-
-  }
 
   // Load map
   if( keyListener::keyPressed[ALLEGRO_KEY_L]){
