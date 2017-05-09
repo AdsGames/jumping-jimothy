@@ -10,12 +10,13 @@ game::game(){
 
   // Load and play music
   music = tools::load_sample_ex( "music/tojam.ogg");
-  al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &currentMusic);
+  al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, currentMusic);
 }
 
 // Destructor
 game::~game(){
-
+  // Stop music
+  al_stop_sample( currentMusic);
 }
 
 // Creates box in world
@@ -205,6 +206,11 @@ void game::load_sprites(){
 
 // Update game logic
 void game::update(){
+  // Game mode
+  if( keyListener::keyPressed[ALLEGRO_KEY_P]){
+    set_next_state( STATE_EDIT);
+  }
+
   // Touching goat
   if( goat -> getGoatWin()){
     level ++;

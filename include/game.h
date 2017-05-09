@@ -72,7 +72,7 @@ class game : public state{
 
     ALLEGRO_SAMPLE *music;
 
-    ALLEGRO_SAMPLE_ID currentMusic;
+    ALLEGRO_SAMPLE_ID *currentMusic;
 
     // Box2D world parameters
     b2Vec2 gravity;
