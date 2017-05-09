@@ -120,7 +120,6 @@ void al_setup(){
   al_start_timer(timer);
 
   al_set_window_title(display,"Jumping Jimothy");
-
 }
 
 void update(){
@@ -161,7 +160,6 @@ void update(){
 
     // Update state
     currentState -> update();
-
   }
   // Exit
   else if( ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE || k_listener.key[ALLEGRO_KEY_ESCAPE]){
