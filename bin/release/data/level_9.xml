@@ -94,7 +94,7 @@
 		<x>12</x>
 		<y>-4</y>
 		<bodytype>Static</bodytype>
-		<orientation>0</orientation>
+		<orientation>4</orientation>
 	</Object>
 	<Object type="Tile">
 		<x>15.2</x>
@@ -285,6 +285,18 @@
 	<Object type="Tile">
 		<x>0.8</x>
 		<y>-8.8</y>
+		<bodytype>Static</bodytype>
+		<orientation>8</orientation>
+	</Object>
+	<Object type="Tile">
+		<x>12</x>
+		<y>-2.4</y>
+		<bodytype>Static</bodytype>
+		<orientation>12</orientation>
+	</Object>
+	<Object type="Tile">
+		<x>12</x>
+		<y>-0.8</y>
 		<bodytype>Static</bodytype>
 		<orientation>8</orientation>
 	</Object>

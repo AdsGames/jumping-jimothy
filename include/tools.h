@@ -16,7 +16,7 @@ class tools{
     public:
         // Convert char to float
         static float string_to_float( std::string newChar);
-        static void abort_on_error(std::string);
+        static void abort_on_error( std::string message, std::string title);
         static std::string convertIntToString( int number);
         static int convertStringToInt(std::string);
 

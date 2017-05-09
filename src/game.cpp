@@ -192,20 +192,16 @@ void game::reset(){
 
 // Load all sprites for in game
 void game::load_sprites(){
-  box = tools::load_bitmap_ex( "box.png");
-  goat_sprite = tools::load_bitmap_ex( "goat.png");
-  goat_map = tools::load_bitmap_ex( "goat_map.png");
+  box = tools::load_bitmap_ex( "images/box.png");
+  goat_sprite = tools::load_bitmap_ex( "images/goat.png");
+  goat_map = tools::load_bitmap_ex( "images/goat_map.png");
 
-  help = tools::load_bitmap_ex( "help.png");
+  help = tools::load_bitmap_ex( "images/help.png");
 
-  character = tools::load_bitmap_ex( "character.png");
-  static_tileset = tools::load_bitmap_ex( "StaticBlock.png");
-  play = tools::load_bitmap_ex( "play.png");
-  pause = tools::load_bitmap_ex( "pause.png");
-
-
-
-
+  character = tools::load_bitmap_ex( "images/character.png");
+  static_tileset = tools::load_bitmap_ex( "images/StaticBlock.png");
+  play = tools::load_bitmap_ex( "images/play.png");
+  pause = tools::load_bitmap_ex( "images/pause.png");
 
   for( int i = 0; i < 4; i++){
     for( int t = 0; t < 12; t++){
@@ -216,7 +212,6 @@ void game::load_sprites(){
 
 // Update game logic
 void game::update(){
-
   if(goat ->getGoatWin()){
     level++;
     if(level>=10){
@@ -228,7 +223,7 @@ void game::update(){
   if(gameCharacter->getX()<-1)
     reset();
 
-if(gameCharacter->getX()>51.5f)
+  if(gameCharacter->getX()>51.5f)
     reset();
 
   if(gameCharacter->getY()>2)
@@ -236,7 +231,6 @@ if(gameCharacter->getX()>51.5f)
 
   if(gameCharacter->getY()<-40)
    reset();
-
 
 
   //if( mouseListener::mouse_pressed & 1)
@@ -253,27 +247,24 @@ if(gameCharacter->getX()>51.5f)
     if( gameBoxes[i] -> getType() == CHARACTER){
       gameBoxes[i] -> update();
     }
-  }{
+  }
 
-}
-   if(keyListener::lastKeyPressed==ALLEGRO_KEY_Z || keyListener::lastKeyPressed==ALLEGRO_KEY_Z ||  joystickListener::buttonPressed[JOY_XBOX_B] )
+  if(keyListener::lastKeyPressed==ALLEGRO_KEY_Z || keyListener::lastKeyPressed==ALLEGRO_KEY_Z ||  joystickListener::buttonPressed[JOY_XBOX_B] )
     reset();
 
   if(keyListener::lastKeyPressed==ALLEGRO_KEY_C){
-
     level++;
     reset();
   }
 
-   if(keyListener::lastKeyPressed==ALLEGRO_KEY_X){
+  if(keyListener::lastKeyPressed==ALLEGRO_KEY_X){
     if(level>1)
-    level--;
+      level--;
     reset();
   }
 
   // Pause/Play time
   if(keyListener::lastKeyPressed==ALLEGRO_KEY_SPACE  || joystickListener::buttonPressed[JOY_XBOX_X] ||  joystickListener::buttonPressed[JOY_XBOX_Y] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_LEFT] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_RIGHT]  ){
-
     static_mode =! static_mode;
     if(static_mode){
       for( unsigned int i = 0; i < gameBoxes.size(); i++){
@@ -292,32 +283,27 @@ if(gameCharacter->getX()>51.5f)
         }
 
       }
-      first_play=false;
+      first_play = false;
     }
   }
-
 }
 
 // Draw to screen
 void game::draw(){
   // Background
-
-
-
   al_clear_to_color( al_map_rgb(40,40,60));
 
-  if(level==1)
-        al_draw_bitmap(help,0,0,0);
+  // Help
+  if( level == 1)
+    al_draw_bitmap(help,0,0,0);
 
   // Draw boxes
-  for( unsigned int i = 0; i < gameBoxes.size(); i++){
+  for( unsigned int i = 0; i < gameBoxes.size(); i++)
     gameBoxes[i] -> draw();
-  }
+
+  // Pause/play buttons
   if(static_mode)
-      al_draw_bitmap(pause,10,10,0);
+    al_draw_bitmap(pause,10,10,0);
   if(!static_mode)
-      al_draw_bitmap(play,10,10,0);
-
-
-
+    al_draw_bitmap(play,10,10,0);
 }

@@ -79,9 +79,6 @@ void Box::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGa
 }
 
 void Box::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
-
-  //std::cout << "Created Box\n";
-
   sprite = newSprite;
 
   type = BOX;
@@ -174,7 +171,6 @@ void Box::setStatic(){
 
 // Set whether dynamic
 void Box::setDynamic(bool canSleep){
-
   if(!static_box){
     static_mode = false;
     body -> SetType( b2_dynamicBody);
@@ -228,33 +224,29 @@ void Box::draw(){
 
   b2Vec2 draw_velocity = b2Vec2(0,0);
 
-  if(!static_box){
-
+  if( !static_box){
     if( static_mode)
       draw_velocity = b2Vec2( static_velocity.x, static_velocity.y);
     else
       draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
 
     // Haxxx im sorry tho
-    if(type!=GOAT){
-
-      al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
-                al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)), tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)), 0));
-
-
+    if(type != GOAT){
+      al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,
+        al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)),
+                    tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)),
+                    0));
     }
-  }else{
-      al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
-                al_map_rgb(255,255,0));
   }
-  if(type==GOAT)
+  else{
+      al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
+      al_map_rgb(255,255,0));
+  }
+  if( type == GOAT)
     al_draw_bitmap(goat_images[goat_frame],-(width/2)*20,-(height/2)*20,0);
- else
+  else
     al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
-
-
 
   // restore the old transform
   al_use_transform(&prevTrans);
-
 }

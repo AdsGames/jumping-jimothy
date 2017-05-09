@@ -4,10 +4,10 @@ editor::editor(){
 
   level_number=1;
   // Load box image
-  image_box[0] = tools::load_bitmap_ex( "DynamicBlock.png");
-  image_box[1] = tools::load_bitmap_ex( "StaticBlock.png");
-  image_box[2] = tools::load_bitmap_ex( "character.png");
-  image_box[3] = tools::load_bitmap_ex( "DisgoatSpriteMap.png");
+  image_box[0] = tools::load_bitmap_ex( "images/DynamicBlock.png");
+  image_box[1] = tools::load_bitmap_ex( "images/StaticBlock.png");
+  image_box[2] = tools::load_bitmap_ex( "images/character.png");
+  image_box[3] = tools::load_bitmap_ex( "images/DisgoatSpriteMap.png");
 
   for( int i = 0; i < 4; i++){
     for( int t = 0; t < 12; t++){
@@ -28,10 +28,10 @@ editor::editor(){
   srand(time(NULL));
 
   al_init_ttf_addon();
-  edit_font = al_load_ttf_font("pixelart.ttf",14,0);
+  edit_font = al_load_ttf_font("fonts/pixelart.ttf",14,0);
 
   if (!edit_font)
-    tools::abort_on_error("Could not load 'pixelart.ttf'.\n");
+    tools::abort_on_error("Could not load 'fontspixelart.ttf'.\n", "Font Error");
 
   grid_on = false;
 }
