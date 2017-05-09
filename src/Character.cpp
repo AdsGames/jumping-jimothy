@@ -11,9 +11,6 @@ Character::Character(){
 }
 
 void Character::update(){
-
-//std::cout<<"Character updated\n";
-
   int number_thingin=5;
   if(!sensor_box -> isColliding())
     number_thingin=2;
@@ -33,69 +30,51 @@ void Character::update(){
   angle = body -> GetAngle();
   double yVel = getBody() -> GetLinearVelocity().y;
 
-  int x_movement=6;
-  float x_air_movement=0.4;
-  time_move_jump_timer_thingy++;
 
-
-    if(keyListener::key[ALLEGRO_KEY_A] || joystickListener::button[JOY_XBOX_PAD_LEFT]){
-        direction=false;
-        if(sensor_box -> isColliding())
-            {
-            body -> SetLinearVelocity(b2Vec2(-5, yVel));
-            }
-         else
-         {
-            if(getBody() -> GetLinearVelocity().x > -5)
-                body -> ApplyLinearImpulse(b2Vec2(-2, 0),position);
-        }
-    }
-
-    else if(keyListener::key[ALLEGRO_KEY_D] || joystickListener::button[JOY_XBOX_PAD_RIGHT]){
-        direction=true;
-      if(sensor_box -> isColliding()){
-            body -> SetLinearVelocity(b2Vec2(5, yVel));
-
-        }
-        else
+  if(keyListener::key[ALLEGRO_KEY_A] || joystickListener::button[JOY_XBOX_PAD_LEFT]){
+    direction=false;
+    if(sensor_box -> isColliding())
         {
-            if(getBody() -> GetLinearVelocity().x < 5)
-          body -> ApplyLinearImpulse(b2Vec2(2, 0),position);
-
+        body -> SetLinearVelocity(b2Vec2(-5, yVel));
         }
-    }else if(sensor_box -> isColliding())
-       body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
+     else
+     {
+        if(getBody() -> GetLinearVelocity().x > -5)
+            body -> ApplyLinearImpulse(b2Vec2(-2, 0),position);
+    }
+  }
+
+  else if(keyListener::key[ALLEGRO_KEY_D] || joystickListener::button[JOY_XBOX_PAD_RIGHT]){
+      direction=true;
+    if(sensor_box -> isColliding()){
+          body -> SetLinearVelocity(b2Vec2(5, yVel));
+
+      }
+      else
+      {
+          if(getBody() -> GetLinearVelocity().x < 5)
+        body -> ApplyLinearImpulse(b2Vec2(2, 0),position);
+
+      }
+  }
+  else if(sensor_box -> isColliding()){
+     body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
+  }
+
     // Homemade friction
-
-
-
-
   if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
     body -> ApplyLinearImpulse(b2Vec2(0, 15),position);
   }
 
 
-
-
-
 //Fixed Danny's poop code by getting rid if it =)
-
-
-  if(sensor_box -> isColliding()){
+  if(sensor_box -> isColliding())
     color = al_map_rgb(50,100,255);
-
-  }else
-        color = al_map_rgb(0,0,255);
-
-
-
-
-
-
+  else
+    color = al_map_rgb(0,0,255);
 }
 
 void Character::init(float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
-
   tick=0;
   frame=0;
 
@@ -133,24 +112,16 @@ void Character::init(float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *
   body ->SetFixedRotation(true);
 
   sensor_box = new Sensor();
-  //ALLEGRO_COLOR newColour =
   sensor_box -> init(newX,newY-0.55,width*0.5,0.6,al_map_rgb(255,255,0),gameWorld,body);
 
-  sprite = tools::load_bitmap_ex("anim.png");
+  sprite = tools::load_bitmap_ex("images/anim.png");
 
-  for( int i = 0; i < 15; i++){
-
+  for( int i = 0; i < 15; i++)
       sprites[i] = al_create_sub_bitmap( sprite, i * 32, 0, 32, 64);
-
-  }
-
-
 
 }
 
 void Character::draw(){
-
-
   // If the object is a character, the position is updated in the
   // update loop rather than in draw
   if(type==BOX){
@@ -188,21 +159,19 @@ void Character::draw(){
 
   }
 
- // al_draw_bitmap(sprite,-(width/2)*20,(-(height/2)*20)-24,0);
+  // al_draw_bitmap(sprite,-(width/2)*20,(-(height/2)*20)-24,0);
 
- // al_draw_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20,al_map_rgb(0,0,0),3);
+  // al_draw_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20,al_map_rgb(0,0,0),3);
 
   //al_draw_filled_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20,color);
 
   // restore the old transform
   al_use_transform(&prevTrans);
 
-  //if(sensor_box -> isColliding())
- // sensor_box -> draw();
-
+  // if(sensor_box -> isColliding())
+  // sensor_box -> draw();
 }
 
 Character::~Character(){
-
 
 }
