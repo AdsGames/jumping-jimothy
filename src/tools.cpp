@@ -23,9 +23,16 @@ void tools::abort_on_error( std::string message, std::string title){
 
 // Load sample if exits, or throw error
 ALLEGRO_SAMPLE *tools::load_sample_ex( std::string file){
+  // Check if file exists
+  std::ifstream f( file.c_str());
+  if( !f.good())
+    abort_on_error( std::string("Cannot find sample " + file + "\nYour file is gone and there's nothing I can do. Sorry."), "File Not Found");
+
+  // Attempt to load
   ALLEGRO_SAMPLE *temp_sample = nullptr;
   if( !(temp_sample = al_load_sample( file.c_str())))
-    abort_on_error( std::string("Cannot find sample " + file + "\nOh no :("), "Loading Error");
+    abort_on_error( std::string("There was an error loading " + file + "\nOh no :("), "Loading Error");
+
   return temp_sample;
 }
 
