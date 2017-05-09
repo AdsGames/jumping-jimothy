@@ -8,7 +8,6 @@ game::game(){
   // Reset fresh
   reset();
 
-  //K is for kill me
   // Load and play music
   music = tools::load_sample_ex( "music/tojam.ogg");
   al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &currentMusic);
@@ -72,13 +71,13 @@ void game::b2_setup(){
 
 	// Add the ground fixture to the ground body.
 	groundBody -> CreateFixture( &groundBox, 0.0f);
-
 }
 
 // Load world from xml
 void game::load_world(int newLevel){
+  // Destroy ground
+  gameWorld -> DestroyBody(groundBody);
 
-  gameWorld ->DestroyBody(groundBody);
   // Doc
   rapidxml::xml_document<> doc;
   rapidxml::xml_node<> * root_node;
@@ -199,41 +198,28 @@ void game::load_sprites(){
   play = tools::load_bitmap_ex( "images/play.png");
   pause = tools::load_bitmap_ex( "images/pause.png");
 
-  for( int i = 0; i < 4; i++){
-    for( int t = 0; t < 12; t++){
+  for( int i = 0; i < 4; i++)
+    for( int t = 0; t < 12; t++)
       tiles[1][i + t*4] = al_create_sub_bitmap( static_tileset, i * 32, t * 32, 32, 32);
-    }
-  }
 }
 
 // Update game logic
 void game::update(){
-  if(goat ->getGoatWin()){
-    level++;
-    if(level>=10){
+  // Touching goat
+  if( goat -> getGoatWin()){
+    level ++;
+    if( level >= 10){
       al_show_native_message_box( nullptr, "Hurrah!", "Victory", "Will you accept your prize?", nullptr, ALLEGRO_MESSAGEBOX_YES_NO);
-      gameCharacter -> getBody() -> SetTransform(b2Vec2(100,100),0);
-    }else
+      gameCharacter -> getBody() -> SetTransform( b2Vec2( 100, 100), 0);
+    }
+    else{
       reset();
+    }
   }
-  if(gameCharacter->getX()<-1)
+
+  // Off screen
+  if( gameCharacter -> getX() < -1 || gameCharacter -> getX() > 51.5f || gameCharacter -> getY() > 2 || gameCharacter -> getY() < -40)
     reset();
-
-  if(gameCharacter->getX()>51.5f)
-    reset();
-
-  if(gameCharacter->getY()>2)
-    reset();
-
-  if(gameCharacter->getY()<-40)
-   reset();
-
-
-  //if( mouseListener::mouse_pressed & 1)
- //   create_box( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20, 1.6, 1.6,0,0,0, true, false);
-
- // if( mouseListener::mouse_pressed & 2)
-  //  create_character( mouseListener::mouse_x / 20, -mouseListener::mouse_y / 20);
 
   // Update the Box2D game world
   gameWorld -> Step( timeStep, velocityIterations, positionIterations);
@@ -245,26 +231,29 @@ void game::update(){
     }
   }
 
-  if(keyListener::lastKeyPressed==ALLEGRO_KEY_Z || keyListener::lastKeyPressed==ALLEGRO_KEY_Z ||  joystickListener::buttonPressed[JOY_XBOX_B] )
+  // Die
+  if( keyListener::keyPressed[ALLEGRO_KEY_Z] || joystickListener::buttonPressed[JOY_XBOX_B])
     reset();
 
-  if(keyListener::lastKeyPressed==ALLEGRO_KEY_C){
+  // Next level
+  if( keyListener::keyPressed[ALLEGRO_KEY_C]){
     level++;
     reset();
   }
 
-  if(keyListener::lastKeyPressed==ALLEGRO_KEY_X){
-    if(level>1)
+  // Previous level
+  if( keyListener::keyPressed[ALLEGRO_KEY_X]){
+    if( level > 1)
       level--;
     reset();
   }
 
   // Pause/Play time
-  if(keyListener::lastKeyPressed==ALLEGRO_KEY_SPACE  || joystickListener::buttonPressed[JOY_XBOX_X] ||  joystickListener::buttonPressed[JOY_XBOX_Y] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_LEFT] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_RIGHT]  ){
+  if( keyListener::keyPressed[ALLEGRO_KEY_SPACE]  || joystickListener::buttonPressed[JOY_XBOX_X] ||  joystickListener::buttonPressed[JOY_XBOX_Y] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_LEFT] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_RIGHT]  ){
     static_mode =! static_mode;
     if(static_mode){
       for( unsigned int i = 0; i < gameBoxes.size(); i++){
-        if( gameBoxes[i] -> getType()==BOX){
+        if( gameBoxes[i] -> getType() == BOX){
           // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
           gameBoxes[i] -> setStatic();
         }
@@ -275,9 +264,7 @@ void game::update(){
         if( gameBoxes[i] -> getType()==BOX){
           // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
           gameBoxes[i] -> setDynamic(!first_play);
-
         }
-
       }
       first_play = false;
     }
