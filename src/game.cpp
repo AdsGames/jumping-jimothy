@@ -5,14 +5,13 @@
 
 // Constructor
 game::game(){
-
+  // Reset fresh
   reset();
-    //music = tools::load_sample_ex( "music/tojam.ogg");
+
   //K is for kill me
-   music = al_load_sample("music/tojam1.ogg");
-
+  // Load and play music
+  music = tools::load_sample_ex( "music/tojam.ogg");
   al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, &currentMusic);
-
 }
 
 // Destructor
@@ -55,7 +54,6 @@ void game::b2_setup(){
 
   // Box2D game world
   gameWorld = new b2World( gravity, doSleep);
-
 
 	// Define the ground body.
 	b2BodyDef groundBodyDef;
@@ -169,25 +167,23 @@ void game::load_world(int newLevel){
 
   }
 }
+
+// Reset game
 void game::reset(){
   gameBoxes.clear();
-   goat = nullptr;
-   gameCharacter = nullptr;
+  goat = nullptr;
+  gameCharacter = nullptr;
   b2_setup();
   load_sprites();
   load_world(level);
   static_mode=true;
   first_play=true;
 
- for( unsigned int i = 0; i < gameBoxes.size(); i++){
-   if( gameBoxes[i] -> getType()==BOX){
-     gameBoxes[i] -> setStatic();
- }
-
+   for( unsigned int i = 0; i < gameBoxes.size(); i++){
+    if( gameBoxes[i] -> getType()==BOX){
+      gameBoxes[i] -> setStatic();
+    }
   }
-
-
-
 }
 
 // Load all sprites for in game
