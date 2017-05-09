@@ -94,8 +94,6 @@ void editor::update(){
   if( keyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
-
-
   // Load map
   if( keyListener::keyPressed[ALLEGRO_KEY_L]){
     editorBoxes.clear();
@@ -110,7 +108,11 @@ void editor::update(){
     save_map("data/level_"+tools::convertIntToString(level_number)+".xml");
     std::string path = "data/level_"+tools::convertIntToString(level_number)+".xml";
     al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ",path.c_str(), nullptr, 0);
+  }
 
+  // Game mode
+  if( keyListener::keyPressed[ALLEGRO_KEY_P]){
+    set_next_state( STATE_GAME);
   }
 }
 
@@ -328,8 +330,8 @@ void editor::draw(){
   // Draw boxes
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
     if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
-
-    al_draw_bitmap( tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+      al_draw_filled_rectangle( editorBoxes.at(i).x + 0, editorBoxes.at(i).y + 0, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32, al_map_rgb(0, 255, 0));
+      al_draw_bitmap( tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     }
     else if( editorBoxes.at(i).type == 2)
       al_draw_bitmap( tiles[editorBoxes.at(i).type][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);

@@ -130,15 +130,6 @@ void update(){
   // Timer
   if( ev.type == ALLEGRO_EVENT_TIMER){
     // Change state?
-    if( keyListener::key[ALLEGRO_KEY_P]){
-      set_next_state( STATE_EDIT);
-
-    }
-    // Change state?
-    if( keyListener::key[ALLEGRO_KEY_O]){
-      set_next_state( STATE_GAME);
-    }
-    // Change state?
     if( keyListener::key[ALLEGRO_KEY_I]){
       set_next_state( STATE_MENU);
     }
