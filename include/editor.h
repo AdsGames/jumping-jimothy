@@ -45,30 +45,32 @@ class editor : public state{
     // Override parent
     void update();
     void draw();
-  protected:
+  private:
+    // Images
     ALLEGRO_BITMAP *image_box[4];
     ALLEGRO_BITMAP *tiles[4][48];
 
+    // Functions
     int calculate_orientation(int);
     void calculate_orientation_global();
 
-    std::vector<editor_box> editorBoxes;
     bool box_at(int x, int y);
     bool box_at_with_type(int newType,int x, int y);
-
 
     void save_map( std::string mapName);
     void load_map( std::string mapName);
 
+    // Tiles
+    std::vector<editor_box> editorBoxes;
+
+    // Vars
     bool grid_on;
 
     int tile_type;
     int level_number;
 
+    // The font
     ALLEGRO_FONT *edit_font;
-
-
-  private:
 };
 
 #endif // EDITOR_H
