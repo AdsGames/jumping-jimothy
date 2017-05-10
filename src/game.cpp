@@ -3,6 +3,8 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_native_dialog.h>
 
+#define danny_wants_to_listen_to_music_while_programming true
+
 // Constructor
 game::game(){
   // Init first time
@@ -14,8 +16,10 @@ game::game(){
   reset();
 
   // Load and play music
-  music = tools::load_sample_ex( "music/tojam.ogg");
-  al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, currentMusic);
+  if(!danny_wants_to_listen_to_music_while_programming){
+    music = tools::load_sample_ex( "music/tojam.ogg");
+    al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, currentMusic);
+  }
 }
 
 // Destructor
@@ -163,6 +167,8 @@ void game::load_world(int newLevel){
         character_count++;
       }if( type == "Finish"){
         goat = create_goat( tools::string_to_float(x), tools::string_to_float(y));
+        if(gameCharacter==nullptr)
+          std::cout<<"WARNING: Game: goat is passed nullptr gameCharacter\n";
         goat_count++;
       /*if(group=="1"){
         if(rootBox==nullptr)
@@ -184,11 +190,11 @@ void game::load_world(int newLevel){
   if(character_count>1)
     std::cout<<"WARNING: Multiple characters loaded, will have undesired results...\n";
   if(goat_count>1)
-    std::cout<<"WARNING: Multiple characters loaded, will have undesired results...\n";
+    std::cout<<"WARNING: Multiple goats loaded, will have undesired results...\n";
   if(character_count==0)
     std::cout<<"WARNING: No character loaded, will have undesired results...\n";
   if(goat_count==0)
-    std::cout<<"WARNING: No character loaded, will have undesired results...\n";
+    std::cout<<"WARNING: No goat loaded, will have undesired results...\n";
   if(static_count==0 && dynamic_count==0 && goat_count==0 && character_count==0)
     std::cout<<"WARNING: No data loaded!\n";
 
@@ -212,6 +218,12 @@ void game::reset(){
       gameBoxes[i] -> setStatic();
     }
   }
+  if(goat==nullptr)
+    std::cout<<"WARNING: Goat pointer is undeclared in game\n";
+
+  if(gameCharacter==nullptr)
+    std::cout<<"WARNING: gameCharacter pointer is undeclared in game\n";
+
 }
 
 // Load all sprites for in game
@@ -247,7 +259,7 @@ void game::update(){
       gameCharacter -> getBody() -> SetTransform( b2Vec2( 100, 100), 0);
     }
     else{
-      std::cout<<"Level completed, loading next level\n";
+      std::cout<<"Level " << level-1 << " completed, loading next level\n";
       reset();
     }
   }
@@ -270,12 +282,16 @@ void game::update(){
 
   // Next level
   if( keyListener::keyPressed[ALLEGRO_KEY_C]){
+    std::cout<<"Level " << level<< " skipped\n";
+
     level++;
     reset();
   }
 
   // Previous level
   if( keyListener::keyPressed[ALLEGRO_KEY_X]){
+    std::cout<<"Level " << level<< " skipped back\n";
+
     if( level > 1)
       level--;
     reset();

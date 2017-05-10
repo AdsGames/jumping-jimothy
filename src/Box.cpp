@@ -17,10 +17,17 @@ Box::~Box(){
 // We'll use this for the goat
 void Box::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGameWorld, Character *newCharacter){
 
+
+
     goat_frame=0;
     goat_tick=0;
     sprite = newSprite;
     gameCharacter = newCharacter;
+
+    if(gameCharacter==nullptr)
+      std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
+    std::cout<<"gameCharacter's position:" << gameCharacter -> getX() << "," << gameCharacter -> getX() << "\n";
+
     for( int i = 0; i < 16; i++){
 
         goat_images[i] = al_create_sub_bitmap( newSprite, i * 32,0, 32, 64);
@@ -146,8 +153,16 @@ float Box::getY(){
 }
 bool Box::getGoatWin(){
   if(type==GOAT){
-    if(sensor_box -> isCollidingWithBody(gameCharacter -> getBody()))
+    //if(gameCharacter==nullptr)
+    //  std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
+
+    std::cout<<"gameCharacter's position:" << gameCharacter -> getX() << "," << gameCharacter -> getX() <<":";
+
+    if(sensor_box -> isCollidingWithBody(gameCharacter -> getBody())){
+      std::cout<<" true\n";
       return true;
+    }
+    std::cout<<" false\n";
   }
   return false;
 
@@ -232,6 +247,7 @@ void Box::draw(){
 
     // Haxxx im sorry tho
     if(type != GOAT){
+
       al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,
         al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)),
                     tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)),
@@ -239,6 +255,7 @@ void Box::draw(){
     }
   }
   else{
+
       al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
       al_map_rgb(255,255,0));
   }

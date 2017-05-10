@@ -40,7 +40,7 @@ class Box{
     Sensor *sensor_box = nullptr;
     bool static_box;
 
-    Character *gameCharacter;
+    Character *gameCharacter = nullptr;
 
     ALLEGRO_BITMAP *sprite;
     ALLEGRO_BITMAP *goat_images[17];
