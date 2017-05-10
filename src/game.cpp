@@ -95,6 +95,13 @@ void game::b2_setup(){
 
 // Load world from xml
 void game::load_world(int newLevel){
+
+  std::cout<<"Attempting to load level_" <<newLevel<<".xml into game\n";
+
+  int goat_count=0;
+  int character_count=0;
+  int dynamic_count=0;
+  int static_count=0;
   // Destroy ground
   gameWorld -> DestroyBody(groundBody);
 
@@ -143,15 +150,20 @@ void game::load_world(int newLevel){
         orientation = object_node -> first_node("orientation") -> value();
 
       if( type == "Tile"){
-        if(bodytype == "Static")
+        if(bodytype == "Static"){
           newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.5, 1.5, tools::string_to_float(vel_x), tools::string_to_float(vel_y), tiles[1][tools::convertStringToInt(orientation)], false, false);
-        else
+          static_count++;
+        }else{
           newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(vel_x), tools::string_to_float(vel_y), box, true, false);
+          dynamic_count++;
+        }
       }
-      if( type == "Character")
+      if( type == "Character"){
         gameCharacter = create_character( tools::string_to_float(x), tools::string_to_float(y));
-      if( type == "Finish")
+        character_count++;
+      }if( type == "Finish"){
         goat = create_goat( tools::string_to_float(x), tools::string_to_float(y));
+        goat_count++;
       /*if(group=="1"){
         if(rootBox==nullptr)
           rootBox=newBox;
@@ -162,14 +174,29 @@ void game::load_world(int newLevel){
           jointDef -> collideConnected = false;
           jointDef  -> referenceAngle = 0;
           gameWorld -> CreateJoint(jointDef);
-        }
-      }*/
+        }*/
+      }
     }
   }
+
+  // Nice debug code
+  std::cout<<"Level loaded: "<<static_count<<" static, "<<dynamic_count<<" dynamic, "<<character_count<< " character(s), "<<goat_count<<" goat(s)\n";
+  if(character_count>1)
+    std::cout<<"WARNING: Multiple characters loaded, will have undesired results...\n";
+  if(goat_count>1)
+    std::cout<<"WARNING: Multiple characters loaded, will have undesired results...\n";
+  if(character_count==0)
+    std::cout<<"WARNING: No character loaded, will have undesired results...\n";
+  if(goat_count==0)
+    std::cout<<"WARNING: No character loaded, will have undesired results...\n";
+  if(static_count==0 && dynamic_count==0 && goat_count==0 && character_count==0)
+    std::cout<<"WARNING: No data loaded!\n";
+
 }
 
 // Reset game
 void game::reset(){
+
   gameBoxes.clear();
   goat = nullptr;
   gameCharacter = nullptr;
@@ -220,6 +247,7 @@ void game::update(){
       gameCharacter -> getBody() -> SetTransform( b2Vec2( 100, 100), 0);
     }
     else{
+      std::cout<<"Level completed, loading next level\n";
       reset();
     }
   }

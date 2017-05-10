@@ -23,6 +23,9 @@ void tools::abort_on_error( std::string message, std::string title){
 
 // Load sample if exits, or throw error
 ALLEGRO_SAMPLE *tools::load_sample_ex( std::string file){
+
+  std::cout<<"Attempt load sound "<<file<<".";
+
   // Check if file exists
   std::ifstream f( file.c_str());
   if( !f.good())
@@ -33,11 +36,16 @@ ALLEGRO_SAMPLE *tools::load_sample_ex( std::string file){
   if( !(temp_sample = al_load_sample( file.c_str())))
     abort_on_error( std::string("There was an error loading " + file + "\nOh no :("), "Loading Error");
 
+  std::cout<<" Completed.\n";
+
   return temp_sample;
 }
 
 // Load bitmap if exits, or throw error
 ALLEGRO_BITMAP * tools::load_bitmap_ex( std::string file){
+
+  std::cout<<"Attempt load bitmap "<<file<<".";
+
   // Check if file exists
   std::ifstream f( file.c_str());
   if( !f.good())
@@ -47,6 +55,9 @@ ALLEGRO_BITMAP * tools::load_bitmap_ex( std::string file){
   ALLEGRO_BITMAP *temp_image = nullptr;
   if( !(temp_image = al_load_bitmap( file.c_str())))
     abort_on_error( std::string("There was an error loading " + file + "... \nSorry..."), "Loading Error");
+
+  std::cout<<" Completed.\n";
+
 
   return temp_image;
 }

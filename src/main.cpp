@@ -89,6 +89,8 @@ void change_state(){
 
 // Setup game
 void setup(){
+
+  std::cout<<"Attempt initialize Allegro.";
   // Init allegro
   if( !al_init())
     tools::abort_on_error( "Allegro could not initilize", "Error");
@@ -132,6 +134,9 @@ void setup(){
 
   // Window title
   al_set_window_title(display,"Jumping Jimothy");
+
+  std::cout<<" Complete.\n";
+
 }
 
 // Handle events
@@ -194,6 +199,8 @@ void update(){
 
     // FPS = average
     fps = fps_total/100;
+    al_set_window_title(display,tools::convertIntToString(fps).c_str());
+
   }
 }
 
