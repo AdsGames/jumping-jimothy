@@ -39,6 +39,10 @@ void menu::update(){
     counter_play = 0;
     counter_pressthing=!counter_pressthing;
   }
+
+  if( keyListener::anyKeyPressed || joystickListener::anyButtonPressed){
+    set_next_state(STATE_GAME);
+  }
 }
 
 void menu::draw(){
