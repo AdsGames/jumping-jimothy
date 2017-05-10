@@ -1,4 +1,4 @@
-/*
+/**
  * State for machine
  * Allan Legemaate
  * 30/12/2016

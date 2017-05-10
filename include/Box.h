@@ -1,3 +1,8 @@
+/**
+ * BOX
+ * Danny Vanstemp
+ * 05/05/2017
+**/
 #ifndef BOX_H
 #define BOX_H
 #include <allegro5/allegro.h>
