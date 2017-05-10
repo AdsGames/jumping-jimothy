@@ -15,6 +15,8 @@
 
 #include <vector>
 #include <string>
+#include <math.h>
+#include <algorithm>
 
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
@@ -46,9 +48,8 @@ class editor : public state{
     void update();
     void draw();
   private:
-    // Images
+    // Imagess
     ALLEGRO_BITMAP *image_box[4];
-    ALLEGRO_BITMAP *tiles[4][48];
 
     // Functions
     int calculate_orientation(int);
