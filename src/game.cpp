@@ -207,9 +207,11 @@ void game::load_sprites(){
 // Update game logic
 void game::update(){
   // Game mode
-  if( keyListener::keyPressed[ALLEGRO_KEY_P]){
+  if( keyListener::keyPressed[ALLEGRO_KEY_P])
     set_next_state( STATE_EDIT);
-  }
+  // Change state?
+  if( keyListener::key[ALLEGRO_KEY_I])
+    set_next_state( STATE_MENU);
 
   // Touching goat
   if( goat -> getGoatWin()){

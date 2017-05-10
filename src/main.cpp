@@ -1,8 +1,9 @@
-#include <stdio.h>
-#include <vector>
-#include <fstream>
-#include <iostream>
-
+/*
+ * Main
+ * This is the main for Jumping Jimothy
+ * Calls state machine update and draw functions
+ * 09/05/2017
+ */
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
@@ -13,6 +14,7 @@
 #include <keyListener.h>
 #include <joystickListener.h>
 
+#include "init.h"
 #include "state.h"
 #include "game.h"
 #include "menu.h"
@@ -35,20 +37,12 @@ bool joystick_enabled = false;
 // Allegro events
 ALLEGRO_EVENT_QUEUE* event_queue = nullptr;
 ALLEGRO_TIMER* timer = nullptr;
-ALLEGRO_DISPLAY *display;
-
+ALLEGRO_DISPLAY *display = nullptr;
 
 // Input listener wrapper classes
 mouseListener m_listener;
 keyListener k_listener;
 joystickListener j_listener;
-
-// Functions
-void clean_up();
-void change_state();
-void setup();
-void update();
-void draw();
 
 // Delete game state and free state resources
 void clean_up(){
@@ -66,6 +60,9 @@ void change_state(){
 
     //Change the state
     switch( nextState ){
+      case STATE_INIT:
+        currentState = new init();
+        break;
       case STATE_GAME:
         currentState = new game();
         break;
@@ -90,38 +87,54 @@ void change_state(){
   }
 }
 
-// Setup Allegro stuffs
-void al_setup(){
-  al_init();
+// Setup game
+void setup(){
+  // Init allegro
+  if( !al_init())
+    tools::abort_on_error( "Allegro could not initilize", "Error");
 
+  // Window title
+  al_set_window_title(display,"Loading...");
+
+  // Controls
   al_install_keyboard();
   al_install_mouse();
   al_install_joystick();
 
+  // GFX addons
   al_init_image_addon();
   al_init_primitives_addon();
 
-    // KILLME I forgot these for the longest time and tried to do audio
+  // Audio
   al_install_audio();
   al_init_acodec_addon();
   al_reserve_samples( 20);
 
-  timer = al_create_timer(1.0 / MAX_FPS);
-
+  // Aquire screen
   //al_set_new_display_flags(ALLEGRO_FULLSCREEN);
   display = al_create_display(1024, 768);
 
+  if( !display)
+    tools::abort_on_error( "Screen could not be created", "Error");
+
+  // Timer
+  timer = al_create_timer(1.0 / MAX_FPS);
+
+  // Register events
   event_queue = al_create_event_queue();
   al_register_event_source( event_queue, al_get_display_event_source(display));
   al_register_event_source( event_queue, al_get_timer_event_source(timer));
   al_register_event_source( event_queue, al_get_keyboard_event_source());
   al_register_event_source( event_queue, al_get_joystick_event_source());
 
+  // Timer
   al_start_timer(timer);
 
+  // Window title
   al_set_window_title(display,"Jumping Jimothy");
 }
 
+// Handle events
 void update(){
   // Event checking
   ALLEGRO_EVENT ev;
@@ -129,17 +142,6 @@ void update(){
 
   // Timer
   if( ev.type == ALLEGRO_EVENT_TIMER){
-    // Change state?
-    if( keyListener::key[ALLEGRO_KEY_I]){
-      set_next_state( STATE_MENU);
-    }
-
-
-    if( (keyListener::anyKeyPressed || joystickListener::anyButtonPressed) && currentState -> getStateID()==STATE_MENU ){
-
-      set_next_state(STATE_GAME);
-    }
-
     // Change state (if needed)
     change_state();
 
@@ -148,7 +150,6 @@ void update(){
     k_listener.update();
     j_listener.update();
 
-
     // Update state
     currentState -> update();
   }
@@ -156,8 +157,7 @@ void update(){
   else if( ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE || k_listener.key[ALLEGRO_KEY_ESCAPE]){
     closing = true;
   }
-
-   // Keyboard
+  // Keyboard
   else if( ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP){
     k_listener.on_event( ev.type, ev.keyboard.keycode);
   }
@@ -173,8 +173,13 @@ void update(){
 
   // Drawing
   if( al_is_event_queue_empty(event_queue)){
+    // Clear buffer
     al_clear_to_color( al_map_rgb(0,0,0));
+
+    // Draw state graphics
     currentState -> draw();
+
+    // Flip (OpenGL)
     al_flip_display();
 
     // Update fps buffer
@@ -192,19 +197,20 @@ void update(){
   }
 }
 
-
+// Start here
 int main(int argc, char **argv){
-  al_setup();
+  // Basic init
+  setup();
 
   //Set the current state ID
-  stateID = STATE_MENU;
+  stateID = STATE_INIT;
+  currentState = new init();
 
-  //Set the current game state object
-  currentState = new menu();
-
+  // Run game
   while(!closing)
     update();
 
+  // Destory display
   al_destroy_display(display);
 
   return 0;

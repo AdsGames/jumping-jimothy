@@ -12,6 +12,7 @@
 
 #include "mouseListener.h"
 #include "keyListener.h"
+#include "joystickListener.h"
 #include "tools.h"
 
 #include "state.h"
