@@ -53,7 +53,6 @@ class tools{
           return (rand() % (max + 1 - min)) + min;
         }
 
-
     protected:
 
     private:

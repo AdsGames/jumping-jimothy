@@ -13,8 +13,6 @@
 #include "state.h"
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
-#include <allegro5/allegro.h>
-#include <allegro5/bitmap.h>
 
 #include <Box.h>
 #include <tools.h>
@@ -22,7 +20,7 @@
 
 class game : public state{
   public:
-    // Construct/deconstruct
+    // Construct / destruct
     game();
     ~game();
 
@@ -30,11 +28,6 @@ class game : public state{
     void update();
     void draw();
     bool level_complete();
-  //DANNNNNNYYYYYYYYYYYYYYYY
-  //SULLLYYYYYYYYYYYYYYYYYYY
-
-  protected:
-
   private:
     // Functions
     void b2_setup();
@@ -42,24 +35,26 @@ class game : public state{
     void load_world(int);
     void reset();
 
+    // Creation code
     Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,ALLEGRO_BITMAP* newSprite, bool newBodyType, bool newIsSensor);
-    Character *create_character(float newX, float newY);
     Box *create_goat(float,float);
+    Character *create_character(float newX, float newY);
 
+    // Our character and goat
     Box *goat;
     Character *gameCharacter;
 
-    int level=1;
-
     // Game variables
     std::vector<Box*> gameBoxes;
-    Box *newBox = nullptr;
-    Box *rootBox = nullptr;
+    Box *newBox;
+    Box *rootBox;
     b2Body* groundBody;
 
-    bool first_play=true;
-    bool static_mode = false;
+    int level;
+    bool first_play;
+    bool static_mode;
 
+    // Bitmaps
     ALLEGRO_BITMAP *box;
     ALLEGRO_BITMAP *character;
     ALLEGRO_BITMAP *goat_sprite;
@@ -70,8 +65,8 @@ class game : public state{
     ALLEGRO_BITMAP *pause;
     ALLEGRO_BITMAP *help;
 
+    // Samples
     ALLEGRO_SAMPLE *music;
-
     ALLEGRO_SAMPLE_ID *currentMusic;
 
     // Box2D world parameters
@@ -79,9 +74,8 @@ class game : public state{
     float32 timeStep;
     int32 velocityIterations;
     int32 positionIterations;
-    bool doSleep;
-
     b2World *gameWorld;
+    bool doSleep;
 };
 
 #endif // GAME_H
