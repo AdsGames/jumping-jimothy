@@ -14,9 +14,7 @@
 #include "keyListener.h"
 #include "joystickListener.h"
 #include "tools.h"
-
 #include "state.h"
-
 
 // Menu
 class menu : public state{
@@ -27,16 +25,17 @@ class menu : public state{
     void update();
     void draw();
 
-  protected:
+  private:
+    // Images
+    ALLEGRO_BITMAP *title;
+    ALLEGRO_BITMAP *play;
+    ALLEGRO_BITMAP *prompt_image;
     ALLEGRO_BITMAP *play_images[50];
     ALLEGRO_BITMAP *title_images[170];
-    ALLEGRO_BITMAP *pressthing_images[2];
 
     int counter_title;
     int counter_play;
-    bool counter_pressthing;
-
-  private:
+    bool counter_prompt;
 };
 
 #endif // MENU_H
