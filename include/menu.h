@@ -2,15 +2,8 @@
 #define MENU_H
 
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_ttf.h>
 
-#include <vector>
-#include <string>
-
-#include "mouseListener.h"
 #include "keyListener.h"
 #include "joystickListener.h"
 #include "tools.h"

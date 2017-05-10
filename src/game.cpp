@@ -5,6 +5,11 @@
 
 // Constructor
 game::game(){
+  // Init first time
+  newBox = nullptr;
+  rootBox = nullptr;
+  level = 1;
+
   // Reset fresh
   reset();
 
@@ -17,6 +22,20 @@ game::game(){
 game::~game(){
   // Stop music
   al_stop_sample( currentMusic);
+
+  // Destroy samples
+  al_destroy_sample( music);
+
+  // Destory bitmaps
+  al_destroy_bitmap( box);
+  al_destroy_bitmap( goat_sprite);
+  al_destroy_bitmap( goat_map);
+  al_destroy_bitmap( help);
+  al_destroy_bitmap( character);
+  al_destroy_bitmap( static_tileset);
+  al_destroy_bitmap( play);
+  al_destroy_bitmap( pause);
+  al_destroy_bitmap( box);
 }
 
 // Creates box in world
@@ -94,77 +113,58 @@ void game::load_world(int newLevel){
   // Find our root node
   root_node = doc.first_node("data");
 
-  // Iteratboole over the nodes
-  for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
-    std::string type = "";
-    std::string x = "";
-    std::string y = "";
-    std::string orientation = "0";
-    std::string bodytype = "totally not static";
-    std::string vel_x = "0";
-    std::string vel_y = "0";
+  // Make sure node exists
+  if( root_node != 0){
+    // Iteratboole over the nodes
+    for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
+      // All the variables we will load
+      std::string type = "Tile";
+      std::string x = "0";
+      std::string y = "0";
+      std::string orientation = "0";
+      std::string bodytype = "Static";
+      std::string vel_x = "0";
+      std::string vel_y = "0";
 
+      // Load data
+      if( object_node -> first_attribute("type") != 0)
+        type = object_node -> first_attribute("type") -> value();
+      if( object_node -> first_node("x") != 0)
+        x = object_node -> first_node("x") -> value();
+      if( object_node -> first_node("x") != 0)
+        y = object_node -> first_node("y") -> value();
+      if( object_node -> first_node("vel_x") != 0)
+        vel_x = object_node -> first_node("vel_x") -> value();
+      if( object_node -> first_node("vel_y") != 0)
+        vel_y = object_node -> first_node("vel_y") -> value();
+      if( object_node -> first_node("bodytype") != 0)
+        bodytype = object_node -> first_node("bodytype") -> value();
+      if( object_node -> first_node("orientation") != 0)
+        orientation = object_node -> first_node("orientation") -> value();
 
-    // Interate over
-    // int generatedNumberResult = atoi( generated_node -> first_attribute("number") -> value());
-    // if( generatedNumberResult == random_number){
-      // for(rapidxml::xml_node<> * tile_node = object_node -> first_node("x"); tile_node; tile_node = tile_node -> next_sibling()){
-    type = object_node -> first_attribute("type") -> value();
-
-    int i = 0;
-    for( rapidxml::xml_node<> * map_item = object_node->first_node("x"); map_item; map_item = map_item->next_sibling()){
-      switch( i ){
-        case 0:
-          x = map_item -> value();
-          break;
-        case 1:
-          y = map_item -> value();
-          break;
-        case 2:
-          bodytype = map_item -> value();
-          break;
-        case 3:
-          orientation = map_item -> value();
-          break;
-        case 4:
-          vel_x = map_item -> value();
-          break;
-        case 5:
-          vel_y = map_item -> value();
-          break;
-
-        default:
-          break;
+      if( type == "Tile"){
+        if(bodytype == "Static")
+          newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.5, 1.5, tools::string_to_float(vel_x), tools::string_to_float(vel_y), tiles[1][tools::convertStringToInt(orientation)], false, false);
+        else
+          newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(vel_x), tools::string_to_float(vel_y), box, true, false);
       }
-      i++;
+      if( type == "Character")
+        gameCharacter = create_character( tools::string_to_float(x), tools::string_to_float(y));
+      if( type == "Finish")
+        goat = create_goat( tools::string_to_float(x), tools::string_to_float(y));
+      /*if(group=="1"){
+        if(rootBox==nullptr)
+          rootBox=newBox;
+        else{
+          b2Vec2 FeetAnchor(0,0);
+          b2WeldJointDef *jointDef = new b2WeldJointDef();
+          jointDef -> Initialize(newBox -> getBody(), rootBox -> getBody(), FeetAnchor);
+          jointDef -> collideConnected = false;
+          jointDef  -> referenceAngle = 0;
+          gameWorld -> CreateJoint(jointDef);
+        }
+      }*/
     }
-    if( type == "Tile"){
-      if(bodytype=="Static")
-        newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.5, 1.5,tools::string_to_float(vel_x),tools::string_to_float(vel_y), tiles[1][tools::convertStringToInt(orientation)], bodytype != "Static", false);
-      else
-        newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6,tools::string_to_float(vel_x),tools::string_to_float(vel_y),box, bodytype != "Static", false);
-    }
-    if( type == "Character")
-      gameCharacter = create_character( tools::string_to_float(x),tools::string_to_float(y));
-    if( type == "Finish")
-      goat = create_goat( tools::string_to_float(x),tools::string_to_float(y));
-//    if(group=="1"){
-//      if(rootBox==nullptr)
-//        rootBox=newBox;
-//      else{
-//        b2Vec2 FeetAnchor(0,0);
-//
-//
-//        b2WeldJointDef *jointDef = new b2WeldJointDef();
-//        jointDef -> Initialize(newBox -> getBody(), rootBox -> getBody(), FeetAnchor);
-//        jointDef -> collideConnected = false;
-//        jointDef  -> referenceAngle = 0;
-//        gameWorld -> CreateJoint(jointDef);
-//      }
-//
-//
-//    }
-
   }
 }
 
@@ -176,11 +176,12 @@ void game::reset(){
   b2_setup();
   load_sprites();
   load_world(level);
-  static_mode=true;
-  first_play=true;
+  static_mode = true;
+  first_play = true;
 
-   for( unsigned int i = 0; i < gameBoxes.size(); i++){
-    if( gameBoxes[i] -> getType()==BOX){
+  // Pause boxes
+  for( unsigned int i = 0; i < gameBoxes.size(); i++){
+    if( gameBoxes[i] -> getType() == BOX){
       gameBoxes[i] -> setStatic();
     }
   }
@@ -191,9 +192,7 @@ void game::load_sprites(){
   box = tools::load_bitmap_ex( "images/box.png");
   goat_sprite = tools::load_bitmap_ex( "images/goat.png");
   goat_map = tools::load_bitmap_ex( "images/goat_map.png");
-
   help = tools::load_bitmap_ex( "images/help.png");
-
   character = tools::load_bitmap_ex( "images/character.png");
   static_tileset = tools::load_bitmap_ex( "images/StaticBlock.png");
   play = tools::load_bitmap_ex( "images/play.png");
@@ -233,11 +232,9 @@ void game::update(){
   gameWorld -> Step( timeStep, velocityIterations, positionIterations);
 
   // Update character
-  for( unsigned int i = 0; i < gameBoxes.size(); i++){
-    if( gameBoxes[i] -> getType() == CHARACTER){
+  for( unsigned int i = 0; i < gameBoxes.size(); i++)
+    if( gameBoxes[i] -> getType() == CHARACTER)
       gameBoxes[i] -> update();
-    }
-  }
 
   // Die
   if( keyListener::keyPressed[ALLEGRO_KEY_Z] || joystickListener::buttonPressed[JOY_XBOX_B])
@@ -295,6 +292,6 @@ void game::draw(){
   // Pause/play buttons
   if(static_mode)
     al_draw_bitmap(pause,10,10,0);
-  if(!static_mode)
+  else
     al_draw_bitmap(play,10,10,0);
 }
