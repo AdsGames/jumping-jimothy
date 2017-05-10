@@ -2,6 +2,9 @@
 
 // Init editor
 editor::editor(){
+
+  std::cout<<"Initializing editor\n";
+
   // Level to edit
   level_number = 1;
 
@@ -376,6 +379,9 @@ bool editor::box_at(int x, int y){
 
 // Load map from xml
 void editor::load_map( std::string mapName){
+
+  std::cout<<"Attempting to load "<<mapName<<" into editor\n";
+
   // Doc
   rapidxml::xml_document<> doc;
 
