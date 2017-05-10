@@ -202,7 +202,7 @@
 	<Object type="Tile">
 		<x>23.2</x>
 		<y>-32.8</y>
-		<bodytype>Dynamic</bodytype>
+		<bodytype>Static</bodytype>
 		<orientation>8</orientation>
 	</Object>
 	<Object type="Character">

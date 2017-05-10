@@ -48,8 +48,8 @@ class game : public state{
     Character *create_character(float newX, float newY);
 
     // Our character and goat
-    Box *goat;
-    Character *gameCharacter;
+    Box *goat = nullptr;
+    Character *gameCharacter = nullptr;
 
     // Game variables
     std::vector<Box*> gameBoxes;
