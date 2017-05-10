@@ -1,3 +1,8 @@
+/**
+ * BOX
+ * Allan Legemaate
+ * 05/05/2017
+**/
 #ifndef EDITOR_H
 #define EDITOR_H
 

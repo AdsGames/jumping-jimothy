@@ -1,3 +1,8 @@
+/**
+ * SENSOR
+ * Danny Vanstemp
+ * 05/05/2017
+**/
 #ifndef SENSOR_H
 #define SENSOR_H
 

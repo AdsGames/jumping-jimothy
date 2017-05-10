@@ -1,3 +1,8 @@
+/**
+ * INIT
+ * Allan Legemaate
+ * 09/05/2017
+**/
 #ifndef INIT_H
 #define INIT_H
 

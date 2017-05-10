@@ -1,3 +1,8 @@
+/**
+ * GAME
+ * A.D.S. Games
+ * 05/05/2017
+**/
 #ifndef GAME_H
 #define GAME_H
 

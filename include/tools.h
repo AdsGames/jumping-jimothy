@@ -1,3 +1,8 @@
+/**
+ * TOOLS
+ * Allan Legemaate
+ * 05/05/2017
+**/
 #ifndef TOOLS_H
 #define TOOLS_H
 

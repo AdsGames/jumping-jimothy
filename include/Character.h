@@ -1,3 +1,8 @@
+/**
+ * CHARACTER
+ * Danny Vanstemp
+ * 05/05/2017
+**/
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
