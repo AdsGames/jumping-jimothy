@@ -11,6 +11,8 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
+#include <vector>
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
@@ -47,10 +49,20 @@ class tools{
         }
 
         // Convert
-        template <class T> static std::string toString( T value){
+        template <class T> static std::string toString( const T& value){
           std::stringstream ss;
           ss << value;
           return ss.str();
+        }
+
+        // Split string
+        static std::vector<std::string> split_string( const std::string& p_pcstStr, char delim )  {
+          std::vector<std::string> tokens;
+          std::stringstream mySstream( p_pcstStr );
+          std::string temp;
+          while( getline( mySstream, temp, delim ))
+            tokens.push_back( temp );
+          return tokens;
         }
 
         // Random number
