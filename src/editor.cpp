@@ -10,7 +10,7 @@ editor::editor(){
 
   // Load box image
   image_box[0] = tools::load_bitmap_ex( "images/DynamicBlock2.png");
-  image_box[1] = tools::load_bitmap_ex( "images/DynamicBlock2.png");
+  image_box[1] = tools::load_bitmap_ex( "images/StaticBlock2.png");
   image_box[2] = tools::load_bitmap_ex( "images/character.png");
   image_box[3] = tools::load_bitmap_ex( "images/DisgoatSpriteMap.png");
 
@@ -252,7 +252,8 @@ void editor::draw(){
   // Draw tiles
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
     if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
-      al_draw_filled_rectangle( editorBoxes.at(i).x + 0, editorBoxes.at(i).y + 0, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32, al_map_rgb(0, 255, 0));
+      if( editorBoxes.at(i).type == 0)
+        al_draw_filled_rectangle( editorBoxes.at(i).x + 0, editorBoxes.at(i).y + 0, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32, al_map_rgb(0, 255, 0));
 
       // Scroll through all 4 parts
       for( int t = 0; t < 4; t++){
