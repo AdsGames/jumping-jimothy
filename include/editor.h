@@ -50,6 +50,7 @@ class editor : public state{
   private:
     // Imagess
     ALLEGRO_BITMAP *image_box[4];
+    ALLEGRO_BITMAP *tiles[4][16];
 
     // Functions
     int calculate_orientation(int);
