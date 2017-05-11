@@ -57,8 +57,8 @@ void editor::update(){
     newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
     newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
     newBox.type = tile_type;
-    newBox.orientation = 12;
-    newBox.orientation_str = "12";
+    for( int i = 0; i < 4; i++)
+      newBox.orientation[i] = 0;
 
     if( tile_type == 0)
       newBox.bodyType = "Dynamic";
@@ -70,13 +70,19 @@ void editor::update(){
       newBox.bodyType = "Finish";
 
     editorBoxes.push_back( newBox);
+
+    // Calculate orientation of boxes
+    calculate_orientation_global();
   }
   if( mouseListener::mouse_button & 2){
     for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-      if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, mouseListener::mouse_x, mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, mouseListener::mouse_y, mouseListener::mouse_y )){
+      if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)mouseListener::mouse_x, (float)mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)mouseListener::mouse_y, (float)mouseListener::mouse_y )){
         editorBoxes.erase( editorBoxes.begin() + i);
       }
     }
+
+    // Calculate orientation of boxes
+    calculate_orientation_global();
   }
   for(int i=0; i<10; i++){
     if( keyListener::keyPressed[i+27])
@@ -123,45 +129,9 @@ void editor::update(){
 
 
 void editor::calculate_orientation_global(){
-  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-    int orientation = calculate_orientation(i);
-    editorBoxes.at(i).orientation = orientation;
-    editorBoxes.at(i).orientation_str = tools::convertIntToString(orientation);
-  }
-}
-
-// Calculated proper orientation of tiles
-int editor::calculate_orientation(int i){
-  int orientation = 0;
-  return orientation;
-}
-
-// Draw to screen
-void editor::draw(){
-  // Background
-  al_clear_to_color( al_map_rgb(200,200,255));
-
-  // Grid
-  if( grid_on){
-    for( int i = 0; i < 1024; i += 32){
-      al_draw_line( i, 0, i, 768, al_map_rgb( 0, 0, 0), 1);
-    }
-
-    for( int i = 0; i < 768; i += 32){
-      al_draw_line( 0, i, 1024, i, al_map_rgb( 0, 0, 0), 1);
-    }
-  }
-
   // Draw boxes
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
     if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
-      //al_draw_filled_rectangle( editorBoxes.at(i).x + 0, editorBoxes.at(i).y + 0, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32, al_map_rgb(0, 255, 0));
-      //al_draw_bitmap( tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
-
-      // Boxes
-      // Pieces
-      int piece[4] = { 0, 0, 0, 0};
-
       // Scroll through all 4 parts
       for( int t = 0; t < 4; t++){
         // Offsets from subtile
@@ -249,7 +219,48 @@ void editor::draw(){
         }
 
         if( options.size() > 0)
-          al_draw_bitmap( tiles[editorBoxes.at(i).type][options.at(0)], editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y, 0);
+          editorBoxes.at(i).orientation[t] = options.at(0);
+        else
+          editorBoxes.at(i).orientation[t] = 0;
+      }
+    }
+  }
+}
+
+// Calculated proper orientation of tiles
+int editor::calculate_orientation(int i){
+  int orientation = 0;
+  return orientation;
+}
+
+// Draw to screen
+void editor::draw(){
+  // Background
+  al_clear_to_color( al_map_rgb(200,200,255));
+
+  // Grid
+  if( grid_on){
+    for( int i = 0; i < 1024; i += 32){
+      al_draw_line( i, 0, i, 768, al_map_rgb( 0, 0, 0), 1);
+    }
+
+    for( int i = 0; i < 768; i += 32){
+      al_draw_line( 0, i, 1024, i, al_map_rgb( 0, 0, 0), 1);
+    }
+  }
+
+  // Draw tiles
+  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
+    if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
+      al_draw_filled_rectangle( editorBoxes.at(i).x + 0, editorBoxes.at(i).y + 0, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32, al_map_rgb(0, 255, 0));
+
+      // Scroll through all 4 parts
+      for( int t = 0; t < 4; t++){
+        // Offsets from subtile
+        int off_x = (t == 1 || t == 3) ? 16: 0;
+        int off_y = (t >= 2) ? 16: 0;
+
+        al_draw_bitmap( tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation[t]], editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y, 0);
       }
     }
     else if( editorBoxes.at(i).type == 2)
@@ -258,14 +269,15 @@ void editor::draw(){
       al_draw_bitmap( tiles[editorBoxes.at(i).type][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
   }
 
+
   // Tile type
-  if(tile_type==0)
+  if( tile_type == 0)
     al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Dynamic");
-  if(tile_type==1)
+  if( tile_type == 1)
     al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Static");
-  if(tile_type==2)
+  if( tile_type == 2)
     al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Character spawn");
-  if(tile_type==3)
+  if( tile_type == 3)
     al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Endgame goat");
 
   // Current level on
@@ -274,29 +286,24 @@ void editor::draw(){
 
 
 // Check if box is at location
-bool editor::box_at_with_type( int newType,int x, int y){
-  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-    if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, x, x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, y, y + 1) && editorBoxes.at(i).type==newType){
+bool editor::box_at_with_type( int newType, int x, int y){
+  for( unsigned int i = 0; i < editorBoxes.size(); i ++)
+    if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)x, (float)x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)y, (float)y + 1) && editorBoxes.at(i).type == newType)
       return true;
-    }
-  }
   return false;
 }
 
 // Check if box is at location
 bool editor::box_at(int x, int y){
-  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-    if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, x, x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, y, y + 1)){
+  for( unsigned int i = 0; i < editorBoxes.size(); i ++)
+    if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)x, (float)x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)y, (float)y + 1))
       return true;
-    }
-  }
   return false;
 }
 
 // Load map from xml
 void editor::load_map( std::string mapName){
-
-  std::cout<<"Attempting to load "<<mapName<<" into editor\n";
+  std::cout << "Attempting to load " << mapName << " into editor\n";
 
   // Doc
   rapidxml::xml_document<> doc;
@@ -318,48 +325,38 @@ void editor::load_map( std::string mapName){
     std::string type = "";
     std::string x = "";
     std::string y = "";
-    std::string orientation = "10";
+    std::string orientation = "00000000";
     std::string bodytype = "totally not static";
     std::string vel_x = "0";
     std::string vel_y = "0";
 
-    type = object_node -> first_attribute("type") -> value();
-
-    int i = 0;
-    for( rapidxml::xml_node<> * map_item = object_node->first_node("x"); map_item; map_item = map_item->next_sibling()){
-      switch( i ){
-        case 0:
-          x = map_item -> value();
-          break;
-        case 1:
-          y = map_item -> value();
-          break;
-        case 2:
-          bodytype = map_item -> value();
-          break;
-        case 3:
-          orientation = map_item -> value();
-          break;
-        case 4:
-          vel_x = map_item -> value();
-          break;
-        case 5:
-          vel_y = map_item -> value();
-          break;
-        default:
-          break;
-      }
-      i++;
-    }
+    // Load data
+    if( object_node -> first_attribute("type") != 0)
+      type = object_node -> first_attribute("type") -> value();
+    if( object_node -> first_node("x") != 0)
+      x = object_node -> first_node("x") -> value();
+    if( object_node -> first_node("y") != 0)
+      y = object_node -> first_node("y") -> value();
+    if( object_node -> first_node("vel_x") != 0)
+      vel_x = object_node -> first_node("vel_x") -> value();
+    if( object_node -> first_node("vel_y") != 0)
+      vel_y = object_node -> first_node("vel_y") -> value();
+    if( object_node -> first_node("bodytype") != 0)
+      bodytype = object_node -> first_node("bodytype") -> value();
+    if( object_node -> first_node("orientation") != 0)
+      orientation = object_node -> first_node("orientation") -> value();
 
     editor_box newBox;
-    newBox.x = (tools::string_to_float(x) * 20) - 16;
-    newBox.y = (tools::string_to_float(y) * -20) - 16;
-    newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
-    newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
-    newBox.orientation = (tools::convertStringToInt(orientation));
-    newBox.orientation_str = orientation;
+    newBox.x = (tools::string_to_float(x) * 20.0f) - 16.0f;
+    newBox.y = (tools::string_to_float(y) * -20.0f) - 16.0f;
+    newBox.x_str = x;
+    newBox.y_str = y;
 
+    // Correct orientation format
+    std::vector<std::string> splits = tools::split_string( orientation, ' ');
+    if( splits.size() == 4)
+      for( int k = 0; k < 4; k++)
+        newBox.orientation[k] = (tools::convertStringToInt(splits.at(k)));
 
     newBox.bodyType = bodytype;
 
@@ -381,8 +378,8 @@ void editor::save_map( std::string mapName){
   // Write xml file
   rapidxml::xml_document<> doc;
   rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);
-  decl->append_attribute(doc.allocate_attribute("version", "1.0"));
-  decl->append_attribute(doc.allocate_attribute("encoding", "utf-8"));
+  decl -> append_attribute( doc.allocate_attribute("version", "1.0"));
+  decl -> append_attribute( doc.allocate_attribute("encoding", "utf-8"));
   doc.append_node(decl);
 
   rapidxml::xml_node<>* root_node = doc.allocate_node( rapidxml::node_element, "data");
@@ -395,6 +392,9 @@ void editor::save_map( std::string mapName){
     rapidxml::xml_node<>* object_node = doc.allocate_node( rapidxml::node_element, node_name);
 
     std::string xml_type = "Tile";
+    std::string output_orientation = tools::toString(editorBoxes.at(i).orientation[0]) + " " + tools::toString(editorBoxes.at(i).orientation[1]) + " " +
+                                     tools::toString(editorBoxes.at(i).orientation[2]) + " " + tools::toString(editorBoxes.at(i).orientation[3]);
+    char *output_orientation_char = doc.allocate_string(output_orientation.c_str());
 
     if( editorBoxes.at(i).type == 2)
       xml_type = "Character";
@@ -405,11 +405,10 @@ void editor::save_map( std::string mapName){
     root_node -> append_node( object_node);
 
     // X/Y/Bodytype
-    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "x", (editorBoxes.at(i).x_str).c_str()));
-    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "y", (editorBoxes.at(i).y_str).c_str()));
+    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "x", editorBoxes.at(i).x_str.c_str()));
+    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "y", editorBoxes.at(i).y_str.c_str()));
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
-    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation",editorBoxes.at(i).orientation_str.c_str() ));
-
+    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
   }
 
   // Save to file

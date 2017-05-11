@@ -142,7 +142,7 @@ void game::load_world(int newLevel){
         type = object_node -> first_attribute("type") -> value();
       if( object_node -> first_node("x") != 0)
         x = object_node -> first_node("x") -> value();
-      if( object_node -> first_node("x") != 0)
+      if( object_node -> first_node("y") != 0)
         y = object_node -> first_node("y") -> value();
       if( object_node -> first_node("vel_x") != 0)
         vel_x = object_node -> first_node("vel_x") -> value();

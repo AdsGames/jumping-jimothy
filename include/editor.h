@@ -29,14 +29,13 @@
 
 // Nice editor boxes
 struct editor_box{
-  int x;
-  int y;
+  float x;
+  float y;
   std::string x_str;
   std::string y_str;
   std::string bodyType;
   int type;
-  int orientation;
-  std::string orientation_str;
+  int orientation[4];
 };
 
 class editor : public state{
