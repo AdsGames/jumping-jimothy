@@ -7,6 +7,7 @@
 #define BOX_H
 #include <allegro5/allegro.h>
 #include <tools.h>
+#include <globals.h>
 
 #define BOX 0
 #define GOAT 2
@@ -22,7 +23,7 @@ class Box{
   public:
     Box();
     ~Box();
-    void init(float, float, float, float,float,float,bool,ALLEGRO_BITMAP*, b2World *);
+    void init(float, float, float, float,float,float,bool,BITMAP*,BITMAP*,BITMAP*,BITMAP*, b2World *);
     void init(float, float, ALLEGRO_BITMAP*, b2World *,Character*);
     bool getGoatWin();
     virtual void draw();
@@ -44,12 +45,14 @@ class Box{
 
     ALLEGRO_BITMAP *sprite;
     ALLEGRO_BITMAP *goat_images[17];
+    ALLEGRO_BITMAP *new_tiles[4];
 
     bool static_mode;
     int type;
     int orientation;
     int goat_frame;
     int goat_tick;
+
 
     b2Vec2 static_velocity;
     float static_angular_velocity;

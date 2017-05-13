@@ -85,8 +85,13 @@ void Box::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGa
 
 }
 
-void Box::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
-  sprite = newSprite;
+void Box::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4, b2World *newGameWorld){
+
+  sprite = sp_1;
+  new_tiles[0] = sp_1;
+  new_tiles[1] = sp_2;
+  new_tiles[2] = sp_3;
+  new_tiles[3] = sp_4;
 
   type = BOX;
   width = newWidth;
@@ -239,11 +244,10 @@ void Box::draw(){
 
   b2Vec2 draw_velocity = b2Vec2(0,0);
 
+
+  // If dynamic
   if( !static_box){
-    if( static_mode)
-      draw_velocity = b2Vec2( static_velocity.x, static_velocity.y);
-    else
-      draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
+
 
     // Haxxx im sorry tho
     if(type != GOAT){
@@ -252,18 +256,31 @@ void Box::draw(){
         al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)),
                     tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)),
                     0));
+      al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
+
+    }else
+      al_draw_bitmap(goat_images[goat_frame],-(width/2)*20,-(height/2)*20,0);
+
+  //If static
+  }else{
+
+
+    for( int t = 0; t < 4; t++){
+        // Offsets from subtile
+        int off_x = (t == 1 || t == 3) ? 16: 0;
+        int off_y = (t >= 2) ? 16: 0;
+
+      al_draw_bitmap( new_tiles[t],-(width/2)*20+off_x, -(height/2)*20+off_y, 0);
     }
-  }
-  else{
+     // al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
+     // al_map_rgb(255,255,0));
 
-      al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
-      al_map_rgb(255,255,0));
-  }
-  if( type == GOAT)
-    al_draw_bitmap(goat_images[goat_frame],-(width/2)*20,-(height/2)*20,0);
-  else
-    al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 
+
+
+    //
+  }
   // restore the old transform
+
   al_use_transform(&prevTrans);
 }

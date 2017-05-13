@@ -14,6 +14,9 @@
 #define DYNAMIC true
 #define KINEMATIC false
 
+//Allan plz dont kill me but ALLEGRO_BITMAP is a wee bit ridiculous
+#define BITMAP ALLEGRO_BITMAP
+
 
 
 
