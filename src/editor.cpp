@@ -38,7 +38,7 @@ editor::editor(){
   srand(time(NULL));
 
   al_init_ttf_addon();
-  edit_font = al_load_ttf_font( "fonts/pixelart.ttf", 14, 0);
+  edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
 
   if (!edit_font)
     tools::abort_on_error( "Could not load 'fontspixelart.ttf'.\n", "Font Error");
@@ -48,15 +48,15 @@ editor::editor(){
   editorBoxes.clear();
 
   // Buttons
-  button_types[button_type_dynamic] = button( 20, 720, "Dynamic", edit_font);
-  button_types[button_type_static] = button( 20 + button_types[0].getX() + button_types[0].getWidth(), 720, "Static", edit_font);
-  button_types[button_type_player] = button( 20 + button_types[1].getX() + button_types[1].getWidth(), 720, "Player", edit_font);
-  button_types[button_type_goat] = button( 20 + button_types[2].getX() + button_types[2].getWidth(), 720, "Goat", edit_font);
+  button_types[button_type_dynamic] = button( 20, 710, "Dynamic", edit_font);
+  button_types[button_type_static] = button( 20 + button_types[0].getX() + button_types[0].getWidth(), 710, "Static", edit_font);
+  button_types[button_type_player] = button( 20 + button_types[1].getX() + button_types[1].getWidth(), 710, "Player", edit_font);
+  button_types[button_type_goat] = button( 20 + button_types[2].getX() + button_types[2].getWidth(), 710, "Goat", edit_font);
 
-  button_types[button_save] = button( 20 + 700, 720, "Save", edit_font);
-  button_types[button_load] = button( 20 + button_types[button_save].getX() + button_types[button_save].getWidth(), 720, "Load", edit_font);
-  button_types[button_play] = button( 20 + button_types[button_load].getX() + button_types[button_load].getWidth(), 720, "Play", edit_font);
-  button_types[button_grid] = button( 20 + button_types[button_play].getX() + button_types[button_play].getWidth(), 720, "Grid", edit_font);
+  button_types[button_save] = button( 20 + 730, 710, "Save", edit_font);
+  button_types[button_load] = button( 20 + button_types[button_save].getX() + button_types[button_save].getWidth(), 710, "Load", edit_font);
+  button_types[button_play] = button( 20 + button_types[button_load].getX() + button_types[button_load].getWidth(), 710, "Play", edit_font);
+  button_types[button_grid] = button( 20 + button_types[button_play].getX() + button_types[button_play].getWidth(), 710, "Grid", edit_font);
 }
 
 editor::~editor(){
@@ -89,8 +89,12 @@ void editor::update(){
     // Display open dialog
     if( al_show_native_file_dialog( nullptr, myChooser)){
       file_name = al_get_native_file_dialog_path(myChooser, 0);
-      save_map( file_name);
-      al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
+
+      // Make sure saves correctly
+      if( save_map( file_name))
+        al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
+      else
+        al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, 0);
     }
   }
 
@@ -101,8 +105,12 @@ void editor::update(){
     if( al_show_native_file_dialog( nullptr, myChooser)){
       file_name = al_get_native_file_dialog_path(myChooser, 0);
       editorBoxes.clear();
-      load_map( file_name);
-      al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ", file_name, nullptr, 0);
+
+      // Make sure loads correctly
+      if( load_map( file_name))
+        al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ", file_name, nullptr, 0);
+      else
+        al_show_native_message_box( nullptr, "Error!", "Error loading map from: ", file_name, nullptr, 0);
     }
   }
 
@@ -287,28 +295,29 @@ void editor::draw(){
         int off_x = (t == 1 || t == 3) ? 16: 0;
         int off_y = (t >= 2) ? 16: 0;
 
-        al_draw_bitmap( tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation[t]], editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y, 0);
+        if( editorBoxes.at(i).orientation[t] >= 0 && editorBoxes.at(i).orientation[t] < 16)
+          al_draw_bitmap( tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation[t]], editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y, 0);
       }
     }
     else if( editorBoxes.at(i).type == 2)
-      al_draw_bitmap( tiles[editorBoxes.at(i).type][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+      al_draw_bitmap( tiles[2][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     else if( editorBoxes.at(i).type == 3)
-      al_draw_bitmap( tiles[editorBoxes.at(i).type][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+      al_draw_bitmap( tiles[3][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
   }
 
 
   // Tile type
   if( tile_type == 0)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 30, 0, "Type: Dynamic");
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Dynamic");
   if( tile_type == 1)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 30, 0, "Type: Static");
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Static");
   if( tile_type == 2)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 30, 0, "Type: Character spawn");
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Character spawn");
   if( tile_type == 3)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 30, 0, "Type: Endgame goat");
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Endgame goat");
 
   // Current map opened
-  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 10, 0, "File: %s", file_name);
+  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s", file_name);
 
   // Draw buttons
   for( int i = 0; i < 8; i++)
@@ -333,9 +342,7 @@ bool editor::box_at(int x, int y){
 }
 
 // Load map from xml
-void editor::load_map( std::string mapName){
-  std::cout << "Attempting to load " << mapName << " into editor\n";
-
+bool editor::load_map( std::string mapName){
   // Doc
   rapidxml::xml_document<> doc;
 
@@ -385,12 +392,22 @@ void editor::load_map( std::string mapName){
 
     // Correct orientation format
     std::vector<std::string> splits = tools::split_string( orientation, ' ');
-    if( splits.size() == 4)
+    if( splits.size() == 4){
       for( int k = 0; k < 4; k++)
         newBox.orientation[k] = (tools::convertStringToInt(splits.at(k)));
+    }
+    // Maybe we can salvage it?
+    else if( splits.size() > 0){
+      for( int k = 0; k < 4; k++)
+        newBox.orientation[k] = (tools::convertStringToInt(splits.at(0)));
+    }
+    // All hope is lost!
+    else{
+      return false;
+    }
 
+    // Body
     newBox.bodyType = bodytype;
-
     if( newBox.bodyType == "Dynamic")
       newBox.type = 0;
     else if( newBox.bodyType == "Static")
@@ -400,12 +417,16 @@ void editor::load_map( std::string mapName){
     else if( newBox.bodyType == "Finish")
       newBox.type = 3;
 
+    // Add box
     editorBoxes.push_back( newBox);
   }
+
+  // Success
+  return true;
 }
 
 // Save map to xml
-void editor::save_map( std::string mapName){
+bool editor::save_map( std::string mapName){
   // Write xml file
   rapidxml::xml_document<> doc;
   rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);
@@ -447,4 +468,7 @@ void editor::save_map( std::string mapName){
   file_stored << doc;
   file_stored.close();
   doc.clear();
+
+  // Success
+  return true;
 }
