@@ -17,6 +17,10 @@ editor::editor(){
   image_box[2] = tools::load_bitmap_ex( "images/character.png");
   image_box[3] = tools::load_bitmap_ex( "images/DisgoatSpriteMap.png");
 
+  for( int i = 0; i < 4; i++)
+    for( int t = 0; t < 15; t++)
+      tiles[i][t] = nullptr;
+
   // Dynamic
   for( int i = 0; i < 3; i++)
     for( int t = 0; t < 5; t++)
@@ -28,7 +32,7 @@ editor::editor(){
       tiles[1][i + t*3] = al_create_sub_bitmap( image_box[1], i * 16, t * 16, 16, 16);
 
   // Player
-  tiles[2][0] = image_box[2];
+  tiles[2][0] = al_create_sub_bitmap( image_box[2], 0, 0, 32, 64);
 
   // Goat
   tiles[3][0] = al_create_sub_bitmap( image_box[3], 0, 0, 32, 64);
@@ -59,8 +63,22 @@ editor::editor(){
   button_types[button_grid] = button( 20 + button_types[button_play].getX() + button_types[button_play].getWidth(), 710, "Grid", edit_font);
 }
 
+// Destruct
 editor::~editor(){
+  // Destroy resources if loaded
+  if( edit_font != nullptr)
+    al_destroy_font( edit_font);
 
+  // Tile images
+  for( int i = 0; i < 4; i++)
+    for( int t = 0; t < 15; t++)
+      if( tiles[i][t] != nullptr)
+        al_destroy_bitmap( tiles[i][t]);
+
+  // Parent bitmaps
+  for( int i = 0; i < 4; i++)
+    if( image_box[i] != nullptr)
+      al_destroy_bitmap( image_box[i]);
 }
 
 // Update editor

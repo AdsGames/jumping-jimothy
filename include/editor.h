@@ -52,6 +52,7 @@ enum button_names{
   button_grid
 };
 
+// The editor state
 class editor : public state{
   public:
     editor();
@@ -63,7 +64,7 @@ class editor : public state{
   private:
     // Imagess
     ALLEGRO_BITMAP *image_box[4];
-    ALLEGRO_BITMAP *tiles[4][16];
+    ALLEGRO_BITMAP *tiles[4][15];
 
     // Functions
     int calculate_orientation(int);
