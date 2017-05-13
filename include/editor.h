@@ -24,6 +24,8 @@
 #include "mouseListener.h"
 #include "keyListener.h"
 #include "tools.h"
+#include "button.h"
+#include "globals.h"
 
 #include "state.h"
 
@@ -36,6 +38,18 @@ struct editor_box{
   std::string bodyType;
   int type;
   int orientation[4];
+};
+
+// Button names
+enum button_names{
+  button_type_dynamic,
+  button_type_static,
+  button_type_player,
+  button_type_goat,
+  button_save,
+  button_load,
+  button_play,
+  button_grid
 };
 
 class editor : public state{
@@ -61,8 +75,14 @@ class editor : public state{
     void save_map( std::string mapName);
     void load_map( std::string mapName);
 
+    // Type buttons
+    button button_types[8];
+
     // Tiles
     std::vector<editor_box> editorBoxes;
+
+    // Map name
+    const char *file_name;
 
     // Vars
     bool grid_on;
