@@ -247,7 +247,11 @@ void Box::draw(){
 
   // If dynamic
   if( !static_box){
-
+    // Danny... why was this removed?
+    if( static_mode)
+      draw_velocity = b2Vec2( static_velocity.x, static_velocity.y);
+    else
+      draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
 
     // Haxxx im sorry tho
     if(type != GOAT){
