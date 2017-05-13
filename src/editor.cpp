@@ -372,10 +372,10 @@ bool editor::load_map( std::string mapName){
     std::string type = "";
     std::string x = "";
     std::string y = "";
-    std::string orientation = "00000000";
-    std::string bodytype = "totally not static";
     std::string vel_x = "0";
     std::string vel_y = "0";
+    std::string bodytype = "static";
+    std::string orientation = "0 0 0 0";
 
     // Load data
     if( object_node -> first_attribute("type") != 0)
@@ -425,6 +425,8 @@ bool editor::load_map( std::string mapName){
       newBox.type = 2;
     else if( newBox.bodyType == "Finish")
       newBox.type = 3;
+    else
+      newBox.type = 0;
 
     // Add box
     editorBoxes.push_back( newBox);
