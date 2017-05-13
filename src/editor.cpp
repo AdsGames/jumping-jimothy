@@ -3,10 +3,13 @@
 // Init editor
 editor::editor(){
 
-  std::cout<<"Initializing editor\n";
+  std::cout << "Initializing editor\n";
 
   // Level to edit
   level_number = 1;
+
+  // Filename
+  file_name = "";
 
   // Load box image
   image_box[0] = tools::load_bitmap_ex( "images/DynamicBlock2.png");
@@ -14,33 +17,46 @@ editor::editor(){
   image_box[2] = tools::load_bitmap_ex( "images/character.png");
   image_box[3] = tools::load_bitmap_ex( "images/DisgoatSpriteMap.png");
 
-  for( int i = 0; i < 3; i++){
-    for( int t = 0; t < 5; t++){
+  // Dynamic
+  for( int i = 0; i < 3; i++)
+    for( int t = 0; t < 5; t++)
       tiles[0][i + t*3] = al_create_sub_bitmap( image_box[0], i * 16, t * 16, 16, 16);
-      tiles[1][i + t*3] = al_create_sub_bitmap( image_box[1], i * 16, t * 16, 16, 16);
-      tiles[2][i + t*3] = al_create_sub_bitmap( image_box[2], 0, 0, 32, 32);
-    }
-  }
 
-  for( int i = 0; i < 4; i++){
-    for( int t = 0; t < 4; t++){
-        tiles[3][i + t*4] = al_create_sub_bitmap( image_box[3], i * 32, t * 64, 32, 64);
-    }
-  }
+  // Static
+  for( int i = 0; i < 3; i++)
+    for( int t = 0; t < 5; t++)
+      tiles[1][i + t*3] = al_create_sub_bitmap( image_box[1], i * 16, t * 16, 16, 16);
+
+  // Player
+  tiles[2][0] = image_box[2];
+
+  // Goat
+  tiles[3][0] = al_create_sub_bitmap( image_box[3], 0, 0, 32, 64);
 
   tile_type = 0;
 
   srand(time(NULL));
 
   al_init_ttf_addon();
-  edit_font = al_load_ttf_font("fonts/pixelart.ttf",14,0);
+  edit_font = al_load_ttf_font( "fonts/pixelart.ttf", 14, 0);
 
   if (!edit_font)
-    tools::abort_on_error("Could not load 'fontspixelart.ttf'.\n", "Font Error");
+    tools::abort_on_error( "Could not load 'fontspixelart.ttf'.\n", "Font Error");
 
   grid_on = false;
 
   editorBoxes.clear();
+
+  // Buttons
+  button_types[button_type_dynamic] = button( 20, 720, "Dynamic", edit_font);
+  button_types[button_type_static] = button( 20 + button_types[0].getX() + button_types[0].getWidth(), 720, "Static", edit_font);
+  button_types[button_type_player] = button( 20 + button_types[1].getX() + button_types[1].getWidth(), 720, "Player", edit_font);
+  button_types[button_type_goat] = button( 20 + button_types[2].getX() + button_types[2].getWidth(), 720, "Goat", edit_font);
+
+  button_types[button_save] = button( 20 + 700, 720, "Save", edit_font);
+  button_types[button_load] = button( 20 + button_types[button_save].getX() + button_types[button_save].getWidth(), 720, "Load", edit_font);
+  button_types[button_play] = button( 20 + button_types[button_load].getX() + button_types[button_load].getWidth(), 720, "Play", edit_font);
+  button_types[button_grid] = button( 20 + button_types[button_play].getX() + button_types[button_play].getWidth(), 720, "Grid", edit_font);
 }
 
 editor::~editor(){
@@ -49,8 +65,57 @@ editor::~editor(){
 
 // Update editor
 void editor::update(){
-  // Add/remove tile
-  if( mouseListener::mouse_button & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y)){
+  // Update buttons
+  for( int i = 0; i < 8; i++)
+    button_types[i].update();
+
+  // Check if over button
+  bool over_button = false;
+  for( int i = 0; i < 8; i++){
+    if( button_types[i].hover()){
+      over_button = true;
+      break;
+    }
+  }
+
+  // Change type
+  for( int i = 0; i < 4; i++)
+    if( button_types[i].clicked())
+      tile_type = i;
+
+  // Save
+  if( button_types[button_save].clicked()){
+    ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
+    // Display open dialog
+    if( al_show_native_file_dialog( nullptr, myChooser)){
+      file_name = al_get_native_file_dialog_path(myChooser, 0);
+      save_map( file_name);
+      al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
+    }
+  }
+
+  // Load map
+  if( button_types[button_load].clicked()){
+    ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
+    // Display open dialog
+    if( al_show_native_file_dialog( nullptr, myChooser)){
+      file_name = al_get_native_file_dialog_path(myChooser, 0);
+      editorBoxes.clear();
+      load_map( file_name);
+      al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ", file_name, nullptr, 0);
+    }
+  }
+
+  // Play
+  if( button_types[button_play].clicked())
+     set_next_state( STATE_GAME);
+
+  // Grid toggle
+  if( button_types[button_grid].clicked())
+    grid_on = !grid_on;
+
+  // Add tile
+  if( mouseListener::mouse_button & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y) && !over_button){
     editor_box newBox;
     newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
     newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
@@ -74,6 +139,8 @@ void editor::update(){
     // Calculate orientation of boxes
     calculate_orientation_global();
   }
+
+  // Remove tile
   if( mouseListener::mouse_button & 2){
     for( unsigned int i = 0; i < editorBoxes.size(); i ++){
       if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)mouseListener::mouse_x, (float)mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)mouseListener::mouse_y, (float)mouseListener::mouse_y )){
@@ -84,52 +151,11 @@ void editor::update(){
     // Calculate orientation of boxes
     calculate_orientation_global();
   }
-  for(int i=0; i<10; i++){
-    if( keyListener::keyPressed[i+27])
-      level_number = i;
-  }
-  // Tile types
-  if( keyListener::keyPressed[ALLEGRO_KEY_Q])
-    tile_type = 0;
-  if( keyListener::keyPressed[ALLEGRO_KEY_W])
-    tile_type = 1;
-  if( keyListener::keyPressed[ALLEGRO_KEY_E])
-    tile_type = 2;
-  if( keyListener::keyPressed[ALLEGRO_KEY_R])
-    tile_type = 3;
-
-  if( keyListener::keyPressed[ALLEGRO_KEY_T])
-    calculate_orientation_global();
-
-  // Grid toggle
-  if( keyListener::keyPressed[ALLEGRO_KEY_G])
-    grid_on = !grid_on;
-
-  // Load map
-  if( keyListener::keyPressed[ALLEGRO_KEY_L]){
-    editorBoxes.clear();
-    load_map("data/level_"+tools::convertIntToString(level_number)+".xml");
-    std::string path = "data/level_"+tools::convertIntToString(level_number)+".xml";
-    al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ",path.c_str(), nullptr, 0);
-
-  }
-
-  // Save map
-  if( keyListener::keyPressed[ALLEGRO_KEY_S]){
-    save_map("data/level_"+tools::convertIntToString(level_number)+".xml");
-    std::string path = "data/level_"+tools::convertIntToString(level_number)+".xml";
-    al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ",path.c_str(), nullptr, 0);
-  }
-
-  // Game mode
-  if( keyListener::keyPressed[ALLEGRO_KEY_P]){
-    set_next_state( STATE_GAME);
-  }
 }
 
 
 void editor::calculate_orientation_global(){
-  // Draw boxes
+  // Calc boxes
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
     if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
       // Scroll through all 4 parts
@@ -273,16 +299,20 @@ void editor::draw(){
 
   // Tile type
   if( tile_type == 0)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Dynamic");
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 30, 0, "Type: Dynamic");
   if( tile_type == 1)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Static");
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 30, 0, "Type: Static");
   if( tile_type == 2)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Character spawn");
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 30, 0, "Type: Character spawn");
   if( tile_type == 3)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 0, 0, "Type: Endgame goat");
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 30, 0, "Type: Endgame goat");
 
-  // Current level on
-  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 20, 0, "Level: level_%i.xml",level_number);
+  // Current map opened
+  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 0, 10, 0, "File: %s", file_name);
+
+  // Draw buttons
+  for( int i = 0; i < 8; i++)
+    button_types[i].draw();
 }
 
 

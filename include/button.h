@@ -2,19 +2,24 @@
 #define BUTTON_H
 
 #include <allegro5/allegro5.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
 #include <string>
+
+#include <mouseListener.h>
 
 
 class button{
   public:
-    button( int x, int y, std::string text);
-    virtual ~button();
+    button( int x, int y, std::string text, ALLEGRO_FONT *button_font);
+    button();
+    ~button();
 
     // Getters
     int getX(){ return x; }
     int getY(){ return y; }
-    int getWidth(){ return width; }
-    int getHeight(){ return height; }
+    int getWidth(){ return width + padding_x; }
+    int getHeight(){ return height + padding_y; }
     int getPaddingX(){ return padding_x; }
     int getPaddingY(){ return padding_y; }
     std::string getText(){ return text; }
@@ -25,6 +30,11 @@ class button{
     void setPadding( int padding_x, int padding_y){ this -> padding_x = padding_x; this -> padding_y = padding_y; }
     void setText( std::string text){ this -> text = text; }
     void setImage( ALLEGRO_BITMAP *image){ this -> image = image; }
+    void setFont( ALLEGRO_FONT *font);
+
+    bool hover();
+    bool clicked();
+    void update();
 
     // Draw
     void draw();
@@ -39,7 +49,12 @@ class button{
     int padding_x;
     int padding_y;
 
+    bool hovering;
+
     ALLEGRO_BITMAP *image;
+
+    // Font
+    ALLEGRO_FONT *button_font;
 
     std::string text;
 };
