@@ -51,9 +51,9 @@ Box *game::create_goat( float newX, float newY){
 }
 
 // Creates box in world
-Box *game::create_box( float newX, float newY, float newWidth, float newHeight, float newVelX,float newVelY, ALLEGRO_BITMAP *newSprite, bool newBodyType, bool newIsSensor){
+Box *game::create_box( float newX, float newY, float newWidth, float newHeight, float newVelX,float newVelY, BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4, bool newBodyType, bool newIsSensor){
   Box *newBox = new Box();
-  newBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, newSprite, gameWorld);
+  newBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, sp_1,sp_2,sp_3,sp_4, gameWorld);
   gameBoxes.push_back( newBox);
   return newBox;
 }
@@ -136,6 +136,7 @@ void game::load_world(int newLevel){
       std::string bodytype = "Static";
       std::string vel_x = "0";
       std::string vel_y = "0";
+      int orientation_array[4];
 
       // Load data
       if( object_node -> first_attribute("type") != 0)
@@ -155,10 +156,18 @@ void game::load_world(int newLevel){
 
       if( type == "Tile"){
         if(bodytype == "Static"){
-          newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.5, 1.5, tools::string_to_float(vel_x), tools::string_to_float(vel_y), tiles[1][tools::convertStringToInt(orientation)], false, false);
+            std::vector<std::string> splits = tools::split_string( orientation, ' ');
+            if( splits.size() == 4)
+              for( int k = 0; k < 4; k++)
+                orientation_array[k] = (tools::convertStringToInt(splits.at(k)));
+
+
+
+          newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.5, 1.5, tools::string_to_float(vel_x), tools::string_to_float(vel_y), new_dynamic_tile[orientation_array[0]],new_dynamic_tile[orientation_array[1]],
+                                    new_dynamic_tile[orientation_array[2]],new_dynamic_tile[orientation_array[3]],false, false);
           static_count++;
         }else{
-          newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(vel_x), tools::string_to_float(vel_y), box, true, false);
+          newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(vel_x), tools::string_to_float(vel_y), box,nullptr,nullptr,nullptr, true, false);
           dynamic_count++;
         }
       }
@@ -236,6 +245,15 @@ void game::load_sprites(){
   static_tileset = tools::load_bitmap_ex( "images/StaticBlock.png");
   play = tools::load_bitmap_ex( "images/play.png");
   pause = tools::load_bitmap_ex( "images/pause.png");
+
+  ALLEGRO_BITMAP *image_box = tools::load_bitmap_ex( "images/StaticBlock2.png");
+
+
+  for( int i = 0; i < 3; i++){
+    for( int t = 0; t < 5; t++){
+      new_dynamic_tile[i + t*3] = al_create_sub_bitmap( image_box, i * 16, t * 16, 16, 16);
+    }
+  }
 
   for( int i = 0; i < 4; i++)
     for( int t = 0; t < 12; t++)

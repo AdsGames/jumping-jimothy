@@ -43,7 +43,7 @@ class game : public state{
     void reset();
 
     // Creation code
-    Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,ALLEGRO_BITMAP* newSprite, bool newBodyType, bool newIsSensor);
+    Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,BITMAP*,BITMAP*, BITMAP*, BITMAP*,  bool newBodyType, bool newIsSensor);
     Box *create_goat(float,float);
     Character *create_character(float newX, float newY);
 
@@ -71,6 +71,9 @@ class game : public state{
     ALLEGRO_BITMAP *play;
     ALLEGRO_BITMAP *pause;
     ALLEGRO_BITMAP *help;
+
+    ALLEGRO_BITMAP *new_dynamic_tile[100];
+    //TODO FIX WHEN NOT DEAD INSIDE
 
     // Samples
     ALLEGRO_SAMPLE *music;
