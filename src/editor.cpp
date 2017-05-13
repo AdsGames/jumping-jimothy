@@ -405,7 +405,7 @@ bool editor::load_map( std::string mapName){
       for( int k = 0; k < 4; k++)
         newBox.orientation[k] = (tools::convertStringToInt(splits.at(k)));
     }
-    // Maybe we can salvage it?
+        // Maybe we can salvage it?
     else if( splits.size() > 0){
       for( int k = 0; k < 4; k++)
         newBox.orientation[k] = (tools::convertStringToInt(splits.at(0)));
