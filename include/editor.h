@@ -72,8 +72,8 @@ class editor : public state{
     bool box_at(int x, int y);
     bool box_at_with_type(int newType,int x, int y);
 
-    void save_map( std::string mapName);
-    void load_map( std::string mapName);
+    bool save_map( std::string mapName);
+    bool load_map( std::string mapName);
 
     // Type buttons
     button button_types[8];
