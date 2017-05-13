@@ -167,19 +167,16 @@ void editor::update(){
   }
 
   // Remove tile
-  if( mouseListener::mouse_button & 2){
-    for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-      if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)mouseListener::mouse_x, (float)mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)mouseListener::mouse_y, (float)mouseListener::mouse_y )){
+  if( mouseListener::mouse_button & 2)
+    for( unsigned int i = 0; i < editorBoxes.size(); i ++)
+      if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)mouseListener::mouse_x, (float)mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)mouseListener::mouse_y, (float)mouseListener::mouse_y ))
         editorBoxes.erase( editorBoxes.begin() + i);
-      }
-    }
-
-    // Calculate orientation of boxes
+  // Calculate orientation of boxes
+  if( mouseListener::mouse_released & 2)
     calculate_orientation_global();
-  }
 }
 
-
+// Calculate all the orientations of blocks
 void editor::calculate_orientation_global(){
   // Calc boxes
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
@@ -277,12 +274,6 @@ void editor::calculate_orientation_global(){
       }
     }
   }
-}
-
-// Calculated proper orientation of tiles
-int editor::calculate_orientation(int i){
-  int orientation = 0;
-  return orientation;
 }
 
 // Draw to screen

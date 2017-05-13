@@ -67,7 +67,6 @@ class editor : public state{
     ALLEGRO_BITMAP *tiles[4][15];
 
     // Functions
-    int calculate_orientation(int);
     void calculate_orientation_global();
 
     bool box_at(int x, int y);
