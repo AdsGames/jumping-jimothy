@@ -84,6 +84,8 @@ class editor : public state{
     // Map name
     const char *file_name;
 
+    bool gui_mode;
+
     // Vars
     bool grid_on;
 
