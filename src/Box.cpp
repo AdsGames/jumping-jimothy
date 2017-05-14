@@ -158,16 +158,14 @@ float Box::getY(){
 }
 bool Box::getGoatWin(){
   if(type==GOAT){
-    //if(gameCharacter==nullptr)
-    //  std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
+    if(gameCharacter==nullptr)
+     std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
 
-    std::cout<<"gameCharacter's position:" << gameCharacter -> getX() << "," << gameCharacter -> getX() <<":";
 
     if(sensor_box -> isCollidingWithBody(gameCharacter -> getBody())){
-      std::cout<<" true\n";
       return true;
     }
-    std::cout<<" false\n";
+
   }
   return false;
 
