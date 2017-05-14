@@ -11,6 +11,8 @@ editor::editor(){
   // Filename
   file_name = "";
 
+  gui_mode = true;
+
   // Load box image
   image_box[0] = tools::load_bitmap_ex( "images/DynamicBlock2.png");
   image_box[1] = tools::load_bitmap_ex( "images/StaticBlock2.png");
@@ -84,8 +86,10 @@ editor::~editor(){
 // Update editor
 void editor::update(){
   // Update buttons
-  for( int i = 0; i < 8; i++)
-    button_types[i].update();
+  for( int i = 0; i < 8; i++){
+    if(gui_mode)
+      button_types[i].update();
+  }
 
   // Check if over button
   bool over_button = false;
@@ -101,8 +105,23 @@ void editor::update(){
     if( button_types[i].clicked())
       tile_type = i;
 
+  // Advanced mode types
+  if(keyListener::keyPressed[ALLEGRO_KEY_Q])
+    tile_type=0;
+  if(keyListener::keyPressed[ALLEGRO_KEY_W])
+    tile_type=1;
+  if(keyListener::keyPressed[ALLEGRO_KEY_E])
+    tile_type=2;
+  if(keyListener::keyPressed[ALLEGRO_KEY_R])
+    tile_type=3;
+
+  // Activate advanced mode
+  // Don't tell Allan, but I really don't like his buttons
+  if(keyListener::keyPressed[ALLEGRO_KEY_A])
+    gui_mode=!gui_mode;
+
   // Save
-  if( button_types[button_save].clicked()){
+  if( button_types[button_save].clicked() || keyListener::keyPressed[ALLEGRO_KEY_S]){
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
     // Display open dialog
     if( al_show_native_file_dialog( nullptr, myChooser)){
@@ -117,7 +136,7 @@ void editor::update(){
   }
 
   // Load map
-  if( button_types[button_load].clicked()){
+  if( button_types[button_load].clicked() || keyListener::keyPressed[ALLEGRO_KEY_D]){
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
     // Display open dialog
     if( al_show_native_file_dialog( nullptr, myChooser)){
@@ -133,15 +152,15 @@ void editor::update(){
   }
 
   // Play
-  if( button_types[button_play].clicked())
+  if( button_types[button_play].clicked() || keyListener::keyPressed[ALLEGRO_KEY_F])
      set_next_state( STATE_GAME);
 
   // Grid toggle
-  if( button_types[button_grid].clicked())
+  if( button_types[button_grid].clicked() || keyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
   // Add tile
-  if( mouseListener::mouse_button & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y) && !over_button){
+  if( mouseListener::mouse_button & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
     editor_box newBox;
     newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
     newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
@@ -329,8 +348,10 @@ void editor::draw(){
   al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s", file_name);
 
   // Draw buttons
-  for( int i = 0; i < 8; i++)
-    button_types[i].draw();
+  for( int i = 0; i < 8; i++){
+    if(gui_mode)
+      button_types[i].draw();
+  }
 }
 
 
