@@ -7,76 +7,21 @@
 
 Character::Character(){
 
-
 }
 
-void Character::update(){
-  int number_thingin=5;
-  if(!sensor_box -> isColliding())
-    number_thingin=2;
+void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
+  tick = 0;
+  frame = 0;
 
-  tick++;
-  if(tick>=number_thingin){
-    frame++;
-    tick=0;
-  }
-  if(frame==14)
-    frame=0;
-
-
-  b2Vec2 position = body -> GetPosition();
-  x = position.x;
-  y = position.y;
-  angle = body -> GetAngle();
-  double yVel = getBody() -> GetLinearVelocity().y;
-
-
-  if(keyListener::key[ALLEGRO_KEY_A] || joystickListener::button[JOY_XBOX_PAD_LEFT]){
-    direction=false;
-    if(sensor_box -> isColliding())
-        {
-        body -> SetLinearVelocity(b2Vec2(-5, yVel));
-        }
-     else
-     {
-        if(getBody() -> GetLinearVelocity().x > -5)
-            body -> ApplyLinearImpulse(b2Vec2(-2, 0),position);
-    }
-  }
-
-  else if(keyListener::key[ALLEGRO_KEY_D] || joystickListener::button[JOY_XBOX_PAD_RIGHT]){
-      direction=true;
-    if(sensor_box -> isColliding()){
-          body -> SetLinearVelocity(b2Vec2(5, yVel));
-
-      }
-      else
-      {
-          if(getBody() -> GetLinearVelocity().x < 5)
-        body -> ApplyLinearImpulse(b2Vec2(2, 0),position);
-
-      }
-  }
-  else if(sensor_box -> isColliding()){
-     body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
-  }
-
-    // Homemade friction
-  if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
-    body -> ApplyLinearImpulse(b2Vec2(0, 15),position);
-  }
-
-
-//Fixed Danny's poop code by getting rid if it =)
-  if(sensor_box -> isColliding())
-    color = al_map_rgb(50,100,255);
-  else
-    color = al_map_rgb(0,0,255);
-}
-
-void Character::init(float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
-  tick=0;
-  frame=0;
+  static_box = false;
+  gameCharacter = nullptr;
+  static_mode = false;
+  orientation = 0;
+  goat_frame = 0;
+  goat_tick = 0;
+  static_velocity = b2Vec2( 0, 0);
+  static_angular_velocity = 0;
+  angle = 0;
 
   direction = false;
   sprite = newSprite;
@@ -107,7 +52,7 @@ void Character::init(float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *
 	fixtureDef.friction = 0.3f;
 
 	// Add the shape to the body.
-	body->CreateFixture(&fixtureDef);
+	body -> CreateFixture(&fixtureDef);
 
   body ->SetFixedRotation(true);
 
@@ -117,9 +62,59 @@ void Character::init(float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *
   sprite = tools::load_bitmap_ex("images/anim.png");
 
   for( int i = 0; i < 15; i++)
-      sprites[i] = al_create_sub_bitmap( sprite, i * 32, 0, 32, 64);
-
+    sprites[i] = al_create_sub_bitmap( sprite, i * 32, 0, 32, 64);
 }
+
+void Character::update(){
+  int ticks_per_frame = 5;
+  if( !sensor_box -> isColliding())
+    ticks_per_frame = 2;
+
+  tick++;
+  if( tick >= ticks_per_frame){
+    frame++;
+    tick = 0;
+  }
+  if(frame==14)
+    frame = 0;
+
+  b2Vec2 position = body -> GetPosition();
+  x = position.x;
+  y = position.y;
+  angle = body -> GetAngle();
+  double yVel = getBody() -> GetLinearVelocity().y;
+
+  if(keyListener::key[ALLEGRO_KEY_A] || joystickListener::button[JOY_XBOX_PAD_LEFT]){
+    direction=false;
+    if(sensor_box -> isColliding())
+      body -> SetLinearVelocity(b2Vec2(-5, yVel));
+    else
+      if(getBody() -> GetLinearVelocity().x > -5)
+        body -> ApplyLinearImpulse(b2Vec2(-2, 0),position);
+  }
+  else if(keyListener::key[ALLEGRO_KEY_D] || joystickListener::button[JOY_XBOX_PAD_RIGHT]){
+    direction=true;
+    if(sensor_box -> isColliding())
+          body -> SetLinearVelocity(b2Vec2(5, yVel));
+    else
+      if(getBody() -> GetLinearVelocity().x < 5)
+        body -> ApplyLinearImpulse(b2Vec2(2, 0),position);
+  }
+  else if(sensor_box -> isColliding()){
+     body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
+  }
+
+  // Homemade friction
+  if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f)
+    body -> ApplyLinearImpulse(b2Vec2(0, 15),position);
+
+  // Fixed Danny's poop code by getting rid if it =)
+  if(sensor_box -> isColliding())
+    color = al_map_rgb(50,100,255);
+  else
+    color = al_map_rgb(0,0,255);
+}
+
 
 void Character::draw(){
   // If the object is a character, the position is updated in the
@@ -129,7 +124,7 @@ void Character::draw(){
     x = position.x;
     y = position.y;
     angle = body -> GetAngle();
- }
+  }
   ALLEGRO_TRANSFORM trans, prevTrans;
 
   // back up the current transform
@@ -146,30 +141,21 @@ void Character::draw(){
   if(direction){
     if(body -> GetLinearVelocity().Length()>0.1f)
       al_draw_bitmap(sprites[frame],-(width/2)*20,(-(height/2)*20)-24,0);
-
     else
       al_draw_bitmap(sprites[14],-(width/2)*20,(-(height/2)*20)-24,0);
-
-  }else{
+  }
+  else{
     if(body -> GetLinearVelocity().Length()>0.1f)
       al_draw_bitmap(sprites[frame],-(width/2)*20,(-(height/2)*20)-24,ALLEGRO_FLIP_HORIZONTAL);
-
     else
       al_draw_bitmap(sprites[14],-(width/2)*20,(-(height/2)*20)-24,ALLEGRO_FLIP_HORIZONTAL);
 
   }
-
-  // al_draw_bitmap(sprite,-(width/2)*20,(-(height/2)*20)-24,0);
-
-  // al_draw_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20,al_map_rgb(0,0,0),3);
-
-  //al_draw_filled_rectangle(-(width/2)*20, -(height/2)*20, (width/2)*20 , (height/2)*20,color);
-
   // restore the old transform
   al_use_transform(&prevTrans);
 
-  // if(sensor_box -> isColliding())
-  // sensor_box -> draw();
+  /*if(sensor_box -> isColliding())
+    sensor_box -> draw();*/
 }
 
 Character::~Character(){

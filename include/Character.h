@@ -22,7 +22,7 @@ class Character : public Box{
   public:
     Character();
     ~Character();
-    void init(float, float,ALLEGRO_BITMAP*, b2World *);
+    void init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld);
     void draw();
     void update();
 

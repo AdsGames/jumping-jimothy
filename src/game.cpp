@@ -16,6 +16,7 @@ game::game(){
   reset();
 
   // Load and play music
+  music = nullptr;
   if(!danny_wants_to_listen_to_music_while_programming){
     music = tools::load_sample_ex( "music/tojam.ogg");
     al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, currentMusic);
@@ -25,21 +26,28 @@ game::game(){
 // Destructor
 game::~game(){
   // Stop music
-  al_stop_sample( currentMusic);
-
-  // Destroy samples
-  al_destroy_sample( music);
+  if( music != nullptr){
+    al_stop_sample( currentMusic);
+    al_destroy_sample( music);
+  }
 
   // Destory bitmaps
-  al_destroy_bitmap( box);
-  al_destroy_bitmap( goat_sprite);
-  al_destroy_bitmap( goat_map);
-  al_destroy_bitmap( help);
-  al_destroy_bitmap( character);
-  al_destroy_bitmap( static_tileset);
-  al_destroy_bitmap( play);
-  al_destroy_bitmap( pause);
-  al_destroy_bitmap( box);
+  if( box != nullptr)
+    al_destroy_bitmap( box);
+  if( goat_sprite != nullptr)
+    al_destroy_bitmap( goat_sprite);
+  if( goat_map != nullptr)
+    al_destroy_bitmap( goat_map);
+  if( help != nullptr)
+    al_destroy_bitmap( help);
+  if( character != nullptr)
+    al_destroy_bitmap( character);
+  if( static_tileset != nullptr)
+    al_destroy_bitmap( static_tileset);
+  if( play != nullptr)
+    al_destroy_bitmap( play);
+  if( pause != nullptr)
+    al_destroy_bitmap( pause);
 }
 
 // Creates box in world
@@ -62,7 +70,7 @@ Box *game::create_box( float newX, float newY, float newWidth, float newHeight, 
 Character *game::create_character( float newX, float newY){
   Character *newCharacter = new Character();
   newCharacter -> init( newX, newY,character, gameWorld);
-  gameBoxes.push_back(newCharacter);
+  gameBoxes.push_back( newCharacter);
   return newCharacter;
 }
 
@@ -100,12 +108,13 @@ void game::b2_setup(){
 // Load world from xml
 void game::load_world(int newLevel){
 
-  std::cout<<"Attempting to load level_" <<newLevel<<".xml into game\n";
+  std::cout << "Attempting to load level_" << newLevel << ".xml into game\n";
 
-  int goat_count=0;
-  int character_count=0;
-  int dynamic_count=0;
-  int static_count=0;
+  int goat_count = 0;
+  int character_count = 0;
+  int dynamic_count = 0;
+  int static_count = 0;
+
   // Destroy ground
   gameWorld -> DestroyBody(groundBody);
 
@@ -174,7 +183,8 @@ void game::load_world(int newLevel){
       if( type == "Character"){
         gameCharacter = create_character( tools::string_to_float(x), tools::string_to_float(y));
         character_count++;
-      }if( type == "Finish"){
+      }
+      if( type == "Finish"){
         goat = create_goat( tools::string_to_float(x), tools::string_to_float(y));
         if(gameCharacter==nullptr)
           std::cout<<"WARNING: Game: goat is passed nullptr gameCharacter\n";
@@ -195,23 +205,25 @@ void game::load_world(int newLevel){
   }
 
   // Nice debug code
-  std::cout<<"Level loaded: "<<static_count<<" static, "<<dynamic_count<<" dynamic, "<<character_count<< " character(s), "<<goat_count<<" goat(s)\n";
-  if(character_count>1)
-    std::cout<<"WARNING: Multiple characters loaded, will have undesired results...\n";
-  if(goat_count>1)
-    std::cout<<"WARNING: Multiple goats loaded, will have undesired results...\n";
-  if(character_count==0)
-    std::cout<<"WARNING: No character loaded, will have undesired results...\n";
-  if(goat_count==0)
-    std::cout<<"WARNING: No goat loaded, will have undesired results...\n";
-  if(static_count==0 && dynamic_count==0 && goat_count==0 && character_count==0)
-    std::cout<<"WARNING: No data loaded!\n";
+  std::cout << "===============================\n";
+  std::cout << "Level loaded: " << static_count << " static, " << dynamic_count << " dynamic, " << character_count << " character(s), " << goat_count << " goat(s)\n";
+  if( character_count > 1)
+    std::cout << "WARNING: Multiple characters loaded, will have undesired results...\n";
+  if( goat_count > 1)
+    std::cout << "WARNING: Multiple goats loaded, will have undesired results...\n";
+  if( character_count == 0)
+    std::cout << "WARNING: No character loaded, will have undesired results...\n";
+  if( goat_count == 0)
+    std::cout << "WARNING: No goat loaded, will have undesired results...\n";
+  if( static_count == 0 && dynamic_count == 0 && goat_count == 0 && character_count == 0)
+    std::cout << "WARNING: No data loaded!\n";
+  std::cout << "===============================\n";
 
 }
 
 // Reset game
 void game::reset(){
-
+  // Reset variables
   gameBoxes.clear();
   goat = nullptr;
   gameCharacter = nullptr;
@@ -227,12 +239,11 @@ void game::reset(){
       gameBoxes[i] -> setStatic();
     }
   }
-  if(goat==nullptr)
-    std::cout<<"WARNING: Goat pointer is undeclared in game\n";
+  if( goat == nullptr)
+    std::cout << "WARNING: Goat pointer is undeclared in game\n";
 
-  if(gameCharacter==nullptr)
-    std::cout<<"WARNING: gameCharacter pointer is undeclared in game\n";
-
+  if( gameCharacter == nullptr)
+    std::cout << "WARNING: gameCharacter pointer is undeclared in game\n";
 }
 
 // Load all sprites for in game
@@ -248,12 +259,9 @@ void game::load_sprites(){
 
   ALLEGRO_BITMAP *image_box = tools::load_bitmap_ex( "images/StaticBlock2.png");
 
-
-  for( int i = 0; i < 3; i++){
-    for( int t = 0; t < 5; t++){
+  for( int i = 0; i < 3; i++)
+    for( int t = 0; t < 5; t++)
       new_dynamic_tile[i + t*3] = al_create_sub_bitmap( image_box, i * 16, t * 16, 16, 16);
-    }
-  }
 
   for( int i = 0; i < 4; i++)
     for( int t = 0; t < 12; t++)
@@ -291,8 +299,7 @@ void game::update(){
 
   // Update character
   for( unsigned int i = 0; i < gameBoxes.size(); i++)
-    if( gameBoxes[i] -> getType() == CHARACTER)
-      gameBoxes[i] -> update();
+    gameBoxes[i] -> update();
 
   // Die
   if( keyListener::keyPressed[ALLEGRO_KEY_Z] || joystickListener::buttonPressed[JOY_XBOX_B])
@@ -309,7 +316,6 @@ void game::update(){
   // Previous level
   if( keyListener::keyPressed[ALLEGRO_KEY_X]){
     std::cout<<"Level " << level<< " skipped back\n";
-
     if( level > 1)
       level--;
     reset();
