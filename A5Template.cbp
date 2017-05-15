@@ -43,6 +43,7 @@
 		<Unit filename="include/Box.h" />
 		<Unit filename="include/Character.h" />
 		<Unit filename="include/Sensor.h" />
+		<Unit filename="include/button.h" />
 		<Unit filename="include/editor.h" />
 		<Unit filename="include/game.h" />
 		<Unit filename="include/globals.h" />
@@ -56,6 +57,7 @@
 		<Unit filename="src/Box.cpp" />
 		<Unit filename="src/Character.cpp" />
 		<Unit filename="src/Sensor.cpp" />
+		<Unit filename="src/button.cpp" />
 		<Unit filename="src/editor.cpp" />
 		<Unit filename="src/game.cpp" />
 		<Unit filename="src/init.cpp" />
