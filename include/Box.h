@@ -21,23 +21,32 @@ class Character;
 
 class Box{
   public:
+
+
+    // Constructors / Destructors
     Box();
     ~Box();
+
     void init(float, float, float, float,float,float,bool,BITMAP*,BITMAP*,BITMAP*,BITMAP*, b2World *);
     void init(float, float, ALLEGRO_BITMAP*, b2World *,Character*);
-    bool getGoatWin();
+
+    // Updates
     virtual void draw();
+    virtual void update();
+
+    // Setters
     void setStatic();
     void setDynamic(bool);
     void setOrientation(int);
-    virtual void update();
-    int getType();
-    float getX();
-    float getY();
-    b2Body *getBody();
+
+    // Getters
+    int getType(){ return type; };
+    float getX(){ return x; };
+    float getY(){ return y; };
+    b2Body *getBody(){ return body; };
+    bool getGoatWin();
 
   protected:
-
     Sensor *sensor_box = nullptr;
     bool static_box;
 
@@ -67,12 +76,6 @@ class Box{
 
     b2World *gameWorld;
     b2Body *body;
-
-
-
-
-
-
 };
 
 
