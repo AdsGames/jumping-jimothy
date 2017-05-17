@@ -90,7 +90,7 @@ void Character::update(){
       body -> SetLinearVelocity(b2Vec2(-5, yVel));
     else
       if(getBody() -> GetLinearVelocity().x > -5)
-        body -> ApplyLinearImpulse(b2Vec2(-2, 0),position);
+        body -> ApplyLinearImpulse(b2Vec2(-2, 0),position,true);
   }
   else if(keyListener::key[ALLEGRO_KEY_D] || joystickListener::button[JOY_XBOX_PAD_RIGHT]){
     direction=true;
@@ -98,7 +98,7 @@ void Character::update(){
           body -> SetLinearVelocity(b2Vec2(5, yVel));
     else
       if(getBody() -> GetLinearVelocity().x < 5)
-        body -> ApplyLinearImpulse(b2Vec2(2, 0),position);
+        body -> ApplyLinearImpulse(b2Vec2(2, 0),position,true);
   }
   else if(sensor_box -> isColliding()){
      body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
@@ -106,7 +106,7 @@ void Character::update(){
 
   // Homemade friction
   if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f)
-    body -> ApplyLinearImpulse(b2Vec2(0, 15),position);
+    body -> ApplyLinearImpulse(b2Vec2(0, 15),position,true);
 
   // Fixed Danny's poop code by getting rid if it =)
   if(sensor_box -> isColliding())
