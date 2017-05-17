@@ -84,7 +84,7 @@ void game::b2_setup(){
   doSleep = true;
 
   // Box2D game world
-  gameWorld = new b2World( gravity, doSleep);
+  gameWorld = new b2World( gravity);
 
 	// Define the ground body.
 	b2BodyDef groundBodyDef;
