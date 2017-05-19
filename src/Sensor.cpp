@@ -43,7 +43,8 @@ void Sensor::init(float newX, float newY, float newWidth, float newHeight, ALLEG
 
   fixtureDef.isSensor = true;
 	// Add the shape to the body.
-	body->CreateFixture(&fixtureDef);
+	body -> CreateFixture(&fixtureDef);
+	body -> SetFixedRotation(true);
 
   b2Vec2 FeetAnchor(0,0);
 
@@ -53,7 +54,6 @@ void Sensor::init(float newX, float newY, float newWidth, float newHeight, ALLEG
   jointDef -> collideConnected = false;
   jointDef  -> referenceAngle = 0;
   gameWorld -> CreateJoint(jointDef);
-
 }
 
 
