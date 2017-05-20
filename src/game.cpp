@@ -3,7 +3,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_native_dialog.h>
 
-#define danny_wants_to_listen_to_music_while_programming true
+#define danny_wants_to_listen_to_music_while_programming false
 
 // Constructor
 game::game(){

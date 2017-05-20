@@ -144,7 +144,7 @@ void Box::init(float newX, float newY, float newWidth, float newHeight,float new
 }
 
 bool Box::getGoatWin(){
-  /*if(type==GOAT){
+  if(type==GOAT){
     if(gameCharacter==nullptr)
      std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
 
@@ -153,7 +153,7 @@ bool Box::getGoatWin(){
       return true;
     }
 
-  }*/
+  }
   return false;
 }
 
