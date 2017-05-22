@@ -3,7 +3,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_native_dialog.h>
 
-#define danny_wants_to_listen_to_music_while_programming false
+#define danny_wants_to_listen_to_music_while_programming true
 
 // Constructor
 game::game(){
@@ -205,6 +205,7 @@ void game::load_world(int newLevel){
   }
 
   // Nice debug code
+  // Allan's big ol' debug lines, they're pretty tho
   std::cout << "===============================\n";
   std::cout << "Level loaded: " << static_count << " static, " << dynamic_count << " dynamic, " << character_count << " character(s), " << goat_count << " goat(s)\n";
   if( character_count > 1)
