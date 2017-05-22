@@ -14,79 +14,9 @@ Box::Box(){
 Box::~Box(){
 
 }
-// We'll use this for the goat
-void Box::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGameWorld, Character *newCharacter){
-  goat_frame = 0;
-  goat_tick = 0;
-  sprite = newSprite;
-  gameCharacter = newCharacter;
 
-  if( gameCharacter == nullptr)
-    std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
-  else
-    std::cout<<"gameCharacter's position:" << gameCharacter -> getX() << "," << gameCharacter -> getX() << "\n";
-
-  // Image
-  for( int i = 0; i < 16; i++)
-    goat_images[i] = al_create_sub_bitmap( newSprite, i * 32,0, 32, 64);
-
-  type = GOAT;
-  width = 1.6;
-  height = 3.2;
-  orientation = 0;
-  static_mode = false;
-  static_box = false;
-  angle = 0;
-  x = 0;
-  y = 0;
-
-  gameWorld = newGameWorld;
-  static_box = false;
-
-  // Body
-  b2BodyDef bodyDef;
-  bodyDef.type = b2_dynamicBody;
-
-  // Position
-  bodyDef.position.Set(newX, newY);
-  body = gameWorld -> CreateBody(&bodyDef);
-
-  // Velocity
-  static_velocity = b2Vec2( 0, 0);
-  static_angular_velocity = 0;
-
-  //body -> SetLinearVelocity(b2Vec2(newVelX,newVelY));
-  //body ->SetLinearDamping(1);
-  //body ->SetAngularDamping(1);
-
-  // Define another box shape for o0ur dynamic body.
-  b2PolygonShape dynamicBox;
-  dynamicBox.SetAsBox(width/2, height/2);
-
-  // Define the dynamic body fixture.
-  b2FixtureDef fixtureDef;
-  fixtureDef.shape = &dynamicBox;
-
-  // Set the box density to be non-zero, so it will be dynamic.
-  fixtureDef.density = 1.0f;
-
-  // Override the default friction.
-  fixtureDef.friction = 0.3f;
-
-  // Add the shape to the body.
-  body -> CreateFixture(&fixtureDef);
-
-  // Sensor
-  sensor_box = new Sensor();
-  sensor_box -> init(newX,newY,width,height,al_map_rgb(255,255,0),gameWorld,body);
-}
 
 void Box::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4, b2World *newGameWorld){
-  sensor_box = nullptr;
-  gameCharacter = nullptr;
-
-  goat_frame = 0;
-  goat_tick = 0;
 
   sprite = sp_1;
   new_tiles[0] = sp_1;
@@ -143,19 +73,6 @@ void Box::init(float newX, float newY, float newWidth, float newHeight,float new
 	body -> CreateFixture(&fixtureDef);
 }
 
-bool Box::getGoatWin(){
-  if(type==GOAT){
-    if(gameCharacter==nullptr)
-     std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
-
-
-    if(sensor_box -> isCollidingWithBody(gameCharacter -> getBody())){
-      return true;
-    }
-
-  }
-  return false;
-}
 
 // Set state
 void Box::setStatic(){
@@ -193,18 +110,11 @@ void Box::update(){
 void Box::draw(){
   // If the object is a character, the position is updated in the
   // update loop rather than in draw
-  if(type == BOX || type==GOAT){
+  if(type == BOX){
     b2Vec2 position = body -> GetPosition();
     x = position.x;
     y = position.y;
     angle = body -> GetAngle();
-    goat_tick++;
-    if(goat_tick>10){
-      goat_frame++;
-      goat_tick=0;
-    }
-    if(goat_frame>14)
-      goat_frame=0;
   }
 
   ALLEGRO_TRANSFORM trans, prevTrans;
@@ -226,22 +136,21 @@ void Box::draw(){
   // If dynamic
   if( !static_box){
     // Danny... why was this removed?
+    // Lolwutnow
     if( static_mode)
       draw_velocity = b2Vec2( static_velocity.x, static_velocity.y);
     else
       draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
 
-    // Haxxx im sorry tho
-    if(type != GOAT){
 
-      al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,
-        al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)),
+
+    al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,
+    al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)),
                     tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)),
                     0));
-      al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
+    al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 
-    }else
-      al_draw_bitmap(goat_images[goat_frame],-(width/2)*20,-(height/2)*20,0);
+
 
   //If static
   }else{

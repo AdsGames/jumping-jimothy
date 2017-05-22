@@ -24,6 +24,7 @@
 #include <Box.h>
 #include <tools.h>
 #include <Character.h>
+#include <Goat.h>
 
 class game : public state{
   public:
@@ -44,11 +45,11 @@ class game : public state{
 
     // Creation code
     Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,BITMAP*,BITMAP*, BITMAP*, BITMAP*,  bool newBodyType, bool newIsSensor);
-    Box *create_goat(float,float);
+    Goat *create_goat(float,float);
     Character *create_character(float newX, float newY);
 
     // Our character and goat
-    Box *goat = nullptr;
+    Goat *gameGoat = nullptr;
     Character *gameCharacter = nullptr;
 
     // Game variables
