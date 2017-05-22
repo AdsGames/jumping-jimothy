@@ -51,11 +51,11 @@ game::~game(){
 }
 
 // Creates box in world
-Box *game::create_goat( float newX, float newY){
-  Box *newBox = new Box();
-  newBox -> init( newX, newY,goat_map, gameWorld,gameCharacter);
-  gameBoxes.push_back( newBox);
-  return newBox;
+Goat *game::create_goat( float newX, float newY){
+  Goat *newGoat = new Goat();
+  newGoat -> init( newX, newY,goat_map, gameWorld,gameCharacter);
+  gameBoxes.push_back( newGoat);
+  return newGoat;
 }
 
 // Creates box in world
@@ -185,7 +185,7 @@ void game::load_world(int newLevel){
         character_count++;
       }
       if( type == "Finish"){
-        goat = create_goat( tools::string_to_float(x), tools::string_to_float(y));
+        gameGoat = create_goat( tools::string_to_float(x), tools::string_to_float(y));
         if(gameCharacter==nullptr)
           std::cout<<"WARNING: Game: goat is passed nullptr gameCharacter\n";
         goat_count++;
@@ -226,7 +226,7 @@ void game::load_world(int newLevel){
 void game::reset(){
   // Reset variables
   gameBoxes.clear();
-  goat = nullptr;
+  gameGoat = nullptr;
   gameCharacter = nullptr;
   b2_setup();
   load_sprites();
@@ -240,7 +240,7 @@ void game::reset(){
       gameBoxes[i] -> setStatic();
     }
   }
-  if( goat == nullptr)
+  if( gameGoat == nullptr)
     std::cout << "WARNING: Goat pointer is undeclared in game\n";
 
   if( gameCharacter == nullptr)
@@ -279,7 +279,7 @@ void game::update(){
     set_next_state( STATE_MENU);
 
   // Touching goat
-  if( goat -> getGoatWin()){
+  if( gameGoat -> getWinCondition()){
     level ++;
     if( level >= 10){
       al_show_native_message_box( nullptr, "Hurrah!", "Victory", "Will you accept your prize?", nullptr, ALLEGRO_MESSAGEBOX_YES_NO);

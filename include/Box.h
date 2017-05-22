@@ -6,6 +6,7 @@
 #ifndef BOX_H
 #define BOX_H
 #include <allegro5/allegro.h>
+#include <Box2D/Box2D.h>
 #include <tools.h>
 #include <globals.h>
 
@@ -28,7 +29,6 @@ class Box{
     ~Box();
 
     void init(float, float, float, float,float,float,bool,BITMAP*,BITMAP*,BITMAP*,BITMAP*, b2World *);
-    void init(float, float, ALLEGRO_BITMAP*, b2World *,Character*);
 
     // Updates
     virtual void draw();
@@ -44,24 +44,17 @@ class Box{
     float getX(){ return x; };
     float getY(){ return y; };
     b2Body *getBody(){ return body; };
-    bool getGoatWin();
 
   protected:
-    Sensor *sensor_box = nullptr;
+
     bool static_box;
 
-    Character *gameCharacter = nullptr;
-
     ALLEGRO_BITMAP *sprite;
-    ALLEGRO_BITMAP *goat_images[17];
     ALLEGRO_BITMAP *new_tiles[4];
 
     bool static_mode;
     int type;
     int orientation;
-    int goat_frame;
-    int goat_tick;
-
 
     b2Vec2 static_velocity;
     float static_angular_velocity;

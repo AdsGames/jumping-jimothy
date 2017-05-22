@@ -14,11 +14,8 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
   frame = 0;
 
   static_box = false;
-  gameCharacter = nullptr;
   static_mode = false;
   orientation = 0;
-  goat_frame = 0;
-  goat_tick = 0;
   static_velocity = b2Vec2( 0, 0);
   static_angular_velocity = 0;
   angle = 0;
