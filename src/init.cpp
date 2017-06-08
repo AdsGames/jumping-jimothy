@@ -5,5 +5,5 @@ init::init(){
 
 
   // Goto menu
-  set_next_state( STATE_EDIT);
+  set_next_state( STATE_MENU);
 }
