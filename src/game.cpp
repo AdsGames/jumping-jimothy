@@ -303,7 +303,7 @@ void game::update(){
     gameBoxes[i] -> update();
 
   // Die
-  if( keyListener::keyPressed[ALLEGRO_KEY_Z] || joystickListener::buttonPressed[JOY_XBOX_B])
+  if( keyListener::keyPressed[ALLEGRO_KEY_Z] || joystickListener::buttonPressed[JOY_XBOX_B] ||  keyListener::keyPressed[ALLEGRO_KEY_R] )
     reset();
 
   // Next level
