@@ -54,15 +54,17 @@ editor::editor(){
   editorBoxes.clear();
 
   // Buttons
-  button_types[button_type_dynamic] = button( 20, 710, "Dynamic", edit_font);
-  button_types[button_type_static] = button( 20 + button_types[0].getX() + button_types[0].getWidth(), 710, "Static", edit_font);
-  button_types[button_type_player] = button( 20 + button_types[1].getX() + button_types[1].getWidth(), 710, "Player", edit_font);
-  button_types[button_type_goat] = button( 20 + button_types[2].getX() + button_types[2].getWidth(), 710, "Goat", edit_font);
+  editor_buttons[button_type_dynamic] = button( 20, 710, "Dynamic", edit_font);
+  editor_buttons[button_type_static] = button( 20 + editor_buttons[button_type_dynamic].getX() + editor_buttons[button_type_dynamic].getWidth(), 710, "Static", edit_font);
+  editor_buttons[button_type_player] = button( 20 + editor_buttons[button_type_static].getX() + editor_buttons[button_type_static].getWidth(), 710, "Player", edit_font);
+  editor_buttons[button_type_goat] = button( 20 + editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth(), 710, "Goat", edit_font);
+  editor_buttons[button_type_collision] = button( 20 + editor_buttons[3].getX() + editor_buttons[3].getWidth(), 710, "Collision", edit_font);
 
-  button_types[button_save] = button( 20 + 730, 710, "Save", edit_font);
-  button_types[button_load] = button( 20 + button_types[button_save].getX() + button_types[button_save].getWidth(), 710, "Load", edit_font);
-  button_types[button_play] = button( 20 + button_types[button_load].getX() + button_types[button_load].getWidth(), 710, "Play", edit_font);
-  button_types[button_grid] = button( 20 + button_types[button_play].getX() + button_types[button_play].getWidth(), 710, "Grid", edit_font);
+
+  editor_buttons[button_save] = button( 20 + 730, 710, "Save", edit_font);
+  editor_buttons[button_load] = button( 20 + editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth(), 710, "Load", edit_font);
+  editor_buttons[button_play] = button( 20 + editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth(), 710, "Play", edit_font);
+  editor_buttons[button_grid] = button( 20 + editor_buttons[button_play].getX() + editor_buttons[button_play].getWidth(), 710, "Grid", edit_font);
 }
 
 // Destruct
@@ -86,24 +88,25 @@ editor::~editor(){
 // Update editor
 void editor::update(){
   // Update buttons
-  for( int i = 0; i < 8; i++){
+  for( int i = 0; i < BUTTON_COUNT; i++){
     if(gui_mode)
-      button_types[i].update();
+      editor_buttons[i].update();
   }
 
   // Check if over button
   bool over_button = false;
-  for( int i = 0; i < 8; i++){
-    if( button_types[i].hover()){
+  for( int i = 0; i < BUTTON_COUNT; i++){
+    if( editor_buttons[i].hover()){
       over_button = true;
       break;
     }
   }
 
   // Change type
-  for( int i = 0; i < 4; i++)
-    if( button_types[i].clicked())
+  for( int i = 0; i <5; i++)
+    if( editor_buttons[i].clicked())
       tile_type = i;
+
 
   // Advanced mode types
   if(keyListener::keyPressed[ALLEGRO_KEY_Q])
@@ -114,6 +117,9 @@ void editor::update(){
     tile_type=2;
   if(keyListener::keyPressed[ALLEGRO_KEY_R])
     tile_type=3;
+  if(keyListener::keyPressed[ALLEGRO_KEY_T])
+    tile_type=4;
+
 
   // Activate advanced mode
   // Don't tell Allan, but I really don't like his buttons
@@ -121,7 +127,7 @@ void editor::update(){
     gui_mode=!gui_mode;
 
   // Save
-  if( button_types[button_save].clicked() || keyListener::keyPressed[ALLEGRO_KEY_S]){
+  if( editor_buttons[button_save].clicked() || keyListener::keyPressed[ALLEGRO_KEY_S]){
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
     // Display open dialog
     if( al_show_native_file_dialog( nullptr, myChooser)){
@@ -136,7 +142,7 @@ void editor::update(){
   }
 
   // Load map
-  if( button_types[button_load].clicked() || keyListener::keyPressed[ALLEGRO_KEY_D]){
+  if( editor_buttons[button_load].clicked() || keyListener::keyPressed[ALLEGRO_KEY_D]){
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
     // Display open dialog
     if( al_show_native_file_dialog( nullptr, myChooser)){
@@ -152,37 +158,70 @@ void editor::update(){
   }
 
   // Play
-  if( button_types[button_play].clicked() || keyListener::keyPressed[ALLEGRO_KEY_F])
+  if( editor_buttons[button_play].clicked() || keyListener::keyPressed[ALLEGRO_KEY_F])
      set_next_state( STATE_GAME);
 
   // Grid toggle
-  if( button_types[button_grid].clicked() || keyListener::keyPressed[ALLEGRO_KEY_G])
+  if( editor_buttons[button_grid].clicked() || keyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
   // Add tile
-  if( mouseListener::mouse_button & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
-    editor_box newBox;
-    newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
-    newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
-    newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
-    newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
-    newBox.type = tile_type;
-    for( int i = 0; i < 4; i++)
-      newBox.orientation[i] = 0;
+  if(tile_type!=4){
+    if( mouseListener::mouse_button & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
+      editor_box newBox;
+      newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
+      newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
+      newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
+      newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
+      newBox.type = tile_type;
+      for( int i = 0; i < 4; i++)
+        newBox.orientation[i] = 0;
 
-    if( tile_type == 0)
-      newBox.bodyType = "Dynamic";
-    else if( tile_type == 1)
-      newBox.bodyType = "Static";
-    else if( tile_type == 2)
-      newBox.bodyType = "Character";
-    else if( tile_type == 3)
-      newBox.bodyType = "Finish";
+      if( tile_type == 0)
+        newBox.bodyType = "Dynamic";
+      else if( tile_type == 1)
+        newBox.bodyType = "Static";
+      else if( tile_type == 2)
+        newBox.bodyType = "Character";
+      else if( tile_type == 3)
+        newBox.bodyType = "Finish";
 
-    editorBoxes.push_back( newBox);
+      editorBoxes.push_back( newBox);
 
-    // Calculate orientation of boxes
-    calculate_orientation_global();
+      // Calculate orientation of boxes
+      calculate_orientation_global();
+    }
+  }
+  //Drag n drop madness
+  if(tile_type==4){
+    if( mouseListener::mouse_pressed & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
+      is_dragging_box=true;
+      box_1_x=mouseListener::mouse_x - mouseListener::mouse_x % 32;
+      box_1_y=mouseListener::mouse_y - mouseListener::mouse_y % 32;
+    }
+    if(mouseListener::mouse_released & 1){
+      is_dragging_box=false;
+
+      if(!over_button && gui_mode){
+        editor_box newBox;
+        newBox.x = box_1_x;
+        newBox.y = box_1_y;
+        newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
+        newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
+        newBox.type = 4;
+        newBox.width = box_2_x - box_1_x;
+        newBox.height = box_2_y - box_1_y;
+
+        newBox.bodyType = "Collision";
+
+        editorBoxes.push_back( newBox);
+      }
+    }
+    if(mouseListener::mouse_button & 1){
+      box_2_x=mouseListener::mouse_x - mouseListener::mouse_x % 32;
+      box_2_y=mouseListener::mouse_y - mouseListener::mouse_y % 32;
+    }
+
   }
 
   // Remove tile
@@ -331,8 +370,14 @@ void editor::draw(){
       al_draw_bitmap( tiles[2][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     else if( editorBoxes.at(i).type == 3)
       al_draw_bitmap( tiles[3][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+    else if( editorBoxes.at(i).type == 4)
+      al_draw_filled_rectangle( editorBoxes.at(i).x,editorBoxes.at(i).y,editorBoxes.at(i).x+editorBoxes.at(i).width,editorBoxes.at(i).y+editorBoxes.at(i).height, al_map_rgb(0, 255, 0));
   }
 
+  if(is_dragging_box){
+    al_draw_filled_rectangle( box_1_x,box_1_y,box_2_x,box_2_y, al_map_rgb(0, 255, 0));
+
+  }
 
   // Tile type
   if( tile_type == 0)
@@ -343,14 +388,17 @@ void editor::draw(){
     al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Character spawn");
   if( tile_type == 3)
     al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Endgame goat");
+  if( tile_type == 4)
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Collision Box");
+
 
   // Current map opened
   al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s", file_name);
 
   // Draw buttons
-  for( int i = 0; i < 8; i++){
+  for( int i = 0; i < BUTTON_COUNT; i++){
     if(gui_mode)
-      button_types[i].draw();
+      editor_buttons[i].draw();
   }
 }
 
@@ -393,8 +441,8 @@ bool editor::load_map( std::string mapName){
     std::string type = "";
     std::string x = "";
     std::string y = "";
-    std::string vel_x = "0";
-    std::string vel_y = "0";
+    std::string width = "0";
+    std::string height = "0";
     std::string bodytype = "static";
     std::string orientation = "0 0 0 0";
 
@@ -405,10 +453,10 @@ bool editor::load_map( std::string mapName){
       x = object_node -> first_node("x") -> value();
     if( object_node -> first_node("y") != 0)
       y = object_node -> first_node("y") -> value();
-    if( object_node -> first_node("vel_x") != 0)
-      vel_x = object_node -> first_node("vel_x") -> value();
-    if( object_node -> first_node("vel_y") != 0)
-      vel_y = object_node -> first_node("vel_y") -> value();
+    if( object_node -> first_node("width") != 0)
+      width = object_node -> first_node("width") -> value();
+    if( object_node -> first_node("height") != 0)
+      height = object_node -> first_node("height") -> value();
     if( object_node -> first_node("bodytype") != 0)
       bodytype = object_node -> first_node("bodytype") -> value();
     if( object_node -> first_node("orientation") != 0)
@@ -419,6 +467,9 @@ bool editor::load_map( std::string mapName){
     newBox.y = (tools::string_to_float(y) * -20.0f) - 16.0f;
     newBox.x_str = x;
     newBox.y_str = y;
+    newBox.width = tools::string_to_float(width);
+    newBox.height = tools::string_to_float(height);
+
 
     // Correct orientation format
     std::vector<std::string> splits = tools::split_string( orientation, ' ');
@@ -446,6 +497,8 @@ bool editor::load_map( std::string mapName){
       newBox.type = 2;
     else if( newBox.bodyType == "Finish")
       newBox.type = 3;
+    else if( newBox.bodyType == "Collision")
+      newBox.type = 4;
     else
       newBox.type = 0;
 

@@ -38,6 +38,8 @@ struct editor_box{
   std::string bodyType;
   int type;
   int orientation[4];
+  int width;
+  int height;
 };
 
 // Button names
@@ -46,6 +48,7 @@ enum button_names{
   button_type_static,
   button_type_player,
   button_type_goat,
+  button_type_collision,
   button_save,
   button_load,
   button_play,
@@ -75,8 +78,9 @@ class editor : public state{
     bool save_map( std::string mapName);
     bool load_map( std::string mapName);
 
+    static const int BUTTON_COUNT=9;
     // Type buttons
-    button button_types[8];
+    button editor_buttons[BUTTON_COUNT];
 
     // Tiles
     std::vector<editor_box> editorBoxes;
@@ -85,6 +89,14 @@ class editor : public state{
     const char *file_name;
 
     bool gui_mode;
+
+    float box_1_x;
+    float box_1_y;
+
+    float box_2_x;
+    float box_2_y;
+
+    bool is_dragging_box=false;
 
     // Vars
     bool grid_on;
