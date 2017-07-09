@@ -41,6 +41,7 @@
 		<Unit filename="include/Character.h" />
 		<Unit filename="include/Goat.h" />
 		<Unit filename="include/Sensor.h" />
+		<Unit filename="include/StaticBox.h" />
 		<Unit filename="include/button.h" />
 		<Unit filename="include/editor.h" />
 		<Unit filename="include/game.h" />
@@ -56,6 +57,7 @@
 		<Unit filename="src/Character.cpp" />
 		<Unit filename="src/Goat.cpp" />
 		<Unit filename="src/Sensor.cpp" />
+		<Unit filename="src/StaticBox.cpp" />
 		<Unit filename="src/button.cpp" />
 		<Unit filename="src/editor.cpp" />
 		<Unit filename="src/game.cpp" />

@@ -1,6 +1,6 @@
 /**
  * BOX
- * Danny Vanstemp
+ * Danny Van Stemp
  * 05/05/2017
 **/
 #ifndef BOX_H
@@ -28,7 +28,7 @@ class Box{
     Box();
     ~Box();
 
-    void init(float, float, float, float,float,float,bool,BITMAP*,BITMAP*,BITMAP*,BITMAP*, b2World *);
+    virtual void init(float, float, float, float,float,float,bool,BITMAP*,BITMAP*,BITMAP*,BITMAP*, b2World *);
 
     // Updates
     virtual void draw();
@@ -40,7 +40,7 @@ class Box{
     void setOrientation(int);
 
     // Getters
-    int getType(){ return type; };
+    virtual int getType(){ return type; };
     float getX(){ return x; };
     float getY(){ return y; };
     b2Body *getBody(){ return body; };

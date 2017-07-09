@@ -66,6 +66,16 @@ Box *game::create_box( float newX, float newY, float newWidth, float newHeight, 
   return newBox;
 }
 
+// Creates box in world
+Box *game::create_static_box( float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4){
+  StaticBox *newStaticBox = new StaticBox();
+  newStaticBox -> init( newX, newY, sp_1,sp_2,sp_3,sp_4);
+  gameBoxes.push_back( newStaticBox);
+  return newStaticBox;
+}
+
+
+
 // Add character to world
 Character *game::create_character( float newX, float newY){
   Character *newCharacter = new Character();
@@ -143,8 +153,8 @@ void game::load_world(int newLevel){
       std::string y = "0";
       std::string orientation = "0";
       std::string bodytype = "Static";
-      std::string vel_x = "0";
-      std::string vel_y = "0";
+      std::string width = "0";
+      std::string height = "0";
       int orientation_array[4];
 
       // Load data
@@ -154,10 +164,10 @@ void game::load_world(int newLevel){
         x = object_node -> first_node("x") -> value();
       if( object_node -> first_node("y") != 0)
         y = object_node -> first_node("y") -> value();
-      if( object_node -> first_node("vel_x") != 0)
-        vel_x = object_node -> first_node("vel_x") -> value();
-      if( object_node -> first_node("vel_y") != 0)
-        vel_y = object_node -> first_node("vel_y") -> value();
+      if( object_node -> first_node("width") != 0)
+        width = object_node -> first_node("width") -> value();
+      if( object_node -> first_node("height") != 0)
+        height = object_node -> first_node("height") -> value();
       if( object_node -> first_node("bodytype") != 0)
         bodytype = object_node -> first_node("bodytype") -> value();
       if( object_node -> first_node("orientation") != 0)
@@ -171,12 +181,18 @@ void game::load_world(int newLevel){
                 orientation_array[k] = (tools::convertStringToInt(splits.at(k)));
 
 
+          // Out with the old, in with the new
 
-          newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.5, 1.5, tools::string_to_float(vel_x), tools::string_to_float(vel_y), new_dynamic_tile[orientation_array[0]],new_dynamic_tile[orientation_array[1]],
-                                    new_dynamic_tile[orientation_array[2]],new_dynamic_tile[orientation_array[3]],false, false);
+         // newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.5, 1.5, tools::string_to_float(vel_x), tools::string_to_float(vel_y), new_dynamic_tile[orientation_array[0]],new_dynamic_tile[orientation_array[1]],
+          //                         new_dynamic_tile[orientation_array[2]],new_dynamic_tile[orientation_array[3]],false, false);
+
+          newBox = create_static_box( tools::string_to_float(x), tools::string_to_float(y), new_dynamic_tile[orientation_array[0]],new_dynamic_tile[orientation_array[1]],
+                                   new_dynamic_tile[orientation_array[2]],new_dynamic_tile[orientation_array[3]]);
+
+
           static_count++;
         }else{
-          newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(vel_x), tools::string_to_float(vel_y), box,nullptr,nullptr,nullptr, true, false);
+          newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(width), tools::string_to_float(height), box,nullptr,nullptr,nullptr, true, false);
           dynamic_count++;
         }
       }
@@ -236,9 +252,9 @@ void game::reset(){
 
   // Pause boxes
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
-    if( gameBoxes[i] -> getType() == BOX){
-      gameBoxes[i] -> setStatic();
-    }
+  //  if( gameBoxes[i] -> getType() == BOX){
+     // gameBoxes[i] -> setStatic();
+   // }
   }
   if( gameGoat == nullptr)
     std::cout << "WARNING: Goat pointer is undeclared in game\n";

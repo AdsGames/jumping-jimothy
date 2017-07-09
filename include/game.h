@@ -22,6 +22,7 @@
 #include "rapidxml_print.hpp"
 
 #include <Box.h>
+#include <StaticBox.h>
 #include <tools.h>
 #include <Character.h>
 #include <Goat.h>
@@ -45,6 +46,9 @@ class game : public state{
 
     // Creation code
     Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,BITMAP*,BITMAP*, BITMAP*, BITMAP*,  bool newBodyType, bool newIsSensor);
+
+    Box *create_static_box(float newX, float newY,BITMAP*,BITMAP*, BITMAP*, BITMAP*);
+
     Goat *create_goat(float,float);
     Character *create_character(float newX, float newY);
 
