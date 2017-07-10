@@ -18,8 +18,8 @@ class button{
     // Getters
     int getX(){ return x; }
     int getY(){ return y; }
-    int getWidth(){ return width + padding_x; }
-    int getHeight(){ return height + padding_y; }
+    int getWidth(){ return width + padding_x*2; }
+    int getHeight(){ return height + padding_y*2; }
     int getPaddingX(){ return padding_x; }
     int getPaddingY(){ return padding_y; }
     std::string getText(){ return text; }

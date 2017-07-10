@@ -52,19 +52,19 @@ editor::editor(){
   grid_on = false;
 
   editorBoxes.clear();
-
   // Buttons
+
   editor_buttons[button_type_dynamic] = button( 20, 710, "Dynamic", edit_font);
-  editor_buttons[button_type_static] = button( 20 + editor_buttons[button_type_dynamic].getX() + editor_buttons[button_type_dynamic].getWidth(), 710, "Static", edit_font);
-  editor_buttons[button_type_player] = button( 20 + editor_buttons[button_type_static].getX() + editor_buttons[button_type_static].getWidth(), 710, "Player", edit_font);
-  editor_buttons[button_type_goat] = button( 20 + editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth(), 710, "Goat", edit_font);
-  editor_buttons[button_type_collision] = button( 20 + editor_buttons[3].getX() + editor_buttons[3].getWidth(), 710, "Collision", edit_font);
+  editor_buttons[button_type_static] = button( 20 + editor_buttons[button_type_dynamic].getX() + editor_buttons[button_type_dynamic].getWidth()/1.2, 710, "Static", edit_font);
+  editor_buttons[button_type_player] = button( 20 + editor_buttons[button_type_static].getX() + editor_buttons[button_type_static].getWidth()/1.2, 710, "Player", edit_font);
+  editor_buttons[button_type_goat] = button( 20 + editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth()/1.2, 710, "Goat", edit_font);
+  editor_buttons[button_type_collision] = button( 20 + editor_buttons[3].getX() + editor_buttons[3].getWidth()/1.2, 710, "Collision", edit_font);
 
 
   editor_buttons[button_save] = button( 20 + 730, 710, "Save", edit_font);
-  editor_buttons[button_load] = button( 20 + editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth(), 710, "Load", edit_font);
-  editor_buttons[button_play] = button( 20 + editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth(), 710, "Play", edit_font);
-  editor_buttons[button_grid] = button( 20 + editor_buttons[button_play].getX() + editor_buttons[button_play].getWidth(), 710, "Grid", edit_font);
+  editor_buttons[button_load] = button( 20 + editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth()/1.2, 710, "Load", edit_font);
+  editor_buttons[button_play] = button( 20 + editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth()/1.2, 710, "Play", edit_font);
+  editor_buttons[button_grid] = button( 20 + editor_buttons[button_play].getX() + editor_buttons[button_play].getWidth()/1.2, 710, "Grid", edit_font);
 }
 
 // Destruct
@@ -128,17 +128,21 @@ void editor::update(){
 
   // Save
   if( editor_buttons[button_save].clicked() || keyListener::keyPressed[ALLEGRO_KEY_S]){
-    ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
-    // Display open dialog
-    if( al_show_native_file_dialog( nullptr, myChooser)){
-      file_name = al_get_native_file_dialog_path(myChooser, 0);
+    if(editorBoxes.size()<1){
+      ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
+      // Display open dialog
+      if( al_show_native_file_dialog( nullptr, myChooser)){
+        file_name = al_get_native_file_dialog_path(myChooser, 0);
 
-      // Make sure saves correctly
-      if( save_map( file_name))
-        al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
-      else
-        al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, 0);
-    }
+        // Make sure saves correctly
+        if( save_map( file_name))
+          al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
+        else
+          al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, 0);
+        }
+    }else
+      al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map ya dingus ", file_name, nullptr, 0);
+
   }
 
   // Load map
@@ -541,11 +545,21 @@ bool editor::save_map( std::string mapName){
     object_node -> append_attribute( doc.allocate_attribute("type", doc.allocate_string(xml_type.c_str())));
     root_node -> append_node( object_node);
 
-    // X/Y/Bodytype
+    // Save data
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "x", editorBoxes.at(i).x_str.c_str()));
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "y", editorBoxes.at(i).y_str.c_str()));
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
-    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
+    if(editorBoxes.at(i).bodyType=="Dynamic")
+      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
+    if(editorBoxes.at(i).bodyType=="Collision"){
+
+
+      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "width","meme"));
+      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height","nicememe"));
+
+     // object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height", tools::convertIntToString(editorBoxes.at(i).height).c_str()));
+
+    }
   }
 
   // Save to file
