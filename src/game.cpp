@@ -120,6 +120,8 @@ void game::load_world(int newLevel){
 
   std::cout << "Attempting to load level_" << newLevel << ".xml into game\n";
 
+  gameCharacter = new Character();
+
   int goat_count = 0;
   int character_count = 0;
   int dynamic_count = 0;

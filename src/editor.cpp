@@ -128,7 +128,7 @@ void editor::update(){
 
   // Save
   if( editor_buttons[button_save].clicked() || keyListener::keyPressed[ALLEGRO_KEY_S]){
-    if(editorBoxes.size()<1){
+    if(editorBoxes.size()>0){
       ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
       // Display open dialog
       if( al_show_native_file_dialog( nullptr, myChooser)){
@@ -206,15 +206,15 @@ void editor::update(){
     if(mouseListener::mouse_released & 1){
       is_dragging_box=false;
 
-      if(!over_button && gui_mode){
+      if(!over_button && gui_mode && (box_2_x - box_1_x)!=0 && (box_2_x - box_1_x)!=0){
         editor_box newBox;
         newBox.x = box_1_x;
         newBox.y = box_1_y;
         newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
         newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
         newBox.type = 4;
-        newBox.width = box_2_x - box_1_x;
-        newBox.height = box_2_y - box_1_y;
+        newBox.width = (box_2_x - box_1_x);
+        newBox.height = (box_2_y - box_1_y);
 
         newBox.bodyType = "Collision";
 
@@ -222,8 +222,8 @@ void editor::update(){
       }
     }
     if(mouseListener::mouse_button & 1){
-      box_2_x=mouseListener::mouse_x - mouseListener::mouse_x % 32;
-      box_2_y=mouseListener::mouse_y - mouseListener::mouse_y % 32;
+      box_2_x=(mouseListener::mouse_x - mouseListener::mouse_x % 32)+32;
+      box_2_y=(mouseListener::mouse_y - mouseListener::mouse_y % 32)+32;
     }
 
   }
@@ -554,8 +554,8 @@ bool editor::save_map( std::string mapName){
     if(editorBoxes.at(i).bodyType=="Collision"){
 
 
-      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "width","meme"));
-      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height","nicememe"));
+      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "width",tools::convertIntToString(editorBoxes.at(i).width).c_str()));
+      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height",tools::convertIntToString(456).c_str()));
 
      // object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height", tools::convertIntToString(editorBoxes.at(i).height).c_str()));
 
