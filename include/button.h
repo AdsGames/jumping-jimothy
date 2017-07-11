@@ -18,6 +18,9 @@ class button{
     // Getters
     int getX(){ return x; }
     int getY(){ return y; }
+    // Silly Allan! You gotta return padding times two, because there's two sides of padding
+    // I gotchu tho, fixed up and respaced buttons in the menu. No weird hitboxes
+    // I wonder if you'll ever see this or I'm typing in vain, pretty much my entire life summed up
     int getWidth(){ return width + padding_x*2; }
     int getHeight(){ return height + padding_y*2; }
     int getPaddingX(){ return padding_x; }
