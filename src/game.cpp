@@ -74,6 +74,14 @@ Box *game::create_static_box( float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2
   return newStaticBox;
 }
 
+Box *game::create_collision( float newX, float newY,float newWidth,float newHeight){
+  CollisionBox *newCollisionBox = new CollisionBox();
+  newCollisionBox -> init( newX, newY, newWidth,newHeight,gameWorld);
+  gameBoxes.push_back( newCollisionBox);
+  return newCollisionBox;
+}
+
+
 
 
 // Add character to world
@@ -175,6 +183,8 @@ void game::load_world(int newLevel){
       if( object_node -> first_node("orientation") != 0)
         orientation = object_node -> first_node("orientation") -> value();
 
+      std::cout<<type<<"\n";
+
       if( type == "Tile"){
         if(bodytype == "Static"){
             std::vector<std::string> splits = tools::split_string( orientation, ' ');
@@ -193,16 +203,20 @@ void game::load_world(int newLevel){
 
 
           static_count++;
-        }else{
+        }else if(bodytype=="Dynamic"){
           newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(width), tools::string_to_float(height), box,nullptr,nullptr,nullptr, true, false);
           dynamic_count++;
+        }else if(bodytype=="Collision"){
+          newBox = create_collision( tools::string_to_float(x), tools::string_to_float(y), tools::string_to_float(width), tools::string_to_float(height));
         }
+
+
       }
-      if( type == "Character"){
+      else if( type == "Character"){
         gameCharacter = create_character( tools::string_to_float(x), tools::string_to_float(y));
         character_count++;
       }
-      if( type == "Finish"){
+      else if( type == "Finish"){
         gameGoat = create_goat( tools::string_to_float(x), tools::string_to_float(y));
         if(gameCharacter==nullptr)
           std::cout<<"WARNING: Game: goat is passed nullptr gameCharacter\n";
@@ -219,6 +233,7 @@ void game::load_world(int newLevel){
           gameWorld -> CreateJoint(jointDef);
         }*/
       }
+
     }
   }
 
