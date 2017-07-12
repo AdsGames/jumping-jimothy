@@ -119,6 +119,11 @@ void editor::update(){
     tile_type=3;
   if(keyListener::keyPressed[ALLEGRO_KEY_T])
     tile_type=4;
+  // Rockin' three liner undo button
+  if(keyListener::keyPressed[ALLEGRO_KEY_Z] && editorBoxes.size()>0){
+    editorBoxes.pop_back();
+    calculate_orientation_global();
+  }
 
 
   // Activate advanced mode
@@ -198,7 +203,7 @@ void editor::update(){
   }
   //Drag n drop madness
   if(tile_type==4){
-    if( mouseListener::mouse_pressed & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
+    if( mouseListener::mouse_pressed & 1 && !box_at_with_type(0,mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
       is_dragging_box=true;
       box_1_x=mouseListener::mouse_x - mouseListener::mouse_x % 32;
       box_1_y=mouseListener::mouse_y - mouseListener::mouse_y % 32;

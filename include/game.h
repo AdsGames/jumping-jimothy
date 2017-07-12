@@ -26,6 +26,7 @@
 #include <tools.h>
 #include <Character.h>
 #include <Goat.h>
+#include <CollisionBox.h>
 
 class game : public state{
   public:
@@ -48,6 +49,8 @@ class game : public state{
     Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,BITMAP*,BITMAP*, BITMAP*, BITMAP*,  bool newBodyType, bool newIsSensor);
 
     Box *create_static_box(float newX, float newY,BITMAP*,BITMAP*, BITMAP*, BITMAP*);
+    Box *create_collision(float newX, float newY,float,float);
+
 
     Goat *create_goat(float,float);
     Character *create_character(float newX, float newY);
