@@ -228,6 +228,8 @@ void editor::update(){
         newBox.type = 4;
         newBox.width = (box_2_x - box_1_x);
         newBox.height = (box_2_y - box_1_y);
+        newBox.width_str = tools::toString( float((box_2_x - box_1_x) / 20.0f));
+        newBox.height_str = tools::toString( float((box_2_y - box_1_y) / 20.0f));
 
         newBox.bodyType = "Collision";
 
@@ -484,8 +486,10 @@ bool editor::load_map( std::string mapName){
     newBox.y = (tools::string_to_float(y) * -20.0f) - 16.0f;
     newBox.x_str = x;
     newBox.y_str = y;
-    newBox.width = tools::string_to_float(width);
-    newBox.height = tools::string_to_float(height);
+    newBox.width = (tools::string_to_float(width) * 20.0f) - 16.0f;
+    newBox.height = (tools::string_to_float(height) * 20.0f) - 16.0f;
+    newBox.height_str = height;
+    newBox.width_str = width;
 
 
     // Correct orientation format
@@ -567,8 +571,8 @@ bool editor::save_map( std::string mapName){
     if(editorBoxes.at(i).bodyType=="Collision"){
 
 
-      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "width",tools::convertIntToString(editorBoxes.at(i).width).c_str()));
-      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height",tools::convertIntToString(456).c_str()));
+      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "width",editorBoxes.at(i).width_str.c_str()));
+      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height",editorBoxes.at(i).height_str.c_str()));
 
      // object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height", tools::convertIntToString(editorBoxes.at(i).height).c_str()));
 

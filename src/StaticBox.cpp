@@ -25,8 +25,18 @@ void StaticBox::init(float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *
   y=newY;
   type = STATIC;
   angle=0;
-  width=1.5;
-  height=1.5;
+  width=1.5f;
+  height=1.5f;
+
+  type = BOX;
+  color = al_map_rgb(255,0,0);
+  static_mode = false;
+  static_box = false;
+  orientation = 0;
+  angle = 0;
+  x = 0;
+  y = 0;
+
 
   sprite = sp_1;
   new_tiles[0] = sp_1;
