@@ -269,9 +269,9 @@ void game::reset(){
 
   // Pause boxes
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
-  //  if( gameBoxes[i] -> getType() == BOX){
-     // gameBoxes[i] -> setStatic();
-   // }
+    if( gameBoxes[i] -> getType() == BOX){
+      gameBoxes[i] -> setStatic();
+   }
   }
   if( gameGoat == nullptr)
     std::cout << "WARNING: Goat pointer is undeclared in game\n";

@@ -50,7 +50,8 @@ void Box::init(float newX, float newY, float newWidth, float newHeight,float new
 
 	bodyDef.position.Set(newX, newY);
 	body = gameWorld -> CreateBody(&bodyDef);
-	body -> SetLinearVelocity(b2Vec2(newVelX,newVelY));
+	//body -> SetLinearVelocity(b2Vec2(newVelX,newVelY));
+
 	//body ->SetLinearDamping(1);
 	//body ->SetAngularDamping(1);
 
