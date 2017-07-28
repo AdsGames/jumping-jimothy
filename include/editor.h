@@ -40,6 +40,8 @@ struct editor_box{
   int orientation[4];
   int width;
   int height;
+  std::string width_str;
+  std::string height_str;
 };
 
 // Button names
