@@ -139,12 +139,16 @@ void editor::update(){
       if( al_show_native_file_dialog( nullptr, myChooser)){
         file_name = al_get_native_file_dialog_path(myChooser, 0);
 
+      // Silly Allan! The cancel button is a valid option
+      // This fixes a crash
+      if(file_name!=nullptr){
         // Make sure saves correctly
         if( save_map( file_name))
           al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
         else
           al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, 0);
         }
+      }
     }else
       al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map ya dingus ", file_name, nullptr, 0);
 
@@ -158,11 +162,15 @@ void editor::update(){
       file_name = al_get_native_file_dialog_path(myChooser, 0);
       editorBoxes.clear();
 
-      // Make sure loads correctly
-      if( load_map( file_name))
-        al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ", file_name, nullptr, 0);
-      else
-        al_show_native_message_box( nullptr, "Error!", "Error loading map from: ", file_name, nullptr, 0);
+      // You also need to check for cancel button here too
+      if(file_name!=nullptr){
+
+        // Make sure loads correctly
+        if( load_map( file_name))
+          al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ", file_name, nullptr, 0);
+        else
+          al_show_native_message_box( nullptr, "Error!", "Error loading map from: ", file_name, nullptr, 0);
+      }
     }
   }
 
