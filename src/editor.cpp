@@ -588,7 +588,7 @@ bool editor::save_map( std::string mapName){
     // Save data
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "x", editorBoxes.at(i).x_str.c_str()));
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "y", editorBoxes.at(i).y_str.c_str()));
-    if(editorBoxes.at(i).bodyType=="Dynamic")
+    if(editorBoxes.at(i).bodyType=="Dynamic" || editorBoxes.at(i).bodyType=="Static")
       object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
     if(editorBoxes.at(i).bodyType=="Collision"){
 

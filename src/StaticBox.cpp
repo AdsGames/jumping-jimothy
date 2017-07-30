@@ -21,6 +21,10 @@ void StaticBox::update(){
 
 void StaticBox::init(float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4)
 {
+
+  std::cout<<"I made a staticblcokf or sure++++++++++++++++++++++++++++\n";
+
+
   x=newX;
   y=newY;
   type = STATIC;
@@ -34,9 +38,6 @@ void StaticBox::init(float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *
   static_box = false;
   orientation = 0;
   angle = 0;
-  x = 0;
-  y = 0;
-
 
   sprite = sp_1;
   new_tiles[0] = sp_1;
@@ -47,8 +48,6 @@ void StaticBox::init(float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *
 
 // Draw box to screen
 void StaticBox::draw(){
-  // If the object is a character, the position is updated in the
-  // update loop rather than in draw
 
   ALLEGRO_TRANSFORM trans, prevTrans;
 
@@ -72,6 +71,11 @@ void StaticBox::draw(){
     }
 
   al_use_transform(&prevTrans);
+
+  // I suck at programming
+  // - Danny Van Stemp, July 30, 2017
+
+  //std::cout<<"YOU LITTLE !@#$%\n";
 }
 StaticBox::~StaticBox()
 {
