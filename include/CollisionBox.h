@@ -2,6 +2,7 @@
 #define COLLISIONBOX_H
 
 #include <Box.h>
+#include <allegro5/allegro_primitives.h>
 
 
 class CollisionBox : public Box

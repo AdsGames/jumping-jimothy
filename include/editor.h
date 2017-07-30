@@ -100,6 +100,8 @@ class editor : public state{
 
     bool is_dragging_box=false;
 
+    bool dialog_open = false;
+
     // Vars
     bool grid_on;
 

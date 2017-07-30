@@ -207,7 +207,9 @@ void game::load_world(int newLevel){
           newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(width), tools::string_to_float(height), box,nullptr,nullptr,nullptr, true, false);
           dynamic_count++;
         }else if(bodytype=="Collision"){
-          newBox = create_collision( tools::string_to_float(x), tools::string_to_float(y), tools::string_to_float(width), tools::string_to_float(height));
+          newBox = create_collision( tools::string_to_float(x), tools::string_to_float(y), tools::string_to_float(width), tools::string_to_float(height) );
+              std::cout<<"Frickin box width:"<<width << "\n";
+
         }
 
 
