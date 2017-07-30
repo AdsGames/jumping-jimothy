@@ -8,8 +8,11 @@ CollisionBox::CollisionBox()
 }
 void CollisionBox::init(float newX, float newY, float newWidth, float newHeight, b2World *newGameWorld){
 
+  width = newWidth;
+  height = newHeight;
   gameWorld = newGameWorld;
   b2BodyDef bodyDef;
+  type = 4;
 
   bodyDef.type = b2_kinematicBody;
 
@@ -18,7 +21,7 @@ void CollisionBox::init(float newX, float newY, float newWidth, float newHeight,
 	//body ->SetLinearDamping(1);
 	//body ->SetAngularDamping(1);
 
-	// Define another box shape for o0ur dynamic body.
+	// Define another box shape for our dynamic body.
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(newWidth/2, newHeight/2);
 
@@ -36,12 +39,32 @@ void CollisionBox::init(float newX, float newY, float newWidth, float newHeight,
 	// Add the shape to the body.
 	body -> CreateFixture(&fixtureDef);
 
-  std::cout<<"!@#$!$!$@%$^&*&^#@$(*(&*&*(&*(^^&*(^&*^&%^&*^&$%^#^%$\n";
+  //std::cout<<"!@#$!$!$@%$^&*&^#@$(*(&*&*(&*(^^&*(^&*^&%^&*^&$%^#^%$\n";
 
 }
 
 void CollisionBox::draw(){
 
+    b2Vec2 position = body -> GetPosition();
+    x = position.x;
+    y = position.y;
+
+
+     ALLEGRO_TRANSFORM trans, prevTrans;
+
+  // back up the current transform
+  al_copy_transform(&prevTrans, al_get_current_transform());
+
+  // scale using the new transform
+  al_identity_transform(&trans);
+
+  al_translate_transform(&trans, x * 20, y * -20);
+
+  al_use_transform(&trans);
+
+  al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(255,0,0));
+
+  al_use_transform(&prevTrans);
 }
 
 void CollisionBox::update(){

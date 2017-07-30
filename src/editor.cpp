@@ -9,7 +9,7 @@ editor::editor(){
   level_number = 1;
 
   // Filename
-  file_name = "";
+  file_name = "Untitled";
 
   gui_mode = true;
 
@@ -156,6 +156,8 @@ void editor::update(){
 
   // Load map
   if( editor_buttons[button_load].clicked() || keyListener::keyPressed[ALLEGRO_KEY_D]){
+
+
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
     // Display open dialog
     if( al_show_native_file_dialog( nullptr, myChooser)){
@@ -170,6 +172,8 @@ void editor::update(){
           al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ", file_name, nullptr, 0);
         else
           al_show_native_message_box( nullptr, "Error!", "Error loading map from: ", file_name, nullptr, 0);
+      }else{
+        file_name="Untitled";
       }
     }
   }
@@ -210,7 +214,7 @@ void editor::update(){
     }
   }
   //Drag n drop madness
-  if(tile_type==4){
+  if(tile_type==4 && !dialog_open){
     if( mouseListener::mouse_pressed & 1 && !box_at_with_type(0,mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
       is_dragging_box=true;
       box_1_x=mouseListener::mouse_x - mouseListener::mouse_x % 32;
@@ -220,20 +224,39 @@ void editor::update(){
       is_dragging_box=false;
 
       if(!over_button && gui_mode && (box_2_x - box_1_x)!=0 && (box_2_x - box_1_x)!=0){
+
+        // Backwards dragged box correction, Box2D chokes on negative widths/heights
+
+        if(box_2_x<box_1_x){
+          int holder_value = box_2_x;
+          box_2_x=box_1_x;
+          box_1_x=holder_value;
+        }
+
+        if(box_2_y<box_1_y){
+          int holder_value = box_2_y;
+          box_2_y=box_1_y;
+          box_1_y=holder_value;
+        }
+
         editor_box newBox;
-        newBox.x = box_1_x;
-        newBox.y = box_1_y;
-        newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
-        newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
-        newBox.type = 4;
         newBox.width = (box_2_x - box_1_x);
         newBox.height = (box_2_y - box_1_y);
-        newBox.width_str = tools::toString( float((box_2_x - box_1_x) / 20.0f));
-        newBox.height_str = tools::toString( float((box_2_y - box_1_y) / 20.0f));
+        newBox.x = box_1_x;
+        newBox.y = box_1_y;
+        newBox.x_str = tools::toString((float(newBox.x) + newBox.width/2) / 20.0f);
+        newBox.y_str = tools::toString( -1 * (float(newBox.y) + newBox.height/2)/ 20.0f);
+        newBox.type = 4;
+        newBox.width_str = tools::toString( float(((box_2_x  - box_1_x))/ 20.0f));
+        newBox.height_str = tools::toString( float(((box_2_y - box_1_y))/ 20.0f));
 
         newBox.bodyType = "Collision";
 
+
         editorBoxes.push_back( newBox);
+
+        std::cout<<"Made a nice collisionbox\n";
+
       }
     }
     if(mouseListener::mouse_button & 1){
@@ -565,7 +588,6 @@ bool editor::save_map( std::string mapName){
     // Save data
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "x", editorBoxes.at(i).x_str.c_str()));
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "y", editorBoxes.at(i).y_str.c_str()));
-    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
     if(editorBoxes.at(i).bodyType=="Dynamic")
       object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
     if(editorBoxes.at(i).bodyType=="Collision"){
@@ -577,6 +599,11 @@ bool editor::save_map( std::string mapName){
      // object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height", tools::convertIntToString(editorBoxes.at(i).height).c_str()));
 
     }
+
+
+    // Write this last for consistency of placement in the xml (hint: always last element)
+    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
+
   }
 
   // Save to file
