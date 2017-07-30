@@ -2,6 +2,7 @@
 
 // We'll use this for the goat
 void Goat::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGameWorld, Character *newCharacter){
+
   goat_frame = 0;
   goat_tick = 0;
   sprite = newSprite;
@@ -69,20 +70,18 @@ void Goat::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newG
 
 // Draw box to screen
 void Goat::draw(){
-  // If the object is a character, the position is updated in the
-  // update loop rather than in draw
 
-    b2Vec2 position = body -> GetPosition();
-    x = position.x;
-    y = position.y;
-    angle = body -> GetAngle();
-    goat_tick++;
-    if(goat_tick>10){
-      goat_frame++;
-      goat_tick=0;
-    }
-    if(goat_frame>14)
-      goat_frame=0;
+  b2Vec2 position = body -> GetPosition();
+  x = position.x;
+  y = position.y;
+  angle = body -> GetAngle();
+  goat_tick++;
+  if(goat_tick>10){
+    goat_frame++;
+    goat_tick=0;
+  }
+  if(goat_frame>14)
+    goat_frame=0;
 
 
   ALLEGRO_TRANSFORM trans, prevTrans;

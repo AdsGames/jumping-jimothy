@@ -27,6 +27,7 @@
 #include <Character.h>
 #include <Goat.h>
 #include <CollisionBox.h>
+#include <DynamicBox.h>
 
 class game : public state{
   public:
@@ -46,10 +47,10 @@ class game : public state{
     void reset();
 
     // Creation code
-    Box *create_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,BITMAP*,BITMAP*, BITMAP*, BITMAP*,  bool newBodyType, bool newIsSensor);
+    Box *create_dynamic_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,BITMAP*,  bool newBodyType, bool newIsSensor);
 
     Box *create_static_box(float newX, float newY,BITMAP*,BITMAP*, BITMAP*, BITMAP*);
-    Box *create_collision(float newX, float newY,float,float);
+    Box *create_collision_box(float newX, float newY,float,float);
 
 
     Goat *create_goat(float,float);

@@ -22,9 +22,6 @@ void StaticBox::update(){
 void StaticBox::init(float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4)
 {
 
-  std::cout<<"I made a staticblcokf or sure++++++++++++++++++++++++++++\n";
-
-
   x=newX;
   y=newY;
   type = STATIC;
@@ -32,14 +29,6 @@ void StaticBox::init(float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *
   width=1.5f;
   height=1.5f;
 
-  type = BOX;
-  color = al_map_rgb(255,0,0);
-  static_mode = false;
-  static_box = false;
-  orientation = 0;
-  angle = 0;
-
-  sprite = sp_1;
   new_tiles[0] = sp_1;
   new_tiles[1] = sp_2;
   new_tiles[2] = sp_3;
@@ -64,18 +53,17 @@ void StaticBox::draw(){
 
   for( int t = 0; t < 4; t++){
         // Offsets from subtile
-        int off_x = (t == 1 || t == 3) ? 16: 0;
-        int off_y = (t >= 2) ? 16: 0;
+    int off_x = (t == 1 || t == 3) ? 16: 0;
+    int off_y = (t >= 2) ? 16: 0;
 
-      al_draw_bitmap( new_tiles[t],-(width/2)*20+off_x, -(height/2)*20+off_y, 0);
-    }
+    al_draw_bitmap( new_tiles[t],-(width/2)*20+off_x, -(height/2)*20+off_y, 0);
+  }
 
   al_use_transform(&prevTrans);
 
   // I suck at programming
   // - Danny Van Stemp, July 30, 2017
 
-  //std::cout<<"YOU LITTLE !@#$%\n";
 }
 StaticBox::~StaticBox()
 {

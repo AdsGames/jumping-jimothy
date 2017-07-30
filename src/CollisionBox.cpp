@@ -35,22 +35,20 @@ void CollisionBox::init(float newX, float newY, float newWidth, float newHeight,
 	// Override the default friction.
 	fixtureDef.friction = 0.3f;
 
-
 	// Add the shape to the body.
 	body -> CreateFixture(&fixtureDef);
-
-  //std::cout<<"!@#$!$!$@%$^&*&^#@$(*(&*&*(&*(^^&*(^&*^&%^&*^&$%^#^%$\n";
 
 }
 
 void CollisionBox::draw(){
 
-    b2Vec2 position = body -> GetPosition();
-    x = position.x;
-    y = position.y;
+  // Collision boxes don't have an update loop, we have to get
+  // the location from the Box2D world ourselves in the draw loop
+  b2Vec2 position = body -> GetPosition();
+  x = position.x;
+  y = position.y;
 
-
-     ALLEGRO_TRANSFORM trans, prevTrans;
+  ALLEGRO_TRANSFORM trans, prevTrans;
 
   // back up the current transform
   al_copy_transform(&prevTrans, al_get_current_transform());

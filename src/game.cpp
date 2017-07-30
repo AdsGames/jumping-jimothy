@@ -59,11 +59,11 @@ Goat *game::create_goat( float newX, float newY){
 }
 
 // Creates box in world
-Box *game::create_box( float newX, float newY, float newWidth, float newHeight, float newVelX,float newVelY, BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4, bool newBodyType, bool newIsSensor){
-  Box *newBox = new Box();
-  newBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, sp_1,sp_2,sp_3,sp_4, gameWorld);
-  gameBoxes.push_back( newBox);
-  return newBox;
+Box *game::create_dynamic_box( float newX, float newY, float newWidth, float newHeight, float newVelX,float newVelY, BITMAP *newSprite, bool newBodyType, bool newIsSensor){
+  DynamicBox *newDynamicBox = new DynamicBox();
+  newDynamicBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, newSprite, gameWorld);
+  gameBoxes.push_back( newDynamicBox);
+  return newDynamicBox;
 }
 
 // Creates box in world
@@ -74,7 +74,7 @@ Box *game::create_static_box( float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2
   return newStaticBox;
 }
 
-Box *game::create_collision( float newX, float newY,float newWidth,float newHeight){
+Box *game::create_collision_box( float newX, float newY,float newWidth,float newHeight){
   CollisionBox *newCollisionBox = new CollisionBox();
   newCollisionBox -> init( newX, newY, newWidth,newHeight,gameWorld);
   gameBoxes.push_back( newCollisionBox);
@@ -205,10 +205,10 @@ void game::load_world(int newLevel){
           static_count++;
 
         }else if(bodytype=="Dynamic"){
-          newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(width), tools::string_to_float(height), box,nullptr,nullptr,nullptr, true, false);
+          newBox = create_dynamic_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(width), tools::string_to_float(height), box,true, false);
           dynamic_count++;
         }else if(bodytype=="Collision"){
-          newBox = create_collision( tools::string_to_float(x), tools::string_to_float(y), tools::string_to_float(width), tools::string_to_float(height) );
+          newBox = create_collision_box( tools::string_to_float(x), tools::string_to_float(y), tools::string_to_float(width), tools::string_to_float(height) );
               std::cout<<"Frickin box width:"<<width << "\n";
 
         }

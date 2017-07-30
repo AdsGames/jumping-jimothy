@@ -28,16 +28,16 @@ class Box{
     Box();
     ~Box();
 
-    virtual void init(float, float, float, float,float,float,bool,BITMAP*,BITMAP*,BITMAP*,BITMAP*, b2World *);
+    virtual void init();
 
     // Updates
     virtual void draw();
     virtual void update();
 
     // Setters
-    void setStatic();
-    void setDynamic(bool);
-    void setOrientation(int);
+    virtual void setStatic();
+    virtual void setDynamic(bool);
+    void setOrientation();
 
     // Getters
     virtual int getType(){ return type; };
