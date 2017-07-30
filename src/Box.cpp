@@ -77,12 +77,11 @@ void Box::init(float newX, float newY, float newWidth, float newHeight,float new
 
 // Set state
 void Box::setStatic(){
-  if(!static_box){
-    static_mode = true;
-    static_velocity = body -> GetLinearVelocity();
-    static_angular_velocity = body -> GetAngularVelocity();
-    body -> SetType( b2_staticBody);
-  }
+  static_mode = true;
+  static_velocity = body -> GetLinearVelocity();
+  static_angular_velocity = body -> GetAngularVelocity();
+  body -> SetType( b2_staticBody);
+
 }
 
 // Set whether dynamic
@@ -111,12 +110,12 @@ void Box::update(){
 void Box::draw(){
   // If the object is a character, the position is updated in the
   // update loop rather than in draw
-  if(type == BOX){
+  //if(type == BOX){
     b2Vec2 position = body -> GetPosition();
     x = position.x;
     y = position.y;
     angle = body -> GetAngle();
-  }
+ // }
 
   ALLEGRO_TRANSFORM trans, prevTrans;
 
@@ -156,14 +155,14 @@ void Box::draw(){
   //If static
   }else{
 
-
-    for( int t = 0; t < 4; t++){
-        // Offsets from subtile
-        int off_x = (t == 1 || t == 3) ? 16: 0;
-        int off_y = (t >= 2) ? 16: 0;
-
-      al_draw_bitmap( new_tiles[t],-(width/2)*20+off_x, -(height/2)*20+off_y, 0);
-    }
+//
+//    for( int t = 0; t < 4; t++){
+//        // Offsets from subtile
+//        int off_x = (t == 1 || t == 3) ? 16: 0;
+//        int off_y = (t >= 2) ? 16: 0;
+//
+//      al_draw_bitmap( new_tiles[t],-(width/2)*20+off_x, -(height/2)*20+off_y, 0);
+//    }
      // al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
      // al_map_rgb(255,255,0));
 

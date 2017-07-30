@@ -203,6 +203,7 @@ void game::load_world(int newLevel){
 
 
           static_count++;
+
         }else if(bodytype=="Dynamic"){
           newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(width), tools::string_to_float(height), box,nullptr,nullptr,nullptr, true, false);
           dynamic_count++;
@@ -390,8 +391,9 @@ void game::draw(){
     al_draw_bitmap(help,0,0,0);
 
   // Draw boxes
-  for( unsigned int i = 0; i < gameBoxes.size(); i++)
+  for( unsigned int i = 0; i < gameBoxes.size(); i++){
     gameBoxes[i] -> draw();
+  }
 
   // Pause/play buttons
   if(static_mode)
