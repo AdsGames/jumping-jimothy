@@ -3,6 +3,7 @@
 
 #include <Box.h>
 #include <allegro5/allegro_primitives.h>
+#include <keyListener.h>
 
 
 class CollisionBox : public Box

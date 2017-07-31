@@ -42,27 +42,30 @@ void CollisionBox::init(float newX, float newY, float newWidth, float newHeight,
 
 void CollisionBox::draw(){
 
-  // Collision boxes don't have an update loop, we have to get
-  // the location from the Box2D world ourselves in the draw loop
-  b2Vec2 position = body -> GetPosition();
-  x = position.x;
-  y = position.y;
+  if( keyListener::key[ALLEGRO_KEY_G]){
 
-  ALLEGRO_TRANSFORM trans, prevTrans;
+    // Collision boxes don't have an update loop, we have to get
+    // the location from the Box2D world ourselves in the draw loop
+    b2Vec2 position = body -> GetPosition();
+    x = position.x;
+    y = position.y;
 
-  // back up the current transform
-  al_copy_transform(&prevTrans, al_get_current_transform());
+    ALLEGRO_TRANSFORM trans, prevTrans;
 
-  // scale using the new transform
-  al_identity_transform(&trans);
+    // back up the current transform
+    al_copy_transform(&prevTrans, al_get_current_transform());
 
-  al_translate_transform(&trans, x * 20, y * -20);
+    // scale using the new transform
+    al_identity_transform(&trans);
 
-  al_use_transform(&trans);
+    al_translate_transform(&trans, x * 20, y * -20);
 
-  al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(255,0,0));
+    al_use_transform(&trans);
 
-  al_use_transform(&prevTrans);
+    al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(255,0,0));
+
+    al_use_transform(&prevTrans);
+  }
 }
 
 void CollisionBox::update(){
