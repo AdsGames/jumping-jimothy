@@ -17,8 +17,8 @@ void DynamicBox::init(float newX, float newY, float newWidth, float newHeight,fl
 
 
   type = BOX;
-  width = newWidth;
-  height = newHeight;
+  width = 1.55f;
+  height = 1.55f;
   color = al_map_rgb(255,0,0);
   static_mode = false;
   static_box = false;
