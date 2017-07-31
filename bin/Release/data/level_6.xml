@@ -3,92 +3,111 @@
 	<Object type="Tile">
 		<x>20</x>
 		<y>-18.4</y>
-		<bodytype>Static</bodytype>
 		<orientation>1 1 7 7</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>21.6</x>
 		<y>-18.4</y>
-		<bodytype>Static</bodytype>
 		<orientation>1 1 7 7</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>23.2</x>
 		<y>-18.4</y>
-		<bodytype>Static</bodytype>
 		<orientation>1 1 7 7</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>24.8</x>
 		<y>-18.4</y>
-		<bodytype>Static</bodytype>
 		<orientation>1 1 7 7</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>20</x>
 		<y>-23.2</y>
-		<bodytype>Static</bodytype>
 		<orientation>0 1 6 7</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>21.6</x>
 		<y>-23.2</y>
-		<bodytype>Static</bodytype>
 		<orientation>1 1 7 7</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>23.2</x>
 		<y>-23.2</y>
-		<bodytype>Static</bodytype>
 		<orientation>1 1 7 7</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>24.8</x>
 		<y>-23.2</y>
-		<bodytype>Static</bodytype>
 		<orientation>1 2 7 8</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>18.4</x>
 		<y>-18.4</y>
-		<bodytype>Static</bodytype>
 		<orientation>1 1 7 7</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>26.4</x>
 		<y>-18.4</y>
-		<bodytype>Static</bodytype>
 		<orientation>1 1 7 7</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>28</x>
 		<y>-18.4</y>
-		<bodytype>Static</bodytype>
 		<orientation>1 2 7 8</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>16.8</x>
 		<y>-18.4</y>
-		<bodytype>Static</bodytype>
 		<orientation>0 1 6 7</orientation>
+		<bodytype>Static</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>24.8</x>
 		<y>-16.8</y>
-		<bodytype>Dynamic</bodytype>
 		<orientation>0 2 6 8</orientation>
+		<bodytype>Dynamic</bodytype>
 	</Object>
 	<Object type="Character">
 		<x>18.4</x>
 		<y>-15.2</y>
 		<bodytype>Character</bodytype>
-		<orientation>0 0 0 0</orientation>
 	</Object>
 	<Object type="Finish">
 		<x>20</x>
 		<y>-20</y>
 		<bodytype>Finish</bodytype>
-		<orientation>0 0 0 0</orientation>
+	</Object>
+	<Object type="Tile">
+		<x>33.6</x>
+		<y>-36.8</y>
+		<width>19.2</width>
+		<height>0</height>
+		<bodytype>Collision</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>22.4</x>
+		<y>-18.4</y>
+		<width>12.8</width>
+		<height>1.6</height>
+		<bodytype>Collision</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>22.4</x>
+		<y>-23.2</y>
+		<width>6.4</width>
+		<height>1.6</height>
+		<bodytype>Collision</bodytype>
 	</Object>
 </data>
 
