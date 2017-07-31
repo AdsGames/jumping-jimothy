@@ -504,13 +504,32 @@ bool editor::load_map( std::string mapName){
     if( object_node -> first_node("orientation") != 0)
       orientation = object_node -> first_node("orientation") -> value();
 
+
+
+
     editor_box newBox;
-    newBox.x = (tools::string_to_float(x) * 20.0f) - 16.0f;
-    newBox.y = (tools::string_to_float(y) * -20.0f) - 16.0f;
+
     newBox.x_str = x;
     newBox.y_str = y;
-    newBox.width = (tools::string_to_float(width) * 20.0f) - 16.0f;
-    newBox.height = (tools::string_to_float(height) * 20.0f) - 16.0f;
+    newBox.bodyType = bodytype;
+
+    // Idek dude but it works
+    if(newBox.bodyType == "Collision"){
+
+      newBox.width = (tools::string_to_float(width) * 20.0f);
+      newBox.height = (tools::string_to_float(height) * 20.0f);
+      newBox.x = (tools::string_to_float(x) - tools::string_to_float(width)/2)*20.0f;
+      // This guy is positive because we make it negative later
+      newBox.y = (tools::string_to_float(y) + tools::string_to_float(height)/2)*-20.0f;
+
+    }
+    if(newBox.bodyType != "Collision"){
+      newBox.width = (tools::string_to_float(width) * 20.0f) - 16.0f;
+      newBox.height = (tools::string_to_float(height) * 20.0f) - 16.0f;
+      newBox.x = (tools::string_to_float(x) * 20.0f) - 16.0f;
+      newBox.y = (tools::string_to_float(y) * -20.0f) - 16.0f;
+    }
+
     newBox.height_str = height;
     newBox.width_str = width;
 
@@ -521,7 +540,7 @@ bool editor::load_map( std::string mapName){
       for( int k = 0; k < 4; k++)
         newBox.orientation[k] = (tools::convertStringToInt(splits.at(k)));
     }
-        // Maybe we can salvage it?
+    // Maybe we can salvage it?
     else if( splits.size() > 0){
       for( int k = 0; k < 4; k++)
         newBox.orientation[k] = (tools::convertStringToInt(splits.at(0)));
@@ -532,7 +551,6 @@ bool editor::load_map( std::string mapName){
     }
 
     // Body
-    newBox.bodyType = bodytype;
     if( newBox.bodyType == "Dynamic")
       newBox.type = 0;
     else if( newBox.bodyType == "Static")
