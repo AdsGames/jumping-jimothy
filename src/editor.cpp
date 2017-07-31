@@ -60,8 +60,9 @@ editor::editor(){
   editor_buttons[button_type_goat] = button( 20 + editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth()/1.2, 710, "Goat", edit_font);
   editor_buttons[button_type_collision] = button( 20 + editor_buttons[3].getX() + editor_buttons[3].getWidth()/1.2, 710, "Collision", edit_font);
 
-
-  editor_buttons[button_save] = button( 20 + 730, 710, "Save", edit_font);
+  editor_buttons[button_undo] = button( 620, 710, "Undo", edit_font);
+  editor_buttons[button_clear] = button( 20 + editor_buttons[button_undo].getX() + editor_buttons[button_undo].getWidth()/1.2, 710, "Clear", edit_font);
+  editor_buttons[button_save] = button( 20 + editor_buttons[button_clear].getX() + editor_buttons[button_clear].getWidth()/1.2, 710, "Save", edit_font);
   editor_buttons[button_load] = button( 20 + editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth()/1.2, 710, "Load", edit_font);
   editor_buttons[button_play] = button( 20 + editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth()/1.2, 710, "Play", edit_font);
   editor_buttons[button_grid] = button( 20 + editor_buttons[button_play].getX() + editor_buttons[button_play].getWidth()/1.2, 710, "Grid", edit_font);
@@ -119,11 +120,18 @@ void editor::update(){
     tile_type=3;
   if(keyListener::keyPressed[ALLEGRO_KEY_T])
     tile_type=4;
+
   // Rockin' three liner undo button
-  if(keyListener::keyPressed[ALLEGRO_KEY_Z] && editorBoxes.size()>0){
+  if((keyListener::keyPressed[ALLEGRO_KEY_Z] || editor_buttons[button_undo].clicked() )&& editorBoxes.size()>0){
     editorBoxes.pop_back();
     calculate_orientation_global();
   }
+
+  // Clear world button
+  if(keyListener::keyPressed[ALLEGRO_KEY_C] || editor_buttons[button_clear].clicked()){
+    editorBoxes.clear();
+  }
+
 
 
   // Activate advanced mode
