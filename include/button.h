@@ -11,7 +11,11 @@
 
 class button{
   public:
+
     button( int x, int y, std::string text, ALLEGRO_FONT *button_font);
+    // We gotta overload the system! JK just the function
+    button( int x, int y, int width, int height, std::string text, ALLEGRO_FONT *button_font);
+
     button();
     ~button();
 
