@@ -2,6 +2,16 @@
 
 // Init menu
 menu::menu(){
+
+  menu_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
+
+
+  menu_buttons[menu_button_edit] = button( 200, 500, 100,100, "Level Editor",menu_font);
+  menu_buttons[menu_button_exit] = button( 0, 700, 50,68, "Exit",menu_font);
+  menu_buttons[menu_button_play] = button( 400, 310, 100,50, "Play",menu_font);
+  menu_buttons[menu_button_help] = button( 200, 210, 75,50, "Halp plz v2",menu_font);
+
+
   // Title image
   title = tools::load_bitmap_ex("images/title.png");
 
@@ -42,6 +52,27 @@ menu::~menu(){
 
 // Update animation and wait for input
 void menu::update(){
+
+
+
+   // Update buttons
+  for( int i = 0; i < BUTTON_COUNT; i++){
+    menu_buttons[i].update();
+  }
+
+  if(menu_buttons[menu_button_play].clicked()){
+    set_next_state(STATE_GAME);
+  }
+
+  if(menu_buttons[menu_button_edit].clicked()){
+    set_next_state(STATE_EDIT);
+  }
+
+  if(menu_buttons[menu_button_exit].clicked()){
+    set_next_state(STATE_EXIT);
+  }
+
+
   // Add to counters
   counter_title ++;
   counter_play ++;
@@ -58,6 +89,7 @@ void menu::update(){
 
 // Draw images to screen
 void menu::draw(){
+
   // Background
   al_clear_to_color( al_map_rgb(200,200,255));
 
@@ -69,4 +101,9 @@ void menu::draw(){
 
   if( counter_prompt)
     al_draw_scaled_bitmap( prompt_image, 0, 0, 128, 16, 290, 710, 256, 32, 0);
+
+   // Update buttons
+  for( int i = 0; i < BUTTON_COUNT; i++){
+    menu_buttons[i].draw();
+  }
 }

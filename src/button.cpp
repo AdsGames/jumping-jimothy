@@ -35,6 +35,23 @@ button::button( int x, int y, std::string text, ALLEGRO_FONT *button_font){
   padding_y = 10;
 }
 
+// Construct, now with more arguments!
+button::button( int x, int y, int width, int height, std::string text, ALLEGRO_FONT *button_font){
+  this -> x = x;
+  this -> y = y;
+  this -> text = text;
+  this -> image = nullptr;
+  this -> button_font = button_font;
+
+
+  this -> width = width;
+  this -> height = width;
+
+
+  padding_x = 10;
+  padding_y = 10;
+}
+
 // Destruct
 button::~button(){
   if( image != nullptr)

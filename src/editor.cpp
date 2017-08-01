@@ -43,7 +43,7 @@ editor::editor(){
 
   srand(time(NULL));
 
-  al_init_ttf_addon();
+
   edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
 
   if (!edit_font)
