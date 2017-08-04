@@ -31,6 +31,8 @@ class button{
     int getPaddingY(){ return padding_y; }
     std::string getText(){ return text; }
 
+    void setVisibility(bool newVisible){visible=newVisible; }
+
     // Setters
     void setPosition( int x, int y){ this -> x = x; this -> y = y; }
     void setSize( int width, int height){ this -> width = width; this -> height = height;}
@@ -57,6 +59,7 @@ class button{
     int padding_y;
 
     bool hovering;
+    bool visible;
 
     ALLEGRO_BITMAP *image;
 

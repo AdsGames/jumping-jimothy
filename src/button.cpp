@@ -42,10 +42,10 @@ button::button( int x, int y, int width, int height, std::string text, ALLEGRO_F
   this -> text = text;
   this -> image = nullptr;
   this -> button_font = button_font;
-
+  this -> visible = true;
 
   this -> width = width;
-  this -> height = width;
+  this -> height = height;
 
 
   padding_x = 10;
@@ -85,15 +85,18 @@ bool button::clicked(){
 
 // Draw
 void button::draw(){
-  // Backdrop
-  al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgb( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering));
-  al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgb( 0, 0, 0), 2);
 
-  // Text
-  if( button_font != nullptr)
-    al_draw_text( button_font, al_map_rgb( 0, 0, 0), x + padding_x, y + padding_y, 0, text.c_str());
+  if(visible){
+    // Backdrop
+    al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgb( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering));
+    al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgb( 0, 0, 0), 2);
 
-  // Image if avail
-  if( image != nullptr)
-    al_draw_bitmap( image, x, y, 0);
+    // Text
+    if( button_font != nullptr)
+      al_draw_text( button_font, al_map_rgb( 0, 0, 0), x + padding_x, y + padding_y, 0, text.c_str());
+
+    // Image if avail
+    if( image != nullptr)
+      al_draw_bitmap( image, x, y, 0);
+  }
 }
