@@ -1,6 +1,5 @@
 #include "tools.h"
 
-
 std::string tools::convertIntToString( int number){
   std::stringstream ss;
   ss << number;

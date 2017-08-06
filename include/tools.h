@@ -19,8 +19,13 @@
 #include <allegro5/allegro_audio.h>
 
 
+
 class tools{
+
+
+
     public:
+
         // Convert char to float
         static float string_to_float( std::string newChar);
         static void abort_on_error( std::string message, std::string title);

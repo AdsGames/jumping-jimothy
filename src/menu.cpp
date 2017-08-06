@@ -81,15 +81,15 @@ void menu::update(){
     menu_buttons[i].update();
   }
 
-  if(menu_buttons[menu_button_play].clicked()){
+  if(menu_buttons[menu_button_play].mouseReleased()){
     set_next_state(STATE_GAME);
   }
 
-  if(menu_buttons[menu_button_edit].clicked()){
+  if(menu_buttons[menu_button_edit].mouseReleased()){
     set_next_state(STATE_EDIT);
   }
 
-  if(menu_buttons[menu_button_exit].clicked()){
+  if(menu_buttons[menu_button_exit].mouseReleased()){
     set_next_state(STATE_EXIT);
   }
 
@@ -143,7 +143,7 @@ void menu::draw(){
   else
     al_draw_scaled_bitmap( playbutton_frame, 0, 0, 70, 38,530, 630, 70*3, 38*3, 0);
 
-    al_draw_scaled_bitmap( button_help, 0, 0, 70, 38,530, 630, 70*3, 38*3, 0);
+  al_draw_scaled_bitmap( button_help, 0, 0, 70, 38,530, 630, 70*3, 38*3, 0);
 
 
 
