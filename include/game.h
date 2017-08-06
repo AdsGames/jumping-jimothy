@@ -11,6 +11,8 @@
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_font.h>
 #include <Box2D/Box2D.h>
 
 #include <mouseListener.h>
@@ -69,6 +71,10 @@ class game : public state{
     int level;
     bool first_play;
     bool static_mode;
+
+    ALLEGRO_FONT *game_font;
+    ALLEGRO_FONT *help_font;
+
 
     // Bitmaps
     ALLEGRO_BITMAP *box;

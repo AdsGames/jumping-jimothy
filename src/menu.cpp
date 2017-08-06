@@ -3,7 +3,7 @@
 // Init menu
 menu::menu(){
 
-  menu_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
+  menu_font = al_load_ttf_font( "fonts/munro.ttf", 18, 0);
 
 
   menu_buttons[menu_button_edit] = button( 320, 630, 180,90, "Level Editor",menu_font);
@@ -114,8 +114,15 @@ void menu::draw(){
   // Background
   al_clear_to_color( al_map_rgb(50,50,50));
 
+  al_draw_textf( menu_font, al_map_rgb( 255, 255, 255), 1010, 15, 2, "TOJam 12, 2017");
+  al_draw_textf( menu_font, al_map_rgb( 255, 255, 255), 1010, 35, 2, "Danny Van Stemp");
+  al_draw_textf( menu_font, al_map_rgb( 255, 255, 255), 1010, 55, 2, "Allan Legemaate");
+  al_draw_textf( menu_font, al_map_rgb( 255, 255, 255), 1010, 75, 2, "Sullivan Stobo");
+  al_draw_textf( menu_font, al_map_rgb( 255, 255, 255), 1010, 95, 2, "Max Keleher");
+
+
   // Title
-  al_draw_scaled_bitmap( title, 0,0, 175, 160, 50, 50, 612,560, 0);
+  al_draw_scaled_bitmap( title, 0,0, 175, 160, 150, 50, 612,560, 0);
   //al_draw_bitmap(title,300,300,0);
   //al_draw_bitmap(playbutton_frame,297,562,0);
 

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<Object type="Tile">
+		<x>18.4</x>
+		<y>-28</y>
+		<orientation>0 1 6 7</orientation>
+		<bodytype>Dynamic</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>20</x>
+		<y>-28</y>
+		<orientation>1 1 7 7</orientation>
+		<bodytype>Dynamic</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>21.6</x>
+		<y>-28</y>
+		<orientation>1 1 7 7</orientation>
+		<bodytype>Dynamic</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>23.2</x>
+		<y>-28</y>
+		<orientation>1 1 7 7</orientation>
+		<bodytype>Dynamic</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>24.8</x>
+		<y>-28</y>
+		<orientation>1 1 7 7</orientation>
+		<bodytype>Dynamic</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>26.4</x>
+		<y>-28</y>
+		<orientation>1 1 7 7</orientation>
+		<bodytype>Dynamic</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>28</x>
+		<y>-28</y>
+		<orientation>1 1 7 7</orientation>
+		<bodytype>Dynamic</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>29.6</x>
+		<y>-28</y>
+		<orientation>1 2 7 8</orientation>
+		<bodytype>Dynamic</bodytype>
+	</Object>
+	<Object type="Finish">
+		<x>28</x>
+		<y>-24.8</y>
+		<bodytype>Finish</bodytype>
+	</Object>
+	<Object type="Character">
+		<x>20</x>
+		<y>-24.8</y>
+		<bodytype>Character</bodytype>
+	</Object>
+</data>
+
