@@ -16,11 +16,20 @@ button::button(){
 
 // Construct
 button::button( int x, int y, std::string text, ALLEGRO_FONT *button_font){
+
+  // Literally this
   this -> x = x;
   this -> y = y;
   this -> text = text;
   this -> image = nullptr;
   this -> button_font = button_font;
+
+  this -> visible = true;
+
+
+  this -> mouse_released=false;
+  this -> old_mouse_down=false;
+  this -> hovering = false;
 
   if( button_font != nullptr){
     this -> width = al_get_text_width( button_font, text.c_str());
@@ -42,7 +51,12 @@ button::button( int x, int y, int width, int height, std::string text, ALLEGRO_F
   this -> text = text;
   this -> image = nullptr;
   this -> button_font = button_font;
+
   this -> visible = true;
+
+  this -> mouse_released=false;
+  this -> old_mouse_down=false;
+  this -> hovering = false;
 
   this -> width = width;
   this -> height = height;
@@ -69,6 +83,15 @@ void button::setFont( ALLEGRO_FONT *font){
 
 // Update
 void button::update(){
+
+
+
+  mouse_released=false;
+  if(hovering && old_mouse_down && !mouseListener::mouse_button & 1){
+    mouse_released=true;
+    std::cout<<text<<", it's true then\n";
+  }
+  old_mouse_down = hovering && mouseListener::mouse_button & 1;
   hovering = mouseListener::mouse_x > x && mouseListener::mouse_x < x + getWidth() &&
              mouseListener::mouse_y > y && mouseListener::mouse_y < y + getHeight();
 }
@@ -81,6 +104,11 @@ bool button::hover(){
 // True if clicked
 bool button::clicked(){
   return hovering && mouseListener::mouse_pressed & 1;
+}
+
+bool button::mouseReleased(){
+  return mouse_released;
+
 }
 
 // Draw

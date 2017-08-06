@@ -7,6 +7,7 @@
 #include <string>
 
 #include <mouseListener.h>
+#include <tools.h>
 
 
 class button{
@@ -41,6 +42,7 @@ class button{
     void setImage( ALLEGRO_BITMAP *image){ this -> image = image; }
     void setFont( ALLEGRO_FONT *font);
 
+    bool mouseReleased();
     bool hover();
     bool clicked();
     void update();
@@ -59,6 +61,8 @@ class button{
     int padding_y;
 
     bool hovering;
+    bool old_mouse_down;
+    bool mouse_released;
     bool visible;
 
     ALLEGRO_BITMAP *image;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<Object type="Tile">
+		<x>17.6</x>
+		<y>-15.2</y>
+		<width>12.8</width>
+		<height>4.8</height>
+		<bodytype>Collision</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>38.4</x>
+		<y>-19.2</y>
+		<width>12.8</width>
+		<height>16</height>
+		<bodytype>Collision</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>24</x>
+		<y>-31.2</y>
+		<width>12.8</width>
+		<height>8</height>
+		<bodytype>Collision</bodytype>
+	</Object>
+</data>
+

@@ -105,7 +105,7 @@ void editor::update(){
 
   // Change type
   for( int i = 0; i <5; i++)
-    if( editor_buttons[i].clicked())
+    if( editor_buttons[i].mouseReleased())
       tile_type = i;
 
 
@@ -122,13 +122,13 @@ void editor::update(){
     tile_type=4;
 
   // Rockin' three liner undo button
-  if((keyListener::keyPressed[ALLEGRO_KEY_Z] || editor_buttons[button_undo].clicked() )&& editorBoxes.size()>0){
+  if((keyListener::keyPressed[ALLEGRO_KEY_Z] || editor_buttons[button_undo].mouseReleased() )&& editorBoxes.size()>0){
     editorBoxes.pop_back();
     calculate_orientation_global();
   }
 
   // Clear world button
-  if(keyListener::keyPressed[ALLEGRO_KEY_C] || editor_buttons[button_clear].clicked()){
+  if(keyListener::keyPressed[ALLEGRO_KEY_C] || editor_buttons[button_clear].mouseReleased()){
     editorBoxes.clear();
   }
 
@@ -140,7 +140,7 @@ void editor::update(){
     gui_mode=!gui_mode;
 
   // Save
-  if( editor_buttons[button_save].clicked() || keyListener::keyPressed[ALLEGRO_KEY_S]){
+  if( editor_buttons[button_save].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_S]){
     if(editorBoxes.size()>0){
       ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
       // Display open dialog
@@ -163,7 +163,7 @@ void editor::update(){
   }
 
   // Load map
-  if( editor_buttons[button_load].clicked() || keyListener::keyPressed[ALLEGRO_KEY_D]){
+  if( editor_buttons[button_load].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_D]){
 
 
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
@@ -187,11 +187,11 @@ void editor::update(){
   }
 
   // Play
-  if( editor_buttons[button_play].clicked() || keyListener::keyPressed[ALLEGRO_KEY_F])
+  if( editor_buttons[button_play].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_F])
      set_next_state( STATE_GAME);
 
   // Grid toggle
-  if( editor_buttons[button_grid].clicked() || keyListener::keyPressed[ALLEGRO_KEY_G])
+  if( editor_buttons[button_grid].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
   // Add tile
