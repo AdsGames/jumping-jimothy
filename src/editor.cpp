@@ -47,7 +47,7 @@ editor::editor(){
   edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
 
   if (!edit_font)
-    tools::abort_on_error( "Could not load 'fontspixelart.ttf'.\n", "Font Error");
+    tools::abort_on_error( "Could not load 'fantasque.ttf'.\n", "Font Error");
 
   grid_on = false;
 
@@ -277,8 +277,11 @@ void editor::update(){
   // Remove tile
   if( mouseListener::mouse_button & 2)
     for( unsigned int i = 0; i < editorBoxes.size(); i ++)
-      if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)mouseListener::mouse_x, (float)mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)mouseListener::mouse_y, (float)mouseListener::mouse_y ))
+      if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)mouseListener::mouse_x, (float)mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)mouseListener::mouse_y, (float)mouseListener::mouse_y )){
+
         editorBoxes.erase( editorBoxes.begin() + i);
+        calculate_orientation_global();
+      }
   // Calculate orientation of boxes
   if( mouseListener::mouse_released & 2)
     calculate_orientation_global();
@@ -582,6 +585,15 @@ bool editor::load_map( std::string mapName){
 
 // Save map to xml
 bool editor::save_map( std::string mapName){
+
+  //NSFW haxx to prevent goat loading before player
+
+  for(int i=0;i<editorBoxes.size();i++){
+    if(editorBoxes[i].type==GOAT){
+      std::swap(editorBoxes[i],editorBoxes.back());
+    }
+  }
+
   // Write xml file
   rapidxml::xml_document<> doc;
   rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);

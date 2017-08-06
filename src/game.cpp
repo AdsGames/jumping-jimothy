@@ -17,6 +17,12 @@ game::game(){
 
   // Load and play music
   music = nullptr;
+
+
+  game_font = al_load_ttf_font( "fonts/munro.ttf", 30, 0);
+  help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);
+
+
   if(!danny_wants_to_listen_to_music_while_programming){
     music = tools::load_sample_ex( "music/tojam.ogg");
     al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, currentMusic);
@@ -317,9 +323,8 @@ void game::update(){
   // Touching goat
   if( gameGoat -> getWinCondition()){
     level ++;
-    if( level >= 10){
-      al_show_native_message_box( nullptr, "Hurrah!", "Victory", "Will you accept your prize?", nullptr, ALLEGRO_MESSAGEBOX_YES_NO);
-      gameCharacter -> getBody() -> SetTransform( b2Vec2( 100, 100), 0);
+    if( level > 10){
+      set_next_state(STATE_MENU);
     }
     else{
       std::cout<<"Level " << level-1 << " completed, loading next level\n";
@@ -386,9 +391,25 @@ void game::draw(){
   // Background
   al_clear_to_color( al_map_rgb(40,40,60));
 
+  al_draw_textf( game_font, al_map_rgb( 255, 255, 255), 1010, 15, 2, "Level %i", level);
+
+
   // Help
-  if( level == 1)
-    al_draw_bitmap(help,0,0,0);
+  if( level == 1){
+    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Use WASD keys to move around.");
+    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 125, 1, "Reach the goat to complete the level.");
+  }
+
+  if( level == 3){
+    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Green blocks' gravity can be toggled. ");
+    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 125, 1, "Use Spacebar to toggle gravity.");
+  }
+
+  if( level == 4){
+    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Use R to restart the level.");
+  }
+
+    //al_draw_bitmap(help,0,0,0);
 
   // Draw boxes
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
