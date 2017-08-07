@@ -7,6 +7,8 @@
 
 // Constructor
 game::game(){
+
+  gameCharacter = new Character();
   // Init first time
   newBox = nullptr;
   rootBox = nullptr;
@@ -198,12 +200,6 @@ void game::load_world(int newLevel){
               for( int k = 0; k < 4; k++)
                 orientation_array[k] = (tools::convertStringToInt(splits.at(k)));
 
-
-          // Out with the old, in with the new
-
-         // newBox = create_box( tools::string_to_float(x), tools::string_to_float(y), 1.5, 1.5, tools::string_to_float(vel_x), tools::string_to_float(vel_y), new_dynamic_tile[orientation_array[0]],new_dynamic_tile[orientation_array[1]],
-          //                         new_dynamic_tile[orientation_array[2]],new_dynamic_tile[orientation_array[3]],false, false);
-
           newBox = create_static_box( tools::string_to_float(x), tools::string_to_float(y), new_dynamic_tile[orientation_array[0]],new_dynamic_tile[orientation_array[1]],
                                    new_dynamic_tile[orientation_array[2]],new_dynamic_tile[orientation_array[3]]);
 
@@ -215,8 +211,6 @@ void game::load_world(int newLevel){
           dynamic_count++;
         }else if(bodytype=="Collision"){
           newBox = create_collision_box( tools::string_to_float(x), tools::string_to_float(y), tools::string_to_float(width), tools::string_to_float(height) );
-              std::cout<<"Frickin box width:"<<width << "\n";
-
         }
 
 
@@ -230,6 +224,9 @@ void game::load_world(int newLevel){
         if(gameCharacter==nullptr)
           std::cout<<"WARNING: Game: goat is passed nullptr gameCharacter\n";
         goat_count++;
+
+      // Once killed 17 people
+      // Use at own risk
       /*if(group=="1"){
         if(rootBox==nullptr)
           rootBox=newBox;

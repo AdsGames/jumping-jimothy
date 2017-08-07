@@ -3,6 +3,8 @@
 // Init editor
 editor::editor(){
 
+
+
   std::cout << "Initializing editor\n";
 
   // Level to edit
@@ -131,8 +133,6 @@ void editor::update(){
   if(keyListener::keyPressed[ALLEGRO_KEY_C] || editor_buttons[button_clear].mouseReleased()){
     editorBoxes.clear();
   }
-
-
 
   // Activate advanced mode
   // Don't tell Allan, but I really don't like his buttons
@@ -590,9 +590,13 @@ bool editor::save_map( std::string mapName){
 
   for(int i=0;i<editorBoxes.size();i++){
     if(editorBoxes[i].type==GOAT){
-      std::swap(editorBoxes[i],editorBoxes.back());
+    editor_box newBox = editorBoxes[i];
+    editorBoxes.erase(editorBoxes.begin()+i);
+    editorBoxes.insert(editorBoxes.begin(),newBox);
+    std::cout<<"REARRANGED A FRICKING GOAT GOSH DARN\n";
     }
   }
+
 
   // Write xml file
   rapidxml::xml_document<> doc;
