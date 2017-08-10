@@ -41,11 +41,14 @@ class game : public state{
     void update();
     void draw();
     bool level_complete();
+
+    // Test mode
+    static bool testing;
   private:
     // Functions
+    void load_world(int);
     void b2_setup();
     void load_sprites();
-    void load_world(int);
     void reset();
 
     // Creation code
@@ -53,7 +56,6 @@ class game : public state{
 
     Box *create_static_box(float newX, float newY,BITMAP*,BITMAP*, BITMAP*, BITMAP*);
     Box *create_collision_box(float newX, float newY,float,float);
-
 
     Goat *create_goat(float,float);
     Character *create_character(float newX, float newY);

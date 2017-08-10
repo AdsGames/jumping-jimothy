@@ -5,6 +5,8 @@
 
 #define danny_wants_to_listen_to_music_while_programming true
 
+bool game::testing = 0;
+
 // Constructor
 game::game(){
 
@@ -12,7 +14,11 @@ game::game(){
   // Init first time
   newBox = nullptr;
   rootBox = nullptr;
+
   level = 1;
+
+  if( testing)
+    level = 0;
 
   // Reset fresh
   reset();
@@ -325,7 +331,10 @@ void game::update(){
     }
     else{
       std::cout<<"Level " << level-1 << " completed, loading next level\n";
-      reset();
+      if( !testing)
+        reset();
+      else
+        set_next_state( STATE_EDIT);
     }
   }
 
@@ -346,10 +355,13 @@ void game::update(){
 
   // Next level
   if( keyListener::keyPressed[ALLEGRO_KEY_C]){
-    std::cout<<"Level " << level<< " skipped\n";
-
-    level++;
-    reset();
+    if( !testing){
+      std::cout<<"Level " << level<< " skipped\n";
+      level++;
+      reset();
+    }
+    else
+      set_next_state( STATE_EDIT);
   }
 
   // Previous level
