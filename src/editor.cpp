@@ -51,7 +51,6 @@ editor::editor(){
     tools::abort_on_error( "Could not load 'fantasque.ttf'.\n", "Font Error");
 
   grid_on = false;
-
   editorBoxes.clear();
 
 
@@ -74,6 +73,12 @@ editor::editor(){
   editor_buttons[button_play].setImage( tools::load_bitmap_ex( "images/editor/button_play.png"));
   editor_buttons[button_grid] = button( 20 + editor_buttons[button_play].getX() + editor_buttons[button_play].getWidth()/1.2, 710, "", edit_font);
   editor_buttons[button_grid].setImage( tools::load_bitmap_ex( "images/editor/button_grid.png"));
+
+  // Is it edit mode?
+  if( game::testing){
+    load_map( "data/level_0.xml");
+    game::testing = false;
+  }
 }
 
 // Destruct
@@ -143,7 +148,7 @@ void editor::update(){
   // Activate advanced mode
   // Don't tell Allan, but I really don't like his buttons
   if(keyListener::keyPressed[ALLEGRO_KEY_A])
-    gui_mode=!gui_mode;
+    gui_mode =! gui_mode;
 
   // Save
   if( editor_buttons[button_save].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_S]){
@@ -171,7 +176,6 @@ void editor::update(){
     }
     else
       al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!", file_name, nullptr, 0);
-
   }
 
   // Load map
@@ -184,7 +188,7 @@ void editor::update(){
       editorBoxes.clear();
 
       // You also need to check for cancel button here too
-      if(file_name!=nullptr){
+      if( file_name != nullptr){
 
         // Make sure loads correctly
         if( load_map( file_name))
@@ -199,8 +203,11 @@ void editor::update(){
   }
 
   // Play
-  if( editor_buttons[button_play].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_F])
+  if( editor_buttons[button_play].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_F]){
+     save_map( "data/level_0.xml");
      set_next_state( STATE_GAME);
+     game::testing = true;
+  }
 
   // Grid toggle
   if( editor_buttons[button_grid].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_G])

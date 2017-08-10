@@ -26,6 +26,7 @@
 #include "tools.h"
 #include "button.h"
 #include "globals.h"
+#include "game.h"
 
 #include "state.h"
 
@@ -112,6 +113,7 @@ class editor : public state{
 
     int tile_type;
     int level_number;
+    bool test_mode = false;
 
     // The font
     ALLEGRO_FONT *edit_font;
