@@ -113,15 +113,15 @@ void editor::update(){
 
   // Advanced mode types
   if(keyListener::keyPressed[ALLEGRO_KEY_Q])
-    tile_type=0;
+    tile_type = 0;
   if(keyListener::keyPressed[ALLEGRO_KEY_W])
-    tile_type=1;
+    tile_type = 1;
   if(keyListener::keyPressed[ALLEGRO_KEY_E])
-    tile_type=2;
+    tile_type = 2;
   if(keyListener::keyPressed[ALLEGRO_KEY_R])
-    tile_type=3;
+    tile_type = 3;
   if(keyListener::keyPressed[ALLEGRO_KEY_T])
-    tile_type=4;
+    tile_type = 4;
 
   // Rockin' three liner undo button
   if((keyListener::keyPressed[ALLEGRO_KEY_Z] || editor_buttons[button_undo].mouseReleased() )&& editorBoxes.size()>0){
@@ -141,24 +141,30 @@ void editor::update(){
 
   // Save
   if( editor_buttons[button_save].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_S]){
-    if(editorBoxes.size()>0){
-      ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
-      // Display open dialog
-      if( al_show_native_file_dialog( nullptr, myChooser)){
-        file_name = al_get_native_file_dialog_path(myChooser, 0);
+    if( editorBoxes.size() > 0){
+      ALLEGRO_FILECHOOSER *myChooser;
 
-      // Silly Allan! The cancel button is a valid option
-      // This fixes a crash
-      if(file_name!=nullptr){
+      // Has it been saved already?
+      if( !is_saved){
+        myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
+
+        // Display open dialog
+        if( al_show_native_file_dialog( nullptr, myChooser))
+          file_name = al_get_native_file_dialog_path( myChooser, 0);
+      }
+      // Make sure file name is proper
+      if(file_name != nullptr){
         // Make sure saves correctly
-        if( save_map( file_name))
+        if( save_map( file_name)){
           al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
+          is_saved = true;
+        }
         else
           al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, 0);
-        }
       }
-    }else
-      al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map ya dingus ", file_name, nullptr, 0);
+    }
+    else
+      al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!", file_name, nullptr, 0);
 
   }
 
