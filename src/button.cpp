@@ -14,8 +14,8 @@ button::button(){
   padding_y = 10;
 }
 
-// Construct
-button::button( int x, int y, std::string text, ALLEGRO_FONT *button_font){
+// Constructor
+button::button( int x, int y, std::string text, ALLEGRO_FONT *button_font, int width, int height, int padding_x, int padding_y){
 
   // Literally this
   this -> x = x;
@@ -26,7 +26,6 @@ button::button( int x, int y, std::string text, ALLEGRO_FONT *button_font){
 
   this -> visible = true;
 
-
   this -> mouse_released=false;
   this -> old_mouse_down=false;
   this -> hovering = false;
@@ -36,40 +35,25 @@ button::button( int x, int y, std::string text, ALLEGRO_FONT *button_font){
     this -> height = al_get_font_line_height( button_font);
   }
   else{
-    this -> width = 50;
-    this -> height = 10;
+    this -> width = width;
+    this -> height = height;
   }
 
-  padding_x = 10;
-  padding_y = 10;
-}
-
-// Construct, now with more arguments!
-button::button( int x, int y, int width, int height, std::string text, ALLEGRO_FONT *button_font){
-  this -> x = x;
-  this -> y = y;
-  this -> text = text;
-  this -> image = nullptr;
-  this -> button_font = button_font;
-
-  this -> visible = true;
-
-  this -> mouse_released=false;
-  this -> old_mouse_down=false;
-  this -> hovering = false;
-
-  this -> width = width;
-  this -> height = height;
-
-
-  padding_x = 10;
-  padding_y = 10;
+  this -> padding_x = padding_x;
+  this -> padding_y = padding_y;
 }
 
 // Destruct
 button::~button(){
   if( image != nullptr)
     al_destroy_bitmap( image);
+}
+
+// Sets an image
+void button::setImage( ALLEGRO_BITMAP *image){
+  this -> image = image;
+  this -> width = al_get_bitmap_width( this -> image);
+  this -> height = al_get_bitmap_height( this -> image);
 }
 
 // Set new font
@@ -83,13 +67,10 @@ void button::setFont( ALLEGRO_FONT *font){
 
 // Update
 void button::update(){
-
-
-
-  mouse_released=false;
-  if(hovering && old_mouse_down && !mouseListener::mouse_button & 1){
-    mouse_released=true;
-    std::cout<<text<<", it's true then\n";
+  mouse_released = false;
+  if( hovering && old_mouse_down && !mouseListener::mouse_button & 1){
+    mouse_released = true;
+    std::cout << text << ", it's true then\n";
   }
   old_mouse_down = hovering && mouseListener::mouse_button & 1;
   hovering = mouseListener::mouse_x > x && mouseListener::mouse_x < x + getWidth() &&
@@ -108,12 +89,10 @@ bool button::clicked(){
 
 bool button::mouseReleased(){
   return mouse_released;
-
 }
 
 // Draw
 void button::draw(){
-
   if(visible){
     // Backdrop
     al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgb( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering));
@@ -125,6 +104,6 @@ void button::draw(){
 
     // Image if avail
     if( image != nullptr)
-      al_draw_bitmap( image, x, y, 0);
+      al_draw_bitmap( image, x + padding_x, y + padding_y, 0);
   }
 }

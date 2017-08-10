@@ -26,6 +26,7 @@
 #include "tools.h"
 #include "button.h"
 #include "globals.h"
+#include "game.h"
 
 #include "state.h"
 
@@ -82,7 +83,8 @@ class editor : public state{
     bool save_map( std::string mapName);
     bool load_map( std::string mapName);
 
-    static const int BUTTON_COUNT=11;
+    static const int BUTTON_COUNT = 11;
+
     // Type buttons
     button editor_buttons[BUTTON_COUNT];
 
@@ -100,15 +102,18 @@ class editor : public state{
     float box_2_x;
     float box_2_y;
 
-    bool is_dragging_box=false;
-
+    bool is_dragging_box = false;
     bool dialog_open = false;
+
+    // Remember saves
+    bool is_saved = false;
 
     // Vars
     bool grid_on;
 
     int tile_type;
     int level_number;
+    bool test_mode = false;
 
     // The font
     ALLEGRO_FONT *edit_font;
