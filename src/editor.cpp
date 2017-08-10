@@ -45,7 +45,6 @@ editor::editor(){
 
   srand(time(NULL));
 
-
   edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
 
   if (!edit_font)
@@ -54,20 +53,27 @@ editor::editor(){
   grid_on = false;
 
   editorBoxes.clear();
-  // Buttons
 
+
+  // Buttons
   editor_buttons[button_type_dynamic] = button( 20, 710, "Dynamic", edit_font);
   editor_buttons[button_type_static] = button( 20 + editor_buttons[button_type_dynamic].getX() + editor_buttons[button_type_dynamic].getWidth()/1.2, 710, "Static", edit_font);
   editor_buttons[button_type_player] = button( 20 + editor_buttons[button_type_static].getX() + editor_buttons[button_type_static].getWidth()/1.2, 710, "Player", edit_font);
   editor_buttons[button_type_goat] = button( 20 + editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth()/1.2, 710, "Goat", edit_font);
   editor_buttons[button_type_collision] = button( 20 + editor_buttons[3].getX() + editor_buttons[3].getWidth()/1.2, 710, "Collision", edit_font);
 
-  editor_buttons[button_undo] = button( 620, 710, "Undo", edit_font);
-  editor_buttons[button_clear] = button( 20 + editor_buttons[button_undo].getX() + editor_buttons[button_undo].getWidth()/1.2, 710, "Clear", edit_font);
-  editor_buttons[button_save] = button( 20 + editor_buttons[button_clear].getX() + editor_buttons[button_clear].getWidth()/1.2, 710, "Save", edit_font);
-  editor_buttons[button_load] = button( 20 + editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth()/1.2, 710, "Load", edit_font);
-  editor_buttons[button_play] = button( 20 + editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth()/1.2, 710, "Play", edit_font);
-  editor_buttons[button_grid] = button( 20 + editor_buttons[button_play].getX() + editor_buttons[button_play].getWidth()/1.2, 710, "Grid", edit_font);
+  editor_buttons[button_undo] = button( 620, 710, "", edit_font);
+  editor_buttons[button_undo].setImage( tools::load_bitmap_ex( "images/editor/button_undo.png"));
+  editor_buttons[button_clear] = button( 20 + editor_buttons[button_undo].getX() + editor_buttons[button_undo].getWidth()/1.2, 710, "", edit_font);
+  editor_buttons[button_clear].setImage( tools::load_bitmap_ex( "images/editor/button_new.png"));
+  editor_buttons[button_save] = button( 20 + editor_buttons[button_clear].getX() + editor_buttons[button_clear].getWidth()/1.2, 710, "", edit_font);
+  editor_buttons[button_save].setImage( tools::load_bitmap_ex( "images/editor/button_save.png"));
+  editor_buttons[button_load] = button( 20 + editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth()/1.2, 710, "", edit_font);
+  editor_buttons[button_load].setImage( tools::load_bitmap_ex( "images/editor/button_load.png"));
+  editor_buttons[button_play] = button( 20 + editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth()/1.2, 710, "", edit_font);
+  editor_buttons[button_play].setImage( tools::load_bitmap_ex( "images/editor/button_play.png"));
+  editor_buttons[button_grid] = button( 20 + editor_buttons[button_play].getX() + editor_buttons[button_play].getWidth()/1.2, 710, "", edit_font);
+  editor_buttons[button_grid].setImage( tools::load_bitmap_ex( "images/editor/button_grid.png"));
 }
 
 // Destruct
@@ -170,9 +176,8 @@ void editor::update(){
 
   // Load map
   if( editor_buttons[button_load].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_D]){
-
-
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
+
     // Display open dialog
     if( al_show_native_file_dialog( nullptr, myChooser)){
       file_name = al_get_native_file_dialog_path(myChooser, 0);
@@ -186,8 +191,9 @@ void editor::update(){
           al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ", file_name, nullptr, 0);
         else
           al_show_native_message_box( nullptr, "Error!", "Error loading map from: ", file_name, nullptr, 0);
-      }else{
-        file_name="Untitled";
+      }
+      else{
+        file_name = "Untitled";
       }
     }
   }
@@ -201,7 +207,7 @@ void editor::update(){
     grid_on = !grid_on;
 
   // Add tile
-  if(tile_type!=4){
+  if(tile_type != 4){
     if( mouseListener::mouse_button & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
       editor_box newBox;
       newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
@@ -228,25 +234,22 @@ void editor::update(){
     }
   }
   //Drag n drop madness
-  if(tile_type==4 && !dialog_open){
+  if( tile_type == 4 && !dialog_open){
     if( mouseListener::mouse_pressed & 1 && !box_at_with_type(0,mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
-      is_dragging_box=true;
-      box_1_x=mouseListener::mouse_x - mouseListener::mouse_x % 32;
-      box_1_y=mouseListener::mouse_y - mouseListener::mouse_y % 32;
+      is_dragging_box = true;
+      box_1_x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
+      box_1_y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
     }
     if(mouseListener::mouse_released & 1){
-      is_dragging_box=false;
+      is_dragging_box = false;
 
-      if(!over_button && gui_mode && (box_2_x - box_1_x)!=0 && (box_2_x - box_1_x)!=0){
-
+      if(!over_button && gui_mode && (box_2_x - box_1_x) != 0 && (box_2_x - box_1_x) != 0){
         // Backwards dragged box correction, Box2D chokes on negative widths/heights
-
         if(box_2_x<box_1_x){
           int holder_value = box_2_x;
           box_2_x=box_1_x;
           box_1_x=holder_value;
         }
-
         if(box_2_y<box_1_y){
           int holder_value = box_2_y;
           box_2_y=box_1_y;
@@ -263,34 +266,28 @@ void editor::update(){
         newBox.type = 4;
         newBox.width_str = tools::toString( float(((box_2_x  - box_1_x))/ 20.0f));
         newBox.height_str = tools::toString( float(((box_2_y - box_1_y))/ 20.0f));
-
         newBox.bodyType = "Collision";
-
 
         editorBoxes.push_back( newBox);
 
-        std::cout<<"Made a nice collisionbox\n";
-
+        std::cout << "Made a nice collisionbox\n";
       }
     }
     if(mouseListener::mouse_button & 1){
-      box_2_x=(mouseListener::mouse_x - mouseListener::mouse_x % 32)+32;
-      box_2_y=(mouseListener::mouse_y - mouseListener::mouse_y % 32)+32;
+      box_2_x = (mouseListener::mouse_x - mouseListener::mouse_x % 32) + 32;
+      box_2_y = (mouseListener::mouse_y - mouseListener::mouse_y % 32) + 32;
     }
-
   }
 
   // Remove tile
-  if( mouseListener::mouse_button & 2)
-    for( unsigned int i = 0; i < editorBoxes.size(); i ++)
+  if( mouseListener::mouse_button & 2){
+    for( unsigned int i = 0; i < editorBoxes.size(); i ++){
       if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)mouseListener::mouse_x, (float)mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)mouseListener::mouse_y, (float)mouseListener::mouse_y )){
-
         editorBoxes.erase( editorBoxes.begin() + i);
         calculate_orientation_global();
       }
-  // Calculate orientation of boxes
-  if( mouseListener::mouse_released & 2)
-    calculate_orientation_global();
+    }
+  }
 }
 
 // Calculate all the orientations of blocks
