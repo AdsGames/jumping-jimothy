@@ -6,30 +6,25 @@ menu::menu(){
   menu_font = al_load_ttf_font( "fonts/munro.ttf", 18, 0);
 
 
-  menu_buttons[menu_button_edit] = button( 320, 630, 180,90, "Level Editor",menu_font);
+  menu_buttons[menu_button_edit] = button( 320, 630, "Level Editor", nullptr, 180, 90);
   menu_buttons[menu_button_edit].setVisibility(false);
 
-  menu_buttons[menu_button_exit] = button( 750, 630, 180,90, "Exit",menu_font);
+  menu_buttons[menu_button_exit] = button( 750, 630, "Exit", nullptr, 180, 90);
   menu_buttons[menu_button_exit].setVisibility(false);
 
 
-  menu_buttons[menu_button_play] = button( 40, 590, 250,140, "Play",menu_font);
+  menu_buttons[menu_button_play] = button( 40, 590, "Play", nullptr, 250, 140);
   menu_buttons[menu_button_play].setVisibility(false);
 
-  menu_buttons[menu_button_help] = button( 540, 630, 180,90, "Halp plz v2",menu_font);
+  menu_buttons[menu_button_help] = button( 540, 630, "Halp plz v2", nullptr, 180, 90);
   menu_buttons[menu_button_help].setVisibility(false);
 
 
 
   // Title image
-
   button_edit = tools::load_bitmap_ex("images/button_edit.png");
   button_help = tools::load_bitmap_ex("images/button_help.png");
   button_exit = tools::load_bitmap_ex("images/button_exit.png");
-
-
-
-
   title = tools::load_bitmap_ex("images/title_static.png");
   playbutton_frame = tools::load_bitmap_ex("images/playbutton_frame.png");
   playbutton_frame_hover = tools::load_bitmap_ex("images/playbutton_frame_hover.png");
