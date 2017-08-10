@@ -324,7 +324,7 @@ void game::update(){
     set_next_state( STATE_MENU);
 
   // Touching goat
-  if( gameGoat -> getWinCondition()){
+  if( gameGoat != nullptr && gameGoat -> getWinCondition()){
     level ++;
     if( level > 10){
       set_next_state(STATE_MENU);
@@ -339,7 +339,7 @@ void game::update(){
   }
 
   // Off screen
-  if( gameCharacter -> getX() < -1 || gameCharacter -> getX() > 51.5f || gameCharacter -> getY() > 2 || gameCharacter -> getY() < -40)
+  if( gameCharacter != nullptr && gameCharacter -> getX() < -1 || gameCharacter -> getX() > 51.5f || gameCharacter -> getY() > 2 || gameCharacter -> getY() < -40)
     reset();
 
   // Update the Box2D game world
