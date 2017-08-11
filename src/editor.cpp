@@ -215,7 +215,12 @@ void editor::update(){
 
   // Add tile
   if(tile_type != 4){
-    if( mouseListener::mouse_button & 1 && !box_at(mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
+    if( mouseListener::mouse_button & 1
+      && !box_at_with_type(0,mouseListener::mouse_x, mouseListener::mouse_y)
+      && !box_at_with_type(1,mouseListener::mouse_x, mouseListener::mouse_y)
+      && !box_at_with_type(2,mouseListener::mouse_x, mouseListener::mouse_y)
+      && !box_at_with_type(3,mouseListener::mouse_x, mouseListener::mouse_y)
+      && ((!over_button && gui_mode) || !gui_mode)){
       editor_box newBox;
       newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
       newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
@@ -433,12 +438,19 @@ void editor::draw(){
       al_draw_bitmap( tiles[2][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     else if( editorBoxes.at(i).type == 3)
       al_draw_bitmap( tiles[3][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
-    else if( editorBoxes.at(i).type == 4)
-      al_draw_filled_rectangle( editorBoxes.at(i).x,editorBoxes.at(i).y,editorBoxes.at(i).x+editorBoxes.at(i).width,editorBoxes.at(i).y+editorBoxes.at(i).height, al_map_rgb(0, 255, 0));
   }
 
+  //Gotta draw the tranparent boxes in front
+  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
+      if( editorBoxes.at(i).type == 4)
+        al_draw_filled_rectangle( editorBoxes.at(i).x,editorBoxes.at(i).y,editorBoxes.at(i).x+editorBoxes.at(i).width,editorBoxes.at(i).y+editorBoxes.at(i).height, al_map_rgba(0, 255, 0,50));
+
+  }
+
+
+
   if(is_dragging_box){
-    al_draw_filled_rectangle( box_1_x,box_1_y,box_2_x,box_2_y, al_map_rgb(0, 255, 0));
+    al_draw_filled_rectangle( box_1_x,box_1_y,box_2_x,box_2_y, al_map_rgba(0, 255, 0,50));
 
   }
 
