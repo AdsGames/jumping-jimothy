@@ -26,6 +26,10 @@ menu::menu(){
   button_help = tools::load_bitmap_ex("images/button_help.png");
   button_exit = tools::load_bitmap_ex("images/button_exit.png");
   title = tools::load_bitmap_ex("images/title_static.png");
+  title_overlay = tools::load_bitmap_ex("images/title_overlay.png");
+  title_shine = tools::load_bitmap_ex("images/title_shine.png");
+
+
   playbutton_frame = tools::load_bitmap_ex("images/playbutton_frame.png");
   playbutton_frame_hover = tools::load_bitmap_ex("images/playbutton_frame_hover.png");
 
@@ -47,7 +51,7 @@ menu::menu(){
   prompt_image = tools::load_bitmap_ex("images/prompt.png");
 
   // Init counters
-  counter_title = 0;
+  counter_title = 251;
   counter_play = 0;
 }
 
@@ -94,7 +98,7 @@ void menu::update(){
   counter_play ++;
 
   // Animation roll arounds
-  counter_title = (counter_title >= 170) ? 0 : counter_title;
+  counter_title = (counter_title >= 400) ? 0 : counter_title;
   counter_prompt = (counter_play >= 50) ? !counter_prompt : counter_prompt;
   counter_play = (counter_play >= 50) ? 0 : counter_play;
 
@@ -118,6 +122,10 @@ void menu::draw(){
 
   // Title
   al_draw_scaled_bitmap( title, 0,0, 175, 160, 150, 50, 612,560, 0);
+  if(counter_title<50)al_draw_scaled_bitmap( title_shine, 0,0, 60, 150, 150+counter_title*10, 50, 210,525, 0);
+
+  al_draw_scaled_bitmap( title_overlay, 0,0, 200, 160, 150, 50, 700,560, 0);
+
   //al_draw_bitmap(title,300,300,0);
   //al_draw_bitmap(playbutton_frame,297,562,0);
 

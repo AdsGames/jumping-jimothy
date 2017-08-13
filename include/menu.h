@@ -41,6 +41,8 @@ class menu : public state{
     button menu_buttons[BUTTON_COUNT];
     // Images
     ALLEGRO_BITMAP *title;
+    ALLEGRO_BITMAP *title_overlay;
+    ALLEGRO_BITMAP *title_shine;
     ALLEGRO_BITMAP *playbutton_frame;
     ALLEGRO_BITMAP *playbutton_frame_hover;
     ALLEGRO_BITMAP *play;
