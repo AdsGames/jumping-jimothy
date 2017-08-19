@@ -32,6 +32,8 @@ menu::menu(){
   title = tools::load_bitmap_ex("images/title_static.png");
   title_overlay = tools::load_bitmap_ex("images/title_overlay.png");
   title_shine = tools::load_bitmap_ex("images/title_shine.png");
+  logo = tools::load_bitmap_ex("images/logo.png");
+
 
 
   playbutton_frame = tools::load_bitmap_ex("images/playbutton_frame.png");
@@ -99,7 +101,8 @@ void menu::update(){
   if(menu_buttons[menu_button_help].mouseReleased()){
     credits_menu=true;
   }
-
+  if(keyListener::anyKeyPressed)
+    credits_menu = false;
 
 
   // Add to counters
@@ -185,18 +188,25 @@ void menu::draw(){
   }
 
   if(credits_menu){
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 40, 1,"Written in C++ using Code::Blocks");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 80, 1,"Allegro 5 for graphics");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 120, 1,"Box2D for physics");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 160, 1,"RapidXml for level loading/saving");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 240, 1,"Music/code by Allan Legemaate");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 280, 1,"Art/game design by Sullivan Stobo");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 320, 1,"Level/game design by Max Keleher");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 360, 1,"Lead code by Danny Van Stemp");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 400, 1, "Art made in Paint.net and Asperite");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 440, 1,"Music made in FL Studio");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 520, 1,"Made for TOJam 12");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 512, 560, 1,"ADS Games, 2017");
+
+    int padding=50;
+    int x_location=395;
+    al_draw_bitmap(logo, 730,50,0);
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 40+padding, 1,"Written in C++ using Code::Blocks");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 80+padding, 1,"Allegro 5 for graphics");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 120+padding, 1,"Box2D for physics");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 160+padding, 1,"RapidXml for level loading/saving");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 240+padding, 1,"Music/code by Allan Legemaate");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 280+padding, 1,"Art/game design by Sullivan Stobo");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 320+padding, 1,"Level/game design by Max Keleher");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 360+padding, 1,"Lead code by Danny Van Stemp");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 400+padding, 1, "Art made in Paint.net and Asperite");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 440+padding, 1,"Music made in FL Studio");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 520+padding, 1,"Made for TOJam 12");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 560+padding, 1,"ADS Games, 2017");
+
+    al_draw_textf( credits_font, al_map_rgb( 255, 100, 100), 40, 720, 0,"Press any key to return.");
+
 
   }
 
