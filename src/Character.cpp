@@ -64,8 +64,13 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
 
 void Character::update(){
   int ticks_per_frame = 5;
-  if( !sensor_box -> isColliding())
+  if( !sensor_box -> isColliding()){
     ticks_per_frame = 2;
+  }else
+    // One liner to fix Andy's exploits
+    // This makes the character have no friction when he is airborne.
+    // No more wall climbing!
+    body ->GetFixtureList() ->SetFriction(0.0f);
 
   tick++;
   if( tick >= ticks_per_frame){
@@ -151,8 +156,8 @@ void Character::draw(){
   // restore the old transform
   al_use_transform(&prevTrans);
 
-  /*if(sensor_box -> isColliding())
-    sensor_box -> draw();*/
+  //if(sensor_box -> isColliding())
+    sensor_box -> draw();
 }
 
 Character::~Character(){

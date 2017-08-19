@@ -117,7 +117,7 @@ void setup(){
 
   // Aquire screen
 
-  al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+  //al_set_new_display_flags(ALLEGRO_FULLSCREEN);
   display = al_create_display(1024, 768);
 
   if( !display)
