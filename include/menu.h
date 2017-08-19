@@ -55,7 +55,9 @@ class menu : public state{
     ALLEGRO_BITMAP *button_help;
 
     ALLEGRO_FONT *menu_font;
+    ALLEGRO_FONT *credits_font;
 
+    bool credits_menu;
     int counter_title;
     int counter_play;
     bool counter_prompt;
