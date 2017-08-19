@@ -54,6 +54,8 @@ class menu : public state{
     ALLEGRO_BITMAP *button_exit;
     ALLEGRO_BITMAP *button_help;
 
+    ALLEGRO_BITMAP *logo;
+
     ALLEGRO_FONT *menu_font;
     ALLEGRO_FONT *credits_font;
 
