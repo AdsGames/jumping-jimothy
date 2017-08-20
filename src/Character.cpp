@@ -157,7 +157,7 @@ void Character::draw(){
   al_use_transform(&prevTrans);
 
   //if(sensor_box -> isColliding())
-    sensor_box -> draw();
+//sensor_box -> draw();
 }
 
 Character::~Character(){
