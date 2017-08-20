@@ -70,8 +70,8 @@ void button::update(){
   mouse_released = false;
   if( hovering && old_mouse_down && !mouseListener::mouse_button & 1){
     mouse_released = true;
-    std::cout << text << ", it's true then\n";
-  }
+
+      }
   old_mouse_down = hovering && mouseListener::mouse_button & 1;
   hovering = mouseListener::mouse_x > x && mouseListener::mouse_x < x + getWidth() &&
              mouseListener::mouse_y > y && mouseListener::mouse_y < y + getHeight();
