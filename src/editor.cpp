@@ -615,7 +615,6 @@ bool editor::save_map( std::string mapName){
     editor_box newBox = editorBoxes[i];
     editorBoxes.erase(editorBoxes.begin()+i);
     editorBoxes.insert(editorBoxes.begin(),newBox);
-    std::cout<<"REARRANGED A FRICKING GOAT GOSH DARN\n";
     }
   }
 
