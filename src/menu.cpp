@@ -202,8 +202,8 @@ void menu::draw(){
     al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 360+padding, 1,"Lead code by Danny Van Stemp");
     al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 400+padding, 1, "Art made in Paint.net and Asperite");
     al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 440+padding, 1,"Music made in FL Studio");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 520+padding, 1,"Made for TOJam 12");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 560+padding, 1,"ADS Games, 2017");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 835, 320, 1,"Made for TOJam 12");
+    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 835, 280, 1,"ADS Games, 2017");
 
     al_draw_textf( credits_font, al_map_rgb( 255, 100, 100), 40, 720, 0,"Press any key to return.");
 
