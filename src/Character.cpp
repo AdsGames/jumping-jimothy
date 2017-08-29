@@ -23,14 +23,14 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
   direction = false;
   sprite = newSprite;
   type = CHARACTER;
-  width = 1;
-  height = 2;
+  width = 0.8;
+  height = 2.5;
   color = al_map_rgb(0,0,255);
 
   gameWorld = newGameWorld;
   b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(newX, newY);
+	bodyDef.position.Set(newX, newY+0.25f);
 	body = gameWorld -> CreateBody(&bodyDef);
 
 	// Define another box shape for our dynamic body.
@@ -54,7 +54,7 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
   body ->SetFixedRotation(true);
 
   sensor_box = new Sensor();
-  sensor_box -> init(newX,newY-0.55,width*0.5,0.6,al_map_rgb(255,255,0),gameWorld,body);
+  sensor_box -> init(newX,newY-0.55,width*0.4,0.6,al_map_rgb(255,255,0),gameWorld,body);
 
   sprite = tools::load_bitmap_ex("images/anim.png");
 
@@ -121,12 +121,7 @@ void Character::update(){
 void Character::draw(){
   // If the object is a character, the position is updated in the
   // update loop rather than in draw
-  if(type==BOX){
-    b2Vec2 position = body -> GetPosition();
-    x = position.x;
-    y = position.y;
-    angle = body -> GetAngle();
-  }
+
   ALLEGRO_TRANSFORM trans, prevTrans;
 
   // back up the current transform
@@ -140,24 +135,35 @@ void Character::draw(){
 
   al_use_transform(&trans);
 
+    // Nice debug draw for player hitbox
+ // al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(255,25,64));
+
+  int x_offset=-8;
+  int y_offset=-13;
+
   if(direction){
     if(body -> GetLinearVelocity().Length()>0.1f)
-      al_draw_bitmap(sprites[frame],-(width/2)*20,(-(height/2)*20)-24,0);
+      al_draw_bitmap(sprites[frame],-(width/2)*20+x_offset,(-(height/2)*20)+y_offset,0);
     else
-      al_draw_bitmap(sprites[14],-(width/2)*20,(-(height/2)*20)-24,0);
+      al_draw_bitmap(sprites[14],-(width/2)*20+x_offset,(-(height/2)*20)+y_offset,0);
   }
   else{
     if(body -> GetLinearVelocity().Length()>0.1f)
-      al_draw_bitmap(sprites[frame],-(width/2)*20,(-(height/2)*20)-24,ALLEGRO_FLIP_HORIZONTAL);
+      al_draw_bitmap(sprites[frame],-(width/2)*20+x_offset,(-(height/2)*20)+y_offset,ALLEGRO_FLIP_HORIZONTAL);
     else
-      al_draw_bitmap(sprites[14],-(width/2)*20,(-(height/2)*20)-24,ALLEGRO_FLIP_HORIZONTAL);
+      al_draw_bitmap(sprites[14],-(width/2)*20+x_offset,(-(height/2)*20)+y_offset,ALLEGRO_FLIP_HORIZONTAL);
 
   }
+
+
+
   // restore the old transform
   al_use_transform(&prevTrans);
 
-  //if(sensor_box -> isColliding())
-//sensor_box -> draw();
+
+
+  // Nice debug draw for sensor box
+  //sensor_box -> draw();
 }
 
 Character::~Character(){
