@@ -78,12 +78,12 @@ bool Sensor::isCollidingWithBody(b2Body *newBody){
 void Sensor::draw(){
   // If the object is a character, the position is updated in the
   // update loop rather than in draw
-  if(type == BOX){
+
     b2Vec2 position = body -> GetPosition();
     x = position.x;
     y = position.y;
     angle = body -> GetAngle();
-  }
+
 
   ALLEGRO_TRANSFORM trans, prevTrans;
 
@@ -99,7 +99,7 @@ void Sensor::draw(){
   al_use_transform(&trans);
 
 
-    al_draw_filled_rectangle(-(width/2)*20 + 1, -(height/2)*20  + 1, (width/2)*20 - 1, (height/2)*20 - 1,
+    al_draw_filled_rectangle(-(width/2)*20 , -(height/2)*20 , (width/2)*20 , (height/2)*20 ,
                 al_map_rgb(255,255,0));
 
  // al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
