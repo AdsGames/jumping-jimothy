@@ -64,6 +64,15 @@ bool Sensor::isColliding(){
 
 
 }
+bool Sensor::isCollidingWithDynamicBody(){
+  for(b2ContactEdge *contact = body -> GetContactList(); contact; contact = contact ->next){
+    if(contact ->other ->GetType() == b2_dynamicBody)
+      return true;
+  }
+  return false;
+
+
+}
 bool Sensor::isCollidingWithBody(b2Body *newBody){
   for(b2ContactEdge *contact = body -> GetContactList(); contact; contact = contact ->next){
       if(contact -> other==newBody)
