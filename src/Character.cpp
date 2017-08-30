@@ -58,6 +58,8 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
 
   sprite = tools::load_bitmap_ex("images/anim.png");
 
+  jump = tools::load_sample_ex("jump.wav");
+
   for( int i = 0; i < 15; i++)
     sprites[i] = al_create_sub_bitmap( sprite, i * 32, 0, 32, 64);
 }
@@ -107,8 +109,10 @@ void Character::update(){
   }
 
   // Homemade friction
-  if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f)
+  if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
     body -> ApplyLinearImpulse(b2Vec2(0, 15),position,true);
+    al_play_sample( jump, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+  }
 
   // Fixed Danny's poop code by getting rid if it =)
   if(sensor_box -> isColliding())
