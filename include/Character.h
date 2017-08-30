@@ -1,6 +1,6 @@
 /**
  * CHARACTER
- * Danny Vanstemp
+ * Danny Van Stemp
  * 05/05/2017
 **/
 #ifndef CHARACTER_H
@@ -37,6 +37,10 @@ class Character : public Box{
 
     ALLEGRO_BITMAP *sprite;
     ALLEGRO_BITMAP *sprites[20];
+
+    ALLEGRO_SAMPLE *jump;
+    ALLEGRO_SAMPLE_ID *currentMusic;
+
 };
 
 
