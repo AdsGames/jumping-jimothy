@@ -27,9 +27,14 @@ class Character : public Box{
     void update();
 
   private:
-    int time_move_jump_timer_thingy;
     int tick;
     int frame;
+    int timer_sound_delay;
+    int counter_sensor_contact;
+
+    bool landed;
+
+    float velocity_old;
 
     bool direction;
 
@@ -39,7 +44,7 @@ class Character : public Box{
     ALLEGRO_BITMAP *sprites[20];
 
     ALLEGRO_SAMPLE *jump;
-    ALLEGRO_SAMPLE_ID *currentMusic;
+    ALLEGRO_SAMPLE *land;
 
 };
 

@@ -10,8 +10,11 @@ Character::Character(){
 }
 
 void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
+
+  timer_sound_delay=0;
   tick = 0;
   frame = 0;
+  landed=true;
 
   static_box = false;
   static_mode = false;
@@ -59,12 +62,36 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
   sprite = tools::load_bitmap_ex("images/anim.png");
 
   jump = tools::load_sample_ex("jump.wav");
+  land = tools::load_sample_ex("land.wav");
 
   for( int i = 0; i < 15; i++)
     sprites[i] = al_create_sub_bitmap( sprite, i * 32, 0, 32, 64);
 }
 
 void Character::update(){
+
+
+
+  if(sensor_box -> isColliding())
+    counter_sensor_contact++;
+  else
+    counter_sensor_contact=0;
+  if(counter_sensor_contact>25)
+    landed=true;
+
+  //std::cout<<body ->GetLinearVelocity().y<<"\n";
+  if((body ->GetLinearVelocity().y>=-0.01f && body ->GetLinearVelocity().y<=0.01f) && sensor_box -> isColliding() && velocity_old<-0.01f){
+    al_play_sample( land, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+    landed=true;
+
+  }
+  velocity_old = body ->GetLinearVelocity().y;
+  if(sensor_box -> isCollidingWithDynamicBody())
+    landed=true;
+
+  std::cout<<sensor_box -> isCollidingWithDynamicBody()<<"\n";
+
+
   int ticks_per_frame = 5;
   if( !sensor_box -> isColliding()){
     ticks_per_frame = 2;
@@ -108,11 +135,17 @@ void Character::update(){
      body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
   }
 
-  // Homemade friction
-  if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f){
+  // Jumping Jimothy
+  //std::cout<<landed<<"\n";
+  if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f && landed){
     body -> ApplyLinearImpulse(b2Vec2(0, 15),position,true);
-    al_play_sample( jump, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+    landed=false;
+    if(timer_sound_delay>10){
+      al_play_sample( jump, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+      timer_sound_delay=0;
+    }
   }
+  timer_sound_delay++;
 
   // Fixed Danny's poop code by getting rid if it =)
   if(sensor_box -> isColliding())
