@@ -40,6 +40,22 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Option use_console_runner="0" />
+				<Compiler>
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-lallegro" />
+					<Add option="-lallegro_primitives" />
+					<Add option="-lallegro_image" />
+					<Add option="-lallegro_audio" />
+					<Add option="-lallegro_font" />
+					<Add option="-lallegro_color" />
+					<Add option="-lallegro_dialog" />
+					<Add option="-lallegro_ttf" />
+					<Add option="-lallegro_acodec" />
+					<Add option="-lBox2D" />
+					<Add directory="include" />
+				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
