@@ -30,6 +30,7 @@ class Character : public Box{
     int tick;
     int frame;
     int timer_sound_delay;
+    int timer_jump_delay;
     int counter_sensor_contact;
 
     bool landed;
