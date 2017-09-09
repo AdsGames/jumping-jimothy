@@ -76,8 +76,8 @@ void Character::update(){
     counter_sensor_contact++;
   else
     counter_sensor_contact=0;
-  if(counter_sensor_contact>25)
-    landed=true;
+ // if(counter_sensor_contact>25)
+    //landed=true;
 
   //std::cout<<body ->GetLinearVelocity().y<<"\n";
   if((body ->GetLinearVelocity().y>=-0.01f && body ->GetLinearVelocity().y<=0.01f) && sensor_box -> isColliding() && velocity_old<-0.01f){
@@ -115,21 +115,26 @@ void Character::update(){
   angle = body -> GetAngle();
   double yVel = getBody() -> GetLinearVelocity().y;
 
+  float x_velocity_ground = 4;
+  float x_velocity_air = 0.7;
+  float x_velocity_air_max=4;
+
+
   if(keyListener::key[ALLEGRO_KEY_A] || joystickListener::button[JOY_XBOX_PAD_LEFT]){
     direction=false;
     if(sensor_box -> isColliding())
-      body -> SetLinearVelocity(b2Vec2(-5, yVel));
+      body -> SetLinearVelocity(b2Vec2(-x_velocity_ground, yVel));
     else
-      if(getBody() -> GetLinearVelocity().x > -5)
-        body -> ApplyLinearImpulse(b2Vec2(-2, 0),position,true);
+      if(getBody() -> GetLinearVelocity().x > -x_velocity_air_max)
+        body -> ApplyLinearImpulse(b2Vec2(-x_velocity_air, 0),position,true);
   }
   else if(keyListener::key[ALLEGRO_KEY_D] || joystickListener::button[JOY_XBOX_PAD_RIGHT]){
     direction=true;
     if(sensor_box -> isColliding())
-          body -> SetLinearVelocity(b2Vec2(5, yVel));
+          body -> SetLinearVelocity(b2Vec2(x_velocity_ground, yVel));
     else
-      if(getBody() -> GetLinearVelocity().x < 5)
-        body -> ApplyLinearImpulse(b2Vec2(2, 0),position,true);
+      if(getBody() -> GetLinearVelocity().x < x_velocity_air_max)
+        body -> ApplyLinearImpulse(b2Vec2(x_velocity_air, 0),position,true);
   }
   else if(sensor_box -> isColliding()){
      body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
@@ -137,12 +142,17 @@ void Character::update(){
 
   // Jumping Jimothy
   //std::cout<<landed<<"\n";
+  timer_jump_delay++;
   if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f && landed){
-    body -> ApplyLinearImpulse(b2Vec2(0, 15),position,true);
-    landed=false;
-    if(timer_sound_delay>10){
-      al_play_sample( jump, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-      timer_sound_delay=0;
+
+    if(timer_jump_delay>20){
+        timer_jump_delay=0;
+      body -> ApplyLinearImpulse(b2Vec2(0,17),position,true);
+      landed=false;
+      if(timer_sound_delay>10){
+        al_play_sample( jump, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+        timer_sound_delay=0;
+      }
     }
   }
   timer_sound_delay++;
