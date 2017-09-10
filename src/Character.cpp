@@ -11,6 +11,8 @@ Character::Character(){
 
 void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
 
+  initial_key_release=false;
+
   timer_sound_delay=0;
   tick = 0;
   frame = 0;
@@ -70,7 +72,8 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
 
 void Character::update(){
 
-
+  if(!keyListener::anyKeyPressed && !joystickListener::anyButtonPressed)
+    initial_key_release=true;
 
   if(sensor_box -> isColliding())
     counter_sensor_contact++;
@@ -81,7 +84,10 @@ void Character::update(){
 
   //std::cout<<body ->GetLinearVelocity().y<<"\n";
   if((body ->GetLinearVelocity().y>=-0.01f && body ->GetLinearVelocity().y<=0.01f) && sensor_box -> isColliding() && velocity_old<-0.01f){
-    al_play_sample( land, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+    float land_volume = velocity_old/20;
+    if(land_volume>1)
+      land_volume=1;
+    al_play_sample( land, land_volume, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
     landed=true;
 
   }
@@ -89,7 +95,7 @@ void Character::update(){
   if(sensor_box -> isCollidingWithDynamicBody())
     landed=true;
 
-  std::cout<<sensor_box -> isCollidingWithDynamicBody()<<"\n";
+  std::cout<<initial_key_release<<"\n";
 
 
   int ticks_per_frame = 5;
@@ -116,11 +122,11 @@ void Character::update(){
   double yVel = getBody() -> GetLinearVelocity().y;
 
   float x_velocity_ground = 4;
-  float x_velocity_air = 0.7;
+  float x_velocity_air = 0.8;
   float x_velocity_air_max=4;
 
 
-  if(keyListener::key[ALLEGRO_KEY_A] || joystickListener::button[JOY_XBOX_PAD_LEFT]){
+  if((keyListener::key[ALLEGRO_KEY_A] || joystickListener::button[JOY_XBOX_PAD_LEFT] ) && initial_key_release){
     direction=false;
     if(sensor_box -> isColliding())
       body -> SetLinearVelocity(b2Vec2(-x_velocity_ground, yVel));
@@ -128,7 +134,7 @@ void Character::update(){
       if(getBody() -> GetLinearVelocity().x > -x_velocity_air_max)
         body -> ApplyLinearImpulse(b2Vec2(-x_velocity_air, 0),position,true);
   }
-  else if(keyListener::key[ALLEGRO_KEY_D] || joystickListener::button[JOY_XBOX_PAD_RIGHT]){
+  else if((keyListener::key[ALLEGRO_KEY_D] || joystickListener::button[JOY_XBOX_PAD_RIGHT] )&& initial_key_release){
     direction=true;
     if(sensor_box -> isColliding())
           body -> SetLinearVelocity(b2Vec2(x_velocity_ground, yVel));
@@ -143,7 +149,7 @@ void Character::update(){
   // Jumping Jimothy
   //std::cout<<landed<<"\n";
   timer_jump_delay++;
-  if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f && landed){
+  if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f && landed && initial_key_release){
 
     if(timer_jump_delay>20){
         timer_jump_delay=0;
@@ -158,6 +164,7 @@ void Character::update(){
   timer_sound_delay++;
 
   // Fixed Danny's poop code by getting rid if it =)
+
   if(sensor_box -> isColliding())
     color = al_map_rgb(50,100,255);
   else

@@ -2,7 +2,7 @@
 <data>
 	<Object type="Character">
 		<x>45.6</x>
-		<y>-2.4</y>
+		<y>-4</y>
 		<bodytype>Character</bodytype>
 	</Object>
 	<Object type="Tile">
