@@ -35,6 +35,8 @@ class Character : public Box{
 
     bool landed;
 
+    bool initial_key_release;
+
     float velocity_old;
 
     bool direction;

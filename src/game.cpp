@@ -3,7 +3,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_native_dialog.h>
 
-#define danny_wants_to_listen_to_music_while_programming true
+#define danny_wants_to_listen_to_music_while_programming false
 
 bool game::testing = false;
 
@@ -222,11 +222,11 @@ void game::load_world(int newLevel){
 
       }
       else if( type == "Character"){
-        gameCharacter = create_character( tools::string_to_float(x), tools::string_to_float(y));
+        gameCharacter = create_character( tools::string_to_float(x), tools::string_to_float(y)-1.6);
         character_count++;
       }
       else if( type == "Finish"){
-        gameGoat = create_goat( tools::string_to_float(x), tools::string_to_float(y));
+        gameGoat = create_goat( tools::string_to_float(x), tools::string_to_float(y)-1);
         if(gameCharacter==nullptr)
           std::cout<<"WARNING: Game: goat is passed nullptr gameCharacter\n";
         goat_count++;
@@ -417,8 +417,6 @@ void game::draw(){
   if( level == 4){
     al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Use R to restart the level.");
   }
-
-    //al_draw_bitmap(help,0,0,0);
 
   // Draw boxes
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
