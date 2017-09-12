@@ -32,6 +32,7 @@ class button{
     std::string getText(){ return text; }
 
     void setVisibility( bool newVisible){ visible = newVisible; }
+    void toggleVisibility();
 
     // Setters
     void setPosition( int x, int y){ this -> x = x; this -> y = y; }
@@ -62,7 +63,12 @@ class button{
     bool hovering;
     bool old_mouse_down;
     bool mouse_released;
+
+    // Inactive cannot be clicked/hovered
+    // Invisible cannot be seen
+    // Disabled is both
     bool visible;
+    bool active;
 
     ALLEGRO_BITMAP *image;
 

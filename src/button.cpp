@@ -64,6 +64,9 @@ void button::setFont( ALLEGRO_FONT *font){
     this -> height = al_get_font_line_height( button_font);
   }
 }
+void button::toggleVisibility(){
+  visible=!visible;
+}
 
 // Update
 void button::update(){

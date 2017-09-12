@@ -55,24 +55,21 @@ editor::editor(){
 
 
   // Buttons
-  editor_buttons[button_type_dynamic] = button( 20, 710, "Dynamic", edit_font);
-  editor_buttons[button_type_static] = button( 20 + editor_buttons[button_type_dynamic].getX() + editor_buttons[button_type_dynamic].getWidth()/1.2, 710, "Static", edit_font);
-  editor_buttons[button_type_player] = button( 20 + editor_buttons[button_type_static].getX() + editor_buttons[button_type_static].getWidth()/1.2, 710, "Player", edit_font);
-  editor_buttons[button_type_goat] = button( 20 + editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth()/1.2, 710, "Goat", edit_font);
-  editor_buttons[button_type_collision] = button( 20 + editor_buttons[3].getX() + editor_buttons[3].getWidth()/1.2, 710, "Collision", edit_font);
+  editor_buttons[button_type_dynamic] = button( 0, 728, "Dynamic", edit_font);
+  editor_buttons[button_type_static] = button(editor_buttons[button_type_dynamic].getX() + editor_buttons[button_type_dynamic].getWidth(), 728, "Static", edit_font);
+  editor_buttons[button_type_player] = button(editor_buttons[button_type_static].getX() + editor_buttons[button_type_static].getWidth(), 728, "Player", edit_font);
+  editor_buttons[button_type_goat] = button( editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth(), 728, "Goat", edit_font);
+  editor_buttons[button_type_collision] = button(editor_buttons[3].getX() + editor_buttons[3].getWidth(), 728, "Collision", edit_font);
+  editor_buttons[button_hide_left] = button( editor_buttons[4].getX() + editor_buttons[4].getWidth(), 728, "<", edit_font);
 
-  editor_buttons[button_undo] = button( 620, 710, "", edit_font);
-  editor_buttons[button_undo].setImage( tools::load_bitmap_ex( "images/editor/button_undo.png"));
-  editor_buttons[button_clear] = button( 20 + editor_buttons[button_undo].getX() + editor_buttons[button_undo].getWidth()/1.2, 710, "", edit_font);
-  editor_buttons[button_clear].setImage( tools::load_bitmap_ex( "images/editor/button_new.png"));
-  editor_buttons[button_save] = button( 20 + editor_buttons[button_clear].getX() + editor_buttons[button_clear].getWidth()/1.2, 710, "", edit_font);
-  editor_buttons[button_save].setImage( tools::load_bitmap_ex( "images/editor/button_save.png"));
-  editor_buttons[button_load] = button( 20 + editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth()/1.2, 710, "", edit_font);
-  editor_buttons[button_load].setImage( tools::load_bitmap_ex( "images/editor/button_load.png"));
-  editor_buttons[button_play] = button( 20 + editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth()/1.2, 710, "", edit_font);
-  editor_buttons[button_play].setImage( tools::load_bitmap_ex( "images/editor/button_play.png"));
-  editor_buttons[button_grid] = button( 20 + editor_buttons[button_play].getX() + editor_buttons[button_play].getWidth()/1.2, 710, "", edit_font);
-  editor_buttons[button_grid].setImage( tools::load_bitmap_ex( "images/editor/button_grid.png"));
+  editor_buttons[button_hide_right] = button( 566, 728, ">", edit_font);
+  editor_buttons[button_undo] = button( editor_buttons[button_hide_right].getX() + editor_buttons[button_hide_right].getWidth(), 728, "Undo", edit_font);
+  editor_buttons[button_clear] = button(editor_buttons[button_undo].getX() + editor_buttons[button_undo].getWidth(), 728, "Clear", edit_font);
+  editor_buttons[button_save] = button(editor_buttons[button_clear].getX() + editor_buttons[button_clear].getWidth(), 728, "Save", edit_font);
+  editor_buttons[button_save_as] = button( editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth(), 728, "Save as", edit_font);
+  editor_buttons[button_load] = button(editor_buttons[button_save_as].getX() + editor_buttons[button_save_as].getWidth(), 728, "Load", edit_font);
+  editor_buttons[button_grid] = button(editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth(), 728, "Grid", edit_font);
+  editor_buttons[button_play] = button(editor_buttons[button_grid].getX() + editor_buttons[button_grid].getWidth(), 728, "Play", edit_font);
 
   // Is it edit mode?
   if( game::testing){
@@ -212,6 +209,23 @@ void editor::update(){
   // Grid toggle
   if( editor_buttons[button_grid].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
+
+  if( editor_buttons[button_hide_left].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_LEFT]){
+    editor_buttons[button_type_collision].toggleVisibility();
+    editor_buttons[button_type_static].toggleVisibility();
+    editor_buttons[button_type_dynamic].toggleVisibility();
+    editor_buttons[button_type_player].toggleVisibility();
+    editor_buttons[button_type_goat].toggleVisibility();
+    if(editor_buttons[button_hide_left].getText()=="<"){
+      editor_buttons[button_hide_left].setPosition( 0, 728);
+      editor_buttons[button_hide_left].setText(">");
+    }else{
+      editor_buttons[button_hide_left].setPosition( editor_buttons[4].getX() + editor_buttons[4].getWidth(), 728);
+      editor_buttons[button_hide_left].setText("<");
+    }
+
+  }
+
 
   // Add tile
   if(tile_type != 4){
