@@ -33,6 +33,8 @@ class button{
 
     void setVisibility( bool newVisible){ visible = newVisible; }
     void toggleVisibility();
+    void toggleStatus();
+    void setTransparency(float newAlpha){alpha = newAlpha;}
 
     // Setters
     void setPosition( int x, int y){ this -> x = x; this -> y = y; }
@@ -63,6 +65,8 @@ class button{
     bool hovering;
     bool old_mouse_down;
     bool mouse_released;
+
+    float alpha;
 
     // Inactive cannot be clicked/hovered
     // Invisible cannot be seen

@@ -17,6 +17,7 @@ button::button(){
 // Constructor
 button::button( int x, int y, std::string text, ALLEGRO_FONT *button_font, int width, int height, int padding_x, int padding_y){
 
+  this -> alpha = 255;
   // Literally this
   this -> x = x;
   this -> y = y;
@@ -25,6 +26,7 @@ button::button( int x, int y, std::string text, ALLEGRO_FONT *button_font, int w
   this -> button_font = button_font;
 
   this -> visible = true;
+  this -> active = true;
 
   this -> mouse_released=false;
   this -> old_mouse_down=false;
@@ -65,19 +67,32 @@ void button::setFont( ALLEGRO_FONT *font){
   }
 }
 void button::toggleVisibility(){
+
   visible=!visible;
+}
+
+
+void button::toggleStatus(){
+
+  visible=!visible;
+  active=!active;
 }
 
 // Update
 void button::update(){
-  mouse_released = false;
-  if( hovering && old_mouse_down && !mouseListener::mouse_button & 1){
-    mouse_released = true;
 
-      }
-  old_mouse_down = hovering && mouseListener::mouse_button & 1;
-  hovering = mouseListener::mouse_x > x && mouseListener::mouse_x < x + getWidth() &&
-             mouseListener::mouse_y > y && mouseListener::mouse_y < y + getHeight();
+  mouse_released = false;
+  if(active){
+    if( hovering && old_mouse_down && !mouseListener::mouse_button & 1){
+      mouse_released = true;
+
+        }
+    old_mouse_down = hovering && mouseListener::mouse_button & 1;
+    hovering = mouseListener::mouse_x > x && mouseListener::mouse_x < x + getWidth() &&
+               mouseListener::mouse_y > y && mouseListener::mouse_y < y + getHeight();
+  }else{
+    hovering=false;
+  }
 }
 
 // True if hovering
@@ -98,12 +113,12 @@ bool button::mouseReleased(){
 void button::draw(){
   if(visible){
     // Backdrop
-    al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgb( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering));
-    al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgb( 0, 0, 0), 2);
+    al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering,alpha));
+    al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), 2);
 
     // Text
     if( button_font != nullptr)
-      al_draw_text( button_font, al_map_rgb( 0, 0, 0), x + padding_x, y + padding_y, 0, text.c_str());
+      al_draw_text( button_font, al_map_rgba( 0, 0, 0,alpha), x + padding_x, y + padding_y, 0, text.c_str());
 
     // Image if avail
     if( image != nullptr)
