@@ -168,13 +168,39 @@ void editor::update(){
           is_saved = true;
         }
         else
-          al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, 0);
+          al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, ALLEGRO_MESSAGEBOX_ERROR);
       }
     }
     else
-      al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!", file_name, nullptr, 0);
+      al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!", "", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
   }
+  // Save as
+  if( editor_buttons[button_save_as].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_X]){
+    if( editorBoxes.size() > 0){
+      ALLEGRO_FILECHOOSER *myChooser;
 
+      // Has it been saved already?
+
+      myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
+
+         // Display open dialog
+      if( al_show_native_file_dialog( nullptr, myChooser))
+        file_name = al_get_native_file_dialog_path( myChooser, 0);
+
+      if(file_name != nullptr){
+          // Make sure saves correctly
+        if( save_map( file_name)){
+          al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
+          is_saved = true;
+        }else{
+          al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, ALLEGRO_MESSAGEBOX_ERROR);
+        }
+      }
+
+    }else{
+        al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!","", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
+    }
+  }
   // Load map
   if( editor_buttons[button_load].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_D]){
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
@@ -182,10 +208,11 @@ void editor::update(){
     // Display open dialog
     if( al_show_native_file_dialog( nullptr, myChooser)){
       file_name = al_get_native_file_dialog_path(myChooser, 0);
-      editorBoxes.clear();
+
 
       // You also need to check for cancel button here too
       if( file_name != nullptr){
+        editorBoxes.clear();
 
         // Make sure loads correctly
         if( load_map( file_name))
