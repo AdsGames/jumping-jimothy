@@ -60,7 +60,10 @@ enum button_names{
   button_save_as,
   button_load,
   button_play,
-  button_grid
+  button_grid,
+  button_help,
+  button_back,
+  button_hide_top
 };
 
 // The editor state
@@ -86,7 +89,7 @@ class editor : public state{
     bool save_map( std::string mapName);
     bool load_map( std::string mapName);
 
-    static const int BUTTON_COUNT = 14;
+    static const int BUTTON_COUNT = 17;
 
     // Type buttons
     button editor_buttons[BUTTON_COUNT];

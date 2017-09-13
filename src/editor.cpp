@@ -71,6 +71,12 @@ editor::editor(){
   editor_buttons[button_grid] = button(editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth(), 728, "Grid", edit_font);
   editor_buttons[button_play] = button(editor_buttons[button_grid].getX() + editor_buttons[button_grid].getWidth(), 728, "Play", edit_font);
 
+  editor_buttons[button_hide_top] = button( 837, 0, ">", edit_font);
+  editor_buttons[button_help] = button(  editor_buttons[button_hide_top].getX() + editor_buttons[button_hide_top].getWidth(), 0, "Help", edit_font);
+  editor_buttons[button_back] = button(  editor_buttons[button_help].getX() + editor_buttons[button_help].getWidth(), 0, "Main Menu", edit_font);
+
+
+
   // Is it edit mode?
   if( game::testing){
     load_map( "data/level_0.xml");
@@ -139,12 +145,21 @@ void editor::update(){
 
   // Clear world button
   if(keyListener::keyPressed[ALLEGRO_KEY_C] || editor_buttons[button_clear].mouseReleased()){
-    editorBoxes.clear();
+
+    if(al_show_native_message_box( nullptr, "Clear?", "Clear the map?", "There is no recovering this masterpiece.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1);
+      editorBoxes.clear();
   }
+
+  if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editor_buttons[button_back].mouseReleased()){
+    if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1);
+      set_next_state(STATE_MENU);
+
+  }
+
 
   // Activate advanced mode
   // Don't tell Allan, but I really don't like his buttons
-  if(keyListener::keyPressed[ALLEGRO_KEY_A])
+  if(keyListener::keyPressed[ALLEGRO_KEY_X])
     gui_mode =! gui_mode;
 
   // Save
@@ -175,11 +190,9 @@ void editor::update(){
       al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!", "", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
   }
   // Save as
-  if( editor_buttons[button_save_as].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_X]){
+  if( editor_buttons[button_save_as].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_D]){
     if( editorBoxes.size() > 0){
       ALLEGRO_FILECHOOSER *myChooser;
-
-      // Has it been saved already?
 
       myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
 
@@ -202,7 +215,7 @@ void editor::update(){
     }
   }
   // Load map
-  if( editor_buttons[button_load].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_D]){
+  if( editor_buttons[button_load].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_A]){
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
 
     // Display open dialog
@@ -237,8 +250,9 @@ void editor::update(){
   if( editor_buttons[button_grid].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
+  // Gosh darn toggle hide buttons take so much freakin' room
   if( editor_buttons[button_hide_left].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_LEFT]){
-    editor_buttons[button_type_collision].toggleVisibility();
+    editor_buttons[button_type_collision].toggleStatus();
     editor_buttons[button_type_static].toggleStatus();
     editor_buttons[button_type_dynamic].toggleStatus();
     editor_buttons[button_type_player].toggleStatus();
@@ -251,13 +265,11 @@ void editor::update(){
       editor_buttons[button_hide_left].setPosition( editor_buttons[4].getX() + editor_buttons[4].getWidth(), 728);
       editor_buttons[button_hide_left].setText("<");
       editor_buttons[button_hide_left].setTransparency(255);
-
     }
 
   }
-
-   if( editor_buttons[button_hide_right].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
-    editor_buttons[button_undo].toggleVisibility();
+  if( editor_buttons[button_hide_right].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
+    editor_buttons[button_undo].toggleStatus();
     editor_buttons[button_clear].toggleStatus();
     editor_buttons[button_save].toggleStatus();
     editor_buttons[button_save_as].toggleStatus();
@@ -265,23 +277,31 @@ void editor::update(){
     editor_buttons[button_play].toggleStatus();
     editor_buttons[button_grid].toggleStatus();
 
-
     if(editor_buttons[button_hide_right].getText()==">"){
       editor_buttons[button_hide_right].setPosition( 994, 728);
       editor_buttons[button_hide_right].setText("<");
-
       editor_buttons[button_hide_right].setTransparency(150);
     }else{
       editor_buttons[button_hide_right].setPosition( 566, 728);
       editor_buttons[button_hide_right].setText(">");
       editor_buttons[button_hide_right].setTransparency(255);
-
-
-
     }
-
   }
+   if( editor_buttons[button_hide_top].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_UP]){
+    editor_buttons[button_back].toggleStatus();
+    editor_buttons[button_help].toggleStatus();
 
+
+    if(editor_buttons[button_hide_top].getText()==">"){
+      editor_buttons[button_hide_top].setPosition( 994, 0);
+      editor_buttons[button_hide_top].setText("<");
+      editor_buttons[button_hide_top].setTransparency(150);
+    }else{
+      editor_buttons[button_hide_top].setPosition( 837, 0);
+      editor_buttons[button_hide_top].setText(">");
+      editor_buttons[button_hide_top].setTransparency(255);
+    }
+   }
 
   // Add tile
   if(tile_type != 4){
