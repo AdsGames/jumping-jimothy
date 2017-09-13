@@ -212,16 +212,45 @@ void editor::update(){
 
   if( editor_buttons[button_hide_left].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_LEFT]){
     editor_buttons[button_type_collision].toggleVisibility();
-    editor_buttons[button_type_static].toggleVisibility();
-    editor_buttons[button_type_dynamic].toggleVisibility();
-    editor_buttons[button_type_player].toggleVisibility();
-    editor_buttons[button_type_goat].toggleVisibility();
+    editor_buttons[button_type_static].toggleStatus();
+    editor_buttons[button_type_dynamic].toggleStatus();
+    editor_buttons[button_type_player].toggleStatus();
+    editor_buttons[button_type_goat].toggleStatus();
     if(editor_buttons[button_hide_left].getText()=="<"){
       editor_buttons[button_hide_left].setPosition( 0, 728);
       editor_buttons[button_hide_left].setText(">");
+      editor_buttons[button_hide_left].setTransparency(150);
     }else{
       editor_buttons[button_hide_left].setPosition( editor_buttons[4].getX() + editor_buttons[4].getWidth(), 728);
       editor_buttons[button_hide_left].setText("<");
+      editor_buttons[button_hide_left].setTransparency(255);
+
+    }
+
+  }
+
+   if( editor_buttons[button_hide_right].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
+    editor_buttons[button_undo].toggleVisibility();
+    editor_buttons[button_clear].toggleStatus();
+    editor_buttons[button_save].toggleStatus();
+    editor_buttons[button_save_as].toggleStatus();
+    editor_buttons[button_load].toggleStatus();
+    editor_buttons[button_play].toggleStatus();
+    editor_buttons[button_grid].toggleStatus();
+
+
+    if(editor_buttons[button_hide_right].getText()==">"){
+      editor_buttons[button_hide_right].setPosition( 994, 728);
+      editor_buttons[button_hide_right].setText("<");
+
+      editor_buttons[button_hide_right].setTransparency(150);
+    }else{
+      editor_buttons[button_hide_right].setPosition( 566, 728);
+      editor_buttons[button_hide_right].setText(">");
+      editor_buttons[button_hide_right].setTransparency(255);
+
+
+
     }
 
   }
