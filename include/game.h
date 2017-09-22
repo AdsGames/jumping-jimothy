@@ -30,6 +30,7 @@
 #include <Goat.h>
 #include <CollisionBox.h>
 #include <DynamicBox.h>
+#include <Explosive.h>
 
 class game : public state{
   public:
@@ -53,7 +54,7 @@ class game : public state{
 
     // Creation code
     Box *create_dynamic_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,BITMAP*,  bool newBodyType, bool newIsSensor);
-
+    Box *create_explosive_box(float,float);
     Box *create_static_box(float newX, float newY,BITMAP*,BITMAP*, BITMAP*, BITMAP*);
     Box *create_collision_box(float newX, float newY,float,float);
 

@@ -5,6 +5,10 @@
 		<y>-29.6</y>
 		<bodytype>Character</bodytype>
 	</Object>
+	<Object type="Explosive">
+		<x>8.8</x>
+		<y>-35</y>
+	</Object>
 	<Object type="Tile">
 		<x>7.2</x>
 		<y>-32.8</y>

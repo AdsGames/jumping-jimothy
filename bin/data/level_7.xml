@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
+	<Object type="Explosive">
+		<x>20</x>
+		<y>-35</y>
+	</Object>
 	<Object type="Tile">
 		<x>0.8</x>
 		<y>-20</y>
