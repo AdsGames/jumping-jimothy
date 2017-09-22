@@ -3,7 +3,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_native_dialog.h>
 
-#define danny_wants_to_listen_to_music_while_programming false
+#define danny_wants_to_listen_to_music_while_programming true
 
 bool game::testing = false;
 
@@ -95,8 +95,13 @@ Box *game::create_collision_box( float newX, float newY,float newWidth,float new
   return newCollisionBox;
 }
 
+Box *game::create_explosive_box(float newX, float newY){
+  Explosive *newExplosive = new Explosive();
+  newExplosive -> init( newX, newY, 1.6,1.6, 0,0,false, box, gameWorld);
+  gameBoxes.push_back( newExplosive);
+  return newExplosive;
 
-
+}
 
 // Add character to world
 Character *game::create_character( float newX, float newY){
@@ -244,6 +249,9 @@ void game::load_world(int newLevel){
           jointDef  -> referenceAngle = 0;
           gameWorld -> CreateJoint(jointDef);
         }*/
+      }else if(type == "Explosive"){
+        create_explosive_box( tools::string_to_float(x), tools::string_to_float(y));
+        std::cout<<"EXPLOODEEEEEE+==================================\n";
       }
 
     }

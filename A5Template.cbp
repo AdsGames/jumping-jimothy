@@ -70,6 +70,7 @@
 		<Unit filename="include/Character.h" />
 		<Unit filename="include/CollisionBox.h" />
 		<Unit filename="include/DynamicBox.h" />
+		<Unit filename="include/Explosive.h" />
 		<Unit filename="include/Goat.h" />
 		<Unit filename="include/Sensor.h" />
 		<Unit filename="include/StaticBox.h" />
@@ -88,6 +89,7 @@
 		<Unit filename="src/Character.cpp" />
 		<Unit filename="src/CollisionBox.cpp" />
 		<Unit filename="src/DynamicBox.cpp" />
+		<Unit filename="src/Explosive.cpp" />
 		<Unit filename="src/Goat.cpp" />
 		<Unit filename="src/Sensor.cpp" />
 		<Unit filename="src/StaticBox.cpp" />

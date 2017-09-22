@@ -95,7 +95,6 @@ void Character::update(){
   if(sensor_box -> isCollidingWithDynamicBody())
     landed=true;
 
-  std::cout<<initial_key_release<<"\n";
 
 
   int ticks_per_frame = 5;
