@@ -77,8 +77,8 @@ class editor : public state{
     void draw();
   private:
     // Imagess
-    ALLEGRO_BITMAP *image_box[4];
-    ALLEGRO_BITMAP *tiles[4][15];
+    ALLEGRO_BITMAP *image_box[5];
+    ALLEGRO_BITMAP *tiles[5][15];
 
     // Functions
     void calculate_orientation_global();

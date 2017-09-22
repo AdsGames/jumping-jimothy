@@ -5,6 +5,7 @@
 
 #define danny_wants_to_listen_to_music_while_programming true
 
+
 bool game::testing = false;
 
 // Constructor
@@ -97,7 +98,7 @@ Box *game::create_collision_box( float newX, float newY,float newWidth,float new
 
 Box *game::create_explosive_box(float newX, float newY){
   Explosive *newExplosive = new Explosive();
-  newExplosive -> init( newX, newY, 1.6,1.6, 0,0,false, box, gameWorld);
+  newExplosive -> init( newX, newY, 1.6,1.6, 0,0,false, box_repel, gameWorld);
   gameBoxes.push_back( newExplosive);
   return newExplosive;
 
@@ -251,7 +252,6 @@ void game::load_world(int newLevel){
         }*/
       }else if(type == "Explosive"){
         create_explosive_box( tools::string_to_float(x), tools::string_to_float(y));
-        std::cout<<"EXPLOODEEEEEE+==================================\n";
       }
 
     }
@@ -303,6 +303,7 @@ void game::reset(){
 // Load all sprites for in game
 void game::load_sprites(){
   box = tools::load_bitmap_ex( "images/box.png");
+  box_repel = tools::load_bitmap_ex( "images/box_repel.png");
   goat_sprite = tools::load_bitmap_ex( "images/goat.png");
   goat_map = tools::load_bitmap_ex( "images/goat_map.png");
   help = tools::load_bitmap_ex( "images/help.png");
