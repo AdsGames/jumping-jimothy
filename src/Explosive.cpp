@@ -26,6 +26,10 @@ void Explosive::init(float newX, float newY, float newWidth, float newHeight,flo
 
   sprite = newSprite;
 
+  affect_character=true;
+  numRays=32;
+  blastRadius = 10;
+  blastPower = 1000;
 
   type = BOX;
   width = 1.55f;
@@ -80,45 +84,50 @@ void Explosive::init(float newX, float newY, float newWidth, float newHeight,flo
 
 
 void Explosive::update(){
-  int numRays=32;
+
   b2Vec2 center = body->GetPosition();
-  int blastRadius = 10;
-  int blastPower = 1000;
 
-//find all fixtures within blast radius AABB
+
+
+  // Totally not copypasta'd code
+  // Should do something about it
+  // Ehhhhhhh
+
+  //find all fixtures within blast radius AABB
   MyQueryCallback queryCallback;
-      b2AABB aabb;
-        aabb.lowerBound = center - b2Vec2( blastRadius, blastRadius );
-        aabb.upperBound = center + b2Vec2( blastRadius, blastRadius );
-        gameWorld->QueryAABB( &queryCallback, aabb );
+  b2AABB aabb;
+  aabb.lowerBound = center - b2Vec2( blastRadius, blastRadius );
+  aabb.upperBound = center + b2Vec2( blastRadius, blastRadius );
+  gameWorld->QueryAABB( &queryCallback, aabb );
 
-        //check which of these have their center of mass within the blast radius
-        for (int i = 0; i < queryCallback.foundBodies.size(); i++) {
-            b2Body* newBody = queryCallback.foundBodies[i];
-            b2Vec2 bodyCom = newBody->GetWorldCenter();
-            //ignore bodies outside the blast range
-            if ( (bodyCom - center).Length() >= blastRadius )
-                continue;
-            applyBlastImpulse(body, center, bodyCom, blastPower * 0.05f );//scale blast power to roughly match results of other methods at 32 rays
-        }
+  //check which of these have their center of mass within the blast radius
+  for (int i = 0; i < queryCallback.foundBodies.size(); i++) {
+    b2Body* newBody = queryCallback.foundBodies[i];
+    b2Vec2 bodyCom = newBody->GetWorldCenter();
+    //ignore bodies outside the blast range
+    if ( (bodyCom - center).Length() >= blastRadius )
+      continue;
+    applyBlastImpulse(newBody, center, bodyCom, blastPower * 0.05f );//scale blast power to roughly match results of other methods at 32 rays
+  }
 }
 
  //this is the same for proximity and raycast methods so we can put it in a common function
-void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower)
-    {
-        //ignore the grenade itself, and any non-dynamic bodies
-        if ( newBody == body || body->GetType() != b2_dynamicBody )
-            return;
-        b2Vec2 blastDir = applyPoint - blastCenter;
-        float distance = blastDir.Normalize();
+void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower){
+
+  //ignore the grenade itself, and any non-dynamic bodies
+  if ( newBody == body || newBody->GetType() != b2_dynamicBody )
+    return;
+  b2Vec2 blastDir = applyPoint - blastCenter;
+  float distance = blastDir.Normalize();
         //ignore bodies exactly at the blast point - blast direction is undefined
-        if ( distance == 0 )
-            return;
-        float invDistance = 1 / distance;
-        float impulseMag = blastPower * invDistance * invDistance;
-        impulseMag = b2Min( impulseMag, 500.0f );
-        body->ApplyLinearImpulse( impulseMag * blastDir, applyPoint,true );
-    }
+  if ( distance == 0 )
+    return;
+  float invDistance = 1 / distance;
+  float impulseMag = blastPower * invDistance * invDistance;
+  impulseMag = b2Min( impulseMag, 500.0f );
+  newBody->ApplyLinearImpulse( impulseMag * blastDir, applyPoint,true );
+
+  }
 
 void Explosive::draw(){
 

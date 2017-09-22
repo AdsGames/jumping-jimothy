@@ -81,6 +81,7 @@ class game : public state{
 
     // Bitmaps
     ALLEGRO_BITMAP *box;
+    ALLEGRO_BITMAP *box_repel;
     ALLEGRO_BITMAP *character;
     ALLEGRO_BITMAP *goat_sprite;
     ALLEGRO_BITMAP *goat_map;

@@ -20,6 +20,8 @@ editor::editor(){
   image_box[1] = tools::load_bitmap_ex( "images/StaticBlock2.png");
   image_box[2] = tools::load_bitmap_ex( "images/character.png");
   image_box[3] = tools::load_bitmap_ex( "images/DisgoatSpriteMap.png");
+  image_box[4] = tools::load_bitmap_ex( "images/box_repel.png");
+
 
   for( int i = 0; i < 4; i++)
     for( int t = 0; t < 15; t++)
@@ -41,6 +43,10 @@ editor::editor(){
   // Goat
   tiles[3][0] = al_create_sub_bitmap( image_box[3], 0, 0, 32, 64);
 
+  // Explode/repel
+  tiles[4][0] = image_box[4];
+
+
   tile_type = 0;
 
   srand(time(NULL));
@@ -59,7 +65,7 @@ editor::editor(){
   editor_buttons[button_type_static] = button(editor_buttons[button_type_dynamic].getX() + editor_buttons[button_type_dynamic].getWidth(), 728, "Static", edit_font);
   editor_buttons[button_type_player] = button(editor_buttons[button_type_static].getX() + editor_buttons[button_type_static].getWidth(), 728, "Player", edit_font);
   editor_buttons[button_type_goat] = button( editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth(), 728, "Goat", edit_font);
-  editor_buttons[button_type_collision] = button(editor_buttons[3].getX() + editor_buttons[3].getWidth(), 728, "Collision", edit_font);
+  editor_buttons[button_type_collision] = button(editor_buttons[button_type_goat].getX() + editor_buttons[button_type_goat].getWidth(), 728, "Collision", edit_font);
   editor_buttons[button_hide_left] = button( editor_buttons[4].getX() + editor_buttons[4].getWidth(), 728, "<", edit_font);
 
   editor_buttons[button_hide_right] = button( 566, 728, ">", edit_font);
@@ -136,6 +142,8 @@ void editor::update(){
     tile_type = 3;
   if(keyListener::keyPressed[ALLEGRO_KEY_T])
     tile_type = 4;
+  if(keyListener::keyPressed[ALLEGRO_KEY_Y])
+    tile_type = 5;
 
   // Rockin' three liner undo button
   if((keyListener::keyPressed[ALLEGRO_KEY_Z] || editor_buttons[button_undo].mouseReleased() )&& editorBoxes.size()>0){
@@ -328,6 +336,8 @@ void editor::update(){
         newBox.bodyType = "Character";
       else if( tile_type == 3)
         newBox.bodyType = "Finish";
+      else if( tile_type == 5)
+        newBox.bodyType = "Explosion";
 
       editorBoxes.push_back( newBox);
 
@@ -528,6 +538,8 @@ void editor::draw(){
       al_draw_bitmap( tiles[2][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     else if( editorBoxes.at(i).type == 3)
       al_draw_bitmap( tiles[3][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+    else if( editorBoxes.at(i).type == 5)
+      al_draw_bitmap( tiles[4][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
   }
 
   //Gotta draw the tranparent boxes in front
@@ -555,6 +567,8 @@ void editor::draw(){
     al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Endgame goat");
   if( tile_type == 4)
     al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Collision Box");
+  if( tile_type == 5)
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Explosion Box");
 
 
   // Current map opened
@@ -684,6 +698,8 @@ bool editor::load_map( std::string mapName){
       newBox.type = 3;
     else if( newBox.bodyType == "Collision")
       newBox.type = 4;
+    else if( newBox.bodyType == "Explosion")
+      newBox.type = 5;
     else
       newBox.type = 0;
 
@@ -734,6 +750,8 @@ bool editor::save_map( std::string mapName){
       xml_type = "Character";
     else if( editorBoxes.at(i).type == 3)
       xml_type = "Finish";
+    else if( editorBoxes.at(i).type == 5)
+      xml_type = "Explosion";
 
     object_node -> append_attribute( doc.allocate_attribute("type", doc.allocate_string(xml_type.c_str())));
     root_node -> append_node( object_node);

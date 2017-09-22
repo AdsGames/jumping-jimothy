@@ -14,10 +14,14 @@ class Explosive : public Box
     void update();
 
     void init(float, float, float, float,float,float,bool,BITMAP*, b2World *);
-    void  applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
-
+    void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 
   protected:
+
+    int numRays;
+    int blastRadius;
+    int blastPower;
+    bool affect_character;
 
   private:
 };
