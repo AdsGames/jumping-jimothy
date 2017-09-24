@@ -7,6 +7,7 @@ void Goat::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newG
   goat_tick = 0;
   sprite = newSprite;
   gameCharacter = newCharacter;
+  std::cout<<gameCharacter<<"\n";
 
   if( gameCharacter == nullptr)
     std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
@@ -70,6 +71,9 @@ void Goat::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newG
 
 // Draw box to screen
 void Goat::draw(){
+
+    //std::cout<<gameCharacter ->getX()<<"\n";
+
 
   b2Vec2 position = body -> GetPosition();
   x = position.x;

@@ -8,6 +8,7 @@
 
 #include "globals.h"
 #include "Box.h"
+#include "Sensor.h"
 #include "keyListener.h"
 #include "joystickListener.h"
 
@@ -16,7 +17,7 @@ class b2Body;
 class b2BodyDef;
 class b2Vec2;
 class keyListener;
-class Sensor;
+//class Sensor;
 
 class Character : public Box{
   public:
@@ -25,6 +26,7 @@ class Character : public Box{
     void init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld);
     void draw();
     void update();
+    b2Body *getSensorBody(){return sensor_box->getBody();}
 
   private:
     int tick;
