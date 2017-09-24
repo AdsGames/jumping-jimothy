@@ -10,17 +10,17 @@ menu::menu(){
 
 
 
-  menu_buttons[menu_button_edit] = button( 320, 630, "Level Editor", nullptr, 180, 90);
+  menu_buttons[menu_button_edit] = Button( 320, 630, "Level Editor", nullptr, 180, 90);
   menu_buttons[menu_button_edit].setVisibility(false);
 
-  menu_buttons[menu_button_exit] = button( 750, 630, "Exit", nullptr, 180, 90);
+  menu_buttons[menu_button_exit] = Button( 750, 630, "Exit", nullptr, 180, 90);
   menu_buttons[menu_button_exit].setVisibility(false);
 
 
-  menu_buttons[menu_button_play] = button( 40, 590, "Play", nullptr, 250, 140);
+  menu_buttons[menu_button_play] = Button( 40, 590, "Play", nullptr, 250, 140);
   menu_buttons[menu_button_play].setVisibility(false);
 
-  menu_buttons[menu_button_help] = button( 540, 630, "Halp plz v2", nullptr, 180, 90);
+  menu_buttons[menu_button_help] = Button( 540, 630, "Halp plz v2", nullptr, 180, 90);
   menu_buttons[menu_button_help].setVisibility(false);
 
 

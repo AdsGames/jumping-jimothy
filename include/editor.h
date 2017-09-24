@@ -92,7 +92,7 @@ class editor : public state{
     static const int BUTTON_COUNT = 17;
 
     // Type buttons
-    button editor_buttons[BUTTON_COUNT];
+    Button editor_buttons[BUTTON_COUNT];
 
     // Tiles
     std::vector<editor_box> editorBoxes;

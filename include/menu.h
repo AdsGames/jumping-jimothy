@@ -38,7 +38,7 @@ class menu : public state{
   private:
 
     static const int BUTTON_COUNT = 4;
-    button menu_buttons[BUTTON_COUNT];
+    Button menu_buttons[BUTTON_COUNT];
     // Images
     ALLEGRO_BITMAP *title;
     ALLEGRO_BITMAP *title_overlay;
