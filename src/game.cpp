@@ -11,7 +11,7 @@ bool game::testing = false;
 // Constructor
 game::game(){
 
-  gameCharacter = new Character();
+  //gameCharacter = new Character();
   // Init first time
   newBox = nullptr;
   rootBox = nullptr;
@@ -98,7 +98,11 @@ Box *game::create_collision_box( float newX, float newY,float newWidth,float new
 
 Box *game::create_explosive_box(float newX, float newY){
   Explosive *newExplosive = new Explosive();
-  newExplosive -> init( newX, newY, 1.6,1.6, 0,0,false, box_repel, gameWorld);
+  newExplosive -> init( newX, newY, 1.6,1.6, 0,0,false, box_repel, gameWorld,gameCharacter);
+  if(gameCharacter==nullptr)
+    tools::abort_on_error("KYS","u suck and ur nullptr too");
+  else
+    std::cout<<"ASDFJASFJKASDJFASDFKASDFKJASDFKASDFJASDFKJ"<<gameCharacter<<"\n";
   gameBoxes.push_back( newExplosive);
   return newExplosive;
 
@@ -148,7 +152,7 @@ void game::load_world(int newLevel){
 
   std::cout << "Attempting to load level_" << newLevel << ".xml into game\n";
 
-  gameCharacter = new Character();
+  //gameCharacter = new Character();
 
   int goat_count = 0;
   int character_count = 0;
@@ -250,8 +254,9 @@ void game::load_world(int newLevel){
           jointDef  -> referenceAngle = 0;
           gameWorld -> CreateJoint(jointDef);
         }*/
+      std::cout<<gameCharacter<<"\n";
       }else if(type == "Explosive"){
-        create_explosive_box( tools::string_to_float(x), tools::string_to_float(y));
+       newBox = create_explosive_box( tools::string_to_float(x), tools::string_to_float(y));
       }
 
     }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-	<Object type="Explosive">
-		<x>20</x>
-		<y>-35</y>
+	<Object type="Character">
+		<x>47.2</x>
+		<y>-29.6</y>
+		<bodytype>Character</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>0.8</x>
@@ -1065,11 +1066,6 @@
 		<y>-21.6</y>
 		<orientation>3 4 3 4</orientation>
 		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Character">
-		<x>47.2</x>
-		<y>-29.6</y>
-		<bodytype>Character</bodytype>
 	</Object>
 	<Object type="Finish">
 		<x>7.2</x>

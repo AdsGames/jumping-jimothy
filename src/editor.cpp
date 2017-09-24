@@ -318,6 +318,8 @@ void editor::update(){
       && !box_at_with_type(1,mouseListener::mouse_x, mouseListener::mouse_y)
       && !box_at_with_type(2,mouseListener::mouse_x, mouseListener::mouse_y)
       && !box_at_with_type(3,mouseListener::mouse_x, mouseListener::mouse_y)
+      && !box_at_with_type(5,mouseListener::mouse_x, mouseListener::mouse_y)
+
       && ((!over_button && gui_mode) || !gui_mode)){
       editor_box newBox;
       newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
@@ -723,6 +725,13 @@ bool editor::save_map( std::string mapName){
     editorBoxes.insert(editorBoxes.begin(),newBox);
     }
   }
+   for(int i=0;i<editorBoxes.size();i++){
+    if(editorBoxes[i].type==5){
+    editor_box newBox = editorBoxes[i];
+    editorBoxes.erase(editorBoxes.begin()+i);
+    editorBoxes.insert(editorBoxes.begin(),newBox);
+    }
+  }
 
 
   // Write xml file
@@ -750,8 +759,9 @@ bool editor::save_map( std::string mapName){
       xml_type = "Character";
     else if( editorBoxes.at(i).type == 3)
       xml_type = "Finish";
-    else if( editorBoxes.at(i).type == 5)
-      xml_type = "Explosion";
+    else if( editorBoxes.at(i).type == 5){
+      xml_type = "Explosive";
+    }
 
     object_node -> append_attribute( doc.allocate_attribute("type", doc.allocate_string(xml_type.c_str())));
     root_node -> append_node( object_node);
@@ -773,7 +783,8 @@ bool editor::save_map( std::string mapName){
 
 
     // Write this last for consistency of placement in the xml (hint: always last element)
-    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
+    if(xml_type!="Explosive")
+      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
 
   }
 

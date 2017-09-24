@@ -22,16 +22,17 @@ public:
     }
 };
 
-void Explosive::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,BITMAP *newSprite, b2World *newGameWorld){
+void Explosive::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,BITMAP *newSprite, b2World *newGameWorld, Character *newGameCharacter){
 
   sprite = newSprite;
+  gameCharacter = newGameCharacter;
 
-  affect_character=true;
+  affect_character=false;
   numRays=32;
   blastRadius = 10;
   blastPower = 1000;
 
-  type = BOX;
+  type = 5;
   width = 1.55f;
   height = 1.55f;
   color = al_map_rgb(255,0,0);
@@ -115,7 +116,10 @@ void Explosive::update(){
 void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower){
 
   //ignore the grenade itself, and any non-dynamic bodies
-  if ( newBody == body || newBody->GetType() != b2_dynamicBody )
+
+  // Fricking feet, how do they work?
+  if ( newBody == body || newBody->GetType() != b2_dynamicBody || ((newBody == gameCharacter->getBody()
+    || newBody == gameCharacter -> getSensorBody() ) && !affect_character))
     return;
   b2Vec2 blastDir = applyPoint - blastCenter;
   float distance = blastDir.Normalize();
