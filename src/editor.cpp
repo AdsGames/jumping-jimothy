@@ -60,26 +60,26 @@ editor::editor(){
   editorBoxes.clear();
 
 
-  // Buttons
-  editor_buttons[button_type_dynamic] = button( 0, 728, "Dynamic", edit_font);
-  editor_buttons[button_type_static] = button(editor_buttons[button_type_dynamic].getX() + editor_buttons[button_type_dynamic].getWidth(), 728, "Static", edit_font);
-  editor_buttons[button_type_player] = button(editor_buttons[button_type_static].getX() + editor_buttons[button_type_static].getWidth(), 728, "Player", edit_font);
-  editor_buttons[button_type_goat] = button( editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth(), 728, "Goat", edit_font);
-  editor_buttons[button_type_collision] = button(editor_buttons[button_type_goat].getX() + editor_buttons[button_type_goat].getWidth(), 728, "Collision", edit_font);
-  editor_buttons[button_hide_left] = button( editor_buttons[4].getX() + editor_buttons[4].getWidth(), 728, "<", edit_font);
+  // buttons
+  editor_buttons[button_type_dynamic] = Button( 0, 728, "Dynamic", edit_font);
+  editor_buttons[button_type_static] = Button(editor_buttons[button_type_dynamic].getX() + editor_buttons[button_type_dynamic].getWidth(), 728, "Static", edit_font);
+  editor_buttons[button_type_player] = Button(editor_buttons[button_type_static].getX() + editor_buttons[button_type_static].getWidth(), 728, "Player", edit_font);
+  editor_buttons[button_type_goat] = Button( editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth(), 728, "Goat", edit_font);
+  editor_buttons[button_type_collision] = Button(editor_buttons[button_type_goat].getX() + editor_buttons[button_type_goat].getWidth(), 728, "Collision", edit_font);
+  editor_buttons[button_hide_left] = Button( editor_buttons[4].getX() + editor_buttons[4].getWidth(), 728, "<", edit_font);
 
-  editor_buttons[button_hide_right] = button( 566, 728, ">", edit_font);
-  editor_buttons[button_undo] = button( editor_buttons[button_hide_right].getX() + editor_buttons[button_hide_right].getWidth(), 728, "Undo", edit_font);
-  editor_buttons[button_clear] = button(editor_buttons[button_undo].getX() + editor_buttons[button_undo].getWidth(), 728, "Clear", edit_font);
-  editor_buttons[button_save] = button(editor_buttons[button_clear].getX() + editor_buttons[button_clear].getWidth(), 728, "Save", edit_font);
-  editor_buttons[button_save_as] = button( editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth(), 728, "Save as", edit_font);
-  editor_buttons[button_load] = button(editor_buttons[button_save_as].getX() + editor_buttons[button_save_as].getWidth(), 728, "Load", edit_font);
-  editor_buttons[button_grid] = button(editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth(), 728, "Grid", edit_font);
-  editor_buttons[button_play] = button(editor_buttons[button_grid].getX() + editor_buttons[button_grid].getWidth(), 728, "Play", edit_font);
+  editor_buttons[button_hide_right] = Button( 566, 728, ">", edit_font);
+  editor_buttons[button_undo] = Button( editor_buttons[button_hide_right].getX() + editor_buttons[button_hide_right].getWidth(), 728, "Undo", edit_font);
+  editor_buttons[button_clear] = Button(editor_buttons[button_undo].getX() + editor_buttons[button_undo].getWidth(), 728, "Clear", edit_font);
+  editor_buttons[button_save] = Button(editor_buttons[button_clear].getX() + editor_buttons[button_clear].getWidth(), 728, "Save", edit_font);
+  editor_buttons[button_save_as] = Button( editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth(), 728, "Save as", edit_font);
+  editor_buttons[button_load] = Button(editor_buttons[button_save_as].getX() + editor_buttons[button_save_as].getWidth(), 728, "Load", edit_font);
+  editor_buttons[button_grid] = Button(editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth(), 728, "Grid", edit_font);
+  editor_buttons[button_play] = Button(editor_buttons[button_grid].getX() + editor_buttons[button_grid].getWidth(), 728, "Play", edit_font);
 
-  editor_buttons[button_hide_top] = button( 837, 0, ">", edit_font);
-  editor_buttons[button_help] = button(  editor_buttons[button_hide_top].getX() + editor_buttons[button_hide_top].getWidth(), 0, "Help", edit_font);
-  editor_buttons[button_back] = button(  editor_buttons[button_help].getX() + editor_buttons[button_help].getWidth(), 0, "Main Menu", edit_font);
+  editor_buttons[button_hide_top] = Button( 837, 0, ">", edit_font);
+  editor_buttons[button_help] = Button(  editor_buttons[button_hide_top].getX() + editor_buttons[button_hide_top].getWidth(), 0, "Help", edit_font);
+  editor_buttons[button_back] = Button(  editor_buttons[button_help].getX() + editor_buttons[button_help].getWidth(), 0, "Main Menu", edit_font);
 
 
 
@@ -116,11 +116,11 @@ void editor::update(){
       editor_buttons[i].update();
   }
 
-  // Check if over button
-  bool over_button = false;
+  // Check if over Button
+  bool over_Button = false;
   for( int i = 0; i < BUTTON_COUNT; i++){
     if( editor_buttons[i].hover()){
-      over_button = true;
+      over_Button = true;
       break;
     }
   }
@@ -145,13 +145,13 @@ void editor::update(){
   if(keyListener::keyPressed[ALLEGRO_KEY_Y])
     tile_type = 5;
 
-  // Rockin' three liner undo button
+  // Rockin' three liner undo Button
   if((keyListener::keyPressed[ALLEGRO_KEY_Z] || editor_buttons[button_undo].mouseReleased() )&& editorBoxes.size()>0){
     editorBoxes.pop_back();
     calculate_orientation_global();
   }
 
-  // Clear world button
+  // Clear world Button
   if(keyListener::keyPressed[ALLEGRO_KEY_C] || editor_buttons[button_clear].mouseReleased()){
 
     if(al_show_native_message_box( nullptr, "Clear?", "Clear the map?", "There is no recovering this masterpiece.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1);
@@ -231,7 +231,7 @@ void editor::update(){
       file_name = al_get_native_file_dialog_path(myChooser, 0);
 
 
-      // You also need to check for cancel button here too
+      // You also need to check for cancel Button here too
       if( file_name != nullptr){
         editorBoxes.clear();
 
@@ -320,7 +320,7 @@ void editor::update(){
       && !box_at_with_type(3,mouseListener::mouse_x, mouseListener::mouse_y)
       && !box_at_with_type(5,mouseListener::mouse_x, mouseListener::mouse_y)
 
-      && ((!over_button && gui_mode) || !gui_mode)){
+      && ((!over_Button && gui_mode) || !gui_mode)){
       editor_box newBox;
       newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
       newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
@@ -349,7 +349,7 @@ void editor::update(){
   }
   //Drag n drop madness
   if( tile_type == 4 && !dialog_open){
-    if( mouseListener::mouse_pressed & 1 && !box_at_with_type(0,mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_button && gui_mode) || !gui_mode)){
+    if( mouseListener::mouse_pressed & 1 && !box_at_with_type(0,mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_Button && gui_mode) || !gui_mode)){
       is_dragging_box = true;
       box_1_x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
       box_1_y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
@@ -357,7 +357,7 @@ void editor::update(){
     if(mouseListener::mouse_released & 1){
       is_dragging_box = false;
 
-      if(!over_button && gui_mode && (box_2_x - box_1_x) != 0 && (box_2_x - box_1_x) != 0){
+      if(!over_Button && gui_mode && (box_2_x - box_1_x) != 0 && (box_2_x - box_1_x) != 0){
         // Backwards dragged box correction, Box2D chokes on negative widths/heights
         if(box_2_x<box_1_x){
           int holder_value = box_2_x;
