@@ -1,8 +1,5 @@
 #include "UIElement.h"
 
-#include "UIElement.h"
-
-
 // Defaults
 UIElement::UIElement(){
   this -> x = 0;

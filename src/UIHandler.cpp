@@ -1,4 +1,5 @@
 #include "UIHandler.h"
+#include "Button.h"
 
 UIHandler::UIHandler()
 {
@@ -12,6 +13,29 @@ UIHandler::~UIHandler()
 
 void UIHandler::addElement(UIElement newUIElement){
   ui_elements.push_back(newUIElement);
+
+}
+bool UIHandler::isHovering(){
+  for(int i=0; i<ui_elements.size();i++){
+    if(ui_elements[i].hover());
+      return true;
+  }
+  return false;
+
+
+}
+
+void UIHandler::createButton(int newX, int newY,std::string newText,ALLEGRO_FONT *newFont){
+    ui_elements.push_back(Button(newX, newY, newText, newFont));
+}
+void UIHandler::createAnchoredButton(std::string newText,ALLEGRO_FONT *newFont,std::string newAnchor, bool newJustification){
+  Button newButton = Button(0,getElementByText(newAnchor).getY(),newText,newFont);
+  if(newJustification)
+    newButton.setX(getElementByText(newAnchor).getX()-newButton.getWidth());
+  else
+    newButton.setX(getElementByText(newAnchor).getRightX());
+
+
 
 }
 

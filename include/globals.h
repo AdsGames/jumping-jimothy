@@ -6,6 +6,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#define LEFT false
+#define RIGHT true
 
 #define BOX 0
 #define CHARACTER 1

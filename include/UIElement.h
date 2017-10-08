@@ -5,6 +5,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 
+//#include "Button.h"
 #include <string>
 #include <mouseListener.h>
 #include <tools.h>
@@ -28,11 +29,13 @@ class UIElement
     void toggleVisibility();
     void toggleStatus();
     void setTransparency(float newAlpha){alpha = newAlpha;}
+    void setX(int newX){x=newX;}
 
     int getWidth(){ return width + padding_x * 2; }
     int getHeight(){ return height + padding_y * 2; }
     int getPaddingX(){ return padding_x; }
     int getPaddingY(){ return padding_y; }
+    int getRightX(){ return x+getWidth();}
     void setPadding( int padding_x, int padding_y){ this -> padding_x = padding_x; this -> padding_y = padding_y; }
     // Setters
     void setPosition( int x, int y){ this -> x = x; this -> y = y; }
@@ -76,6 +79,7 @@ class UIElement
     ALLEGRO_FONT *UIElement_font;
 
     std::string text;
+    std::string id;
 
   private:
 
