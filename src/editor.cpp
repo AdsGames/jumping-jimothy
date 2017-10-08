@@ -3,7 +3,7 @@
 // Init editor
 editor::editor(){
 
-
+  editorUI = UIHandler();
 
   std::cout << "Initializing editor\n";
 
@@ -61,9 +61,20 @@ editor::editor(){
 
 
   // buttons
-  editor_buttons[button_type_dynamic] = Button( 0, 728, "Dynamic", edit_font);
-  editor_buttons[button_type_static] = Button(editor_buttons[button_type_dynamic].getX() + editor_buttons[button_type_dynamic].getWidth(), 728, "Static", edit_font);
-  editor_buttons[button_type_player] = Button(editor_buttons[button_type_static].getX() + editor_buttons[button_type_static].getWidth(), 728, "Player", edit_font);
+ // Button newButton = ;
+ // Button newButton = ;
+  editorUI.addElement(Button(0, 728, "Dynamic", edit_font));
+ // UIElement newUI = UIElement();
+ // editorUI.addElement(newUI);
+ // editorUI.killme(1);
+  editorUI.createButton(editorUI.getElementByText("Dynamic").getRightX(), 728, "Static", edit_font);
+  editorUI.createAnchoredButton("Static",edit_font,"Dynamic",RIGHT);
+  editorUI.createAnchoredButton("Player",edit_font,"Static",RIGHT);
+  editorUI.createAnchoredButton("Goat",edit_font,"Player",RIGHT);
+  editorUI.createAnchoredButton("Collision",edit_font,"Goat",RIGHT);
+  editorUI.createAnchoredButton(">",edit_font,"Goat",RIGHT);
+
+/*
   editor_buttons[button_type_goat] = Button( editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth(), 728, "Goat", edit_font);
   editor_buttons[button_type_collision] = Button(editor_buttons[button_type_goat].getX() + editor_buttons[button_type_goat].getWidth(), 728, "Collision", edit_font);
   editor_buttons[button_hide_left] = Button( editor_buttons[4].getX() + editor_buttons[4].getWidth(), 728, "<", edit_font);
@@ -80,7 +91,7 @@ editor::editor(){
   editor_buttons[button_hide_top] = Button( 837, 0, ">", edit_font);
   editor_buttons[button_help] = Button(  editor_buttons[button_hide_top].getX() + editor_buttons[button_hide_top].getWidth(), 0, "Help", edit_font);
   editor_buttons[button_back] = Button(  editor_buttons[button_help].getX() + editor_buttons[button_help].getWidth(), 0, "Main Menu", edit_font);
-
+*/
 
 
   // Is it edit mode?
@@ -111,54 +122,42 @@ editor::~editor(){
 // Update editor
 void editor::update(){
   // Update buttons
-  for( int i = 0; i < BUTTON_COUNT; i++){
-    if(gui_mode)
-      editor_buttons[i].update();
-  }
-
+ editorUI.update();
   // Check if over Button
   bool over_Button = false;
-  for( int i = 0; i < BUTTON_COUNT; i++){
-    if( editor_buttons[i].hover()){
-      over_Button = true;
-      break;
-    }
-  }
-
-  // Change type
-  for( int i = 0; i <5; i++)
-    if( editor_buttons[i].mouseReleased())
-      tile_type = i;
 
 
-  // Advanced mode types
-  if(keyListener::keyPressed[ALLEGRO_KEY_Q])
+  over_Button = editorUI.isHovering();
+
+
+  // Changing types
+  if(keyListener::keyPressed[ALLEGRO_KEY_Q] || editorUI.getElementByText("Dynamic").mouseReleased())
     tile_type = 0;
-  if(keyListener::keyPressed[ALLEGRO_KEY_W])
+  if(keyListener::keyPressed[ALLEGRO_KEY_W] || editorUI.getElementByText("Static").mouseReleased())
     tile_type = 1;
-  if(keyListener::keyPressed[ALLEGRO_KEY_E])
+  if(keyListener::keyPressed[ALLEGRO_KEY_E] || editorUI.getElementByText("Player").mouseReleased())
     tile_type = 2;
-  if(keyListener::keyPressed[ALLEGRO_KEY_R])
+  if(keyListener::keyPressed[ALLEGRO_KEY_R] || editorUI.getElementByText("Goat").mouseReleased())
     tile_type = 3;
-  if(keyListener::keyPressed[ALLEGRO_KEY_T])
+  if(keyListener::keyPressed[ALLEGRO_KEY_T] || editorUI.getElementByText("Collision").mouseReleased())
     tile_type = 4;
   if(keyListener::keyPressed[ALLEGRO_KEY_Y])
     tile_type = 5;
 
   // Rockin' three liner undo Button
-  if((keyListener::keyPressed[ALLEGRO_KEY_Z] || editor_buttons[button_undo].mouseReleased() )&& editorBoxes.size()>0){
+  if((keyListener::keyPressed[ALLEGRO_KEY_Z] || editorUI.getElementByText("Undo").mouseReleased() ) && editorBoxes.size()>0){
     editorBoxes.pop_back();
     calculate_orientation_global();
   }
 
   // Clear world Button
-  if(keyListener::keyPressed[ALLEGRO_KEY_C] || editor_buttons[button_clear].mouseReleased()){
+  if(keyListener::keyPressed[ALLEGRO_KEY_C] || editorUI.getElementByText("Clear").mouseReleased()){
 
     if(al_show_native_message_box( nullptr, "Clear?", "Clear the map?", "There is no recovering this masterpiece.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1);
       editorBoxes.clear();
   }
 
-  if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editor_buttons[button_back].mouseReleased()){
+  if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back").mouseReleased()){
     if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1);
       set_next_state(STATE_MENU);
 
@@ -171,7 +170,7 @@ void editor::update(){
     gui_mode =! gui_mode;
 
   // Save
-  if( editor_buttons[button_save].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_S]){
+  if( editorUI.getElementByText("Save").mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_S]){
     if( editorBoxes.size() > 0){
       ALLEGRO_FILECHOOSER *myChooser;
 
@@ -198,7 +197,7 @@ void editor::update(){
       al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!", "", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
   }
   // Save as
-  if( editor_buttons[button_save_as].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_D]){
+  if(editorUI.getElementByText("Save as").mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_D]){
     if( editorBoxes.size() > 0){
       ALLEGRO_FILECHOOSER *myChooser;
 
@@ -223,7 +222,7 @@ void editor::update(){
     }
   }
   // Load map
-  if( editor_buttons[button_load].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_A]){
+  if(editorUI.getElementByText("Load").mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_A]){
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
 
     // Display open dialog
@@ -248,18 +247,18 @@ void editor::update(){
   }
 
   // Play
-  if( editor_buttons[button_play].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_F]){
+  if(editorUI.getElementByText("Play").mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_F]){
      save_map( "data/level_0.xml");
      set_next_state( STATE_GAME);
      game::testing = true;
   }
 
   // Grid toggle
-  if( editor_buttons[button_grid].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_G])
+  if(editorUI.getElementByText("Grid").mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
   // Gosh darn toggle hide buttons take so much freakin' room
-  if( editor_buttons[button_hide_left].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_LEFT]){
+/*  if( editor_buttons[button_hide_left].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_LEFT]){
     editor_buttons[button_type_collision].toggleStatus();
     editor_buttons[button_type_static].toggleStatus();
     editor_buttons[button_type_dynamic].toggleStatus();
@@ -310,7 +309,7 @@ void editor::update(){
       editor_buttons[button_hide_top].setTransparency(255);
     }
    }
-
+    */
   // Add tile
   if(tile_type != 4){
     if( mouseListener::mouse_button & 1
@@ -577,10 +576,7 @@ void editor::draw(){
   al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s", file_name);
 
   // Draw buttons
-  for( int i = 0; i < BUTTON_COUNT; i++){
-    if(gui_mode)
-      editor_buttons[i].draw();
-  }
+  editorUI.draw();
 }
 
 

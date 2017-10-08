@@ -24,9 +24,10 @@
 #include "mouseListener.h"
 #include "keyListener.h"
 #include "tools.h"
-#include "button.h"
+#include "Button.h"
 #include "globals.h"
 #include "game.h"
+#include "UIHandler.h"
 
 #include "state.h"
 
@@ -45,27 +46,6 @@ struct editor_box{
   std::string height_str;
 };
 
-// Button names
-enum button_names{
-  button_type_dynamic,
-  button_type_static,
-  button_type_player,
-  button_type_goat,
-  button_type_collision,
-  button_hide_left,
-  button_hide_right,
-  button_undo,
-  button_clear,
-  button_save,
-  button_save_as,
-  button_load,
-  button_play,
-  button_grid,
-  button_help,
-  button_back,
-  button_hide_top
-};
-
 // The editor state
 class editor : public state{
   public:
@@ -76,7 +56,9 @@ class editor : public state{
     void update();
     void draw();
   private:
-    // Imagess
+
+    UIHandler editorUI;
+    // Images
     ALLEGRO_BITMAP *image_box[5];
     ALLEGRO_BITMAP *tiles[5][15];
 
@@ -90,9 +72,6 @@ class editor : public state{
     bool load_map( std::string mapName);
 
     static const int BUTTON_COUNT = 17;
-
-    // Type buttons
-    Button editor_buttons[BUTTON_COUNT];
 
     // Tiles
     std::vector<editor_box> editorBoxes;

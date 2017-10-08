@@ -1,6 +1,6 @@
 #include "Button.h"
 
-Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font, int width, int height, int padding_x, int padding_y){
+Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font){
 
   this -> alpha = 255;
   // Literally this
@@ -22,13 +22,40 @@ Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font, in
     this -> height = al_get_font_line_height( UIElement_font);
   }
   else{
-    this -> width = width;
-    this -> height = height;
+    this -> width = 10;
+    this -> height = 10;
   }
 
-  this -> padding_x = padding_x;
-  this -> padding_y = padding_y;
+  this -> padding_x = 10;
+  this -> padding_y = 10;
 }
+
+Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font, int newWidth, int newHeight){
+
+  this -> alpha = 255;
+  // Literally this
+  this -> x = x;
+  this -> y = y;
+  this -> text = text;
+  this -> image = nullptr;
+  this -> UIElement_font = UIElement_font;
+
+  this -> visible = true;
+  this -> active = true;
+
+  this -> mouse_released=false;
+  this -> old_mouse_down=false;
+  this -> hovering = false;
+
+
+  this -> width = newWidth;
+  this -> height = newHeight;
+
+
+  this -> padding_x = 10;
+  this -> padding_y = 10;
+}
+
 
 
 Button::~Button()
