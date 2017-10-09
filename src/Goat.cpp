@@ -7,12 +7,9 @@ void Goat::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newG
   goat_tick = 0;
   sprite = newSprite;
   gameCharacter = newCharacter;
-  std::cout<<gameCharacter<<"\n";
 
   if( gameCharacter == nullptr)
     std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
-  else
-    std::cout<<"gameCharacter's position:" << gameCharacter -> getX() << "," << gameCharacter -> getX() << "\n";
 
   // Image
   for( int i = 0; i < 16; i++)
