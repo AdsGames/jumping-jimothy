@@ -61,37 +61,50 @@ editor::editor(){
 
 
   // buttons
- // Button newButton = ;
- // Button newButton = ;
+
+
   editorUI.addElement(Button(0, 728, "Dynamic", edit_font));
- // UIElement newUI = UIElement();
- // editorUI.addElement(newUI);
- // editorUI.killme(1);
-  editorUI.createButton(editorUI.getElementByText("Dynamic").getRightX(), 728, "Static", edit_font);
   editorUI.createAnchoredButton("Static",edit_font,"Dynamic",RIGHT);
   editorUI.createAnchoredButton("Player",edit_font,"Static",RIGHT);
   editorUI.createAnchoredButton("Goat",edit_font,"Player",RIGHT);
   editorUI.createAnchoredButton("Collision",edit_font,"Goat",RIGHT);
-  editorUI.createAnchoredButton(">",edit_font,"Goat",RIGHT);
+  editorUI.createAnchoredButton("Explosive",edit_font,"Collision",RIGHT);
 
-/*
-  editor_buttons[button_type_goat] = Button( editor_buttons[button_type_player].getX() + editor_buttons[button_type_player].getWidth(), 728, "Goat", edit_font);
-  editor_buttons[button_type_collision] = Button(editor_buttons[button_type_goat].getX() + editor_buttons[button_type_goat].getWidth(), 728, "Collision", edit_font);
-  editor_buttons[button_hide_left] = Button( editor_buttons[4].getX() + editor_buttons[4].getWidth(), 728, "<", edit_font);
+  editorUI.createAnchoredButton("<",edit_font,"Explosive",RIGHT);
 
-  editor_buttons[button_hide_right] = Button( 566, 728, ">", edit_font);
-  editor_buttons[button_undo] = Button( editor_buttons[button_hide_right].getX() + editor_buttons[button_hide_right].getWidth(), 728, "Undo", edit_font);
-  editor_buttons[button_clear] = Button(editor_buttons[button_undo].getX() + editor_buttons[button_undo].getWidth(), 728, "Clear", edit_font);
-  editor_buttons[button_save] = Button(editor_buttons[button_clear].getX() + editor_buttons[button_clear].getWidth(), 728, "Save", edit_font);
-  editor_buttons[button_save_as] = Button( editor_buttons[button_save].getX() + editor_buttons[button_save].getWidth(), 728, "Save as", edit_font);
-  editor_buttons[button_load] = Button(editor_buttons[button_save_as].getX() + editor_buttons[button_save_as].getWidth(), 728, "Load", edit_font);
-  editor_buttons[button_grid] = Button(editor_buttons[button_load].getX() + editor_buttons[button_load].getWidth(), 728, "Grid", edit_font);
-  editor_buttons[button_play] = Button(editor_buttons[button_grid].getX() + editor_buttons[button_grid].getWidth(), 728, "Play", edit_font);
+  // Ok Mr. Allan. We need to have a talk about your enums.
+  // They were not very nice to work with, and I replaced
+  // them. But, however, they did have one advantage and
+  // they weren't as bad as I may have stated in earlier
+  // commits. I ran into a problem with my system. Since
+  // my system uses the buttons' text as it's ID system,
+  // two buttons that have the same text will cause an
+  // ambiguity. I had considered, but have since decided
+  // to not include a separate ID system. To get around
+  // this, the two buttons that are ">" characters, one
+  // is "> " and one is ">". One has a trailing " " which
+  // is an invisible character, alt code 0160 on Windows.
+  // I acknowledge that this is a horrible hack and should
+  // not exist in any code base. Your system did not have
+  // this problem and I apologize for the atrocity you have
+  // to witness, and God forbid, maintain.
+  //
+  // Deepest regrets,
+  //   Danny Van Stemp
 
-  editor_buttons[button_hide_top] = Button( 837, 0, ">", edit_font);
-  editor_buttons[button_help] = Button(  editor_buttons[button_hide_top].getX() + editor_buttons[button_hide_top].getWidth(), 0, "Help", edit_font);
-  editor_buttons[button_back] = Button(  editor_buttons[button_help].getX() + editor_buttons[button_help].getWidth(), 0, "Main Menu", edit_font);
-*/
+  editorUI.addElement(Button(556,728,"> ", edit_font));
+  editorUI.createAnchoredButton("Undo",edit_font,"> ",LEFT);
+  editorUI.createAnchoredButton("Clear",edit_font,"Undo",LEFT);
+  editorUI.createAnchoredButton("Save",edit_font,"Clear",LEFT);
+  editorUI.createAnchoredButton("Save as",edit_font,"Save",LEFT);
+  editorUI.createAnchoredButton("Load",edit_font,"Save as",LEFT);
+  editorUI.createAnchoredButton("Grid",edit_font,"Load",LEFT);
+  editorUI.createAnchoredButton("Play",edit_font,"Grid",LEFT);
+
+
+  editorUI.addElement(Button(882,0,">",edit_font));
+  editorUI.createAnchoredButton("Help",edit_font,">",LEFT);
+  editorUI.createAnchoredButton("Back",edit_font,"Help",LEFT);
 
 
   // Is it edit mode?
@@ -127,7 +140,7 @@ void editor::update(){
   bool over_Button = false;
 
 
-  over_Button = editorUI.isHovering();
+  //over_Button = editorUI.isHovering();
 
 
   // Changing types
@@ -141,7 +154,7 @@ void editor::update(){
     tile_type = 3;
   if(keyListener::keyPressed[ALLEGRO_KEY_T] || editorUI.getElementByText("Collision").mouseReleased())
     tile_type = 4;
-  if(keyListener::keyPressed[ALLEGRO_KEY_Y])
+  if(keyListener::keyPressed[ALLEGRO_KEY_Y] || editorUI.getElementByText("Explosive").mouseReleased())
     tile_type = 5;
 
   // Rockin' three liner undo Button
@@ -153,12 +166,12 @@ void editor::update(){
   // Clear world Button
   if(keyListener::keyPressed[ALLEGRO_KEY_C] || editorUI.getElementByText("Clear").mouseReleased()){
 
-    if(al_show_native_message_box( nullptr, "Clear?", "Clear the map?", "There is no recovering this masterpiece.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1);
+    if(al_show_native_message_box( nullptr, "Clear?", "Clear the map?", "There is no recovering this masterpiece.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
       editorBoxes.clear();
   }
 
   if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back").mouseReleased()){
-    if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1);
+    if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
       set_next_state(STATE_MENU);
 
   }
@@ -725,7 +738,7 @@ bool editor::save_map( std::string mapName){
     if(editorBoxes[i].type==5){
     editor_box newBox = editorBoxes[i];
     editorBoxes.erase(editorBoxes.begin()+i);
-    editorBoxes.insert(editorBoxes.begin(),newBox);
+    editorBoxes.push_back(newBox);
     }
   }
 

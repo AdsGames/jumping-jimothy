@@ -11,7 +11,7 @@ bool game::testing = false;
 // Constructor
 game::game(){
 
-  //gameCharacter = new Character();
+  gameCharacter = new Character();
   // Init first time
   newBox = nullptr;
   rootBox = nullptr;
