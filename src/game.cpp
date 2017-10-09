@@ -100,9 +100,8 @@ Box *game::create_explosive_box(float newX, float newY){
   Explosive *newExplosive = new Explosive();
   newExplosive -> init( newX, newY, 1.6,1.6, 0,0,false, box_repel, gameWorld,gameCharacter);
   if(gameCharacter==nullptr)
-    tools::abort_on_error("KYS","u suck and ur nullptr too");
-  else
-    std::cout<<"ASDFJASFJKASDJFASDFKASDFKJASDFKASDFJASDFKJ"<<gameCharacter<<"\n";
+    std::cout<<"WARNING: gameCharacter is nullptr when creating an explosive box.\n";
+
   gameBoxes.push_back( newExplosive);
   return newExplosive;
 
@@ -254,7 +253,6 @@ void game::load_world(int newLevel){
           jointDef  -> referenceAngle = 0;
           gameWorld -> CreateJoint(jointDef);
         }*/
-      std::cout<<gameCharacter<<"\n";
       }else if(type == "Explosive"){
        newBox = create_explosive_box( tools::string_to_float(x), tools::string_to_float(y));
       }

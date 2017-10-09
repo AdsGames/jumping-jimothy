@@ -23,7 +23,7 @@ void tools::abort_on_error( std::string message, std::string title){
 // Load sample if exits, or throw error
 ALLEGRO_SAMPLE *tools::load_sample_ex( std::string file){
 
-  std::cout<<"Attempt load sound "<<file<<".";
+  std::cout<<"Loading sound "<<file<<".";
 
   // Check if file exists
   std::ifstream f( file.c_str());
@@ -35,7 +35,7 @@ ALLEGRO_SAMPLE *tools::load_sample_ex( std::string file){
   if( !(temp_sample = al_load_sample( file.c_str())))
     abort_on_error( std::string("There was an error loading " + file + "\nOh no :("), "Loading Error");
 
-  std::cout<<" Completed.\n";
+  std::cout<<" Success.\n";
 
   return temp_sample;
 }
@@ -43,7 +43,7 @@ ALLEGRO_SAMPLE *tools::load_sample_ex( std::string file){
 // Load bitmap if exits, or throw error
 ALLEGRO_BITMAP * tools::load_bitmap_ex( std::string file){
 
-  std::cout<<"Attempt load bitmap "<<file<<".";
+  std::cout<<"Loading bitmap "<<file<<".";
 
   // Check if file exists
   std::ifstream f( file.c_str());
@@ -55,7 +55,7 @@ ALLEGRO_BITMAP * tools::load_bitmap_ex( std::string file){
   if( !(temp_image = al_load_bitmap( file.c_str())))
     abort_on_error( std::string("There was an error loading " + file + "... \nSorry..."), "Loading Error");
 
-  std::cout<<" Completed.\n";
+  std::cout<<" Success.\n";
 
 
   return temp_image;

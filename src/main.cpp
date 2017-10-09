@@ -90,7 +90,7 @@ void change_state(){
 // Setup game
 void setup(){
 
-  std::cout<<"Attempt initialize Allegro.";
+  std::cout<<"Initializing Allegro.";
   // Init allegro
   if( !al_init())
     tools::abort_on_error( "Allegro could not initilize", "Error");
@@ -139,7 +139,21 @@ void setup(){
   // Window title
   al_set_window_title(display,"Jumping Jimothy");
 
-  std::cout<<" Complete.\n";
+  std::cout<<" Sucesss.\n";
+
+
+  // Probably never going to be relevant but pretty cool anyways
+  uint32_t version = al_get_allegro_version();
+  int major = version >> 24;
+  int minor = (version >> 16) & 255;
+  int revision = (version >> 8) & 255;
+  int release = version & 255;
+
+  std::cout<<"Allegro version "<<major<<"."<<minor<<"."<<revision<<"."<<release<<"\n";
+
+  // This is actually completely irrelevant other than making fun of Allan's PC when he runs this
+  // Sorry, your PC is a very nice PC
+  std::cout<<"Running as "<<al_get_app_name()<<", with "<<al_get_ram_size()<<" MB RAM.\n";
 
 }
 
