@@ -140,7 +140,7 @@ void editor::update(){
   bool over_Button = false;
 
 
-  //over_Button = editorUI.isHovering();
+  over_Button = editorUI.isHovering();
 
 
   // Changing types

@@ -17,7 +17,7 @@ void UIHandler::addElement(UIElement newUIElement){
 }
 bool UIHandler::isHovering(){
   for(int i=0; i<ui_elements.size();i++){
-    if(ui_elements[i].hover());
+    if(ui_elements[i].hover())
       return true;
   }
   return false;
