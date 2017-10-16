@@ -17,7 +17,7 @@ class UIHandler
     void draw();
     void update();
     bool isHovering();
-    UIElement* getElementByText(std::string);
+    UIElement getElementByText(std::string);
     void createButton(int x, int y,std::string newText,ALLEGRO_FONT *newFont);
     void createAnchoredButton(std::string,ALLEGRO_FONT *,std::string,bool);
   protected:
