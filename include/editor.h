@@ -28,6 +28,7 @@
 #include "globals.h"
 #include "game.h"
 #include "UIHandler.h"
+#include "CheckBox.h"
 
 #include "state.h"
 

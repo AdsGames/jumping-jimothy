@@ -62,17 +62,23 @@ void change_state(){
     switch( nextState ){
       case STATE_INIT:
         currentState = new init();
+        std::cout<<"Switched state to initialization.\n";
         break;
       case STATE_GAME:
         currentState = new game();
+        std::cout<<"Switched state to game.\n";
         break;
       case STATE_EDIT:
         currentState = new editor();
+        std::cout<<"Switched state to editor.\n";
         break;
       case STATE_MENU:
         currentState = new menu();
+        std::cout<<"Switched state to main menu.\n";
+
         break;
       case STATE_EXIT:
+        std::cout<<"Exiting program.\n";
         closing = true;
         break;
       default:

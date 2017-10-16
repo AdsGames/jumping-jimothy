@@ -206,7 +206,7 @@ void game::load_world(int newLevel){
       if( object_node -> first_node("orientation") != 0)
         orientation = object_node -> first_node("orientation") -> value();
 
-      std::cout<<type<<"\n";
+     // std::cout<<type<<"\n";
 
       if( type == "Tile"){
         if(bodytype == "Static"){
