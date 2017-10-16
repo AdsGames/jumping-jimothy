@@ -63,7 +63,7 @@ Button::~Button()
   //dtor
 }
 void Button::draw(){
- if(visible){
+  if(visible){
     // Backdrop
     al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering,alpha));
     al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), 2);

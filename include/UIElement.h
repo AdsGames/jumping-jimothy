@@ -49,8 +49,6 @@ class UIElement
     bool clicked();
     void update();
 
-    //
-
     virtual void draw(){};
 
 

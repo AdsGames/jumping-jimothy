@@ -4,13 +4,24 @@
 UIElement::UIElement(){
   this -> x = 0;
   this -> y = 0;
+  this -> width = 0;
+  this -> height = 0;
   this -> text = "";
   this -> image = nullptr;
   this -> UIElement_font = nullptr;
   this -> hovering = false;
+  this -> old_mouse_down = false;
+  this -> mouse_released = false;
+  this -> alpha = 1.0f;
+  this -> visible = true;
+  this -> active = false;
+  this -> image = nullptr;
+  this -> UIElement_font = nullptr;
+  this -> text = "undefined";
+  this -> id = "-1";
 
-  padding_x = 10;
-  padding_y = 10;
+  this -> padding_x = 10;
+  this -> padding_y = 10;
 }
 
 
@@ -36,13 +47,11 @@ void UIElement::setFont( ALLEGRO_FONT *font){
   }
 }
 void UIElement::toggleVisibility(){
-
   visible=!visible;
 }
 
 
 void UIElement::toggleStatus(){
-
   visible=!visible;
   active=!active;
 }
@@ -78,7 +87,7 @@ bool UIElement::mouseReleased(){
   return mouse_released;
 }
 
-// Draw
+//// Draw
 //void UIElement::draw(){
 //  if(visible){
 //
