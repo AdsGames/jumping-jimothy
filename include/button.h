@@ -13,7 +13,7 @@ class Button : public UIElement
 
     Button(){};
 
-    void draw();
+    virtual void draw();
 
    // Button();
     virtual ~Button();

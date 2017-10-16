@@ -11,19 +11,19 @@
 class UIHandler
 {
   public:
-    UIHandler();
-    virtual ~UIHandler();
-    void addElement(UIElement);
+    UIHandler() {};
+    virtual ~UIHandler() {};
+    void addElement(UIElement *newUIElement);
     void draw();
     void update();
     bool isHovering();
-    UIElement getElementByText(std::string);
+    UIElement* getElementByText(std::string);
     void createButton(int x, int y,std::string newText,ALLEGRO_FONT *newFont);
     void createAnchoredButton(std::string,ALLEGRO_FONT *,std::string,bool);
   protected:
 
   private:
-    std::vector<UIElement> ui_elements;
+    std::vector<UIElement*> ui_elements;
 };
 
 #endif // UIHANDLER_H

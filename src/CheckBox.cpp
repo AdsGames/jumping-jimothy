@@ -60,7 +60,5 @@ void CheckBox::draw(){
     // Text
     if( UIElement_font != nullptr)
       al_draw_text( UIElement_font, al_map_rgba( 0, 0, 0,alpha), x + padding_x+checkbox_width, y + padding_y, 0, text.c_str());
-
-
   }
 }

@@ -11,7 +11,7 @@ class CheckBox : public UIElement
     CheckBox(int, int, std::string, ALLEGRO_FONT*);
     virtual ~CheckBox();
 
-    void draw() override;
+    virtual void draw();
 
   protected:
 
