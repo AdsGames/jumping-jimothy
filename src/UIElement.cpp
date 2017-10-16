@@ -79,18 +79,20 @@ bool UIElement::mouseReleased(){
 }
 
 // Draw
-void UIElement::draw(){
-  if(visible){
-    // Backdrop
-    al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering,alpha));
-    al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), 2);
-
-    // Text
-    if( UIElement_font != nullptr)
-      al_draw_text( UIElement_font, al_map_rgba( 0, 0, 0,alpha), x + padding_x, y + padding_y, 0, text.c_str());
-
-    // Image if avail
-    if( image != nullptr)
-      al_draw_bitmap( image, x + padding_x, y + padding_y, 0);
-  }
-}
+//void UIElement::draw(){
+//  if(visible){
+//
+//    std::cout<<"How do I actually oop?\n";
+//    // Backdrop
+//    al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering,alpha));
+//    al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), 2);
+//
+//    // Text
+//    if( UIElement_font != nullptr)
+//      al_draw_text( UIElement_font, al_map_rgba( 0, 0, 0,alpha), x + padding_x, y + padding_y, 0, text.c_str());
+//
+//    // Image if avail
+//    if( image != nullptr)
+//      al_draw_bitmap( image, x + padding_x, y + padding_y, 0);
+//  }
+//}

@@ -106,6 +106,9 @@ editor::editor(){
   editorUI.createAnchoredButton("Help",edit_font,">",LEFT);
   editorUI.createAnchoredButton("Back",edit_font,"Help",LEFT);
 
+  editorUI.addElement(CheckBox(100,200,"Click to die",edit_font));
+
+
 
   // Is it edit mode?
   if( game::testing){
@@ -396,7 +399,6 @@ void editor::update(){
 
         editorBoxes.push_back( newBox);
 
-        std::cout << "Made a nice collisionbox\n";
       }
     }
     if(mouseListener::mouse_button & 1){

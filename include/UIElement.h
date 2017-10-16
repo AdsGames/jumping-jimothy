@@ -49,8 +49,11 @@ class UIElement
     bool clicked();
     void update();
 
-    // Draw
-    void draw();
+    //
+
+    virtual void draw(){};
+
+
   protected:
      // Variables
     int x;
@@ -80,6 +83,7 @@ class UIElement
 
     std::string text;
     std::string id;
+
 
   private:
 

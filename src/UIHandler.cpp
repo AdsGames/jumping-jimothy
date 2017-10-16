@@ -50,8 +50,11 @@ UIElement UIHandler::getElementByText(std::string newText){
   // This will probably crash if the element is not found
   // So be careful
   // Plz dont hurt me
+  //  Edit: I do give ample warning before the tortured aftereffects
+  //  Just watch the console
+
   UIElement failure = UIElement();
-  std::cout<<"WARNING: Failed to find UI element "<<newText<<", may be unpredictable\n";
+  std::cout<<"WARNING: Failed to find UI element "<<newText<<", may(hint:will) be unpredictable\n";
   return failure;
 }
 

@@ -69,9 +69,6 @@ void Goat::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newG
 // Draw box to screen
 void Goat::draw(){
 
-    //std::cout<<gameCharacter ->getX()<<"\n";
-
-
   b2Vec2 position = body -> GetPosition();
   x = position.x;
   y = position.y;
