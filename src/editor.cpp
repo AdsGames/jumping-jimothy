@@ -137,6 +137,9 @@ void editor::update(){
   // Update buttons
   editorUI.update();
 
+    // Learned a few things from you
+  editorUI.getElementByText("Block affects character") -> setStatus(tile_type==5);
+
   // Check if over Button
   bool over_Button = editorUI.isHovering();
 
@@ -335,6 +338,8 @@ void editor::update(){
       newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
       newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
       newBox.type = tile_type;
+      newBox.affect_character = editorUI.getElementByText("Block affects character") -> getChecked();
+
       for( int i = 0; i < 4; i++)
         newBox.orientation[i] = 0;
 
@@ -347,7 +352,7 @@ void editor::update(){
       else if( tile_type == 3)
         newBox.bodyType = "Finish";
       else if( tile_type == 5)
-        newBox.bodyType = "Explosion";
+        newBox.bodyType = "Explosive";
 
       editorBoxes.push_back( newBox);
 
@@ -410,7 +415,6 @@ void editor::update(){
     }
   }
 
-  editorUI.getElementByText("Grid") -> setText("oii susan");
 }
 
 // Calculate all the orientations of blocks
@@ -549,8 +553,15 @@ void editor::draw(){
       al_draw_bitmap( tiles[2][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     else if( editorBoxes.at(i).type == 3)
       al_draw_bitmap( tiles[3][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
-    else if( editorBoxes.at(i).type == 5)
+    else if( editorBoxes.at(i).type == 5){
+      if(editorBoxes.at(i).affect_character)
+        al_draw_filled_rectangle( editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4, editorBoxes.at(i).x +28, editorBoxes.at(i).y + 28, al_map_rgb(255, 0, 0));
+      else
+        al_draw_filled_rectangle( editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4, editorBoxes.at(i).x +28, editorBoxes.at(i).y + 28, al_map_rgb(0, 255, 0));
+
       al_draw_bitmap( tiles[4][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+
+    }
   }
 
   //Gotta draw the tranparent boxes in front
@@ -579,7 +590,7 @@ void editor::draw(){
   if( tile_type == 4)
     al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Collision Box");
   if( tile_type == 5)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Explosion Box");
+    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Explosive Box");
 
 
   // Current map opened
@@ -632,6 +643,7 @@ bool editor::load_map( std::string mapName){
     std::string height = "0";
     std::string bodytype = "static";
     std::string orientation = "0 0 0 0";
+    std::string affect_character = "false";
 
     // Load data
     if( object_node -> first_attribute("type") != 0)
@@ -648,6 +660,10 @@ bool editor::load_map( std::string mapName){
       bodytype = object_node -> first_node("bodytype") -> value();
     if( object_node -> first_node("orientation") != 0)
       orientation = object_node -> first_node("orientation") -> value();
+    if( object_node -> first_node("affect_character") != 0)
+      affect_character = object_node -> first_node("affect_character") -> value();
+
+
 
 
 
@@ -657,6 +673,7 @@ bool editor::load_map( std::string mapName){
     newBox.x_str = x;
     newBox.y_str = y;
     newBox.bodyType = bodytype;
+    newBox.affect_character = (affect_character=="true");
 
     // Idek dude but it works
     if(newBox.bodyType == "Collision"){
@@ -706,7 +723,7 @@ bool editor::load_map( std::string mapName){
       newBox.type = 3;
     else if( newBox.bodyType == "Collision")
       newBox.type = 4;
-    else if( newBox.bodyType == "Explosion")
+    else if( newBox.bodyType == "Explosive")
       newBox.type = 5;
     else
       newBox.type = 0;
@@ -777,12 +794,16 @@ bool editor::save_map( std::string mapName){
     if(editorBoxes.at(i).bodyType=="Dynamic" || editorBoxes.at(i).bodyType=="Static")
       object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
     if(editorBoxes.at(i).bodyType=="Collision"){
-
-
       object_node -> append_node( doc.allocate_node( rapidxml::node_element, "width",editorBoxes.at(i).width_str.c_str()));
       object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height",editorBoxes.at(i).height_str.c_str()));
 
-     // object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height", tools::convertIntToString(editorBoxes.at(i).height).c_str()));
+    }
+    if(editorBoxes.at(i).bodyType=="Explosive"){
+      if(editorBoxes.at(i).affect_character)
+        object_node -> append_node( doc.allocate_node( rapidxml::node_element, "affect_character","true"));
+      else
+        object_node -> append_node( doc.allocate_node( rapidxml::node_element, "affect_character","false"));
+
 
     }
 

@@ -27,7 +27,7 @@ CheckBox::CheckBox(int newX, int newY,std::string newText, ALLEGRO_FONT *newFont
   this -> old_mouse_down=false;
   this -> hovering = false;
 
-  this -> status = false;
+  this -> checked = false;
 
 
   if( UIElement_font != nullptr){
@@ -52,7 +52,7 @@ void CheckBox::update(){
   if(active){
     if( hovering && old_mouse_down && !mouseListener::mouse_button & 1){
       mouse_released = true;
-      status=!status;
+      checked=!checked;
 
     }
     old_mouse_down = hovering && mouseListener::mouse_button & 1;
@@ -76,7 +76,7 @@ void CheckBox::draw(){
     al_draw_filled_rectangle( x+padding_x, y+padding_y, x + padding_x +checkbox_width, y + padding_y + checkbox_width, al_map_rgba( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering,alpha));
     al_draw_rectangle( x + padding_x, y + padding_y, x + padding_x+checkbox_width, y + padding_y + checkbox_width, al_map_rgba( 0, 0, 0,alpha), 2);
 
-    if(status)
+    if(checked)
       al_draw_filled_rectangle( x+padding_x+2, y+padding_y+2, x + padding_x +checkbox_width-2, y + padding_y + checkbox_width-2, al_map_rgba( 0,0,0,alpha));
 
 

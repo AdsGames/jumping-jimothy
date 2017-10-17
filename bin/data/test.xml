@@ -1,452 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-	<Object type="Character">
-		<x>12</x>
-		<y>-37.6</y>
-		<bodytype>Character</bodytype>
+	<Object type="Explosive">
+		<x>13.6</x>
+		<y>-16.8</y>
+		<affect_character>false</affect_character>
 	</Object>
-	<Object type="Character">
+	<Object type="Explosive">
+		<x>15.2</x>
+		<y>-20</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>15.2</x>
+		<y>-23.2</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>18.4</x>
+		<y>-26.4</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>21.6</x>
+		<y>-26.4</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>24.8</x>
+		<y>-23.2</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>26.4</x>
+		<y>-20</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>28</x>
+		<y>-16.8</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>28</x>
+		<y>-13.6</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
 		<x>20</x>
 		<y>-5.6</y>
-		<bodytype>Character</bodytype>
+		<affect_character>true</affect_character>
 	</Object>
-	<Object type="Tile">
-		<x>48.8</x>
-		<y>-2.4</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
+	<Object type="Explosive">
 		<x>24.8</x>
-		<y>-12</y>
-		<orientation>1 2 7 8</orientation>
-		<bodytype>Dynamic</bodytype>
+		<y>-5.6</y>
+		<affect_character>true</affect_character>
 	</Object>
-	<Object type="Tile">
-		<x>23.2</x>
-		<y>-12</y>
-		<orientation>0 1 3 9</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>23.2</x>
-		<y>-13.6</y>
-		<orientation>3 5 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>21.6</x>
-		<y>-15.2</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>21.6</x>
-		<y>-16.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>21.6</x>
-		<y>-18.4</y>
-		<orientation>3 5 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>23.2</x>
-		<y>-20</y>
-		<orientation>0 1 6 7</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>24.8</x>
-		<y>-20</y>
-		<orientation>1 2 7 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
+	<Object type="Explosive">
 		<x>28</x>
-		<y>-20</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
+		<y>-5.6</y>
+		<affect_character>true</affect_character>
 	</Object>
-	<Object type="Tile">
+	<Object type="Explosive">
 		<x>31.2</x>
-		<y>-18.4</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
+		<y>-5.6</y>
+		<affect_character>true</affect_character>
 	</Object>
-	<Object type="Tile">
-		<x>32.8</x>
-		<y>-16.8</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
+	<Object type="Explosive">
+		<x>34.4</x>
+		<y>-7.2</y>
+		<affect_character>true</affect_character>
 	</Object>
-	<Object type="Tile">
+	<Object type="Explosive">
 		<x>36</x>
-		<y>-15.2</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>37.6</x>
-		<y>-13.6</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>39.2</x>
-		<y>-12</y>
-		<orientation>3 5 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>39.2</x>
 		<y>-10.4</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
+		<affect_character>true</affect_character>
 	</Object>
-	<Object type="Tile">
-		<x>21.6</x>
-		<y>-37.6</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
+	<Object type="Explosive">
+		<x>37.6</x>
+		<y>-15.2</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>37.6</x>
+		<y>-18.4</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>37.6</x>
+		<y>-21.6</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>36</x>
+		<y>-24.8</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>34.4</x>
+		<y>-26.4</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>32.8</x>
+		<y>-28</y>
+		<affect_character>true</affect_character>
 	</Object>
 	<Object type="Explosive">
 		<x>31.2</x>
 		<y>-31.2</y>
+		<affect_character>true</affect_character>
 	</Object>
 	<Object type="Explosive">
-		<x>29.6</x>
-		<y>-28</y>
-	</Object>
-	<Object type="Explosive">
-		<x>26.4</x>
-		<y>-23.2</y>
-	</Object>
-	<Object type="Explosive">
-		<x>23.2</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Explosive">
-		<x>23.2</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Explosive">
-		<x>26.4</x>
-		<y>-12</y>
-	</Object>
-	<Object type="Tile">
-		<x>12</x>
-		<y>-21.6</y>
-		<orientation>3 5 6 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>12</x>
-		<y>-20</y>
-		<orientation>0 1 3 9</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-20</y>
-		<orientation>12 5 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-18.4</y>
-		<orientation>0 1 3 9</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
 		<x>15.2</x>
-		<y>-18.4</y>
-		<orientation>1 2 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
 		<y>-16.8</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Static</bodytype>
+		<affect_character>false</affect_character>
 	</Object>
-	<Object type="Tile">
-		<x>18.4</x>
-		<y>-15.2</y>
-		<orientation>0 1 6 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>20</x>
-		<y>-15.2</y>
-		<orientation>1 2 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>21.6</x>
-		<y>-13.6</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>24.8</x>
-		<y>-10.4</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>26.4</x>
-		<y>-8.8</y>
-		<orientation>0 1 6 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>28</x>
-		<y>-8.8</y>
-		<orientation>12 5 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>28</x>
-		<y>-7.2</y>
-		<orientation>0 1 3 9</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>29.6</x>
-		<y>-7.2</y>
-		<orientation>1 2 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>4</x>
-		<y>-37.6</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>10.4</x>
-		<y>-26.4</y>
-		<orientation>3 5 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>10.4</x>
+	<Object type="Explosive">
+		<x>16.8</x>
 		<y>-24.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>10.4</x>
-		<y>-23.2</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>12</x>
-		<y>-18.4</y>
-		<orientation>1 2 7 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-16.8</y>
-		<orientation>3 5 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-15.2</y>
-		<orientation>0 1 3 9</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>15.2</x>
-		<y>-15.2</y>
-		<orientation>12 5 7 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>15.2</x>
-		<y>-13.6</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>15.2</x>
-		<y>-12</y>
-		<orientation>0 1 3 9</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
-		<y>-12</y>
-		<orientation>12 5 7 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
-		<y>-10.4</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
-		<y>-8.8</y>
-		<orientation>0 1 3 9</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>18.4</x>
-		<y>-8.8</y>
-		<orientation>12 5 7 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>18.4</x>
-		<y>-7.2</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
+		<affect_character>false</affect_character>
 	</Object>
 	<Object type="Explosive">
-		<x>20</x>
-		<y>-26.4</y>
-	</Object>
-	<Object type="Explosive">
-		<x>20</x>
-		<y>-23.2</y>
-	</Object>
-	<Object type="Explosive">
-		<x>24.8</x>
-		<y>-18.4</y>
+		<x>23.2</x>
+		<y>-24.8</y>
+		<affect_character>false</affect_character>
 	</Object>
 	<Object type="Explosive">
 		<x>28</x>
-		<y>-16.8</y>
+		<y>-18.4</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>18.4</x>
+		<y>-5.6</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>26.4</x>
+		<y>-5.6</y>
+		<affect_character>true</affect_character>
 	</Object>
 	<Object type="Explosive">
 		<x>32.8</x>
-		<y>-15.2</y>
+		<y>-5.6</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>37.6</x>
+		<y>-12</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>37.6</x>
+		<y>-20</y>
+		<affect_character>true</affect_character>
 	</Object>
 	<Object type="Explosive">
 		<x>36</x>
-		<y>-12</y>
-	</Object>
-	<Object type="Tile">
-		<x>8.8</x>
-		<y>-20</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>10.4</x>
-		<y>-18.4</y>
-		<orientation>3 11 6 7</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>10.4</x>
-		<y>-16.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>10.4</x>
-		<y>-15.2</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>12</x>
-		<y>-13.6</y>
-		<orientation>3 5 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>12</x>
-		<y>-12</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-10.4</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>8.8</x>
-		<y>-37.6</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Dynamic</bodytype>
-	</Object>
-	<Object type="Finish">
-		<x>32.8</x>
-		<y>-7.2</y>
-		<bodytype>Finish</bodytype>
-	</Object>
-	<Object type="Finish">
-		<x>39.2</x>
-		<y>-37.6</y>
-		<bodytype>Finish</bodytype>
+		<y>-26.4</y>
+		<affect_character>true</affect_character>
 	</Object>
 	<Object type="Explosive">
 		<x>31.2</x>
 		<y>-29.6</y>
+		<affect_character>true</affect_character>
 	</Object>
 	<Object type="Explosive">
-		<x>24.8</x>
+		<x>15.2</x>
 		<y>-21.6</y>
-	</Object>
-	<Object type="Explosive">
-		<x>24.8</x>
-		<y>-13.6</y>
-	</Object>
-	<Object type="Explosive">
-		<x>20</x>
-		<y>-28</y>
-	</Object>
-	<Object type="Explosive">
-		<x>21.6</x>
-		<y>-21.6</y>
-	</Object>
-	<Object type="Explosive">
-		<x>29.6</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Explosive">
-		<x>0.8</x>
-		<y>-37.6</y>
-	</Object>
-	<Object type="Explosive">
-		<x>28</x>
-		<y>-24.8</y>
-	</Object>
-	<Object type="Explosive">
-		<x>5.6</x>
-		<y>-37.6</y>
+		<affect_character>false</affect_character>
 	</Object>
 	<Object type="Explosive">
 		<x>26.4</x>
-		<y>-16.8</y>
+		<y>-21.6</y>
+		<affect_character>false</affect_character>
 	</Object>
 	<Object type="Explosive">
-		<x>31.2</x>
-		<y>-32.8</y>
+		<x>21.6</x>
+		<y>-5.6</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>36</x>
+		<y>-8.8</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>37.6</x>
+		<y>-23.2</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>13.6</x>
+		<y>-15.2</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>28</x>
+		<y>-15.2</y>
+		<affect_character>false</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>37.6</x>
+		<y>-16.8</y>
+		<affect_character>true</affect_character>
 	</Object>
 	<Object type="Explosive">
 		<x>20</x>
-		<y>-24.8</y>
-	</Object>
-	<Object type="Explosive">
-		<x>23.2</x>
-		<y>-16.8</y>
+		<y>-26.4</y>
+		<affect_character>false</affect_character>
 	</Object>
 	<Object type="Explosive">
 		<x>34.4</x>
-		<y>-13.6</y>
+		<y>-28</y>
+		<affect_character>true</affect_character>
+	</Object>
+	<Object type="Explosive">
+		<x>29.6</x>
+		<y>-5.6</y>
+		<affect_character>true</affect_character>
 	</Object>
 </data>
 

@@ -22,12 +22,12 @@ public:
     }
 };
 
-void Explosive::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,BITMAP *newSprite, b2World *newGameWorld, Character *newGameCharacter){
+void Explosive::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,BITMAP *newSprite,bool newAffectCharacter, b2World *newGameWorld, Character *newGameCharacter){
 
   sprite = newSprite;
   gameCharacter = newGameCharacter;
 
-  affect_character=false;
+  affect_character=newAffectCharacter;
   numRays=32;
   blastRadius = 10;
   blastPower = 1000;

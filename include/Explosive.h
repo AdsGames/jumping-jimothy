@@ -14,7 +14,7 @@ class Explosive : public Box
     void draw();
     void update();
 
-    void init(float, float, float, float,float,float,bool,BITMAP*, b2World *, Character *);
+    void init(float, float, float, float,float,float,bool,BITMAP*, bool,b2World *, Character *);
     void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 
   protected:
