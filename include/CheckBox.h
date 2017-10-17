@@ -12,12 +12,15 @@ class CheckBox : public UIElement
     virtual ~CheckBox();
     void update() override;
     virtual void draw();
+    bool getChecked(){
+      return checked;
+    }
 
   protected:
 
   private:
     int checkbox_width = 20;
-    bool status;
+    bool checked;
 };
 
 #endif // CHECKBOX_H

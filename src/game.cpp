@@ -96,9 +96,9 @@ Box *game::create_collision_box( float newX, float newY,float newWidth,float new
   return newCollisionBox;
 }
 
-Box *game::create_explosive_box(float newX, float newY){
+Box *game::create_explosive_box(float newX, float newY, bool newAffectCharacter){
   Explosive *newExplosive = new Explosive();
-  newExplosive -> init( newX, newY, 1.6,1.6, 0,0,false, box_repel, gameWorld,gameCharacter);
+  newExplosive -> init( newX, newY, 1.6,1.6, 0,0,false, box_repel,newAffectCharacter, gameWorld,gameCharacter);
   if(gameCharacter==nullptr)
     std::cout<<"WARNING: gameCharacter is nullptr when creating an explosive box.\n";
 
@@ -188,6 +188,7 @@ void game::load_world(int newLevel){
       std::string bodytype = "Static";
       std::string width = "0";
       std::string height = "0";
+      std::string affect_character = "false";
       int orientation_array[4];
 
       // Load data
@@ -205,6 +206,8 @@ void game::load_world(int newLevel){
         bodytype = object_node -> first_node("bodytype") -> value();
       if( object_node -> first_node("orientation") != 0)
         orientation = object_node -> first_node("orientation") -> value();
+      if( object_node -> first_node("affect_character") != 0)
+        affect_character = object_node -> first_node("affect_character") -> value();
 
      // std::cout<<type<<"\n";
 
@@ -254,7 +257,7 @@ void game::load_world(int newLevel){
           gameWorld -> CreateJoint(jointDef);
         }*/
       }else if(type == "Explosive"){
-       newBox = create_explosive_box( tools::string_to_float(x), tools::string_to_float(y));
+       newBox = create_explosive_box( tools::string_to_float(x), tools::string_to_float(y), (affect_character=="true"));
       }
 
     }
