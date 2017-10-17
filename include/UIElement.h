@@ -30,6 +30,10 @@ class UIElement
     void toggleStatus();
     void setTransparency(float newAlpha){alpha = newAlpha;}
     void setX(int newX){x=newX;}
+    void setStatus(bool newStatus){
+      visible = newStatus;
+      active = newStatus;
+    }
 
     int getWidth(){ return width + padding_x * 2; }
     int getHeight(){ return height + padding_y * 2; }
@@ -47,7 +51,8 @@ class UIElement
     bool mouseReleased();
     bool hover();
     bool clicked();
-    void update();
+
+    virtual void update();
 
     virtual void draw(){};
 

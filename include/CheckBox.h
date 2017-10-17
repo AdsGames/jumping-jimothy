@@ -10,7 +10,7 @@ class CheckBox : public UIElement
     CheckBox();
     CheckBox(int, int, std::string, ALLEGRO_FONT*);
     virtual ~CheckBox();
-
+    void update() override;
     virtual void draw();
 
   protected:
