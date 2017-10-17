@@ -103,7 +103,7 @@ editor::editor(){
   editorUI.createAnchoredButton("Back",edit_font,"Help",LEFT);
 
   // huehuehue
-  editorUI.addElement( new CheckBox(300,000000000000,"Block affects character",edit_font));
+  editorUI.addElement( new CheckBox(0000000000,60,"Block affects character",edit_font));
 
 
 
@@ -712,6 +712,8 @@ bool editor::load_map( std::string mapName){
       return false;
     }
 
+
+
     // Body
     if( newBox.bodyType == "Dynamic")
       newBox.type = 0;
@@ -809,8 +811,8 @@ bool editor::save_map( std::string mapName){
 
 
     // Write this last for consistency of placement in the xml (hint: always last element)
-    if(xml_type!="Explosive")
-      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
+
+    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "bodytype", editorBoxes.at(i).bodyType.c_str()));
 
   }
 
