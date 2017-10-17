@@ -18,8 +18,16 @@ game::game(){
 
   level = 1;
 
-  if( testing)
+  game_font = al_load_ttf_font( "fonts/munro.ttf", 30, 0);
+  help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);
+  edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
+
+
+
+  if( testing){
     level = 0;
+    testing_back_button = Button(966,728,"Back",edit_font);
+  }
 
   // Reset fresh
   reset();
@@ -28,8 +36,6 @@ game::game(){
   music = nullptr;
 
 
-  game_font = al_load_ttf_font( "fonts/munro.ttf", 30, 0);
-  help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);
 
 
   if(!danny_wants_to_listen_to_music_while_programming){
@@ -331,6 +337,15 @@ void game::load_sprites(){
 
 // Update game logic
 void game::update(){
+
+  if(testing){
+    testing_back_button.update();
+
+    if(testing_back_button.mouseReleased())
+      set_next_state( STATE_EDIT);
+
+
+  }
   // Game mode
   if( keyListener::keyPressed[ALLEGRO_KEY_P])
     set_next_state( STATE_EDIT);
@@ -439,6 +454,9 @@ void game::draw(){
   }
 
   // Pause/play buttons
+  if(testing)
+    testing_back_button.draw();
+
   if(static_mode)
     al_draw_bitmap(pause,10,10,0);
   else
