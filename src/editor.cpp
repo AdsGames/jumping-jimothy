@@ -102,7 +102,8 @@ editor::editor(){
   editorUI.createAnchoredButton("Help",edit_font,">",LEFT);
   editorUI.createAnchoredButton("Back",edit_font,"Help",LEFT);
 
-  editorUI.addElement( new CheckBox(100,200,"Click to die",edit_font));
+  // huehuehue
+  editorUI.addElement( new CheckBox(300,000000000000,"Block affects character",edit_font));
 
 
 
@@ -133,6 +134,8 @@ editor::~editor(){
 
 // Update editor
 void editor::update(){
+
+
   // Update buttons
   editorUI.update();
 
@@ -408,6 +411,8 @@ void editor::update(){
       }
     }
   }
+
+   //editorUI.getElementByText("Grid") -> setText("oii susan");
 }
 
 // Calculate all the orientations of blocks
