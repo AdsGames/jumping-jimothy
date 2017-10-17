@@ -170,8 +170,13 @@ void editor::update(){
   }
 
   if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back") -> mouseReleased()){
-    if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
+    if(editorBoxes.size()>0){
+      if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
+        set_next_state(STATE_MENU);
+    }
+    else
       set_next_state(STATE_MENU);
+
 
   }
 
@@ -260,9 +265,15 @@ void editor::update(){
 
   // Play
   if(editorUI.getElementByText("Play") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_F]){
-     save_map( "data/level_0.xml");
-     set_next_state( STATE_GAME);
-     game::testing = true;
+     if(editorBoxes.size()>0){
+      save_map( "data/level_0.xml");
+      set_next_state( STATE_GAME);
+      game::testing = true;
+     }
+     else
+      al_show_native_message_box( nullptr, "Attemping to play an empty level", "That wouldn't be very fun would it?",nullptr, nullptr, 0);
+
+
   }
 
   // Grid toggle

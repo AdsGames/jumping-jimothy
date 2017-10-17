@@ -31,6 +31,7 @@
 #include <CollisionBox.h>
 #include <DynamicBox.h>
 #include <Explosive.h>
+#include <Button.h>
 
 class game : public state{
   public:
@@ -77,7 +78,7 @@ class game : public state{
 
     ALLEGRO_FONT *game_font;
     ALLEGRO_FONT *help_font;
-
+    ALLEGRO_FONT *edit_font;
 
     // Bitmaps
     ALLEGRO_BITMAP *box;
@@ -97,6 +98,9 @@ class game : public state{
     // Samples
     ALLEGRO_SAMPLE *music;
     ALLEGRO_SAMPLE_ID *currentMusic;
+
+    Button testing_back_button;
+
 
     // Box2D world parameters
     b2Vec2 gravity;
