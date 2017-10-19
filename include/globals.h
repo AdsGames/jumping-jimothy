@@ -21,7 +21,7 @@
 //Allan plz dont kill me but ALLEGRO_BITMAP is a wee bit ridiculous
 #define BITMAP ALLEGRO_BITMAP
 
-#define PI = 3.14159263
+#define PI 3.14159263
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
