@@ -15,6 +15,7 @@ class UIElement
   public:
     // Constructor
     UIElement();
+    UIElement(int, int, std::string,ALLEGRO_FONT*);
 
     ~UIElement();
 
@@ -25,11 +26,16 @@ class UIElement
 
     std::string getText(){ return text; }
 
+    void setDefaults();
     void setVisibility( bool newVisible){ visible = newVisible; }
     void toggleVisibility();
     void toggleStatus();
     void setTransparency(float newAlpha){alpha = newAlpha;}
+    void setBitmapRotationAngle(float newRotation){bitmap_rotation_angle=newRotation;}
     void setX(int newX){x=newX;}
+    void setColour(ALLEGRO_COLOR newColour){
+      colour = newColour;
+    }
     void setStatus(bool newStatus){
       visible = newStatus;
       active = newStatus;
@@ -57,7 +63,7 @@ class UIElement
 
     virtual void update();
 
-    virtual void draw(){};
+    virtual void draw();
 
 
   protected:
@@ -70,11 +76,16 @@ class UIElement
     int padding_x;
     int padding_y;
 
+    float bitmap_rotation_angle;
+
     bool hovering;
     bool old_mouse_down;
     bool mouse_released;
 
     float alpha;
+
+    // Frick you
+    ALLEGRO_COLOR colour;
 
     // Inactive cannot be clicked/hovered
     // Invisible cannot be seen
@@ -88,7 +99,6 @@ class UIElement
     ALLEGRO_FONT *UIElement_font;
 
     std::string text;
-    std::string id;
 
 
   private:

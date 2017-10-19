@@ -22,10 +22,11 @@ public:
     }
 };
 
-void Explosive::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,BITMAP *newSprite,bool newAffectCharacter, b2World *newGameWorld, Character *newGameCharacter){
+void Explosive::init(float newX, float newY, int newOrientation,BITMAP *newSprite,bool newAffectCharacter, b2World *newGameWorld, Character *newGameCharacter){
 
   sprite = newSprite;
   gameCharacter = newGameCharacter;
+  orientation = newOrientation;
 
   affect_character=newAffectCharacter;
   numRays=32;
@@ -49,12 +50,7 @@ void Explosive::init(float newX, float newY, float newWidth, float newHeight,flo
   gameWorld = newGameWorld;
   b2BodyDef bodyDef;
 
-  static_box = !newBodyType;
-
-  if(newBodyType)
-    bodyDef.type = b2_dynamicBody;
-	else
-	 bodyDef.type = b2_kinematicBody;
+  bodyDef.type = b2_kinematicBody;
 
 	bodyDef.position.Set(newX, newY);
 	body = gameWorld -> CreateBody(&bodyDef);
@@ -129,7 +125,10 @@ void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 ap
   float invDistance = 1 / distance;
   float impulseMag = blastPower * invDistance * invDistance;
   impulseMag = b2Min( impulseMag, 500.0f );
-  newBody->ApplyLinearImpulse( impulseMag * blastDir, applyPoint,true );
+
+
+  //if(orienation == 0) newBody->ApplyLinearImpulse( impulseMag * blastDir, applyPoint,true );
+  newBody->ApplyLinearImpulse( impulseMag*b2Vec2(0,0.2), applyPoint,true );
 
   }
 

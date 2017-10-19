@@ -55,7 +55,7 @@ class game : public state{
 
     // Creation code
     Box *create_dynamic_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,BITMAP*,  bool newBodyType, bool newIsSensor);
-    Box *create_explosive_box(float,float,bool);
+    Box *create_explosive_box(float,float,int,bool);
     Box *create_static_box(float newX, float newY,BITMAP*,BITMAP*, BITMAP*, BITMAP*);
     Box *create_collision_box(float newX, float newY,float,float);
 
@@ -83,6 +83,7 @@ class game : public state{
     // Bitmaps
     ALLEGRO_BITMAP *box;
     ALLEGRO_BITMAP *box_repel;
+    ALLEGRO_BITMAP *box_repel_direction;
     ALLEGRO_BITMAP *character;
     ALLEGRO_BITMAP *goat_sprite;
     ALLEGRO_BITMAP *goat_map;

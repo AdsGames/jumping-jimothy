@@ -75,6 +75,8 @@ game::~game(){
 Goat *game::create_goat( float newX, float newY){
   Goat *newGoat = new Goat();
   newGoat -> init( newX, newY,goat_map, gameWorld,gameCharacter);
+  if(gameCharacter==nullptr)
+    std::cout<<"WARNING: gameCharacter is nullptr when creating an explosive box.\n";
   gameBoxes.push_back( newGoat);
   return newGoat;
 }
@@ -102,9 +104,16 @@ Box *game::create_collision_box( float newX, float newY,float newWidth,float new
   return newCollisionBox;
 }
 
-Box *game::create_explosive_box(float newX, float newY, bool newAffectCharacter){
+Box *game::create_explosive_box(float newX, float newY,int newOrientation, bool newAffectCharacter){
   Explosive *newExplosive = new Explosive();
-  newExplosive -> init( newX, newY, 1.6,1.6, 0,0,false, box_repel,newAffectCharacter, gameWorld,gameCharacter);
+  ALLEGRO_BITMAP *newBoxImage;
+
+  if(newOrientation==0)
+    newBoxImage = box_repel;
+  else
+    newBoxImage = box_repel_direction;
+
+  newExplosive -> init( newX, newY,newOrientation, box_repel,newAffectCharacter, gameWorld,gameCharacter);
   if(gameCharacter==nullptr)
     std::cout<<"WARNING: gameCharacter is nullptr when creating an explosive box.\n";
 
@@ -263,7 +272,7 @@ void game::load_world(int newLevel){
           gameWorld -> CreateJoint(jointDef);
         }*/
       }else if(type == "Explosive"){
-       newBox = create_explosive_box( tools::string_to_float(x), tools::string_to_float(y), (affect_character=="true"));
+       newBox = create_explosive_box( tools::string_to_float(x), tools::string_to_float(y),tools::string_to_float(orientation), (affect_character=="true"));
       }
 
     }
@@ -316,6 +325,7 @@ void game::reset(){
 void game::load_sprites(){
   box = tools::load_bitmap_ex( "images/box.png");
   box_repel = tools::load_bitmap_ex( "images/box_repel.png");
+  box_repel_direction = tools::load_bitmap_ex( "images/box_repel_direction.png");
   goat_sprite = tools::load_bitmap_ex( "images/goat.png");
   goat_map = tools::load_bitmap_ex( "images/goat_map.png");
   help = tools::load_bitmap_ex( "images/help.png");
@@ -363,8 +373,10 @@ void game::update(){
       std::cout<<"Level " << level-1 << " completed, loading next level\n";
       if( !testing)
         reset();
-      else
+      else{
+        al_show_native_message_box( nullptr, "Level complete!", "Opening editor",nullptr, nullptr, 0);
         set_next_state( STATE_EDIT);
+      }
     }
   }
 
@@ -390,8 +402,10 @@ void game::update(){
       level++;
       reset();
     }
-    else
+    else{
+      al_show_native_message_box( nullptr, "Level complete!", "Opening editor",nullptr, nullptr, 0);
       set_next_state( STATE_EDIT);
+    }
   }
 
   // Previous level

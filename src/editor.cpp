@@ -21,6 +21,8 @@ editor::editor(){
   image_box[2] = tools::load_bitmap_ex( "images/character.png");
   image_box[3] = tools::load_bitmap_ex( "images/DisgoatSpriteMap.png");
   image_box[4] = tools::load_bitmap_ex( "images/box_repel.png");
+  image_box[5] = tools::load_bitmap_ex( "images/box_repel_direction.png");
+
 
   for( int i = 0; i < 4; i++)
     for( int t = 0; t < 15; t++)
@@ -105,6 +107,8 @@ editor::editor(){
   // huehuehue
   editorUI.addElement( new CheckBox(0000000000,60,"Block affects character",edit_font));
 
+  editorUI.addElement( new Button(200,700,"explosive_up",image_box[5],PI/2));
+
 
 
   // Is it edit mode?
@@ -139,6 +143,7 @@ void editor::update(){
 
     // Learned a few things from you
   editorUI.getElementByText("Block affects character") -> setStatus(tile_type==5);
+
 
   // Check if over Button
   bool over_Button = editorUI.isHovering();

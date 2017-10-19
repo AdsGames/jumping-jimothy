@@ -61,7 +61,7 @@ class editor : public state{
 
     UIHandler editorUI;
     // Images
-    ALLEGRO_BITMAP *image_box[5];
+    ALLEGRO_BITMAP *image_box[6];
     ALLEGRO_BITMAP *tiles[5][15];
 
     // Functions
