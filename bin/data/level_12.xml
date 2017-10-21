@@ -109,8 +109,14 @@
 	</Object>
 	<Object type="Tile">
 		<x>24.8</x>
-		<y>-13.6</y>
+		<y>-15.2</y>
 		<orientation>4 5 7 8</orientation>
+		<bodytype>Dynamic</bodytype>
+	</Object>
+	<Object type="Tile">
+		<x>24.8</x>
+		<y>-13.6</y>
+		<orientation>4 5 4 5</orientation>
 		<bodytype>Dynamic</bodytype>
 	</Object>
 	<Object type="Tile">
@@ -122,13 +128,13 @@
 	<Object type="Tile">
 		<x>23.2</x>
 		<y>-15.2</y>
-		<orientation>3 5 6 8</orientation>
+		<orientation>3 4 6 7</orientation>
 		<bodytype>Dynamic</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>23.2</x>
 		<y>-13.6</y>
-		<orientation>3 4 3 9</orientation>
+		<orientation>3 4 3 4</orientation>
 		<bodytype>Dynamic</bodytype>
 	</Object>
 	<Object type="Tile">
@@ -603,6 +609,13 @@
 		<height>24</height>
 		<bodytype>Collision</bodytype>
 	</Object>
+	<Object type="Explosive">
+		<x>29.6</x>
+		<y>-36</y>
+		<affect_character>true</affect_character>
+		<orientation>1</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
 	<Object type="Tile">
 		<x>21.6</x>
 		<y>-26.4</y>
@@ -621,6 +634,41 @@
 		<width>1.6</width>
 		<height>3.2</height>
 		<bodytype>Collision</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>24.8</x>
+		<y>-36</y>
+		<affect_character>true</affect_character>
+		<orientation>1</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>23.2</x>
+		<y>-36</y>
+		<affect_character>true</affect_character>
+		<orientation>1</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>23.2</x>
+		<y>-5.6</y>
+		<affect_character>false</affect_character>
+		<orientation>3</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>18.4</x>
+		<y>-36</y>
+		<affect_character>true</affect_character>
+		<orientation>1</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>26.4</x>
+		<y>-36</y>
+		<affect_character>true</affect_character>
+		<orientation>1</orientation>
+		<bodytype>Explosive</bodytype>
 	</Object>
 	<Object type="Tile">
 		<x>8.8</x>
@@ -707,34 +755,6 @@
 		<bodytype>Finish</bodytype>
 	</Object>
 	<Object type="Explosive">
-		<x>16.8</x>
-		<y>-36</y>
-		<affect_character>true</affect_character>
-		<orientation>1</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>21.6</x>
-		<y>-36</y>
-		<affect_character>true</affect_character>
-		<orientation>1</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>24.8</x>
-		<y>-36</y>
-		<affect_character>true</affect_character>
-		<orientation>1</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>28</x>
-		<y>-5.6</y>
-		<affect_character>false</affect_character>
-		<orientation>3</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
 		<x>15.2</x>
 		<y>-5.6</y>
 		<affect_character>false</affect_character>
@@ -742,73 +762,10 @@
 		<bodytype>Explosive</bodytype>
 	</Object>
 	<Object type="Explosive">
-		<x>31.2</x>
-		<y>-36</y>
-		<affect_character>true</affect_character>
-		<orientation>1</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
 		<x>32.8</x>
 		<y>-5.6</y>
 		<affect_character>false</affect_character>
 		<orientation>3</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>18.4</x>
-		<y>-5.6</y>
-		<affect_character>false</affect_character>
-		<orientation>3</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>16.8</x>
-		<y>-5.6</y>
-		<affect_character>false</affect_character>
-		<orientation>3</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>20</x>
-		<y>-5.6</y>
-		<affect_character>false</affect_character>
-		<orientation>3</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>32.8</x>
-		<y>-36</y>
-		<affect_character>true</affect_character>
-		<orientation>1</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>23.2</x>
-		<y>-36</y>
-		<affect_character>true</affect_character>
-		<orientation>1</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>28</x>
-		<y>-36</y>
-		<affect_character>true</affect_character>
-		<orientation>1</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>18.4</x>
-		<y>-36</y>
-		<affect_character>true</affect_character>
-		<orientation>1</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>15.2</x>
-		<y>-36</y>
-		<affect_character>true</affect_character>
-		<orientation>1</orientation>
 		<bodytype>Explosive</bodytype>
 	</Object>
 	<Object type="Explosive">
@@ -819,7 +776,42 @@
 		<bodytype>Explosive</bodytype>
 	</Object>
 	<Object type="Explosive">
+		<x>13.6</x>
+		<y>-36</y>
+		<affect_character>true</affect_character>
+		<orientation>1</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
 		<x>20</x>
+		<y>-5.6</y>
+		<affect_character>false</affect_character>
+		<orientation>3</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>29.6</x>
+		<y>-5.6</y>
+		<affect_character>false</affect_character>
+		<orientation>3</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>24.8</x>
+		<y>-5.6</y>
+		<affect_character>false</affect_character>
+		<orientation>3</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>16.8</x>
+		<y>-36</y>
+		<affect_character>true</affect_character>
+		<orientation>1</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>12</x>
 		<y>-36</y>
 		<affect_character>true</affect_character>
 		<orientation>1</orientation>
@@ -833,21 +825,63 @@
 		<bodytype>Explosive</bodytype>
 	</Object>
 	<Object type="Explosive">
-		<x>12</x>
+		<x>28</x>
+		<y>-5.6</y>
+		<affect_character>false</affect_character>
+		<orientation>3</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>15.2</x>
 		<y>-36</y>
 		<affect_character>true</affect_character>
 		<orientation>1</orientation>
 		<bodytype>Explosive</bodytype>
 	</Object>
 	<Object type="Explosive">
-		<x>29.6</x>
+		<x>31.2</x>
 		<y>-36</y>
 		<affect_character>true</affect_character>
 		<orientation>1</orientation>
 		<bodytype>Explosive</bodytype>
 	</Object>
 	<Object type="Explosive">
-		<x>23.2</x>
+		<x>28</x>
+		<y>-36</y>
+		<affect_character>true</affect_character>
+		<orientation>1</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>16.8</x>
+		<y>-5.6</y>
+		<affect_character>false</affect_character>
+		<orientation>3</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>21.6</x>
+		<y>-36</y>
+		<affect_character>true</affect_character>
+		<orientation>1</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>20</x>
+		<y>-36</y>
+		<affect_character>true</affect_character>
+		<orientation>1</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>18.4</x>
+		<y>-5.6</y>
+		<affect_character>false</affect_character>
+		<orientation>3</orientation>
+		<bodytype>Explosive</bodytype>
+	</Object>
+	<Object type="Explosive">
+		<x>26.4</x>
 		<y>-5.6</y>
 		<affect_character>false</affect_character>
 		<orientation>3</orientation>
@@ -868,38 +902,10 @@
 		<bodytype>Explosive</bodytype>
 	</Object>
 	<Object type="Explosive">
-		<x>29.6</x>
-		<y>-5.6</y>
-		<affect_character>false</affect_character>
-		<orientation>3</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>13.6</x>
+		<x>32.8</x>
 		<y>-36</y>
 		<affect_character>true</affect_character>
 		<orientation>1</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>26.4</x>
-		<y>-36</y>
-		<affect_character>true</affect_character>
-		<orientation>1</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>26.4</x>
-		<y>-5.6</y>
-		<affect_character>false</affect_character>
-		<orientation>3</orientation>
-		<bodytype>Explosive</bodytype>
-	</Object>
-	<Object type="Explosive">
-		<x>24.8</x>
-		<y>-5.6</y>
-		<affect_character>false</affect_character>
-		<orientation>3</orientation>
 		<bodytype>Explosive</bodytype>
 	</Object>
 </data>
