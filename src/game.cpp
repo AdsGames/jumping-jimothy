@@ -113,7 +113,7 @@ Box *game::create_explosive_box(float newX, float newY,int newOrientation, bool 
   else
     newBoxImage = box_repel_direction;
 
-  newExplosive -> init( newX, newY,newOrientation, box_repel,newAffectCharacter, gameWorld,gameCharacter);
+  newExplosive -> init( newX, newY,newOrientation, newBoxImage,newAffectCharacter, gameWorld,gameCharacter);
   if(gameCharacter==nullptr)
     std::cout<<"WARNING: gameCharacter is nullptr when creating an explosive box.\n";
 
