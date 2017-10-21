@@ -183,7 +183,7 @@ void update(){
     currentState -> update();
   }
   // Exit
-  else if( ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE || k_listener.key[ALLEGRO_KEY_ESCAPE]){
+  else if( ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE || k_listener.keyReleased[ALLEGRO_KEY_ESCAPE]){
     closing = true;
   }
   // Keyboard

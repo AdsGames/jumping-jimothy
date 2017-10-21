@@ -46,6 +46,8 @@ editor::editor(){
 
   // Explode/repel
   tiles[4][0] = image_box[4];
+  tiles[4][1] = image_box[5];
+
 
 
   tile_type = 0;
@@ -107,7 +109,17 @@ editor::editor(){
   // huehuehue
   editorUI.addElement( new CheckBox(0000000000,60,"Block affects character",edit_font));
 
-  editorUI.addElement( new Button(200,700,"explosive_up",image_box[5],PI/2));
+  editorUI.addElement( new Button(0,100,"explosive_up",image_box[5],0));
+  editorUI.addElement( new Button(38,100,"explosive_right",image_box[5],PI/2));
+  editorUI.addElement( new Button(76,100,"explosive_down",image_box[5],PI));
+  editorUI.addElement( new Button(114,100,"explosive_left",image_box[5],PI*3/2));
+  editorUI.addElement( new Button(152,100,"explosive_circle",image_box[4],PI*3/2));
+
+
+  editorUI.getElementByText("explosive_up") -> setColour(al_map_rgba(200,200,200,255));
+  explosive_orientation = 1;
+
+
 
 
 
@@ -143,7 +155,54 @@ void editor::update(){
 
     // Learned a few things from you
   editorUI.getElementByText("Block affects character") -> setStatus(tile_type==5);
+  editorUI.getElementByText("explosive_up") -> setStatus(tile_type==5);
+  editorUI.getElementByText("explosive_left") -> setStatus(tile_type==5);
+  editorUI.getElementByText("explosive_right") -> setStatus(tile_type==5);
+  editorUI.getElementByText("explosive_down") -> setStatus(tile_type==5);
+  editorUI.getElementByText("explosive_circle") -> setStatus(tile_type==5);
 
+  if( editorUI.getElementByText("explosive_circle") -> mouseReleased())
+    explosive_orientation = 0;
+
+  if( editorUI.getElementByText("explosive_up") -> mouseReleased())
+    explosive_orientation = 1;
+
+  if( editorUI.getElementByText("explosive_right") -> mouseReleased())
+    explosive_orientation = 2;
+
+  if( editorUI.getElementByText("explosive_down") -> mouseReleased())
+    explosive_orientation = 3;
+
+  if( editorUI.getElementByText("explosive_left") -> mouseReleased())
+    explosive_orientation = 4;
+
+
+  ALLEGRO_COLOR selected_colour = al_map_rgba(0,150,0,255);
+
+  if(explosive_orientation == 0)
+    editorUI.getElementByText("explosive_circle") -> setColour(selected_colour);
+  else
+    editorUI.getElementByText("explosive_circle") -> setColour(al_map_rgba(200,200,200,255));
+
+  if(explosive_orientation == 1)
+    editorUI.getElementByText("explosive_up") -> setColour(selected_colour);
+  else
+    editorUI.getElementByText("explosive_up") -> setColour(al_map_rgba(200,200,200,255));
+
+  if(explosive_orientation == 2)
+    editorUI.getElementByText("explosive_right") -> setColour(selected_colour);
+  else
+    editorUI.getElementByText("explosive_right") -> setColour(al_map_rgba(200,200,200,255));
+
+  if(explosive_orientation == 3)
+    editorUI.getElementByText("explosive_down") -> setColour(selected_colour);
+  else
+    editorUI.getElementByText("explosive_down") -> setColour(al_map_rgba(200,200,200,255));
+
+  if(explosive_orientation == 4)
+    editorUI.getElementByText("explosive_left") -> setColour(selected_colour);
+  else
+    editorUI.getElementByText("explosive_left") -> setColour(al_map_rgba(200,200,200,255));
 
   // Check if over Button
   bool over_Button = editorUI.isHovering();
@@ -174,7 +233,7 @@ void editor::update(){
       editorBoxes.clear();
   }
 
-  if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back") -> mouseReleased()){
+  if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back") -> mouseReleased() || keyListener::keyReleased[ALLEGRO_KEY_ESCAPE]){
     if(editorBoxes.size()>0){
       if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
         set_next_state(STATE_MENU);
@@ -359,6 +418,7 @@ void editor::update(){
       for( int i = 0; i < 4; i++)
         newBox.orientation[i] = 0;
 
+
       if( tile_type == 0)
         newBox.bodyType = "Dynamic";
       else if( tile_type == 1)
@@ -367,9 +427,10 @@ void editor::update(){
         newBox.bodyType = "Character";
       else if( tile_type == 3)
         newBox.bodyType = "Finish";
-      else if( tile_type == 5)
+      else if( tile_type == 5){
         newBox.bodyType = "Explosive";
-
+        newBox.orientation[0]=explosive_orientation;
+      }
       editorBoxes.push_back( newBox);
 
       // Calculate orientation of boxes
@@ -575,8 +636,16 @@ void editor::draw(){
       else
         al_draw_filled_rectangle( editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4, editorBoxes.at(i).x +28, editorBoxes.at(i).y + 28, al_map_rgb(0, 255, 0));
 
-      al_draw_bitmap( tiles[4][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+      if(editorBoxes.at(i).orientation[0]==0)
+        al_draw_bitmap( tiles[4][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+      if(editorBoxes.at(i).orientation[0]>0){
 
+        // PI/2 is a quarter turn. Editor boxes orientation is a range from 1-4.
+        // So we have a quarter turn * 1-4, creating a quarter turn, half turn, ect.
+        // - PI/2 is because we start rotated right a quarter turn.
+        float new_angle=(PI/2)*editorBoxes.at(i).orientation[0] - PI/2;
+        al_draw_rotated_bitmap(tiles[4][1],16,16,editorBoxes.at(i).x+16,editorBoxes.at(i).y+16,new_angle,0);
+      }
     }
   }
 
@@ -791,9 +860,17 @@ bool editor::save_map( std::string mapName){
     rapidxml::xml_node<>* object_node = doc.allocate_node( rapidxml::node_element, node_name);
 
     std::string xml_type = "Tile";
-    std::string output_orientation = tools::toString(editorBoxes.at(i).orientation[0]) + " " + tools::toString(editorBoxes.at(i).orientation[1]) + " " +
-                                     tools::toString(editorBoxes.at(i).orientation[2]) + " " + tools::toString(editorBoxes.at(i).orientation[3]);
+    std::string output_orientation = "";
+
+    if(editorBoxes.at(i).type != 5){
+     output_orientation = tools::toString(editorBoxes.at(i).orientation[0]) + " " + tools::toString(editorBoxes.at(i).orientation[1]) + " " +
+                                      tools::toString(editorBoxes.at(i).orientation[2]) + " " + tools::toString(editorBoxes.at(i).orientation[3]);
+    }else{
+      output_orientation = tools::toString(editorBoxes.at(i).orientation[0]);
+    }
     char *output_orientation_char = doc.allocate_string(output_orientation.c_str());
+
+
 
     if( editorBoxes.at(i).type == 2)
       xml_type = "Character";
@@ -821,6 +898,9 @@ bool editor::save_map( std::string mapName){
         object_node -> append_node( doc.allocate_node( rapidxml::node_element, "affect_character","true"));
       else
         object_node -> append_node( doc.allocate_node( rapidxml::node_element, "affect_character","false"));
+
+      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
+
 
 
     }

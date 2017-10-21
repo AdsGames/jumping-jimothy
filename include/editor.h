@@ -98,6 +98,8 @@ class editor : public state{
     // Vars
     bool grid_on;
 
+    int explosive_orientation;
+
     int tile_type;
     int level_number;
     bool test_mode = false;

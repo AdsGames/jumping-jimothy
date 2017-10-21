@@ -39,7 +39,6 @@ void Explosive::init(float newX, float newY, int newOrientation,BITMAP *newSprit
   color = al_map_rgb(255,0,0);
   static_mode = false;
   static_box = false;
-  orientation = 0;
   angle = 0;
   x = 0;
   y = 0;
@@ -127,10 +126,27 @@ void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 ap
   impulseMag = b2Min( impulseMag, 500.0f );
 
 
-  //if(orienation == 0) newBody->ApplyLinearImpulse( impulseMag * blastDir, applyPoint,true );
-  newBody->ApplyLinearImpulse( impulseMag*b2Vec2(0,0.2), applyPoint,true );
+
+  if(orientation == 0)
+    newBody->ApplyLinearImpulse( impulseMag * blastDir, applyPoint,true );
+  else{
+    float magnitude=0.2;
+    b2Vec2 new_direction;
+    if(orientation==1)
+      new_direction=b2Vec2(0,magnitude);
+    if(orientation==3)
+      new_direction=b2Vec2(0,-magnitude);
+
+    if(orientation==2)
+      new_direction=b2Vec2(magnitude,0);
+
+    if(orientation==4)
+      new_direction=b2Vec2(-magnitude,0);
+
+    newBody->ApplyLinearImpulse( impulseMag*new_direction, applyPoint,true );
 
   }
+}
 
 void Explosive::draw(){
 
@@ -168,7 +184,15 @@ void Explosive::draw(){
   else
     al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(0,255,0));
 
-  al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
+
+  // PI/2 is a quarter turn. Editor boxes orientation is a range from 1-4.
+  // So we have a quarter turn * 1-4, creating a quarter turn, half turn, ect.
+  // - PI/2 is because we start rotated right a quarter turn.
+  float new_angle=(PI/2)*orientation - PI/2;
+
+  al_draw_rotated_bitmap(sprite,16,16,0,0,new_angle,0);
+
+ // al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
 
   // restore the old transform
 
