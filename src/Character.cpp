@@ -186,8 +186,8 @@ void Character::draw(){
 
   al_use_transform(&trans);
 
-    // Nice debug draw for player hitbox
- // al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(255,25,64));
+  // Nice debug draw for player hitbox
+  // al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(255,25,64));
 
   int x_offset=-8;
   int y_offset=-13;

@@ -71,30 +71,11 @@ editor::editor(){
   editorUI.createAnchoredButton("Collision",edit_font,"Goat",RIGHT);
   editorUI.createAnchoredButton("Explosive",edit_font,"Collision",RIGHT);
 
-  editorUI.createAnchoredButton("<",edit_font,"Explosive",RIGHT);
+  editorUI.createAnchoredButton("<",edit_font,"Explosive","left_bottom_toggle",RIGHT);
 
-  // Ok Mr. Allan. We need to have a talk about your enums.
-  // They were not very nice to work with, and I replaced
-  // them. But, however, they did have one advantage and
-  // they weren't as bad as I may have stated in earlier
-  // commits. I ran into a problem with my system. Since
-  // my system uses the buttons' text as it's ID system,
-  // two buttons that have the same text will cause an
-  // ambiguity. I had considered, but have since decided
-  // to not include a separate ID system. To get around
-  // this, the two buttons that are ">" characters, one
-  // is "> " and one is ">". One has a trailing " " which
-  // is an invisible character, alt code 0160 on Windows.
-  // I acknowledge that this is a horrible hack and should
-  // not exist in any code base. Your system did not have
-  // this problem and I apologize for the atrocity you have
-  // to witness, and God forbid, maintain.
-  //
-  // Deepest regrets,
-  //   Danny Van Stemp
 
-  editorUI.addElement( new Button(556,728,"> ", edit_font));
-  editorUI.createAnchoredButton("Undo",edit_font,"> ",LEFT);
+  editorUI.addElement( new Button(566,728,">","right_bottom_toggle", edit_font));
+  editorUI.createAnchoredButton("Undo",edit_font,">",LEFT);
   editorUI.createAnchoredButton("Clear",edit_font,"Undo",LEFT);
   editorUI.createAnchoredButton("Save",edit_font,"Clear",LEFT);
   editorUI.createAnchoredButton("Save as",edit_font,"Save",LEFT);
@@ -102,12 +83,12 @@ editor::editor(){
   editorUI.createAnchoredButton("Grid",edit_font,"Load",LEFT);
   editorUI.createAnchoredButton("Play",edit_font,"Grid",LEFT);
 
-  editorUI.addElement( new Button(882,0,">",edit_font));
-  editorUI.createAnchoredButton("Help",edit_font,">",LEFT);
+  editorUI.addElement( new Button(882,0,">","right_top_toggle",edit_font));
+  editorUI.addElement( new Button(898+13,0,"Help",edit_font));
   editorUI.createAnchoredButton("Back",edit_font,"Help",LEFT);
 
-  // huehuehue
-  editorUI.addElement( new CheckBox(0000000000,60,"Block affects character",edit_font));
+  //                                        huehuehue
+  editorUI.addElement( new CheckBox(0000000000000000000000000,60,"Block affects character",edit_font));
 
   editorUI.addElement( new Button(0,100,"explosive_up",image_box[5],0));
   editorUI.addElement( new Button(38,100,"explosive_right",image_box[5],PI/2));
@@ -115,8 +96,6 @@ editor::editor(){
   editorUI.addElement( new Button(114,100,"explosive_left",image_box[5],PI*3/2));
   editorUI.addElement( new Button(152,100,"explosive_circle",image_box[4],PI*3/2));
 
-
-  editorUI.getElementByText("explosive_up") -> setColour(al_map_rgba(200,200,200,255));
   explosive_orientation = 1;
 
 
@@ -345,23 +324,24 @@ void editor::update(){
     grid_on = !grid_on;
 
   // Gosh darn toggle hide buttons take so much freakin' room
-/*  if( editor_buttons[button_hide_left].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_LEFT]){
-    editor_buttons[button_type_collision].toggleStatus();
-    editor_buttons[button_type_static].toggleStatus();
-    editor_buttons[button_type_dynamic].toggleStatus();
-    editor_buttons[button_type_player].toggleStatus();
-    editor_buttons[button_type_goat].toggleStatus();
-    if(editor_buttons[button_hide_left].getText()=="<"){
-      editor_buttons[button_hide_left].setPosition( 0, 728);
-      editor_buttons[button_hide_left].setText(">");
-      editor_buttons[button_hide_left].setTransparency(150);
+  if(editorUI.getElementById("left_bottom_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_LEFT]){
+    editorUI.getElementByText("Collision") -> toggleStatus();
+    editorUI.getElementByText("Static") -> toggleStatus();
+    editorUI.getElementByText("Dynamic") -> toggleStatus();
+    editorUI.getElementByText("Player") -> toggleStatus();
+    editorUI.getElementByText("Goat") -> toggleStatus();
+    editorUI.getElementByText("Explosive") -> toggleStatus();
+    if(editorUI.getElementById("left_bottom_toggle") -> getText()=="<"){
+      editorUI.getElementById("left_bottom_toggle") -> setPosition( 0, 728);
+      editorUI.getElementById("left_bottom_toggle") -> setText(">");
+      editorUI.getElementById("left_bottom_toggle") -> setTransparency(150);
     }else{
-      editor_buttons[button_hide_left].setPosition( editor_buttons[4].getX() + editor_buttons[4].getWidth(), 728);
-      editor_buttons[button_hide_left].setText("<");
-      editor_buttons[button_hide_left].setTransparency(255);
+      editorUI.getElementById("left_bottom_toggle") -> setPosition(489, 728);
+      editorUI.getElementById("left_bottom_toggle") -> setText("<");
+      editorUI.getElementById("left_bottom_toggle") -> setTransparency(255);
     }
-
   }
+  /*
   if( editor_buttons[button_hide_right].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
     editor_buttons[button_undo].toggleStatus();
     editor_buttons[button_clear].toggleStatus();
@@ -381,6 +361,21 @@ void editor::update(){
       editor_buttons[button_hide_right].setTransparency(255);
     }
   }
+  */
+  if(editorUI.getElementById("right_top_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_UP]){
+    editorUI.getElementByText("Back") -> toggleStatus();
+    editorUI.getElementByText("Help") -> toggleStatus();
+    if(editorUI.getElementById("right_top_toggle") -> getText()==">"){
+      editorUI.getElementById("right_top_toggle") -> setPosition( 994, 0);
+      editorUI.getElementById("right_top_toggle") -> setText("<");
+      editorUI.getElementById("right_top_toggle") -> setTransparency(150);
+    }else{
+      editorUI.getElementById("right_top_toggle") -> setPosition(882, 0);
+      editorUI.getElementById("right_top_toggle") -> setText(">");
+      editorUI.getElementById("right_top_toggle") -> setTransparency(255);
+    }
+  }
+  /*
    if( editor_buttons[button_hide_top].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_UP]){
     editor_buttons[button_back].toggleStatus();
     editor_buttons[button_help].toggleStatus();
