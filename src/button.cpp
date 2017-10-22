@@ -54,11 +54,34 @@ Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font){
   }
 
 }
+Button::Button( int x, int y, std::string text, std::string id, ALLEGRO_FONT *UIElement_font){
+
+  setDefaults();
+  this -> bitmap_rotation_angle=0;
+  // Literally this
+  this -> id = id;
+  this -> x = x;
+  this -> y = y;
+  this -> text = text;
+  this -> image = nullptr;
+  this -> UIElement_font = UIElement_font;
+
+  if( UIElement_font != nullptr){
+    this -> width = al_get_text_width( UIElement_font, text.c_str());
+    this -> height = al_get_font_line_height( UIElement_font);
+  }
+  else{
+    this -> width = 10;
+    this -> height = 10;
+  }
+
+}
 
 Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font, int newWidth, int newHeight){
 
   this -> bitmap_rotation_angle=0;
   this -> alpha = 255;
+  setDefaults();
   // Literally this
   this -> x = x;
   this -> y = y;
@@ -66,20 +89,11 @@ Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font, in
   this -> image = nullptr;
   this -> UIElement_font = UIElement_font;
 
-  this -> visible = true;
-  this -> active = true;
-
-  this -> mouse_released=false;
-  this -> old_mouse_down=false;
-  this -> hovering = false;
-
 
   this -> width = newWidth;
   this -> height = newHeight;
 
 
-  this -> padding_x = 10;
-  this -> padding_y = 10;
 }
 
 

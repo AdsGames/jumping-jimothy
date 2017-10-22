@@ -25,6 +25,8 @@ class UIElement
 
 
     std::string getText(){ return text; }
+    std::string getId(){ return id; }
+
 
     void setDefaults();
     void setVisibility( bool newVisible){ visible = newVisible; }
@@ -51,6 +53,7 @@ class UIElement
     void setPosition( int x, int y){ this -> x = x; this -> y = y; }
     void setSize( int width, int height){ this -> width = width; this -> height = height;}
     void setText( std::string text){ this -> text = text; }
+    void setId( std::string id){ this -> id = id; }
     void setImage( ALLEGRO_BITMAP *image);
     void setFont( ALLEGRO_FONT *font);
 
@@ -99,6 +102,7 @@ class UIElement
     ALLEGRO_FONT *UIElement_font;
 
     std::string text;
+    std::string id;
 
 
   private:

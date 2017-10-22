@@ -22,6 +22,7 @@ void UIElement::setDefaults(){
   this -> image = nullptr;
   this -> padding_x = 10;
   this -> padding_y = 10;
+  this -> id = "";
 
 }
 

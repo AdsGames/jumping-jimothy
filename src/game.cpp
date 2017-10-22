@@ -348,6 +348,9 @@ void game::load_sprites(){
 // Update game logic
 void game::update(){
 
+  if(keyListener::keyReleased[ALLEGRO_KEY_ESCAPE])
+    set_next_state(STATE_MENU);
+
   if(testing){
     testing_back_button.update();
 
