@@ -89,6 +89,8 @@ editor::editor(){
 
   //                                        huehuehue
   editorUI.addElement( new CheckBox(0000000000000000000000000,60,"Block affects character",edit_font));
+  editorUI.createAnchoredButton("<",edit_font,"Block affects character","left_top_toggle",RIGHT);
+
 
   editorUI.addElement( new Button(0,100,"explosive_up",image_box[5],0));
   editorUI.addElement( new Button(38,100,"explosive_right",image_box[5],PI/2));
@@ -139,6 +141,8 @@ void editor::update(){
   editorUI.getElementByText("explosive_right") -> setStatus(tile_type==5);
   editorUI.getElementByText("explosive_down") -> setStatus(tile_type==5);
   editorUI.getElementByText("explosive_circle") -> setStatus(tile_type==5);
+  editorUI.getElementById("left_top_toggle") -> setStatus(tile_type==5);
+
 
   if( editorUI.getElementByText("explosive_circle") -> mouseReleased())
     explosive_orientation = 0;
@@ -341,27 +345,26 @@ void editor::update(){
       editorUI.getElementById("left_bottom_toggle") -> setTransparency(255);
     }
   }
-  /*
-  if( editor_buttons[button_hide_right].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
-    editor_buttons[button_undo].toggleStatus();
-    editor_buttons[button_clear].toggleStatus();
-    editor_buttons[button_save].toggleStatus();
-    editor_buttons[button_save_as].toggleStatus();
-    editor_buttons[button_load].toggleStatus();
-    editor_buttons[button_play].toggleStatus();
-    editor_buttons[button_grid].toggleStatus();
 
-    if(editor_buttons[button_hide_right].getText()==">"){
-      editor_buttons[button_hide_right].setPosition( 994, 728);
-      editor_buttons[button_hide_right].setText("<");
-      editor_buttons[button_hide_right].setTransparency(150);
+  if(editorUI.getElementById("right_bottom_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
+    editorUI.getElementByText("Undo") -> toggleStatus();
+    editorUI.getElementByText("Clear") -> toggleStatus();
+    editorUI.getElementByText("Save") -> toggleStatus();
+    editorUI.getElementByText("Save as") -> toggleStatus();
+    editorUI.getElementByText("Load") -> toggleStatus();
+    editorUI.getElementByText("Play") -> toggleStatus();
+    editorUI.getElementByText("Grid") -> toggleStatus();
+
+    if(editorUI.getElementById("right_bottom_toggle") -> getText()==">"){
+      editorUI.getElementById("right_bottom_toggle") -> setPosition( 994, 728);
+      editorUI.getElementById("right_bottom_toggle") -> setText("<");
+      editorUI.getElementById("right_bottom_toggle") -> setTransparency(150);
     }else{
-      editor_buttons[button_hide_right].setPosition( 566, 728);
-      editor_buttons[button_hide_right].setText(">");
-      editor_buttons[button_hide_right].setTransparency(255);
+      editorUI.getElementById("right_bottom_toggle") -> setPosition(556+8+2, 728);
+      editorUI.getElementById("right_bottom_toggle") -> setText(">");
+      editorUI.getElementById("right_bottom_toggle") -> setTransparency(255);
     }
   }
-  */
   if(editorUI.getElementById("right_top_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_UP]){
     editorUI.getElementByText("Back") -> toggleStatus();
     editorUI.getElementByText("Help") -> toggleStatus();
@@ -375,23 +378,26 @@ void editor::update(){
       editorUI.getElementById("right_top_toggle") -> setTransparency(255);
     }
   }
-  /*
-   if( editor_buttons[button_hide_top].mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_UP]){
-    editor_buttons[button_back].toggleStatus();
-    editor_buttons[button_help].toggleStatus();
 
-
-    if(editor_buttons[button_hide_top].getText()==">"){
-      editor_buttons[button_hide_top].setPosition( 994, 0);
-      editor_buttons[button_hide_top].setText("<");
-      editor_buttons[button_hide_top].setTransparency(150);
-    }else{
-      editor_buttons[button_hide_top].setPosition( 837, 0);
-      editor_buttons[button_hide_top].setText(">");
-      editor_buttons[button_hide_top].setTransparency(255);
-    }
-   }
-    */
+//  if(editorUI.getElementById("left_top_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
+//    editorUI.getElementByText("Undo") -> toggleStatus();
+//    editorUI.getElementByText("Clear") -> toggleStatus();
+//    editorUI.getElementByText("Save") -> toggleStatus();
+//    editorUI.getElementByText("Save as") -> toggleStatus();
+//    editorUI.getElementByText("Load") -> toggleStatus();
+//    editorUI.getElementByText("Play") -> toggleStatus();
+//    editorUI.getElementByText("Grid") -> toggleStatus();
+//
+//    if(editorUI.getElementById("left_top_toggle") -> getText()==">"){
+//      editorUI.getElementById("left_top_toggle") -> setPosition( 994, 728);
+//      editorUI.getElementById("left_top_toggle") -> setText("<");
+//      editorUI.getElementById("left_top_toggle") -> setTransparency(150);
+//    }else{
+//      editorUI.getElementById("left_top_toggle") -> setPosition(556+8+2, 728);
+//      editorUI.getElementById("left_top_toggle") -> setText(">");
+//      editorUI.getElementById("left_top_toggle") -> setTransparency(255);
+//    }
+//  }
   // Add tile
   if(tile_type != 4){
     if( mouseListener::mouse_button & 1
