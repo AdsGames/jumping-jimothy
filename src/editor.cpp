@@ -100,6 +100,8 @@ editor::editor(){
 
   explosive_orientation = 1;
 
+  set_explosive_ui_status();
+
 
 
 
@@ -128,13 +130,9 @@ editor::~editor(){
     if( image_box[i] != nullptr)
       al_destroy_bitmap( image_box[i]);
 }
+void editor::set_explosive_ui_status(){
 
-// Update editor
-void editor::update(){
-  // Update buttons
-  editorUI.update();
-
-    // Learned a few things from you
+  // Learned a few things from you
   editorUI.getElementByText("Block affects character") -> setStatus(tile_type==5);
   editorUI.getElementByText("explosive_up") -> setStatus(tile_type==5);
   editorUI.getElementByText("explosive_left") -> setStatus(tile_type==5);
@@ -142,6 +140,15 @@ void editor::update(){
   editorUI.getElementByText("explosive_down") -> setStatus(tile_type==5);
   editorUI.getElementByText("explosive_circle") -> setStatus(tile_type==5);
   editorUI.getElementById("left_top_toggle") -> setStatus(tile_type==5);
+
+
+}
+
+// Update editor
+void editor::update(){
+  // Update buttons
+  editorUI.update();
+
 
 
   if( editorUI.getElementByText("explosive_circle") -> mouseReleased())
@@ -191,18 +198,42 @@ void editor::update(){
   bool over_Button = editorUI.isHovering();
 
   // Changing types
-  if(keyListener::keyPressed[ALLEGRO_KEY_Q] || editorUI.getElementByText("Dynamic") -> mouseReleased())
+  if(keyListener::keyPressed[ALLEGRO_KEY_Q] || editorUI.getElementByText("Dynamic") -> mouseReleased()){
     tile_type = 0;
-  if(keyListener::keyPressed[ALLEGRO_KEY_W] || editorUI.getElementByText("Static") -> mouseReleased())
+    set_explosive_ui_status();
+  }
+  if(keyListener::keyPressed[ALLEGRO_KEY_W] || editorUI.getElementByText("Static") -> mouseReleased()){
     tile_type = 1;
-  if(keyListener::keyPressed[ALLEGRO_KEY_E] || editorUI.getElementByText("Player") -> mouseReleased())
+        set_explosive_ui_status();
+
+  }
+  if(keyListener::keyPressed[ALLEGRO_KEY_E] || editorUI.getElementByText("Player") -> mouseReleased()){
     tile_type = 2;
-  if(keyListener::keyPressed[ALLEGRO_KEY_R] || editorUI.getElementByText("Goat") -> mouseReleased())
+        set_explosive_ui_status();
+
+  }
+  if(keyListener::keyPressed[ALLEGRO_KEY_R] || editorUI.getElementByText("Goat") -> mouseReleased()){
     tile_type = 3;
-  if(keyListener::keyPressed[ALLEGRO_KEY_T] || editorUI.getElementByText("Collision") -> mouseReleased())
+        set_explosive_ui_status();
+
+  }
+  if(keyListener::keyPressed[ALLEGRO_KEY_T] || editorUI.getElementByText("Collision") -> mouseReleased()){
     tile_type = 4;
-  if(keyListener::keyPressed[ALLEGRO_KEY_Y] || editorUI.getElementByText("Explosive") -> mouseReleased())
+        set_explosive_ui_status();
+
+
+  }
+  if(keyListener::keyPressed[ALLEGRO_KEY_Y] || editorUI.getElementByText("Explosive") -> mouseReleased()){
     tile_type = 5;
+    editorUI.getElementById("left_top_toggle") -> setText("<");
+    editorUI.getElementById("left_top_toggle") -> setText("<");
+    editorUI.getElementById("left_top_toggle") -> setTransparency(255);
+    editorUI.getElementById("left_top_toggle") -> setPosition( 257, 60);
+
+   set_explosive_ui_status();
+
+
+  }
 
   // Rockin' three liner undo Button
   if((keyListener::keyPressed[ALLEGRO_KEY_Z] || editorUI.getElementByText("Undo") -> mouseReleased() ) && editorBoxes.size()>0){
@@ -379,25 +410,24 @@ void editor::update(){
     }
   }
 
-//  if(editorUI.getElementById("left_top_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
-//    editorUI.getElementByText("Undo") -> toggleStatus();
-//    editorUI.getElementByText("Clear") -> toggleStatus();
-//    editorUI.getElementByText("Save") -> toggleStatus();
-//    editorUI.getElementByText("Save as") -> toggleStatus();
-//    editorUI.getElementByText("Load") -> toggleStatus();
-//    editorUI.getElementByText("Play") -> toggleStatus();
-//    editorUI.getElementByText("Grid") -> toggleStatus();
-//
-//    if(editorUI.getElementById("left_top_toggle") -> getText()==">"){
-//      editorUI.getElementById("left_top_toggle") -> setPosition( 994, 728);
-//      editorUI.getElementById("left_top_toggle") -> setText("<");
-//      editorUI.getElementById("left_top_toggle") -> setTransparency(150);
-//    }else{
-//      editorUI.getElementById("left_top_toggle") -> setPosition(556+8+2, 728);
-//      editorUI.getElementById("left_top_toggle") -> setText(">");
-//      editorUI.getElementById("left_top_toggle") -> setTransparency(255);
-//    }
-//  }
+  if(editorUI.getElementById("left_top_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_DOWN]){
+    editorUI.getElementByText("explosive_up") -> toggleStatus();
+    editorUI.getElementByText("explosive_down") -> toggleStatus();
+    editorUI.getElementByText("explosive_left") -> toggleStatus();
+    editorUI.getElementByText("explosive_right") -> toggleStatus();
+    editorUI.getElementByText("explosive_circle") -> toggleStatus();
+    editorUI.getElementByText("Block affects character") -> toggleStatus();
+
+    if(editorUI.getElementById("left_top_toggle") -> getText()==">"){
+      editorUI.getElementById("left_top_toggle") -> setPosition( 257, 60);
+      editorUI.getElementById("left_top_toggle") -> setText("<");
+      editorUI.getElementById("left_top_toggle") -> setTransparency(255);
+    }else{
+      editorUI.getElementById("left_top_toggle") -> setPosition(0, 60);
+      editorUI.getElementById("left_top_toggle") -> setText(">");
+      editorUI.getElementById("left_top_toggle") -> setTransparency(150);
+    }
+  }
   // Add tile
   if(tile_type != 4){
     if( mouseListener::mouse_button & 1

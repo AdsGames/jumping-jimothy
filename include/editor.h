@@ -75,6 +75,8 @@ class editor : public state{
 
     static const int BUTTON_COUNT = 17;
 
+    void set_explosive_ui_status();
+
     // Tiles
     std::vector<editor_box> editorBoxes;
 
