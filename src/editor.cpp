@@ -3,6 +3,10 @@
 // Init editor
 editor::editor(){
 
+  //al_set_new_display_flags(ALLEGRO_WINDOWED);
+  al_set_new_display_flags(ALLEGRO_WINDOWED);
+
+
   editorUI = UIHandler();
 
   std::cout << "Initializing editor\n";
@@ -410,7 +414,7 @@ void editor::update(){
     }
   }
 
-  if(editorUI.getElementById("left_top_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_DOWN]){
+  if(editorUI.getElementById("left_top_toggle") -> mouseReleased()){
     editorUI.getElementByText("explosive_up") -> toggleStatus();
     editorUI.getElementByText("explosive_down") -> toggleStatus();
     editorUI.getElementByText("explosive_left") -> toggleStatus();

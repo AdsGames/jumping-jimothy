@@ -3,7 +3,7 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_native_dialog.h>
 
-#define danny_wants_to_listen_to_music_while_programming true
+#define danny_wants_to_listen_to_music_while_programming false
 
 
 bool game::testing = false;
@@ -369,7 +369,7 @@ void game::update(){
   // Touching goat
   if( gameGoat != nullptr && gameGoat -> getWinCondition()){
     level ++;
-    if( level > 10){
+    if( level > 14){
       set_next_state(STATE_MENU);
     }
     else{
@@ -464,6 +464,13 @@ void game::draw(){
   if( level == 4){
     al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Use R to restart the level.");
   }
+
+//  if( level == 11){
+//    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Green launcher blocks shoot dynamic blocks. ");
+//    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Red launchers launch blocks and the character. ");
+//
+//  }
+
 
   // Draw boxes
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
