@@ -193,11 +193,11 @@ void game::load_world(int newLevel){
     // Iteratboole over the nodes
     for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
       // All the variables we will load
-      std::string type = "Tile";
+      std::string type = "Static";
       std::string x = "0";
       std::string y = "0";
       std::string orientation = "0";
-      std::string bodytype = "Static";
+      //std::string bodytype = "Static";
       std::string width = "0";
       std::string height = "0";
       std::string affect_character = "false";
@@ -214,17 +214,19 @@ void game::load_world(int newLevel){
         width = object_node -> first_node("width") -> value();
       if( object_node -> first_node("height") != 0)
         height = object_node -> first_node("height") -> value();
-      if( object_node -> first_node("bodytype") != 0)
-        bodytype = object_node -> first_node("bodytype") -> value();
+     // if( object_node -> first_node("bodytype") != 0)
+    //  bodytype = object_node -> first_node("bodytype") -> value();
       if( object_node -> first_node("orientation") != 0)
         orientation = object_node -> first_node("orientation") -> value();
       if( object_node -> first_node("affect_character") != 0)
         affect_character = object_node -> first_node("affect_character") -> value();
 
-     // std::cout<<type<<"\n";
+    // std::cout<<type<<"\n";
 
-      if( type == "Tile"){
-        if(bodytype == "Static"){
+     //TODO:: CLEAN THIS POOP UP
+
+      if( type == "Static"){
+
             std::vector<std::string> splits = tools::split_string( orientation, ' ');
             if( splits.size() == 4)
               for( int k = 0; k < 4; k++)
@@ -236,12 +238,12 @@ void game::load_world(int newLevel){
 
           static_count++;
 
-        }else if(bodytype=="Dynamic"){
+        }else if(type=="Dynamic"){
           newBox = create_dynamic_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(width), tools::string_to_float(height), box,true, false);
           dynamic_count++;
-        }else if(bodytype=="Collision"){
+        }else if(type=="Collision"){
           newBox = create_collision_box( tools::string_to_float(x), tools::string_to_float(y), tools::string_to_float(width), tools::string_to_float(height) );
-        }
+
 
 
       }
