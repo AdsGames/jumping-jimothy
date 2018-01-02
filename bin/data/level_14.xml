@@ -1,459 +1,383 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-	<Object type="Tile">
-		<x>7.2</x>
-		<y>-32.8</y>
-		<orientation>1 1 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>8.8</x>
-		<y>-32.8</y>
-		<orientation>1 1 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>10.4</x>
-		<y>-32.8</y>
-		<orientation>1 1 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>12</x>
-		<y>-32.8</y>
-		<orientation>1 1 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-32.8</y>
-		<orientation>1 1 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>15.2</x>
-		<y>-32.8</y>
-		<orientation>1 2 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>7.2</x>
-		<y>-4</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>7.2</x>
-		<y>-5.6</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>7.2</x>
-		<y>-7.2</y>
-		<orientation>3 11 6 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>8.8</x>
-		<y>-7.2</y>
-		<orientation>1 1 10 9</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>10.4</x>
-		<y>-7.2</y>
-		<orientation>12 5 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>10.4</x>
-		<y>-5.6</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>10.4</x>
-		<y>-4</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>8.8</x>
-		<y>-8.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>8.8</x>
-		<y>-10.4</y>
-		<orientation>3 5 6 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>15.2</x>
-		<y>-10.4</y>
-		<orientation>1 1 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-10.4</y>
-		<orientation>3 11 6 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-8.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-7.2</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-5.6</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-4</y>
-		<orientation>0 1 3 9</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>15.2</x>
-		<y>-4</y>
-		<orientation>1 1 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
-		<y>-4</y>
-		<orientation>1 2 10 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
-		<y>-5.6</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
-		<y>-8.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
-		<y>-10.4</y>
-		<orientation>12 5 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
-		<y>-7.2</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>20</x>
-		<y>-4</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>20</x>
-		<y>-5.6</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>20</x>
-		<y>-7.2</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>20</x>
-		<y>-8.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>20</x>
-		<y>-10.4</y>
-		<orientation>3 11 6 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>21.6</x>
-		<y>-10.4</y>
-		<orientation>1 1 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>23.2</x>
-		<y>-10.4</y>
-		<orientation>12 5 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>23.2</x>
-		<y>-8.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>23.2</x>
-		<y>-7.2</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>23.2</x>
-		<y>-5.6</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>23.2</x>
-		<y>-4</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-13.6</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-15.2</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-16.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>13.6</x>
-		<y>-18.4</y>
-		<orientation>3 11 6 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>15.2</x>
-		<y>-18.4</y>
-		<orientation>1 1 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
-		<y>-18.4</y>
-		<orientation>12 11 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>16.8</x>
-		<y>-16.8</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>18.4</x>
-		<y>-18.4</y>
-		<orientation>1 1 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>20</x>
-		<y>-18.4</y>
-		<orientation>12 5 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>20</x>
-		<y>-16.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>20</x>
-		<y>-15.2</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>20</x>
-		<y>-13.6</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>24.8</x>
-		<y>-18.4</y>
-		<orientation>12 11 7 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>26.4</x>
-		<y>-18.4</y>
-		<orientation>1 2 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>23.2</x>
-		<y>-18.4</y>
-		<orientation>0 1 6 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>24.8</x>
-		<y>-16.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>24.8</x>
-		<y>-15.2</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>24.8</x>
-		<y>-13.6</y>
-		<orientation>1 1 10 9</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>23.2</x>
-		<y>-13.6</y>
-		<orientation>0 1 6 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>26.4</x>
-		<y>-13.6</y>
-		<orientation>1 2 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>29.6</x>
-		<y>-18.4</y>
-		<orientation>3 5 6 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>29.6</x>
-		<y>-16.8</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>29.6</x>
-		<y>-15.2</y>
-		<orientation>3 11 3 9</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>29.6</x>
-		<y>-13.6</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>31.2</x>
-		<y>-15.2</y>
-		<orientation>1 2 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>32.8</x>
-		<y>-16.8</y>
-		<orientation>0 1 3 4</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>32.8</x>
-		<y>-18.4</y>
-		<orientation>3 4 6 7</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>34.4</x>
-		<y>-18.4</y>
-		<orientation>4 5 7 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>34.4</x>
-		<y>-16.8</y>
-		<orientation>12 5 4 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>34.4</x>
-		<y>-15.2</y>
-		<orientation>3 5 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>34.4</x>
-		<y>-13.6</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>37.6</x>
-		<y>-13.6</y>
-		<orientation>0 2 3 5</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>37.6</x>
-		<y>-15.2</y>
-		<orientation>3 5 6 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
-	<Object type="Tile">
-		<x>37.6</x>
-		<y>-18.4</y>
-		<orientation>0 2 6 8</orientation>
-		<bodytype>Static</bodytype>
-	</Object>
 	<Object type="Character">
 		<x>7.2</x>
 		<y>-29.6</y>
-		<bodytype>Character</bodytype>
+	</Object>
+	<Object type="Static">
+		<x>7.2</x>
+		<y>-32.8</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>8.8</x>
+		<y>-32.8</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>10.4</x>
+		<y>-32.8</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>12</x>
+		<y>-32.8</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>13.6</x>
+		<y>-32.8</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>15.2</x>
+		<y>-32.8</y>
+		<orientation>1 2 7 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>7.2</x>
+		<y>-4</y>
+		<orientation>0 2 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>7.2</x>
+		<y>-5.6</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>7.2</x>
+		<y>-7.2</y>
+		<orientation>3 11 6 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>8.8</x>
+		<y>-7.2</y>
+		<orientation>1 1 10 9</orientation>
+	</Object>
+	<Object type="Static">
+		<x>10.4</x>
+		<y>-7.2</y>
+		<orientation>12 5 7 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>10.4</x>
+		<y>-5.6</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>10.4</x>
+		<y>-4</y>
+		<orientation>0 2 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>8.8</x>
+		<y>-8.8</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>8.8</x>
+		<y>-10.4</y>
+		<orientation>3 5 6 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>15.2</x>
+		<y>-10.4</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>13.6</x>
+		<y>-10.4</y>
+		<orientation>3 11 6 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>13.6</x>
+		<y>-8.8</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>13.6</x>
+		<y>-7.2</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>13.6</x>
+		<y>-5.6</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>13.6</x>
+		<y>-4</y>
+		<orientation>0 1 3 9</orientation>
+	</Object>
+	<Object type="Static">
+		<x>15.2</x>
+		<y>-4</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>16.8</x>
+		<y>-4</y>
+		<orientation>1 2 10 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>16.8</x>
+		<y>-5.6</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>16.8</x>
+		<y>-8.8</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>16.8</x>
+		<y>-10.4</y>
+		<orientation>12 5 7 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>16.8</x>
+		<y>-7.2</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>20</x>
+		<y>-4</y>
+		<orientation>0 2 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>20</x>
+		<y>-5.6</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>20</x>
+		<y>-7.2</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>20</x>
+		<y>-8.8</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>20</x>
+		<y>-10.4</y>
+		<orientation>3 11 6 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>21.6</x>
+		<y>-10.4</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>23.2</x>
+		<y>-10.4</y>
+		<orientation>12 5 7 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>23.2</x>
+		<y>-8.8</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>23.2</x>
+		<y>-7.2</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>23.2</x>
+		<y>-5.6</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>23.2</x>
+		<y>-4</y>
+		<orientation>0 2 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>13.6</x>
+		<y>-13.6</y>
+		<orientation>0 2 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>13.6</x>
+		<y>-15.2</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>13.6</x>
+		<y>-16.8</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>13.6</x>
+		<y>-18.4</y>
+		<orientation>3 11 6 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>15.2</x>
+		<y>-18.4</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>16.8</x>
+		<y>-18.4</y>
+		<orientation>12 11 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>16.8</x>
+		<y>-16.8</y>
+		<orientation>0 2 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>18.4</x>
+		<y>-18.4</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>20</x>
+		<y>-18.4</y>
+		<orientation>12 5 7 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>20</x>
+		<y>-16.8</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>20</x>
+		<y>-15.2</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>20</x>
+		<y>-13.6</y>
+		<orientation>0 2 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>24.8</x>
+		<y>-18.4</y>
+		<orientation>12 11 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>26.4</x>
+		<y>-18.4</y>
+		<orientation>1 2 7 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>23.2</x>
+		<y>-18.4</y>
+		<orientation>0 1 6 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>24.8</x>
+		<y>-16.8</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>24.8</x>
+		<y>-15.2</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>24.8</x>
+		<y>-13.6</y>
+		<orientation>1 1 10 9</orientation>
+	</Object>
+	<Object type="Static">
+		<x>23.2</x>
+		<y>-13.6</y>
+		<orientation>0 1 6 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>26.4</x>
+		<y>-13.6</y>
+		<orientation>1 2 7 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>29.6</x>
+		<y>-18.4</y>
+		<orientation>3 5 6 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>29.6</x>
+		<y>-16.8</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>29.6</x>
+		<y>-15.2</y>
+		<orientation>3 11 3 9</orientation>
+	</Object>
+	<Object type="Static">
+		<x>29.6</x>
+		<y>-13.6</y>
+		<orientation>0 2 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>31.2</x>
+		<y>-15.2</y>
+		<orientation>1 2 7 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>32.8</x>
+		<y>-16.8</y>
+		<orientation>0 1 3 4</orientation>
+	</Object>
+	<Object type="Static">
+		<x>32.8</x>
+		<y>-18.4</y>
+		<orientation>3 4 6 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>34.4</x>
+		<y>-18.4</y>
+		<orientation>4 5 7 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>34.4</x>
+		<y>-16.8</y>
+		<orientation>12 5 4 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>34.4</x>
+		<y>-15.2</y>
+		<orientation>3 5 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>34.4</x>
+		<y>-13.6</y>
+		<orientation>0 2 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>37.6</x>
+		<y>-13.6</y>
+		<orientation>0 2 3 5</orientation>
+	</Object>
+	<Object type="Static">
+		<x>37.6</x>
+		<y>-15.2</y>
+		<orientation>3 5 6 8</orientation>
+	</Object>
+	<Object type="Static">
+		<x>37.6</x>
+		<y>-18.4</y>
+		<orientation>0 2 6 8</orientation>
 	</Object>
 	<Object type="Finish">
 		<x>13.6</x>
 		<y>-29.6</y>
-		<bodytype>Finish</bodytype>
 	</Object>
-	<Object type="Tile">
+	<Object type="Static">
 		<x>5.6</x>
 		<y>-32.8</y>
 		<orientation>0 1 6 7</orientation>
-		<bodytype>Static</bodytype>
 	</Object>
-	<Object type="Tile">
+	<Object type="Collision">
 		<x>10.4</x>
 		<y>-32.8</y>
 		<width>11.2</width>
 		<height>1.6</height>
-		<bodytype>Collision</bodytype>
 	</Object>
 </data>
 
