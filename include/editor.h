@@ -24,7 +24,7 @@
 #include "mouseListener.h"
 #include "keyListener.h"
 #include "tools.h"
-#include "Button.h"
+#include "button.h"
 #include "globals.h"
 #include "game.h"
 #include "UIHandler.h"
@@ -105,6 +105,7 @@ class editor : public state{
     int tile_type;
     int level_number;
     bool test_mode = false;
+    bool modified;
 
     // The font
     ALLEGRO_FONT *edit_font;

@@ -123,7 +123,12 @@ void setup(){
 
   // Aquire screen
 
-  //al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+  #if defined(RELEASE)
+    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+  #elifdef
+      al_set_new_display_flags(ALLEGRO_WINDOW);
+
+  #endif
   display = al_create_display(1024, 768);
 
   if( !display)
@@ -146,6 +151,14 @@ void setup(){
   al_set_window_title(display,"Jumping Jimothy");
 
   std::cout<<" Sucesss.\n";
+
+  #if defined(DEBUG)
+    std::cout<<"Build target: Debug\n";
+  #endif
+
+  #if defined(RELEASE)
+    std::cout<<"Build target: Release\n";
+  #endif
 
 
   // Probably never going to be relevant but pretty cool anyways

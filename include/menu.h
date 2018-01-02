@@ -63,6 +63,7 @@ class menu : public state{
     int counter_title;
     int counter_play;
     bool counter_prompt;
+
 };
 
 #endif // MENU_H

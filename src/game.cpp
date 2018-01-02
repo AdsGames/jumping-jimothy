@@ -3,9 +3,6 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_native_dialog.h>
 
-#define danny_wants_to_listen_to_music_while_programming false
-
-
 bool game::testing = false;
 
 // Constructor
@@ -38,10 +35,10 @@ game::game(){
 
 
 
-  if(!danny_wants_to_listen_to_music_while_programming){
+  #if defined(RELEASE)
     music = tools::load_sample_ex( "music/tojam.ogg");
     al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, currentMusic);
-  }
+  #endif
 }
 
 // Destructor
@@ -348,8 +345,6 @@ void game::load_sprites(){
 // Update game logic
 void game::update(){
 
-  if(keyListener::keyReleased[ALLEGRO_KEY_ESCAPE])
-    set_next_state(STATE_MENU);
 
   if(testing){
     testing_back_button.update();
@@ -397,6 +392,10 @@ void game::update(){
   // Die
   if( keyListener::keyPressed[ALLEGRO_KEY_Z] || joystickListener::buttonPressed[JOY_XBOX_B] ||  keyListener::keyPressed[ALLEGRO_KEY_R] )
     reset();
+
+  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE]){
+    set_next_state(STATE_MENU);
+  }
 
   // Next level
   if( keyListener::keyPressed[ALLEGRO_KEY_C]){

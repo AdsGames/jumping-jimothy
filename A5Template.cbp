@@ -68,7 +68,6 @@
 			<Add option="-s" />
 		</Linker>
 		<Unit filename="include/Box.h" />
-		<Unit filename="include/Button.h" />
 		<Unit filename="include/Character.h" />
 		<Unit filename="include/CheckBox.h" />
 		<Unit filename="include/CollisionBox.h" />
@@ -80,6 +79,7 @@
 		<Unit filename="include/ToggleBox.h" />
 		<Unit filename="include/UIElement.h" />
 		<Unit filename="include/UIHandler.h" />
+		<Unit filename="include/button.h" />
 		<Unit filename="include/editor.h" />
 		<Unit filename="include/game.h" />
 		<Unit filename="include/globals.h" />
@@ -91,7 +91,6 @@
 		<Unit filename="include/state.h" />
 		<Unit filename="include/tools.h" />
 		<Unit filename="src/Box.cpp" />
-		<Unit filename="src/Button.cpp" />
 		<Unit filename="src/Character.cpp" />
 		<Unit filename="src/CheckBox.cpp" />
 		<Unit filename="src/CollisionBox.cpp" />
@@ -103,6 +102,7 @@
 		<Unit filename="src/ToggleBox.cpp" />
 		<Unit filename="src/UIElement.cpp" />
 		<Unit filename="src/UIHandler.cpp" />
+		<Unit filename="src/button.cpp" />
 		<Unit filename="src/editor.cpp" />
 		<Unit filename="src/game.cpp" />
 		<Unit filename="src/init.cpp" />

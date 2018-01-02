@@ -4,7 +4,7 @@
 editor::editor(){
 
   //al_set_new_display_flags(ALLEGRO_WINDOWED);
-  al_set_new_display_flags(ALLEGRO_WINDOWED);
+  al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 
 
   editorUI = UIHandler();
@@ -268,6 +268,7 @@ void editor::update(){
   if(keyListener::keyPressed[ALLEGRO_KEY_X])
     gui_mode =! gui_mode;
 
+  //std::cout<<is_saved<< "is it saved\n";
   // Save
   if( editorUI.getElementByText("Save") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_S]){
     if( editorBoxes.size() > 0){
@@ -285,8 +286,12 @@ void editor::update(){
       if(file_name != nullptr){
         // Make sure saves correctly
         if( save_map( file_name)){
-          al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
+
+          // Up to debate but I think the dialog box for the save button is uneeded and annoying.
+          // I opted for a modified indicator with a star beside the filename
+          // al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
           is_saved = true;
+          modified=false;
         }
         else
           al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, ALLEGRO_MESSAGEBOX_ERROR);
@@ -295,6 +300,8 @@ void editor::update(){
     else
       al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!", "", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
   }
+
+
   // Save as
   if(editorUI.getElementByText("Save as") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_D]){
     if( editorBoxes.size() > 0){
@@ -302,15 +309,18 @@ void editor::update(){
 
       myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
 
-         // Display open dialog
+      // Display open dialog
+      const char *temp_name;
       if( al_show_native_file_dialog( nullptr, myChooser))
-        file_name = al_get_native_file_dialog_path( myChooser, 0);
+        temp_name = al_get_native_file_dialog_path( myChooser, 0);
 
-      if(file_name != nullptr){
+      if(temp_name != nullptr){
+        file_name = temp_name;
           // Make sure saves correctly
         if( save_map( file_name)){
           al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
           is_saved = true;
+          modified=false;
         }else{
           al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, ALLEGRO_MESSAGEBOX_ERROR);
         }
@@ -320,27 +330,34 @@ void editor::update(){
         al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!","", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
     }
   }
+
+
   // Load map
   if(editorUI.getElementByText("Load") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_A]){
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
 
-    // Display open dialog
+
+    const char* temp_name;
+      // Display open di alog
     if( al_show_native_file_dialog( nullptr, myChooser)){
-      file_name = al_get_native_file_dialog_path(myChooser, 0);
+      temp_name = al_get_native_file_dialog_path(myChooser, 0);
 
 
       // You also need to check for cancel Button here too
-      if( file_name != nullptr){
+      if( temp_name != nullptr){
+        file_name=temp_name;
         editorBoxes.clear();
+      //  std::cout<<"Does the file name==nullptr? No.\n";
 
         // Make sure loads correctly
-        if( load_map( file_name))
+        if( load_map( file_name)){
           al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ", file_name, nullptr, 0);
-        else
+          is_saved=true;
+          modified=false;
+
+
+        }else
           al_show_native_message_box( nullptr, "Error!", "Error loading map from: ", file_name, nullptr, 0);
-      }
-      else{
-        file_name = "Untitled";
       }
     }
   }
@@ -467,6 +484,7 @@ void editor::update(){
         newBox.orientation[0]=explosive_orientation;
       }
       editorBoxes.push_back( newBox);
+      modified=true;
 
       // Calculate orientation of boxes
       calculate_orientation_global();
@@ -508,6 +526,7 @@ void editor::update(){
         newBox.bodyType = "Collision";
 
         editorBoxes.push_back( newBox);
+        modified=true;
 
       }
     }
@@ -522,6 +541,7 @@ void editor::update(){
     for( unsigned int i = 0; i < editorBoxes.size(); i ++){
       if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)mouseListener::mouse_x, (float)mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)mouseListener::mouse_y, (float)mouseListener::mouse_y )){
         editorBoxes.erase( editorBoxes.begin() + i);
+        modified=true;
         calculate_orientation_global();
       }
     }
@@ -712,9 +732,12 @@ void editor::draw(){
   if( tile_type == 5)
     al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Explosive Box");
 
+  std::string modified_character="";
+  if(modified)
+    modified_character="*";
 
   // Current map opened
-  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s", file_name);
+  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s %s", file_name,modified_character.c_str());
 
   // Draw buttons
   editorUI.draw();

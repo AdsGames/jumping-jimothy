@@ -1,5 +1,5 @@
 #include "UIHandler.h"
-#include "Button.h"
+#include "button.h"
 
 void UIHandler::addElement(UIElement *newUIElement){
   ui_elements.push_back(newUIElement);
@@ -39,6 +39,21 @@ void UIHandler::createAnchoredButton(std::string newText,ALLEGRO_FONT *newFont,s
 
   ui_elements.push_back(newButton);
 }
+
+//
+//if buttons.press(){
+//
+//    use Allan.radiostation();
+//
+//    if(bug){
+//        bug.stop();
+//    }
+//    if(goingto.crash()){
+//        dont();
+//    }
+//
+//
+//}
 
 
 UIElement* UIHandler::getElementByText(std::string newText){

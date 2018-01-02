@@ -31,7 +31,7 @@
 #include <CollisionBox.h>
 #include <DynamicBox.h>
 #include <Explosive.h>
-#include <Button.h>
+#include <button.h>
 
 class game : public state{
   public:
