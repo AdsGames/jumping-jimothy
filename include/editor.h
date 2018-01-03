@@ -39,10 +39,6 @@ struct editor_box{
   std::string x_str;
   std::string y_str;
   std::string type_str;
-  //Deleat this newphew
-  // (once done level conversions)
-  std::string bodyType;
-
   int type;
   int orientation[4];
   int width;

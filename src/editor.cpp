@@ -252,7 +252,7 @@ void editor::update(){
   }
 
   if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back") -> mouseReleased() || keyListener::keyReleased[ALLEGRO_KEY_ESCAPE]){
-    if(editorBoxes.size()>0){
+    if(modified){
       if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
         set_next_state(STATE_MENU);
     }
@@ -763,6 +763,8 @@ bool editor::box_at(int x, int y){
 // Load map from xml-
 bool editor::load_map( std::string mapName){
 // Doc
+  std::cout<<"we're loading a level now you POS\n";
+  // Doc
   rapidxml::xml_document<> doc;
 
   // Make an xml object
@@ -779,18 +781,17 @@ bool editor::load_map( std::string mapName){
 
   // Iterate over the nodes
   for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
-    std::string type = "";
+    std::string type_str = "";
     std::string x = "";
     std::string y = "";
     std::string width = "0";
     std::string height = "0";
-    std::string bodytype = "borked";
     std::string orientation = "0 0 0 0";
     std::string affect_character = "false";
 
     // Load data
     if( object_node -> first_attribute("type") != 0)
-      type = object_node -> first_attribute("type") -> value();
+      type_str = object_node -> first_attribute("type") -> value();
     if( object_node -> first_node("x") != 0)
       x = object_node -> first_node("x") -> value();
     if( object_node -> first_node("y") != 0)
@@ -799,27 +800,26 @@ bool editor::load_map( std::string mapName){
       width = object_node -> first_node("width") -> value();
     if( object_node -> first_node("height") != 0)
       height = object_node -> first_node("height") -> value();
-    if( object_node -> first_node("bodytype") != 0)
-      bodytype = object_node -> first_node("bodytype") -> value();
+   // if( object_node -> first_node("type_str") != 0)
+   //   type_str = object_node -> first_node("type_str") -> value();
     if( object_node -> first_node("orientation") != 0)
       orientation = object_node -> first_node("orientation") -> value();
     if( object_node -> first_node("affect_character") != 0)
       affect_character = object_node -> first_node("affect_character") -> value();
 
-
-
-
-
+    std::cout<<type_str <<" is type_str\n";
 
     editor_box newBox;
 
+
+    newBox.type_str = type_str;
     newBox.x_str = x;
     newBox.y_str = y;
-    newBox.bodyType = bodytype;
+    //newBox.type_str = type_str;
     newBox.affect_character = (affect_character=="true");
 
     // Idek dude but it works
-    if(newBox.bodyType == "Collision"){
+    if(newBox.type_str == "Collision"){
 
       newBox.width = (tools::string_to_float(width) * 20.0f);
       newBox.height = (tools::string_to_float(height) * 20.0f);
@@ -828,7 +828,7 @@ bool editor::load_map( std::string mapName){
       newBox.y = (tools::string_to_float(y) + tools::string_to_float(height)/2)*-20.0f;
 
     }
-    if(newBox.bodyType != "Collision"){
+    if(newBox.type_str != "Collision"){
       newBox.width = (tools::string_to_float(width) * 20.0f) - 16.0f;
       newBox.height = (tools::string_to_float(height) * 20.0f) - 16.0f;
       newBox.x = (tools::string_to_float(x) * 20.0f) - 16.0f;
@@ -855,24 +855,26 @@ bool editor::load_map( std::string mapName){
       return false;
     }
 
-
+    std::cout<<type_str <<" is type_str\n";
 
     // Body
-    if( newBox.bodyType == "Dynamic")
+    if( newBox.type_str == "Dynamic")
       newBox.type = 0;
-    else if( newBox.bodyType == "Static")
+    else if( newBox.type_str == "Static")
       newBox.type = 1;
-    else if( newBox.bodyType == "Character")
+    else if( newBox.type_str == "Character")
       newBox.type = 2;
-    else if( newBox.bodyType == "Finish")
+    else if( newBox.type_str == "Finish")
       newBox.type = 3;
-    else if( newBox.bodyType == "Collision")
+    else if( newBox.type_str == "Collision")
       newBox.type = 4;
-    else if( newBox.bodyType == "Explosive")
+    else if( newBox.type_str == "Explosive")
       newBox.type = 5;
-    else
+    else{
       newBox.type = 0;
+      std::cout<<"WARNING: Tile created as no type (type 0).\n";
 
+    }
     // Add box
     editorBoxes.push_back( newBox);
   }
@@ -880,137 +882,6 @@ bool editor::load_map( std::string mapName){
   // Success
   return true;
 }
-
-
-
-
-
-
-
-
-
-
-//
-//
-//  std::cout<<"we're loading a level now you POS\n";
-//  // Doc
-//  rapidxml::xml_document<> doc;
-//
-//  // Make an xml object
-//  std::ifstream theFile( mapName);
-//  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
-//  xml_buffer.push_back('\0');
-//
-//  // Parse the buffer using the xml file parsing library into doc
-//  doc.parse<0>(&xml_buffer[0]);
-//
-//  // Find our root node
-//  rapidxml::xml_node<> * root_node;
-//  root_node = doc.first_node("data");
-//
-//  // Iterate over the nodes
-//  for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
-//    std::string type_str = "";
-//    std::string x = "";
-//    std::string y = "";
-//    std::string width = "0";
-//    std::string height = "0";
-//    std::string orientation = "0 0 0 0";
-//    std::string affect_character = "false";
-//
-//    // Load data
-//    if( object_node -> first_attribute("type") != 0)
-//      type_str = object_node -> first_attribute("type") -> value();
-//    if( object_node -> first_node("x") != 0)
-//      x = object_node -> first_node("x") -> value();
-//    if( object_node -> first_node("y") != 0)
-//      y = object_node -> first_node("y") -> value();
-//    if( object_node -> first_node("width") != 0)
-//      width = object_node -> first_node("width") -> value();
-//    if( object_node -> first_node("height") != 0)
-//      height = object_node -> first_node("height") -> value();
-//   // if( object_node -> first_node("type_str") != 0)
-//   //   type_str = object_node -> first_node("type_str") -> value();
-//    if( object_node -> first_node("orientation") != 0)
-//      orientation = object_node -> first_node("orientation") -> value();
-//    if( object_node -> first_node("affect_character") != 0)
-//      affect_character = object_node -> first_node("affect_character") -> value();
-//
-//    std::cout<<type_str <<" is type_str\n";
-//
-//    editor_box newBox;
-//
-//
-//    newBox.type_str = type_str;
-//    newBox.x_str = x;
-//    newBox.y_str = y;
-//    //newBox.type_str = type_str;
-//    newBox.affect_character = (affect_character=="true");
-//
-//    // Idek dude but it works
-//    if(newBox.type_str == "Collision"){
-//
-//      newBox.width = (tools::string_to_float(width) * 20.0f);
-//      newBox.height = (tools::string_to_float(height) * 20.0f);
-//      newBox.x = (tools::string_to_float(x) - tools::string_to_float(width)/2)*20.0f;
-//      // This guy is positive because we make it negative later
-//      newBox.y = (tools::string_to_float(y) + tools::string_to_float(height)/2)*-20.0f;
-//
-//    }
-//    if(newBox.type_str != "Collision"){
-//      newBox.width = (tools::string_to_float(width) * 20.0f) - 16.0f;
-//      newBox.height = (tools::string_to_float(height) * 20.0f) - 16.0f;
-//      newBox.x = (tools::string_to_float(x) * 20.0f) - 16.0f;
-//      newBox.y = (tools::string_to_float(y) * -20.0f) - 16.0f;
-//    }
-//
-//    newBox.height_str = height;
-//    newBox.width_str = width;
-//
-//
-//    // Correct orientation format
-//    std::vector<std::string> splits = tools::split_string( orientation, ' ');
-//    if( splits.size() == 4){
-//      for( int k = 0; k < 4; k++)
-//        newBox.orientation[k] = (tools::convertStringToInt(splits.at(k)));
-//    }
-//    // Maybe we can salvage it?
-//    else if( splits.size() > 0){
-//      for( int k = 0; k < 4; k++)
-//        newBox.orientation[k] = (tools::convertStringToInt(splits.at(0)));
-//    }
-//    // All hope is lost!
-//    else{
-//      return false;
-//    }
-//
-//    std::cout<<type_str <<" is type_str\n";
-//
-//    // Body
-//    if( newBox.type_str == "Dynamic")
-//      newBox.type = 0;
-//    else if( newBox.type_str == "Static")
-//      newBox.type = 1;
-//    else if( newBox.type_str == "Character")
-//      newBox.type = 2;
-//    else if( newBox.type_str == "Finish")
-//      newBox.type = 3;
-//    else if( newBox.type_str == "Collision")
-//      newBox.type = 4;
-//    else if( newBox.type_str == "Explosive")
-//      newBox.type = 5;
-//    else{
-//      newBox.type = 0;
-//      std::cout<<"WARNING: Tile created as no type (type 0).\n";
-//
-//    }
-//    // Add box
-//    editorBoxes.push_back( newBox);
-//  }
-//
-//  // Success
-//  return true;
-//}
 
 // Save map to xml
 bool editor::save_map( std::string mapName){
@@ -1045,7 +916,7 @@ bool editor::save_map( std::string mapName){
   // Tiles
   for( unsigned int i = 0; i < editorBoxes.size(); i++){
 
-    editorBoxes.at(i).type_str=editorBoxes.at(i).bodyType;
+    //editorBoxes.at(i).type_str=editorBoxes.at(i).bodyType;
     // Object
     char *node_name = doc.allocate_string("Object");
     rapidxml::xml_node<>* object_node = doc.allocate_node( rapidxml::node_element, node_name);
@@ -1071,7 +942,7 @@ bool editor::save_map( std::string mapName){
       xml_type = "Explosive";
     }
 
-    object_node -> append_attribute( doc.allocate_attribute("type", doc.allocate_string(editorBoxes.at(i).bodyType.c_str())));
+    object_node -> append_attribute( doc.allocate_attribute("type", doc.allocate_string(editorBoxes.at(i).type_str.c_str())));
     root_node -> append_node( object_node);
 
     // Save data
