@@ -4,6 +4,8 @@
 #include <allegro5/allegro_native_dialog.h>
 
 bool game::testing = false;
+const char* game::testing_file_name = nullptr;
+
 
 // Constructor
 game::game(){
@@ -374,7 +376,7 @@ void game::update(){
       if( !testing)
         reset();
       else{
-        al_show_native_message_box( nullptr, "Level complete!", "Opening editor",nullptr, nullptr, 0);
+        al_show_native_message_box( nullptr, "Level complete!", "Opening editor","", "Okily dokily.", 0);
         set_next_state( STATE_EDIT);
       }
     }
