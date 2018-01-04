@@ -35,9 +35,8 @@ class UIElement
     void setTransparency(float newAlpha){alpha = newAlpha;}
     void setBitmapRotationAngle(float newRotation){bitmap_rotation_angle=newRotation;}
     void setX(int newX){x=newX;}
-    void setColour(ALLEGRO_COLOR newColour){
-      colour = newColour;
-    }
+    void setTextColour(ALLEGRO_COLOR newColour){text_colour = newColour;}
+    void setBackgroundColour(ALLEGRO_COLOR newColour){background_colour = newColour;}
     void setStatus(bool newStatus){
       visible = newStatus;
       active = newStatus;
@@ -56,6 +55,7 @@ class UIElement
     void setId( std::string id){ this -> id = id; }
     void setImage( ALLEGRO_BITMAP *image);
     void setFont( ALLEGRO_FONT *font);
+    void setVisibleBackground(bool b){visible_background=b;}
 
     bool mouseReleased();
     bool hover();
@@ -84,11 +84,13 @@ class UIElement
     bool hovering;
     bool old_mouse_down;
     bool mouse_released;
+    bool visible_background;
 
     float alpha;
 
     // Frick you
-    ALLEGRO_COLOR colour;
+    ALLEGRO_COLOR text_colour;
+    ALLEGRO_COLOR background_colour;
 
     // Inactive cannot be clicked/hovered
     // Invisible cannot be seen

@@ -107,9 +107,9 @@ void Button::draw(){
     // Backdrop
 
     // This hover colour has more lines than the whole game loop
-    int new_r=tools::clamp(0,255,(int)((colour.r*255)+(20 * hovering)));
-    int new_g=tools::clamp(0,255,(int)((colour.g*255)+(20 * hovering)));
-    int new_b=tools::clamp(0,255,(int)((colour.b*255)+(20 * hovering)));
+    int new_r=tools::clamp(0,255,(int)((background_colour.r*255)+(20 * hovering)));
+    int new_g=tools::clamp(0,255,(int)((background_colour.g*255)+(20 * hovering)));
+    int new_b=tools::clamp(0,255,(int)((background_colour.b*255)+(20 * hovering)));
     ALLEGRO_COLOR hover_colour = al_map_rgba(new_r,new_g,new_b,alpha);
     al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, hover_colour);
 

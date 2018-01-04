@@ -23,6 +23,7 @@ enum programStates{
   STATE_GAME,
   STATE_EDIT,
   STATE_EXIT,
+  STATE_LEVELSELECT,
 };
 
 // State

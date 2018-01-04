@@ -7,7 +7,8 @@ UIElement::UIElement(){
 void UIElement::setDefaults(){
 
   this -> alpha = 255;
-  this -> colour = al_map_rgba(200,200,200,alpha);
+  this -> background_colour = al_map_rgba(200,200,200,alpha);
+  this -> text_colour = al_map_rgba(0,0,0,alpha);
   this -> x = 0;
   this -> y = 0;
   this -> width = 0;
@@ -23,6 +24,7 @@ void UIElement::setDefaults(){
   this -> padding_x = 10;
   this -> padding_y = 10;
   this -> id = "";
+  this -> visible_background =true;
 
 }
 
@@ -117,14 +119,15 @@ bool UIElement::mouseReleased(){
 void UIElement::draw(){
   if(visible){
 
-    std::cout<<"How do I actually oop?\n";
+   // std::cout<<"How do I actually oop?\n";
     // Backdrop
-    al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering,alpha));
-    al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), 2);
-
+    if(visible_background){
+      al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering,alpha));
+      al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), 2);
+    }
     // Text
     if( UIElement_font != nullptr)
-      al_draw_text( UIElement_font, al_map_rgba( 0, 0, 0,alpha), x + padding_x, y + padding_y, 0, text.c_str());
+      al_draw_text( UIElement_font, text_colour, x + padding_x, y + padding_y, 0, text.c_str());
 
     // Image if avail
     if( image != nullptr)
