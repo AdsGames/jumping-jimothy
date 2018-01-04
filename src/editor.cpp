@@ -1,5 +1,8 @@
 #include "editor.h"
 
+
+const char* editor::testing_file_name = "Untitled";
+bool editor::modified=false;
 // Init editor
 editor::editor(){
 
@@ -14,8 +17,14 @@ editor::editor(){
   // Level to edit
   level_number = 1;
 
+  if(testing_file_name !="Untitled" || testing_file_name !=nullptr)
+    is_saved=true;
+
   // Filename
-  file_name = "Untitled";
+  file_name = testing_file_name;
+  testing_file_name = "Untitled";
+
+
 
   gui_mode = true;
 
@@ -258,6 +267,7 @@ void editor::update(){
   if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back") -> mouseReleased() || keyListener::keyReleased[ALLEGRO_KEY_ESCAPE]){
     if(modified){
       if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
+        modified=false;
         set_next_state(STATE_MENU);
     }
     else{
@@ -297,9 +307,11 @@ void editor::update(){
           is_saved = true;
           modified=false;
         }
-        else
+        else{
           al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, ALLEGRO_MESSAGEBOX_ERROR);
-      }
+        }
+      }else
+        file_name="Untitled";
     }
     else
       al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!", "", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
@@ -372,9 +384,10 @@ void editor::update(){
       save_map( "data/level_0.xml");
       set_next_state( STATE_GAME);
       game::testing = true;
+      testing_file_name = file_name;
      }
      else
-      al_show_native_message_box( nullptr, "Attemping to play an empty level", "That wouldn't be very fun would it?",nullptr, nullptr, 0);
+      al_show_native_message_box( nullptr, "Attemping to play an empty level", "That wouldn't be very fun would it?","", "No it wouldn't.", 0);
 
 
   }

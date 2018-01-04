@@ -1,6 +1,6 @@
 /**
- * BOX
- * Allan Legemaate
+ * Editor
+ * Allan Legemaate & Danny Van Stemp
  * 05/05/2017
 **/
 #ifndef EDITOR_H
@@ -82,6 +82,7 @@ class editor : public state{
 
     // Map name
     const char *file_name;
+    static const char *testing_file_name;
 
     bool gui_mode;
 
@@ -105,7 +106,7 @@ class editor : public state{
     int tile_type;
     int level_number;
     bool test_mode = false;
-    bool modified;
+    static bool modified;
 
     // The font
     ALLEGRO_FONT *edit_font;
