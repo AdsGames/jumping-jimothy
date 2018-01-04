@@ -50,8 +50,8 @@ game::~game(){
   }
 
   // Destory bitmaps
-  if( box != nullptr)
-    al_destroy_bitmap( box);
+  //if( box != nullptr)
+  //  al_destroy_bitmap( box);
   if( goat_sprite != nullptr)
     al_destroy_bitmap( goat_sprite);
   if( goat_map != nullptr)
