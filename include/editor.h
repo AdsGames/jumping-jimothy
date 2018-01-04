@@ -70,6 +70,8 @@ class editor : public state{
     bool box_at(int x, int y);
     bool box_at_with_type(int newType,int x, int y);
 
+    bool is_player();
+
     bool save_map( std::string mapName);
     bool load_map( std::string mapName);
 
@@ -85,6 +87,8 @@ class editor : public state{
     static const char *testing_file_name;
 
     bool gui_mode;
+
+
 
     float box_1_x;
     float box_1_y;

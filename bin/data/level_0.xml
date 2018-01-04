@@ -1,477 +1,370 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
 	<Object type="Character">
-		<x>15.2</x>
-		<y>-5.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>21.6</x>
-		<y>-28</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>20</x>
+		<x>36</x>
 		<y>-26.4</y>
 	</Object>
-	<Object type="Dynamic">
+	<Object type="Finish">
 		<x>20</x>
-		<y>-24.8</y>
+		<y>-21.6</y>
 	</Object>
-	<Object type="Dynamic">
-		<x>20</x>
-		<y>-23.2</y>
-	</Object>
-	<Object type="Dynamic">
+	<Object type="Finish">
 		<x>20</x>
 		<y>-20</y>
 	</Object>
-	<Object type="Dynamic">
-		<x>20</x>
+	<Object type="Finish">
+		<x>21.6</x>
+		<y>-20</y>
+	</Object>
+	<Object type="Finish">
+		<x>24.8</x>
+		<y>-20</y>
+	</Object>
+	<Object type="Finish">
+		<x>26.4</x>
 		<y>-18.4</y>
 	</Object>
-	<Object type="Dynamic">
-		<x>20</x>
+	<Object type="Finish">
+		<x>28</x>
+		<y>-18.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>29.6</x>
+		<y>-18.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>29.6</x>
 		<y>-16.8</y>
 	</Object>
-	<Object type="Dynamic">
-		<x>21.6</x>
+	<Object type="Finish">
+		<x>31.2</x>
+		<y>-16.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>32.8</x>
 		<y>-15.2</y>
 	</Object>
-	<Object type="Dynamic">
-		<x>23.2</x>
+	<Object type="Finish">
+		<x>34.4</x>
+		<y>-15.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>34.4</x>
 		<y>-13.6</y>
 	</Object>
-	<Object type="Dynamic">
+	<Object type="Finish">
+		<x>36</x>
+		<y>-13.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>36</x>
+		<y>-12</y>
+	</Object>
+	<Object type="Finish">
+		<x>36</x>
+		<y>-10.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>13.6</x>
+		<y>-32.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>13.6</x>
+		<y>-31.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>13.6</x>
+		<y>-28</y>
+	</Object>
+	<Object type="Finish">
+		<x>13.6</x>
+		<y>-26.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>12</x>
+		<y>-23.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>12</x>
+		<y>-21.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>12</x>
+		<y>-20</y>
+	</Object>
+	<Object type="Finish">
+		<x>12</x>
+		<y>-18.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>13.6</x>
+		<y>-18.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>13.6</x>
+		<y>-16.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>13.6</x>
+		<y>-15.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>15.2</x>
+		<y>-15.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>15.2</x>
+		<y>-13.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>16.8</x>
+		<y>-13.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>18.4</x>
+		<y>-13.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>20</x>
+		<y>-12</y>
+	</Object>
+	<Object type="Finish">
+		<x>21.6</x>
+		<y>-12</y>
+	</Object>
+	<Object type="Finish">
+		<x>24.8</x>
+		<y>-12</y>
+	</Object>
+	<Object type="Finish">
 		<x>26.4</x>
 		<y>-12</y>
 	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-10.4</y>
+	<Object type="Finish">
+		<x>29.6</x>
+		<y>-12</y>
 	</Object>
-	<Object type="Dynamic">
+	<Object type="Finish">
 		<x>31.2</x>
-		<y>-8.8</y>
+		<y>-13.6</y>
 	</Object>
-	<Object type="Dynamic">
-		<x>34.4</x>
-		<y>-8.8</y>
+	<Object type="Finish">
+		<x>36</x>
+		<y>-16.8</y>
 	</Object>
-	<Object type="Dynamic">
+	<Object type="Finish">
 		<x>37.6</x>
-		<y>-8.8</y>
+		<y>-18.4</y>
 	</Object>
-	<Object type="Dynamic">
+	<Object type="Finish">
 		<x>39.2</x>
-		<y>-8.8</y>
+		<y>-18.4</y>
 	</Object>
-	<Object type="Dynamic">
+	<Object type="Finish">
 		<x>40.8</x>
-		<y>-10.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>42.4</x>
-		<y>-12</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>44</x>
-		<y>-13.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>24.8</x>
-		<y>-28</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>24.8</x>
-		<y>-24.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>24.8</x>
-		<y>-21.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>24.8</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>24.8</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>24.8</x>
-		<y>-13.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>29.6</x>
-		<y>-10.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>34.4</x>
-		<y>-10.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>36</x>
-		<y>-12</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>36</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>36</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>32.8</x>
-		<y>-21.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>29.6</x>
-		<y>-21.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>24.8</x>
 		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>21.6</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>18.4</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>15.2</x>
-		<y>-13.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>15.2</x>
-		<y>-12</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>16.8</x>
-		<y>-8.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>21.6</x>
-		<y>-8.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>42.4</x>
-		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>45.6</x>
-		<y>-24.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>44</x>
-		<y>-26.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>39.2</x>
-		<y>-28</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>32.8</x>
-		<y>-24.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>18.4</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>15.2</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>15.2</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>16.8</x>
-		<y>-13.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>20</x>
-		<y>-12</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>23.2</x>
-		<y>-12</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-13.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>31.2</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>32.8</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>32.8</x>
-		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>31.2</x>
-		<y>-21.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>26.4</x>
-		<y>-21.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>16.8</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>18.4</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>20</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-12</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>32.8</x>
-		<y>-13.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>36</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>37.6</x>
-		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>36</x>
-		<y>-21.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>32.8</x>
-		<y>-23.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>23.2</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-21.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>16.8</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>26.4</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>31.2</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>36</x>
-		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>34.4</x>
-		<y>-21.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>21.6</x>
-		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>23.2</x>
-		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>26.4</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>31.2</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>29.6</x>
-		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>26.4</x>
-		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>23.2</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>29.6</x>
-		<y>-18.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>23.2</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>26.4</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>29.6</x>
-		<y>-15.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>29.6</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>32.8</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>20</x>
-		<y>-21.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>16.8</x>
-		<y>-20</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>21.6</x>
-		<y>-16.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-23.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>21.6</x>
-		<y>-29.6</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>21.6</x>
-		<y>-26.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>23.2</x>
-		<y>-23.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>26.4</x>
-		<y>-23.2</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-24.8</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-26.4</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>28</x>
-		<y>-28</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>29.6</x>
-		<y>-28</y>
-	</Object>
-	<Object type="Dynamic">
-		<x>29.6</x>
-		<y>-29.6</y>
-	</Object>
-	<Object type="Collision">
-		<x>28.8</x>
-		<y>-34.4</y>
-		<width>44.8</width>
-		<height>1.6</height>
 	</Object>
 	<Object type="Finish">
 		<x>42.4</x>
+		<y>-21.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>44</x>
+		<y>-21.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>45.6</x>
+		<y>-21.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>45.6</x>
+		<y>-20</y>
+	</Object>
+	<Object type="Finish">
+		<x>47.2</x>
+		<y>-18.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>48.8</x>
+		<y>-16.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>48.8</x>
+		<y>-15.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>48.8</x>
+		<y>-13.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>48.8</x>
+		<y>-12</y>
+	</Object>
+	<Object type="Finish">
+		<x>48.8</x>
+		<y>-10.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>47.2</x>
+		<y>-8.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>47.2</x>
+		<y>-7.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>45.6</x>
+		<y>-7.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>44</x>
+		<y>-7.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>42.4</x>
+		<y>-5.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>40.8</x>
+		<y>-5.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>39.2</x>
+		<y>-5.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>36</x>
+		<y>-7.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>34.4</x>
+		<y>-7.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>32.8</x>
+		<y>-8.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>31.2</x>
+		<y>-10.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>28</x>
+		<y>-15.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>26.4</x>
+		<y>-16.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>24.8</x>
+		<y>-18.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>23.2</x>
+		<y>-21.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>21.6</x>
+		<y>-21.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>21.6</x>
+		<y>-23.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>21.6</x>
+		<y>-24.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>20</x>
+		<y>-24.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>18.4</x>
+		<y>-26.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>16.8</x>
+		<y>-26.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>15.2</x>
+		<y>-24.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>13.6</x>
+		<y>-23.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>10.4</x>
+		<y>-15.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>10.4</x>
+		<y>-13.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>10.4</x>
+		<y>-10.4</y>
+	</Object>
+	<Object type="Finish">
+		<x>12</x>
+		<y>-8.8</y>
+	</Object>
+	<Object type="Finish">
+		<x>12</x>
+		<y>-7.2</y>
+	</Object>
+	<Object type="Finish">
+		<x>13.6</x>
+		<y>-5.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>15.2</x>
+		<y>-5.6</y>
+	</Object>
+	<Object type="Finish">
+		<x>16.8</x>
 		<y>-4</y>
 	</Object>
-	<Object type="Static">
-		<x>8.8</x>
-		<y>-29.6</y>
-		<orientation>3 5 6 8</orientation>
+	<Object type="Finish">
+		<x>18.4</x>
+		<y>-4</y>
 	</Object>
-	<Object type="Static">
-		<x>8.8</x>
-		<y>-28</y>
-		<orientation>1 2 10 5</orientation>
+	<Object type="Finish">
+		<x>20</x>
+		<y>-4</y>
 	</Object>
-	<Object type="Static">
-		<x>7.2</x>
-		<y>-28</y>
-		<orientation>3 11 6 7</orientation>
+	<Object type="Finish">
+		<x>21.6</x>
+		<y>-4</y>
 	</Object>
-	<Object type="Static">
-		<x>7.2</x>
-		<y>-26.4</y>
-		<orientation>3 5 3 5</orientation>
+	<Object type="Finish">
+		<x>24.8</x>
+		<y>-4</y>
 	</Object>
-	<Object type="Static">
-		<x>7.2</x>
-		<y>-24.8</y>
-		<orientation>0 2 3 5</orientation>
+	<Object type="Finish">
+		<x>28</x>
+		<y>-4</y>
 	</Object>
-	<Object type="Static">
-		<x>5.6</x>
-		<y>-23.2</y>
-		<orientation>3 5 6 8</orientation>
+	<Object type="Finish">
+		<x>29.6</x>
+		<y>-5.6</y>
 	</Object>
-	<Object type="Static">
-		<x>5.6</x>
-		<y>-21.6</y>
-		<orientation>0 2 3 5</orientation>
+	<Object type="Finish">
+		<x>32.8</x>
+		<y>-5.6</y>
 	</Object>
-	<Object type="Static">
-		<x>4</x>
-		<y>-20</y>
-		<orientation>3 5 6 8</orientation>
+	<Object type="Finish">
+		<x>36</x>
+		<y>-8.8</y>
 	</Object>
-	<Object type="Static">
-		<x>4</x>
-		<y>-18.4</y>
-		<orientation>3 5 3 5</orientation>
-	</Object>
-	<Object type="Static">
-		<x>4</x>
-		<y>-16.8</y>
-		<orientation>3 5 3 5</orientation>
-	</Object>
-	<Object type="Static">
-		<x>4</x>
-		<y>-15.2</y>
-		<orientation>0 2 3 5</orientation>
+	<Object type="Collision">
+		<x>36.8</x>
+		<y>-32</y>
+		<width>32</width>
+		<height>3.2</height>
 	</Object>
 </data>
 

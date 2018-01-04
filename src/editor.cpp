@@ -147,6 +147,17 @@ editor::~editor(){
    if( image_box[i] != nullptr)
       al_destroy_bitmap( image_box[i]);
 }
+bool editor::is_player(){
+
+  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
+    if(editorBoxes.at(i).type==2)
+     return true;
+  }
+  return false;
+
+
+}
+
 void editor::set_explosive_ui_status(){
 
   // Learned a few things from you
@@ -266,9 +277,10 @@ void editor::update(){
 
   if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back") -> mouseReleased() || keyListener::keyReleased[ALLEGRO_KEY_ESCAPE]){
     if(modified){
-      if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
+      if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1){
         modified=false;
         set_next_state(STATE_MENU);
+      }
     }
     else{
       set_next_state(STATE_MENU);
@@ -381,10 +393,14 @@ void editor::update(){
   // Play
   if(editorUI.getElementByText("Play") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_F]){
      if(editorBoxes.size()>0){
-      save_map( "data/level_0.xml");
-      set_next_state( STATE_GAME);
-      game::testing = true;
-      testing_file_name = file_name;
+      if(is_player()){
+        save_map( "data/level_0.xml");
+        set_next_state( STATE_GAME);
+        game::testing = true;
+        testing_file_name = file_name;
+      }else
+        al_show_native_message_box( nullptr, "Missing player", "You must place a player spawn to test the level.","", "Whoopsie!", 0);
+
      }
      else
       al_show_native_message_box( nullptr, "Attemping to play an empty level", "That wouldn't be very fun would it?","", "No it wouldn't.", 0);
@@ -565,6 +581,7 @@ void editor::update(){
   }
 
 }
+
 
 // Calculate all the orientations of blocks
 void editor::calculate_orientation_global(){
