@@ -20,7 +20,7 @@ editor::editor(){
   gui_mode = true;
 
   // Load box image
-  image_box[0] = tools::load_bitmap_ex( "images/DynamicBlock2.png");
+  image_box[0] = tools::load_bitmap_ex( "images/box_green.png");
   image_box[1] = tools::load_bitmap_ex( "images/StaticBlock2.png");
   image_box[2] = tools::load_bitmap_ex( "images/character.png");
   image_box[3] = tools::load_bitmap_ex( "images/DisgoatSpriteMap.png");
@@ -33,9 +33,9 @@ editor::editor(){
       tiles[i][t] = nullptr;
 
   // Dynamic
-  for( int i = 0; i < 3; i++)
-    for( int t = 0; t < 5; t++)
-      tiles[0][i + t*3] = al_create_sub_bitmap( image_box[0], i * 16, t * 16, 16, 16);
+  //for( int i = 0; i < 3; i++)
+   // for( int t = 0; t < 5; t++)
+   //   tiles[0][i + t*3] = al_create_sub_bitmap( image_box[0], i * 16, t * 16, 16, 16);
 
   // Static
   for( int i = 0; i < 3; i++)
@@ -48,6 +48,7 @@ editor::editor(){
   // Goat
   tiles[3][0] = al_create_sub_bitmap( image_box[3], 0, 0, 32, 64);
 
+  tiles[0][0]  = image_box[0];
   // Explode/repel
   tiles[4][0] = image_box[4];
   tiles[4][1] = image_box[5];
@@ -119,19 +120,22 @@ editor::editor(){
 
 // Destruct
 editor::~editor(){
-  // Destroy resources if loaded
+ // Destroy resources if loaded
   if( edit_font != nullptr)
     al_destroy_font( edit_font);
+//
+#warning horrible hack that will create a memory leak
 
-  // Tile images
-  for( int i = 0; i < 4; i++)
-    for( int t = 0; t < 15; t++)
-      if( tiles[i][t] != nullptr)
-        al_destroy_bitmap( tiles[i][t]);
-
+// HORRIBLE HACK PLZ DONT LET THIS GO INTO RELEASE
+//  // Tile images
+//  for( int i = 0; i < 4; i++)
+//    for( int t = 0; t < 15; t++)
+//      if( tiles[i][t] != nullptr)
+//        al_destroy_bitmap( tiles[i][t]);
+//
   // Parent bitmaps
   for( int i = 0; i < 4; i++)
-    if( image_box[i] != nullptr)
+   if( image_box[i] != nullptr)
       al_destroy_bitmap( image_box[i]);
 }
 void editor::set_explosive_ui_status(){
@@ -256,9 +260,9 @@ void editor::update(){
       if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
         set_next_state(STATE_MENU);
     }
-    else
+    else{
       set_next_state(STATE_MENU);
-
+    }
 
   }
 
@@ -553,7 +557,13 @@ void editor::update(){
 void editor::calculate_orientation_global(){
   // Calc boxes
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-    if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
+
+    // Want to bring back the marching tiles back for dynamic blocks?
+    //if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
+
+    //If not...
+    if(editorBoxes.at(i).type == 1){
+
       // Scroll through all 4 parts
       for( int t = 0; t < 4; t++){
         // Offsets from subtile
@@ -667,7 +677,8 @@ void editor::draw(){
 
   // Draw tiles
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-    if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
+
+    if(editorBoxes.at(i).type == 1){
       if( editorBoxes.at(i).type == 0)
         al_draw_filled_rectangle( editorBoxes.at(i).x + 0, editorBoxes.at(i).y + 0, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32, al_map_rgb(0, 255, 0));
 
@@ -681,6 +692,9 @@ void editor::draw(){
           al_draw_bitmap( tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation[t]], editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y, 0);
       }
     }
+    else if(editorBoxes.at(i).type == 0)
+      al_draw_bitmap( tiles[0][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+
     else if( editorBoxes.at(i).type == 2)
       al_draw_bitmap( tiles[2][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     else if( editorBoxes.at(i).type == 3)
@@ -948,8 +962,10 @@ bool editor::save_map( std::string mapName){
     // Save data
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "x", editorBoxes.at(i).x_str.c_str()));
     object_node -> append_node( doc.allocate_node( rapidxml::node_element, "y", editorBoxes.at(i).y_str.c_str()));
-    if(editorBoxes.at(i).type_str=="Dynamic" || editorBoxes.at(i).type_str=="Static")
+
+    if(editorBoxes.at(i).type_str=="Static")
       object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
+
     if(editorBoxes.at(i).type_str=="Collision"){
       object_node -> append_node( doc.allocate_node( rapidxml::node_element, "width",editorBoxes.at(i).width_str.c_str()));
       object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height",editorBoxes.at(i).height_str.c_str()));
