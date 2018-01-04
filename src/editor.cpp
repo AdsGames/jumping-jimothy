@@ -198,29 +198,29 @@ void editor::update(){
   ALLEGRO_COLOR selected_colour = al_map_rgba(0,150,0,255);
 
   if(explosive_orientation == 0)
-    editorUI.getElementByText("explosive_circle") -> setColour(selected_colour);
+    editorUI.getElementByText("explosive_circle") -> setBackgroundColour(selected_colour);
   else
-    editorUI.getElementByText("explosive_circle") -> setColour(al_map_rgba(200,200,200,255));
+    editorUI.getElementByText("explosive_circle") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
   if(explosive_orientation == 1)
-    editorUI.getElementByText("explosive_up") -> setColour(selected_colour);
+    editorUI.getElementByText("explosive_up") -> setBackgroundColour(selected_colour);
   else
-    editorUI.getElementByText("explosive_up") -> setColour(al_map_rgba(200,200,200,255));
+    editorUI.getElementByText("explosive_up") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
   if(explosive_orientation == 2)
-    editorUI.getElementByText("explosive_right") -> setColour(selected_colour);
+    editorUI.getElementByText("explosive_right") -> setBackgroundColour(selected_colour);
   else
-    editorUI.getElementByText("explosive_right") -> setColour(al_map_rgba(200,200,200,255));
+    editorUI.getElementByText("explosive_right") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
   if(explosive_orientation == 3)
-    editorUI.getElementByText("explosive_down") -> setColour(selected_colour);
+    editorUI.getElementByText("explosive_down") -> setBackgroundColour(selected_colour);
   else
-    editorUI.getElementByText("explosive_down") -> setColour(al_map_rgba(200,200,200,255));
+    editorUI.getElementByText("explosive_down") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
   if(explosive_orientation == 4)
-    editorUI.getElementByText("explosive_left") -> setColour(selected_colour);
+    editorUI.getElementByText("explosive_left") -> setBackgroundColour(selected_colour);
   else
-    editorUI.getElementByText("explosive_left") -> setColour(al_map_rgba(200,200,200,255));
+    editorUI.getElementByText("explosive_left") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
   // Check if over Button
   bool over_Button = editorUI.isHovering();

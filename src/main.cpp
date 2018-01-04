@@ -19,6 +19,7 @@
 #include "game.h"
 #include "menu.h"
 #include "editor.h"
+#include "LevelSelect.h"
 
 // Current state object
 state *currentState = nullptr;
@@ -75,12 +76,16 @@ void change_state(){
       case STATE_MENU:
         currentState = new menu();
         std::cout<<"Switched state to main menu.\n";
-
         break;
       case STATE_EXIT:
         std::cout<<"Exiting program.\n";
         closing = true;
         break;
+      case STATE_LEVELSELECT:
+        currentState = new LevelSelect();
+        std::cout<<"Switched state to level select.\n";
+        break;
+
       default:
         currentState = new game();
     }

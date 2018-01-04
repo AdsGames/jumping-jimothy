@@ -87,7 +87,7 @@ void menu::update(){
   }
 
   if(menu_buttons[menu_button_play].mouseReleased()){
-    set_next_state(STATE_GAME);
+    set_next_state(STATE_LEVELSELECT);
   }
 
   if(menu_buttons[menu_button_edit].mouseReleased()){
