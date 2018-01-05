@@ -16,6 +16,11 @@ class Button : public UIElement
 
     Button(){};
 
+    //void setWidthTo100(){width=100;}
+
+    void setWidth(int newWidth){width=newWidth;}
+    void setHeight(int newHeight){height=newHeight;}
+
     virtual void draw();
 
    // Button();

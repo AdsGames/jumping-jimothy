@@ -5,7 +5,7 @@
 
 bool game::testing = false;
 const char* game::testing_file_name = nullptr;
-
+int game::level_to_start = 1;
 
 // Constructor
 game::game(){
@@ -15,7 +15,8 @@ game::game(){
   newBox = nullptr;
   rootBox = nullptr;
 
-  level = 1;
+  level = level_to_start;
+  level_to_start=1;
 
   game_font = al_load_ttf_font( "fonts/munro.ttf", 30, 0);
   help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);

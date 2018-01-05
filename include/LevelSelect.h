@@ -12,6 +12,8 @@
 #include "UIHandler.h"
 #include "UIElement.h"
 #include "button.h"
+#include "keyListener.h"
+#include "game.h"
 
 
 class LevelSelect : public state
@@ -28,6 +30,7 @@ class LevelSelect : public state
   private:
 
   ALLEGRO_FONT *levelselect_font;
+  ALLEGRO_FONT *levelselect_font_large;
   UIHandler levelSelectUI;
 
 };

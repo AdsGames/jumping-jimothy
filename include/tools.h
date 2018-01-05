@@ -17,6 +17,7 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_font.h>
 
 
 
@@ -34,6 +35,12 @@ class tools{
 
         static ALLEGRO_BITMAP * load_bitmap_ex( std::string file);
         static ALLEGRO_SAMPLE * load_sample_ex( std::string file);
+
+        static int get_text_offset_x(ALLEGRO_FONT *newFont, std::string newText);
+        static int get_text_offset_y(ALLEGRO_FONT *newFont, std::string newText);
+        static int get_text_width(ALLEGRO_FONT *newFont, std::string newText);
+        static int get_text_height(ALLEGRO_FONT *newFont, std::string newText);
+
 
 
         // Clamp values
