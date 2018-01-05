@@ -47,6 +47,8 @@ class game : public state{
     // Test mode
     static bool testing;
     static const char *testing_file_name;
+    static int level_to_start;
+
   private:
     // Functions
     void load_world(int);

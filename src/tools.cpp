@@ -20,6 +20,56 @@ void tools::abort_on_error( std::string message, std::string title){
   exit(-1);
 }
 
+int tools::get_text_offset_x(ALLEGRO_FONT *newFont, std::string newText){
+  int text_width=0;
+  int text_height=0;
+  int text_offset_x;
+  int text_offset_y;
+
+  al_get_text_dimensions(newFont,newText.c_str(),&text_offset_x,&text_offset_y,&text_width,&text_height);
+
+  return text_offset_x;
+
+}
+
+int tools::get_text_offset_y(ALLEGRO_FONT *newFont, std::string newText){
+  int text_width=0;
+  int text_height=0;
+  int text_offset_x;
+  int text_offset_y;
+
+  al_get_text_dimensions(newFont,newText.c_str(),&text_offset_x,&text_offset_y,&text_width,&text_height);
+
+  return text_offset_y;
+
+}
+
+int tools::get_text_width(ALLEGRO_FONT *newFont, std::string newText){
+  int text_width=0;
+  int text_height=0;
+  int text_offset_x;
+  int text_offset_y;
+
+  al_get_text_dimensions(newFont,newText.c_str(),&text_offset_x,&text_offset_y,&text_width,&text_height);
+
+  return text_width;
+
+}
+
+int tools::get_text_height(ALLEGRO_FONT *newFont, std::string newText){
+  int text_width=0;
+  int text_height=0;
+  int text_offset_x;
+  int text_offset_y;
+
+  al_get_text_dimensions(newFont,newText.c_str(),&text_offset_x,&text_offset_y,&text_width,&text_height);
+
+  return text_height;
+
+}
+
+
+
 // Load sample if exits, or throw error
 ALLEGRO_SAMPLE *tools::load_sample_ex( std::string file){
 

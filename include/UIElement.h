@@ -41,6 +41,7 @@ class UIElement
       visible = newStatus;
       active = newStatus;
     }
+    void setJustification(int newJustification){justification=newJustification;}
 
     int getWidth(){ return width + padding_x * 2; }
     int getHeight(){ return height + padding_y * 2; }
@@ -56,6 +57,9 @@ class UIElement
     void setImage( ALLEGRO_BITMAP *image);
     void setFont( ALLEGRO_FONT *font);
     void setVisibleBackground(bool b){visible_background=b;}
+    void setWidth(int newWidth){width=newWidth;}
+    void setHeight(int newHeight){height=newHeight;}
+
 
     bool mouseReleased();
     bool hover();
@@ -87,6 +91,8 @@ class UIElement
     bool visible_background;
 
     float alpha;
+
+    int justification;
 
     // Frick you
     ALLEGRO_COLOR text_colour;

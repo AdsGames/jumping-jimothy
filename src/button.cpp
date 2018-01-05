@@ -103,6 +103,7 @@ Button::~Button()
   //dtor
 }
 void Button::draw(){
+
   if(visible){
     // Backdrop
 
@@ -116,8 +117,26 @@ void Button::draw(){
     al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), 2);
 
     // Text
-    if( UIElement_font != nullptr)
-      al_draw_text( UIElement_font, al_map_rgba( 0, 0, 0,alpha), x + padding_x, y + padding_y, 0, text.c_str());
+    // Text
+    if( UIElement_font != nullptr){
+
+      if(justification==0){
+        al_draw_text( UIElement_font, text_colour, x + padding_x, y + padding_y, 0, text.c_str());
+      }
+      if(justification==1){
+
+        int text_x;
+        int text_y;
+
+        text_x=x+padding_x+width/2;
+        text_y=y+padding_y-(tools::get_text_height(UIElement_font,text)-height)/2;
+
+        al_draw_textf(UIElement_font,text_colour,text_x,(text_y-tools::get_text_offset_y(UIElement_font,text)),justification,text.c_str());
+
+      }
+
+
+    }
 
     // Image if avail
     if( image != nullptr){
