@@ -3,6 +3,38 @@
 LevelSelect::LevelSelect()
 
 {
+  std::cout<<"we're loading a level now you POS\n";
+  // Doc
+  rapidxml::xml_document<> doc;
+
+  // Make an xml object
+  std::ifstream theFile("data/level_data.xml");
+  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
+  xml_buffer.push_back('\0');
+
+  // Parse the buffer using the xml file parsing library into doc
+  doc.parse<0>(&xml_buffer[0]);
+
+  // Find our root node
+  rapidxml::xml_node<> * root_node;
+  root_node = doc.first_node("data");
+
+  // Iterate over the nodes
+  for (rapidxml::xml_node<> * object_node = root_node -> first_node("level"); object_node; object_node = object_node -> next_sibling()){
+
+    int levelNumber = atoi(object_node -> first_attribute("number") -> value());
+
+    std::string newStatus ="";
+    // Load data
+    if( object_node -> first_node("status") != 0)
+      newStatus = object_node -> first_node("status") -> value();
+
+    //std::cout<<newStatus<<"\n";
+    completed_level_list[levelNumber] = (newStatus=="complete");
+    std::cout<<"Level " << levelNumber << ": " << completed_level_list[levelNumber] << "\n";
+
+  }
+
   levelselect_font = al_load_ttf_font( "fonts/munro.ttf", 24, 0);
 
   levelselect_font_large = al_load_ttf_font( "fonts/munro.ttf", 48, 0);

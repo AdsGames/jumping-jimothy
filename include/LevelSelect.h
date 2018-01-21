@@ -9,6 +9,9 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 
+#include "rapidxml.hpp"
+#include "rapidxml_print.hpp"
+
 #include "UIHandler.h"
 #include "UIElement.h"
 #include "button.h"
@@ -29,9 +32,12 @@ class LevelSelect : public state
 
   private:
 
-  ALLEGRO_FONT *levelselect_font;
-  ALLEGRO_FONT *levelselect_font_large;
-  UIHandler levelSelectUI;
+
+    bool completed_level_list[15] = {};
+
+    ALLEGRO_FONT *levelselect_font;
+    ALLEGRO_FONT *levelselect_font_large;
+    UIHandler levelSelectUI;
 
 };
 
