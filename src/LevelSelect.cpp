@@ -46,89 +46,24 @@ LevelSelect::LevelSelect()
   levelSelectUI.getElementByText("Select a level") -> setVisibleBackground(false);
   levelSelectUI.getElementByText("Select a level") -> setTextColour(al_map_rgb(255,255,255));
 
-  levelSelectUI.addElement(new Button(75+100, 110, "Level 1", levelselect_font));
-  levelSelectUI.getElementByText("Level 1") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 1") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 1") -> setJustification(1);
-  if(completed_level_list[1])levelSelectUI.getElementByText("Level 1") -> setBackgroundColour(al_map_rgb(0,255,0));
 
-  levelSelectUI.addElement(new Button(220+100, 110, "Level 2", levelselect_font));
-  levelSelectUI.getElementByText("Level 2") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 2") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 2") -> setJustification(1);
-  if(completed_level_list[2])levelSelectUI.getElementByText("Level 2") -> setBackgroundColour(al_map_rgb(0,255,0));
+  createLevelButton(175,110,1);
+  createLevelButton(320,110,2);
+  createLevelButton(465,110,3);
+  createLevelButton(610,110,4);
+  createLevelButton(755,110,5);
+  createLevelButton(125,170,6);
+  createLevelButton(270,170,7);
+  createLevelButton(415,170,8);
+  createLevelButton(560,170,9);
+  createLevelButton(705,170,10);
+  createLevelButton(175,230,11);
+  createLevelButton(320,230,12);
+  createLevelButton(465,230,13);
 
-
-  levelSelectUI.addElement(new Button(365+100, 110, "Level 3", levelselect_font));
-  levelSelectUI.getElementByText("Level 3") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 3") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 3") -> setJustification(1);
-  if(completed_level_list[3])levelSelectUI.getElementByText("Level 3") -> setBackgroundColour(al_map_rgb(0,255,0));
+  levelSelectUI.addElement(new Button(837, 10, "Reset Save Game", levelselect_font));
 
 
-  levelSelectUI.addElement(new Button(510+100, 110, "Level 4", levelselect_font));
-  levelSelectUI.getElementByText("Level 4") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 4") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 4") -> setJustification(1);
-
-  levelSelectUI.addElement(new Button(655+100, 110, "Level 5", levelselect_font));
-  levelSelectUI.getElementByText("Level 5") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 5") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 5") -> setJustification(1);
-
-
-
-  levelSelectUI.addElement(new Button(75+50, 170, "Level 6", levelselect_font));
-  levelSelectUI.getElementByText("Level 6") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 6") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 6") -> setJustification(1);
-
-  levelSelectUI.addElement(new Button(220+50, 170, "Level 7", levelselect_font));
-  levelSelectUI.getElementByText("Level 7") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 7") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 7") -> setJustification(1);
-
-  levelSelectUI.addElement(new Button(365+50, 170, "Level 8", levelselect_font));
-  levelSelectUI.getElementByText("Level 8") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 8") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 8") -> setJustification(1);
-
-  levelSelectUI.addElement(new Button(510+50, 170, "Level 9", levelselect_font));
-  levelSelectUI.getElementByText("Level 9") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 9") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 9") -> setJustification(1);
-
-  levelSelectUI.addElement(new Button(655+50, 170, "Level 10", levelselect_font));
-  levelSelectUI.getElementByText("Level 10") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 10") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 10") -> setJustification(1);
-
-
-
-  levelSelectUI.addElement(new Button(75+100, 230, "Level 11", levelselect_font));
-  levelSelectUI.getElementByText("Level 11") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 11") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 11") -> setJustification(1);
-
-  levelSelectUI.addElement(new Button(220+100, 230, "Level 12", levelselect_font));
-  levelSelectUI.getElementByText("Level 12") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 12") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 12") -> setJustification(1);
-
-  levelSelectUI.addElement(new Button(365+100, 230, "Level 13", levelselect_font));
-  levelSelectUI.getElementByText("Level 13") -> setHeight(25);
-  levelSelectUI.getElementByText("Level 13") -> setWidth(100);
-  levelSelectUI.getElementByText("Level 13") -> setJustification(1);
-
-//  levelSelectUI.addElement(new Button(510+100, 230, "Level 14", levelselect_font));
-//  levelSelectUI.getElementByText("Level 14") -> setHeight(25);
-//  levelSelectUI.getElementByText("Level 14") -> setWidth(100);
-//  levelSelectUI.getElementByText("Level 14") -> setJustification(1);
-//
-//  levelSelectUI.addElement(new Button(655+100, 230, "Level 15", levelselect_font));
-//  levelSelectUI.getElementByText("Level 15") -> setHeight(25);
-//  levelSelectUI.getElementByText("Level 15") -> setWidth(100);
-//  levelSelectUI.getElementByText("Level 15") -> setJustification(1);
 
 
 
@@ -139,11 +74,24 @@ LevelSelect::~LevelSelect()
   //dtor
 }
 
+void LevelSelect::createLevelButton(int newX, int newY, int newLevelNumber){
+
+  levelSelectUI.addElement(new Button(newX, newY, "Level "+ tools::toString(newLevelNumber), levelselect_font));
+  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setHeight(25);
+  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setWidth(100);
+  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setJustification(1);
+  if(completed_level_list[newLevelNumber])levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setBackgroundColour(al_map_rgb(0,255,0));
+
+
+
+}
+
 void LevelSelect::setLevelComplete(int newLevelNumber){
 
-
   completed_level_list[newLevelNumber]=true;
+}
 
+void LevelSelect::writeLevelData(){
   // Write xml file
   rapidxml::xml_document<> doc;
   rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);
@@ -194,7 +142,6 @@ void LevelSelect::setLevelComplete(int newLevelNumber){
 
 }
 
-
 void LevelSelect::draw(){
 
   al_clear_to_color( al_map_rgb(75,75,100));
@@ -208,7 +155,17 @@ void LevelSelect::update(){
   if(keyListener::key[ALLEGRO_KEY_ESCAPE])
     set_next_state(STATE_MENU);
 
-  for(int i=0; i<levelSelectUI.getUIElements().size(); i++){
+  if(levelSelectUI.getElementByText("Reset Save Game") -> clicked()){
+    for(int i=0; i<16; i++)
+      completed_level_list[i]=false;
+      writeLevelData();
+      set_next_state(STATE_LEVELSELECT);
+
+
+    }
+
+
+  for(int i=1; i<14; i++){
     if(levelSelectUI.getUIElements().at(i) -> clicked()){
       game::level_to_start=i;
       set_next_state(STATE_GAME);
