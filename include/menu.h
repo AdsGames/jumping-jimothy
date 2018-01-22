@@ -59,6 +59,10 @@ class menu : public state{
     ALLEGRO_FONT *menu_font;
     ALLEGRO_FONT *credits_font;
 
+    ALLEGRO_SAMPLE *menu_music=nullptr;
+    ALLEGRO_SAMPLE_ID *currentMusic;
+
+
     bool credits_menu;
     int counter_title;
     int counter_play;

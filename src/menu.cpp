@@ -1,7 +1,12 @@
 #include "menu.h"
 
 // Init menu
+
+//ALLEGRO_SAMPLE *menu::menu_music = nullptr;
+
 menu::menu(){
+
+  menu_music=nullptr;
 
   credits_menu=false;
 
@@ -41,6 +46,17 @@ menu::menu(){
 
 
 
+  #if defined(RELEASE)
+
+  //  if(menu_music==nullptr)
+     // menu_music = tools::load_sample_ex( "music/tojam.ogg");
+
+  // al_play_sample( menu_music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, currentMusic);
+
+  #endif
+
+
+
   // Slice up title images
  // for( int i = 0; i < 10; i++)
   //  for( int t = 0; t < 17; t++)
@@ -74,6 +90,14 @@ menu::~menu(){
   //al_destroy_bitmap( prompt_image);
   al_destroy_bitmap( play);
   al_destroy_bitmap( title);
+
+  #warning  help me allan wan kenobi, you're my only hope
+   if( menu_music != nullptr){
+    al_stop_sample( currentMusic);
+    al_destroy_sample( menu_music);
+  }
+
+
 }
 
 // Update animation and wait for input

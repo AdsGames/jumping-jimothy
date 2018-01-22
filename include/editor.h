@@ -63,6 +63,7 @@ class editor : public state{
     // Images
     ALLEGRO_BITMAP *image_box[6];
     ALLEGRO_BITMAP *tiles[5][15];
+    ALLEGRO_BITMAP *help_menu;
 
     // Functions
     void calculate_orientation_global();
@@ -101,6 +102,7 @@ class editor : public state{
 
     // Remember saves
     bool is_saved = false;
+    bool display_help=false;
 
     // Vars
     bool grid_on;

@@ -28,6 +28,9 @@ editor::editor(){
 
   gui_mode = true;
 
+  help_menu = tools::load_bitmap_ex( "images/help_menu.png");
+
+
   // Load box image
   image_box[0] = tools::load_bitmap_ex( "images/box_green.png");
   image_box[1] = tools::load_bitmap_ex( "images/StaticBlock2.png");
@@ -251,6 +254,13 @@ void editor::update(){
 
 
   }
+
+  if(keyListener::keyPressed[ALLEGRO_KEY_H] || editorUI.getElementByText("Help") -> mouseReleased()){
+    display_help=!display_help;
+
+
+  }
+
   if(keyListener::keyPressed[ALLEGRO_KEY_Y] || editorUI.getElementByText("Explosive") -> mouseReleased()){
     tile_type = 5;
     editorUI.getElementById("left_top_toggle") -> setText("<");
@@ -783,6 +793,8 @@ void editor::draw(){
   // Current map opened
   al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s %s", file_name,modified_character.c_str());
 
+  if(display_help)
+    al_draw_bitmap(help_menu,110,75,0);
   // Draw buttons
   editorUI.draw();
 }
