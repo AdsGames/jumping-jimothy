@@ -104,20 +104,22 @@ Button::~Button()
 }
 void Button::draw(){
 
+
   if(visible){
     // Backdrop
 
     // This hover colour has more lines than the whole game loop
-    int new_r=tools::clamp(0,255,(int)((background_colour.r*255)+(20 * hovering)));
-    int new_g=tools::clamp(0,255,(int)((background_colour.g*255)+(20 * hovering)));
-    int new_b=tools::clamp(0,255,(int)((background_colour.b*255)+(20 * hovering)));
+    int new_r=tools::negative_clamp_thing(0,255,(int)((background_colour.r*255)+(40 * hovering)));
+    int new_g=tools::negative_clamp_thing(0,255,(int)((background_colour.g*255)+(40 * hovering)));
+    int new_b=tools::negative_clamp_thing(0,255,(int)((background_colour.b*255)+(40 * hovering)));
+
     ALLEGRO_COLOR hover_colour = al_map_rgba(new_r,new_g,new_b,alpha);
     al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, hover_colour);
 
     al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), 2);
 
     // Text
-    // Text
+
     if( UIElement_font != nullptr){
 
       if(justification==0){

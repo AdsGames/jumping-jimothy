@@ -31,14 +31,15 @@ class LevelSelect : public state
 
     static void setLevelComplete(int urmom);
 
-        static bool completed_level_list[16];
 
+    static bool completed_level_list[16];
+    static void writeLevelData();
 
   protected:
 
   private:
 
-
+    void createLevelButton(int,int,int);
 
     ALLEGRO_FONT *levelselect_font;
     ALLEGRO_FONT *levelselect_font_large;
