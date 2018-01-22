@@ -1,13 +1,14 @@
 #include "LevelSelect.h"
 
+bool LevelSelect::completed_level_list[16]= {};
+
 LevelSelect::LevelSelect()
 
 {
-  std::cout<<"we're loading a level now you POS\n";
-  // Doc
+  //Doc
   rapidxml::xml_document<> doc;
 
-  // Make an xml object
+//   Make an xml object
   std::ifstream theFile("data/level_data.xml");
   std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
   xml_buffer.push_back('\0');
@@ -15,21 +16,21 @@ LevelSelect::LevelSelect()
   // Parse the buffer using the xml file parsing library into doc
   doc.parse<0>(&xml_buffer[0]);
 
-  // Find our root node
+//   Find our root node
   rapidxml::xml_node<> * root_node;
   root_node = doc.first_node("data");
 
-  // Iterate over the nodes
+   //Iterate over the nodes
   for (rapidxml::xml_node<> * object_node = root_node -> first_node("level"); object_node; object_node = object_node -> next_sibling()){
 
     int levelNumber = atoi(object_node -> first_attribute("number") -> value());
 
     std::string newStatus ="";
-    // Load data
+   //  Load data
     if( object_node -> first_node("status") != 0)
       newStatus = object_node -> first_node("status") -> value();
 
-    //std::cout<<newStatus<<"\n";
+    std::cout<<newStatus<<"\n";
     completed_level_list[levelNumber] = (newStatus=="complete");
     std::cout<<"Level " << levelNumber << ": " << completed_level_list[levelNumber] << "\n";
 
@@ -49,16 +50,21 @@ LevelSelect::LevelSelect()
   levelSelectUI.getElementByText("Level 1") -> setHeight(25);
   levelSelectUI.getElementByText("Level 1") -> setWidth(100);
   levelSelectUI.getElementByText("Level 1") -> setJustification(1);
+  if(completed_level_list[1])levelSelectUI.getElementByText("Level 1") -> setBackgroundColour(al_map_rgb(0,255,0));
 
   levelSelectUI.addElement(new Button(220+100, 110, "Level 2", levelselect_font));
   levelSelectUI.getElementByText("Level 2") -> setHeight(25);
   levelSelectUI.getElementByText("Level 2") -> setWidth(100);
   levelSelectUI.getElementByText("Level 2") -> setJustification(1);
+  if(completed_level_list[2])levelSelectUI.getElementByText("Level 2") -> setBackgroundColour(al_map_rgb(0,255,0));
+
 
   levelSelectUI.addElement(new Button(365+100, 110, "Level 3", levelselect_font));
   levelSelectUI.getElementByText("Level 3") -> setHeight(25);
   levelSelectUI.getElementByText("Level 3") -> setWidth(100);
   levelSelectUI.getElementByText("Level 3") -> setJustification(1);
+  if(completed_level_list[3])levelSelectUI.getElementByText("Level 3") -> setBackgroundColour(al_map_rgb(0,255,0));
+
 
   levelSelectUI.addElement(new Button(510+100, 110, "Level 4", levelselect_font));
   levelSelectUI.getElementByText("Level 4") -> setHeight(25);
@@ -133,10 +139,66 @@ LevelSelect::~LevelSelect()
   //dtor
 }
 
-void LevelSelect::draw(){
-    al_clear_to_color( al_map_rgb(75,75,100));
-    levelSelectUI.draw();
+void LevelSelect::setLevelComplete(int newLevelNumber){
 
+
+  completed_level_list[newLevelNumber]=true;
+
+  // Write xml file
+  rapidxml::xml_document<> doc;
+  rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);
+  decl -> append_attribute( doc.allocate_attribute("version", "1.0"));
+  decl -> append_attribute( doc.allocate_attribute("encoding", "utf-8"));
+  doc.append_node(decl);
+
+  rapidxml::xml_node<>* root_node = doc.allocate_node( rapidxml::node_element, "data");
+  doc.append_node(root_node);
+
+  // Tiles
+  for( unsigned int i = 0; i < 15; i++){
+
+    char *node_name = doc.allocate_string("level");
+    rapidxml::xml_node<>* object_node = doc.allocate_node( rapidxml::node_element, node_name);
+
+
+
+    object_node -> append_attribute( doc.allocate_attribute("number", doc.allocate_string(tools::toString(i).c_str())));
+    root_node -> append_node( object_node);
+
+    // Save data
+
+    std::string newStatus="incomplete";
+
+
+    if(completed_level_list[i])
+      newStatus="complete";
+
+
+    char *newStatusChar = doc.allocate_string(newStatus.c_str());
+
+
+    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "status", newStatusChar));
+
+
+    }
+
+
+  // Save to file
+  std::ofstream file_stored("data/level_data.xml");
+  file_stored << doc;
+  file_stored.close();
+  doc.clear();
+
+
+
+
+}
+
+
+void LevelSelect::draw(){
+
+  al_clear_to_color( al_map_rgb(75,75,100));
+  levelSelectUI.draw();
 
 
 }
