@@ -131,7 +131,7 @@ void setup(){
   #if defined(RELEASE)
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
   #elifdef
-      al_set_new_display_flags(ALLEGRO_WINDOW);
+      al_set_new_display_flags(ALLEGRO_WINDOWED);
 
   #endif
   display = al_create_display(1024, 768);
