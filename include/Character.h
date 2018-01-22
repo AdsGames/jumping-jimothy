@@ -51,6 +51,7 @@ class Character : public Box{
     ALLEGRO_SAMPLE *jump;
     ALLEGRO_SAMPLE *land;
 
+
 };
 
 

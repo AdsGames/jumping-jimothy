@@ -22,6 +22,11 @@ game::game(){
   help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);
   edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
 
+  toggle_on = tools::load_sample_ex("sfx/toggle_on.wav");
+  toggle_off = tools::load_sample_ex("sfx/toggle_off.wav");
+  death = tools::load_sample_ex("sfx/death.wav");
+
+
 
 
   if( testing){
@@ -385,9 +390,7 @@ void game::update(){
     }
   }
 
-  // Off screen
-  if( gameCharacter != nullptr && gameCharacter -> getX() < -1 || gameCharacter -> getX() > 51.5f || gameCharacter -> getY() > 2 || gameCharacter -> getY() < -40)
-    reset();
+
 
   // Update the Box2D game world
   gameWorld -> Step( timeStep, velocityIterations, positionIterations);
@@ -397,9 +400,12 @@ void game::update(){
     gameBoxes[i] -> update();
 
   // Die
-  if( keyListener::keyPressed[ALLEGRO_KEY_Z] || joystickListener::buttonPressed[JOY_XBOX_B] ||  keyListener::keyPressed[ALLEGRO_KEY_R] )
+  if( keyListener::keyPressed[ALLEGRO_KEY_Z] || joystickListener::buttonPressed[JOY_XBOX_B] ||  keyListener::keyPressed[ALLEGRO_KEY_R] ){
+    al_play_sample(death, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+
     reset();
 
+  }
   if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE]){
     set_next_state(STATE_MENU);
   }
@@ -427,23 +433,43 @@ void game::update(){
 
   // Pause/Play time
   if( keyListener::keyPressed[ALLEGRO_KEY_SPACE]  || joystickListener::buttonPressed[JOY_XBOX_X] ||  joystickListener::buttonPressed[JOY_XBOX_Y] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_LEFT] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_RIGHT]  ){
+
+
+
     static_mode =! static_mode;
     if(static_mode){
+      al_play_sample( toggle_off, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+
       for( unsigned int i = 0; i < gameBoxes.size(); i++){
         if( gameBoxes[i] -> getType() == BOX){
           // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
           gameBoxes[i] -> setStatic();
+
         }
       }
     }
     else{
+      al_play_sample( toggle_on, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+
       for( unsigned int i = 0; i < gameBoxes.size(); i++){
         if( gameBoxes[i] -> getType()==BOX){
-          // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
           gameBoxes[i] -> setDynamic(!first_play);
+
         }
       }
       first_play = false;
+    }
+  }
+
+   // Off screen
+   // Brutal hack don't look. Prevens character from dying when the character's location is undefined or something. It's really big anyways
+  if(gameCharacter != nullptr && gameCharacter -> getX()>-5000 && gameCharacter -> getX()<5000 && gameCharacter -> getY()>-5000 && gameCharacter -> getY()<5000 ){
+    if(gameCharacter -> getX() < -1 || gameCharacter -> getX() > 51.5f || gameCharacter -> getY() > 2 || gameCharacter -> getY() < -40){
+      al_play_sample(death, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+
+      reset();
+      std::cout<<"==========="<<gameCharacter -> getX() <<"\n";
+
     }
   }
 }

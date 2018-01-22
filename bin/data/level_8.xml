@@ -49,12 +49,7 @@
 		<y>-16.8</y>
 		<orientation>0 2 6 8</orientation>
 	</Object>
-	<Object type="Collision">
-		<x>33.6</x>
-		<y>-36.8</y>
-		<width>19.2</width>
-		<height>0</height>
-	</Object>
+
 	<Object type="Collision">
 		<x>22.4</x>
 		<y>-18.4</y>

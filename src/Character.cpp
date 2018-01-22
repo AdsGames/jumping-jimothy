@@ -63,8 +63,8 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
 
   sprite = tools::load_bitmap_ex("images/anim.png");
 
-  jump = tools::load_sample_ex("jump.wav");
-  land = tools::load_sample_ex("land.wav");
+  jump = tools::load_sample_ex("sfx/jump.wav");
+  land = tools::load_sample_ex("sfx/land.wav");
 
   for( int i = 0; i < 15; i++)
     sprites[i] = al_create_sub_bitmap( sprite, i * 32, 0, 32, 64);
@@ -153,7 +153,7 @@ void Character::update(){
       body -> ApplyLinearImpulse(b2Vec2(0,17),position,true);
       landed=false;
       if(timer_sound_delay>10){
-        al_play_sample( jump, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+        al_play_sample( jump, 1.0, 0.0, ((float)(tools::random_int(90,110))/100), ALLEGRO_PLAYMODE_ONCE, NULL);
         timer_sound_delay=0;
       }
     }
