@@ -104,6 +104,10 @@ class game : public state{
     ALLEGRO_SAMPLE *music;
     ALLEGRO_SAMPLE_ID *currentMusic;
 
+    ALLEGRO_SAMPLE *toggle_off;
+    ALLEGRO_SAMPLE *toggle_on;
+    ALLEGRO_SAMPLE *death;
+
     Button testing_back_button;
 
 

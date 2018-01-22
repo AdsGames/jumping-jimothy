@@ -186,11 +186,6 @@
 	</Object>
 	<Object type="Static">
 		<x>24.8</x>
-		<y>-37.6</y>
-		<orientation>0 1 6 7</orientation>
-	</Object>
-	<Object type="Static">
-		<x>24.8</x>
 		<y>-31.2</y>
 		<orientation>3 5 3 5</orientation>
 	</Object>
@@ -237,12 +232,10 @@
 	<Object type="Dynamic">
 		<x>23.2</x>
 		<y>-5.6</y>
-		<orientation>0 2 6 8</orientation>
 	</Object>
 	<Object type="Dynamic">
 		<x>23.2</x>
 		<y>-0.8</y>
-		<orientation>0 2 6 8</orientation>
 	</Object>
 	<Object type="Static">
 		<x>28</x>
@@ -256,11 +249,6 @@
 	</Object>
 	<Object type="Static">
 		<x>31.2</x>
-		<y>-37.6</y>
-		<orientation>1 1 7 7</orientation>
-	</Object>
-	<Object type="Static">
-		<x>26.4</x>
 		<y>-37.6</y>
 		<orientation>1 1 7 7</orientation>
 	</Object>
@@ -330,6 +318,16 @@
 		<y>-37.6</y>
 		<width>14.4</width>
 		<height>1.6</height>
+	</Object>
+	<Object type="Static">
+		<x>26.4</x>
+		<y>-37.6</y>
+		<orientation>1 1 7 7</orientation>
+	</Object>
+	<Object type="Static">
+		<x>24.8</x>
+		<y>-37.6</y>
+		<orientation>0 1 6 7</orientation>
 	</Object>
 </data>
 

@@ -30,9 +30,7 @@ LevelSelect::LevelSelect()
     if( object_node -> first_node("status") != 0)
       newStatus = object_node -> first_node("status") -> value();
 
-    std::cout<<newStatus<<"\n";
     completed_level_list[levelNumber] = (newStatus=="complete");
-    std::cout<<"Level " << levelNumber << ": " << completed_level_list[levelNumber] << "\n";
 
   }
 
