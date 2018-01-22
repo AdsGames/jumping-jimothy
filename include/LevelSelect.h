@@ -17,6 +17,7 @@
 #include "button.h"
 #include "keyListener.h"
 #include "game.h"
+#include "tools.h""
 
 
 class LevelSelect : public state
@@ -28,12 +29,16 @@ class LevelSelect : public state
     void draw();
     void update();
 
+    static void setLevelComplete(int urmom);
+
+        static bool completed_level_list[16];
+
+
   protected:
 
   private:
 
 
-    bool completed_level_list[15] = {};
 
     ALLEGRO_FONT *levelselect_font;
     ALLEGRO_FONT *levelselect_font_large;

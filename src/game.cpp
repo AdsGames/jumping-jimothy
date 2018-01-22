@@ -374,6 +374,7 @@ void game::update(){
     }
     else{
       std::cout<<"Level " << level-1 << " completed, loading next level\n";
+      LevelSelect::setLevelComplete(level-1);
       if( !testing)
         reset();
       else{

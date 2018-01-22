@@ -32,6 +32,7 @@
 #include <DynamicBox.h>
 #include <Explosive.h>
 #include <button.h>
+#include <LevelSelect.h>
 
 class game : public state{
   public:
