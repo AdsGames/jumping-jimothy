@@ -16,8 +16,19 @@ Options::Options()
 
 
 
-    OptionsUI.addElement(new Button(100, 100, "Toggle Music",options_font));
-    OptionsUI.addElement(new Button(100, 150, "Toggle SFX",options_font));
+    OptionsUI.addElement(new Button(100, 100, "Toggle SFX",options_font));
+    OptionsUI.addElement(new Button(100, 150, "Toggle Music",options_font));
+
+    OptionsUI.addElement(new Button(195,100,"Off","sfx_toggle",options_font));
+    OptionsUI.getElementById("sfx_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
+
+    OptionsUI.addElement(new Button(210,150,"Off","music_toggle",options_font));
+    OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
+
+
+    read_data();
+    updateUI();
+
 
 
 }
@@ -40,8 +51,38 @@ void Options::update(){
 
   OptionsUI.update();
 
+  if(OptionsUI.getElementById("sfx_toggle") -> mouseReleased() || OptionsUI.getElementByText("Toggle SFX") -> mouseReleased()){
+    sfx_enabled=!sfx_enabled;
+    write_data();
+  }
+
+  if(OptionsUI.getElementById("music_toggle") -> mouseReleased() || OptionsUI.getElementByText("Toggle Music") -> mouseReleased()){
+    music_enabled=!music_enabled;
+    write_data();
+  }
+
+
 }
 
+void Options::updateUI(){
+
+  if(sfx_enabled){
+    OptionsUI.getElementById("sfx_toggle") -> setBackgroundColour(al_map_rgb(0,150,0));
+    OptionsUI.getElementById("sfx_toggle") -> setText("On");
+  }else{
+    OptionsUI.getElementById("sfx_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
+    OptionsUI.getElementById("sfx_toggle") -> setText("Off");
+  }
+
+  if(music_enabled){
+    OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(0,150,0));
+    OptionsUI.getElementById("music_toggle") -> setText("On");
+  }else{
+    OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
+    OptionsUI.getElementById("music_toggle") -> setText("Off");
+  }
+
+}
 
 void Options::read_data(){
 
@@ -66,9 +107,9 @@ void Options::read_data(){
     // It's not a hack if you like it
     if(object_node -> first_attribute("sfx")!=nullptr){
 
-
-
       std::string result = object_node -> first_attribute("sfx") -> value();
+
+
       if(result=="enabled")
         sfx_enabled=true;
       else
@@ -76,9 +117,14 @@ void Options::read_data(){
     }
 
     if(object_node -> first_attribute("music")!=nullptr){
-      if(object_node -> first_attribute("music") -> value() == "enabled")
+
+
+      std::string result = object_node -> first_attribute("music") -> value();
+
+
+      if(result == "enabled"){
         music_enabled=true;
-      else
+      }else
         music_enabled=false;
     }
   }
@@ -86,6 +132,7 @@ void Options::read_data(){
 
 void Options::write_data(){
 
+  updateUI();
 
   rapidxml::xml_document<> doc;
   rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);
@@ -99,11 +146,27 @@ void Options::write_data(){
   // Tile
 
     char *node_name = doc.allocate_string("value");
+
     rapidxml::xml_node<>* object_node = doc.allocate_node( rapidxml::node_element, node_name);
 
+    if(sfx_enabled)
+      object_node -> append_attribute( doc.allocate_attribute("sfx", doc.allocate_string("enabled")));
+
+    else
+      object_node -> append_attribute( doc.allocate_attribute("sfx", doc.allocate_string("not fricking enabled")));
 
 
-    object_node -> append_attribute( doc.allocate_attribute("sfx", doc.allocate_string("enabled")));
+
+    root_node -> append_node( object_node);
+
+    object_node = doc.allocate_node( rapidxml::node_element, node_name);
+
+     if(music_enabled)
+      object_node -> append_attribute( doc.allocate_attribute("music", doc.allocate_string("enabled")));
+
+    else
+      object_node -> append_attribute( doc.allocate_attribute("music", doc.allocate_string("allan worked hard at that music :(")));
+
     root_node -> append_node( object_node);
 
 
