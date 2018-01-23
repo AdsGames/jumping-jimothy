@@ -20,10 +20,13 @@ class Options : public state
 
     void draw();
     void update();
+    void updateUI();
 
     static void read_data();
-    static void write_data();
+    void write_data();
 
+    static bool sfx_enabled;
+    static bool music_enabled;
 
 
   protected:
@@ -33,8 +36,7 @@ class Options : public state
     ALLEGRO_FONT *options_font;
     UIHandler OptionsUI;
 
-    static bool sfx_enabled;
-    static bool music_enabled;
+
 
 };
 
