@@ -33,6 +33,7 @@
 #include <Explosive.h>
 #include <button.h>
 #include <LevelSelect.h>
+#include "Sound.h"
 
 class game : public state{
   public:
@@ -104,9 +105,9 @@ class game : public state{
     ALLEGRO_SAMPLE *music;
     ALLEGRO_SAMPLE_ID *currentMusic;
 
-    ALLEGRO_SAMPLE *toggle_off;
-    ALLEGRO_SAMPLE *toggle_on;
-    ALLEGRO_SAMPLE *death;
+    Sound toggle_off;
+    Sound toggle_on;
+    Sound death;
 
     Button testing_back_button;
 

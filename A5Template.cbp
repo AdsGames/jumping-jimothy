@@ -77,7 +77,9 @@
 		<Unit filename="include/Explosive.h" />
 		<Unit filename="include/Goat.h" />
 		<Unit filename="include/LevelSelect.h" />
+		<Unit filename="include/Options.h" />
 		<Unit filename="include/Sensor.h" />
+		<Unit filename="include/Sound.h" />
 		<Unit filename="include/StaticBox.h" />
 		<Unit filename="include/ToggleBox.h" />
 		<Unit filename="include/UIElement.h" />
@@ -101,7 +103,9 @@
 		<Unit filename="src/Explosive.cpp" />
 		<Unit filename="src/Goat.cpp" />
 		<Unit filename="src/LevelSelect.cpp" />
+		<Unit filename="src/Options.cpp" />
 		<Unit filename="src/Sensor.cpp" />
+		<Unit filename="src/Sound.cpp" />
 		<Unit filename="src/StaticBox.cpp" />
 		<Unit filename="src/ToggleBox.cpp" />
 		<Unit filename="src/UIElement.cpp" />

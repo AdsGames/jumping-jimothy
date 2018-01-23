@@ -22,9 +22,9 @@ game::game(){
   help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);
   edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
 
-  toggle_on = tools::load_sample_ex("sfx/toggle_on.wav");
-  toggle_off = tools::load_sample_ex("sfx/toggle_off.wav");
-  death = tools::load_sample_ex("sfx/death.wav");
+  toggle_on.load("sfx/toggle_on.wav");
+  toggle_off.load("sfx/toggle_off.wav");
+  death.load("sfx/death.wav");
 
 
 
@@ -401,7 +401,7 @@ void game::update(){
 
   // Die
   if( keyListener::keyPressed[ALLEGRO_KEY_Z] || joystickListener::buttonPressed[JOY_XBOX_B] ||  keyListener::keyPressed[ALLEGRO_KEY_R] ){
-    al_play_sample(death, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+    death.play();
 
     reset();
 
@@ -438,7 +438,7 @@ void game::update(){
 
     static_mode =! static_mode;
     if(static_mode){
-      al_play_sample( toggle_off, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+      toggle_off.play();
 
       for( unsigned int i = 0; i < gameBoxes.size(); i++){
         if( gameBoxes[i] -> getType() == BOX){
@@ -449,7 +449,7 @@ void game::update(){
       }
     }
     else{
-      al_play_sample( toggle_on, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+      toggle_on.play();
 
       for( unsigned int i = 0; i < gameBoxes.size(); i++){
         if( gameBoxes[i] -> getType()==BOX){
@@ -465,7 +465,7 @@ void game::update(){
    // Brutal hack don't look. Prevens character from dying when the character's location is undefined or something. It's really big anyways
   if(gameCharacter != nullptr && gameCharacter -> getX()>-5000 && gameCharacter -> getX()<5000 && gameCharacter -> getY()>-5000 && gameCharacter -> getY()<5000 ){
     if(gameCharacter -> getX() < -1 || gameCharacter -> getX() > 51.5f || gameCharacter -> getY() > 2 || gameCharacter -> getY() < -40){
-      al_play_sample(death, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+      death.play();
 
       reset();
       std::cout<<"==========="<<gameCharacter -> getX() <<"\n";
