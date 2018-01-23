@@ -28,6 +28,7 @@ menu::menu(){
   menu_buttons[menu_button_help] = Button( 540, 630, "Halp plz v2", nullptr, 180, 90);
   menu_buttons[menu_button_help].setVisibility(false);
 
+  menu_buttons[menu_button_options] = Button( 940, 710, "(gear)", credits_font );
 
 
   // Title image
@@ -120,6 +121,10 @@ void menu::update(){
 
   if(menu_buttons[menu_button_exit].mouseReleased()){
     set_next_state(STATE_EXIT);
+  }
+
+  if(menu_buttons[menu_button_options].mouseReleased()){
+    set_next_state(STATE_OPTIONS);
   }
 
   if(menu_buttons[menu_button_help].mouseReleased()){

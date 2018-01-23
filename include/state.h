@@ -24,6 +24,7 @@ enum programStates{
   STATE_EDIT,
   STATE_EXIT,
   STATE_LEVELSELECT,
+  STATE_OPTIONS,
 };
 
 // State

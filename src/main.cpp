@@ -20,6 +20,7 @@
 #include "menu.h"
 #include "editor.h"
 #include "LevelSelect.h"
+#include "Options.h"
 
 // Current state object
 state *currentState = nullptr;
@@ -84,6 +85,10 @@ void change_state(){
       case STATE_LEVELSELECT:
         currentState = new LevelSelect();
         std::cout<<"Switched state to level select.\n";
+        break;
+      case STATE_OPTIONS:
+        currentState = new Options();
+        std::cout<<"Switched state to options.\n";
         break;
 
       default:
@@ -178,6 +183,8 @@ void setup(){
   // This is actually completely irrelevant other than making fun of Allan's PC when he runs this
   // Sorry, your PC is a very nice PC
   std::cout<<"Running as "<<al_get_app_name()<<", with "<<al_get_ram_size()<<" MB RAM.\n";
+
+  Options::read_data();
 
 }
 

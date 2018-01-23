@@ -18,12 +18,12 @@
 #include "button.h"
 
 
-//MFW Allan names his enums
 enum{
   menu_button_play,
   menu_button_exit,
   menu_button_edit,
   menu_button_help,
+  menu_button_options,
 };
 
 // Menu
@@ -37,7 +37,7 @@ class menu : public state{
 
   private:
 
-    static const int BUTTON_COUNT = 4;
+    static const int BUTTON_COUNT = 5;
     Button menu_buttons[BUTTON_COUNT];
     // Images
     ALLEGRO_BITMAP *title;
