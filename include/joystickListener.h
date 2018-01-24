@@ -28,8 +28,16 @@
 #define JOY_XBOX_PAD_DOWN     12
 #define JOY_XBOX_PAD_UP       13
 
+
+#define STICK_0_AXIS_0_UP 0
+#define STICK_0_AXIS_0_DOWN 1
+#define STICK_0_AXIS_1_UP 2
+#define STICK_0_AXIS_1_DOWN 3
+
+
 #include <iostream>
 #include <allegro5/allegro.h>
+
 
 class joystickListener
 {
@@ -47,9 +55,12 @@ class joystickListener
 
     static int lastButtonPressed;
     static int lastButtonReleased;
+    static bool stickDirections[4];
+
   protected:
   private:
     static bool lastTicksButton[JOY_MAX_BUTTONS];
+    static ALLEGRO_JOYSTICK_STATE joyState;
 };
 
 #endif // JOYSTICKLISTENER_H

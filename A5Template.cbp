@@ -73,6 +73,7 @@
 		<Unit filename="include/Character.h" />
 		<Unit filename="include/CheckBox.h" />
 		<Unit filename="include/CollisionBox.h" />
+		<Unit filename="include/Controls.h" />
 		<Unit filename="include/DynamicBox.h" />
 		<Unit filename="include/Explosive.h" />
 		<Unit filename="include/Goat.h" />
@@ -100,6 +101,7 @@
 		<Unit filename="src/Character.cpp" />
 		<Unit filename="src/CheckBox.cpp" />
 		<Unit filename="src/CollisionBox.cpp" />
+		<Unit filename="src/Controls.cpp" />
 		<Unit filename="src/DynamicBox.cpp" />
 		<Unit filename="src/Explosive.cpp" />
 		<Unit filename="src/Goat.cpp" />

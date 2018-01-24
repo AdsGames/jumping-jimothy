@@ -6,7 +6,7 @@ Sound::Sound()
 
 Sound::~Sound()
 {
-  #warning frick my poop right up
+  #warning mess my crap the frick up
   //std::cout<<al_is_audio_installed()<<" is the answer to the question.\n";
   //al_destroy_sample( sample);
 
