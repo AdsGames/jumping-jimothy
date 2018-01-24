@@ -39,6 +39,8 @@ editor::editor(){
   image_box[4] = tools::load_bitmap_ex( "images/box_repel.png");
   image_box[5] = tools::load_bitmap_ex( "images/box_repel_direction.png");
 
+  cursor = tools::load_bitmap_ex("images/cursor.png");
+
 
   for( int i = 0; i < 4; i++)
     for( int t = 0; t < 15; t++)
@@ -797,6 +799,10 @@ void editor::draw(){
     al_draw_bitmap(help_menu,110,75,0);
   // Draw buttons
   editorUI.draw();
+
+  if(Options::draw_cursor)
+    al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
+
 }
 
 

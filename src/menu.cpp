@@ -12,6 +12,7 @@ menu::menu(){
 
   menu_font = al_load_ttf_font( "fonts/munro.ttf", 18, 0);
   credits_font = al_load_ttf_font( "fonts/munro.ttf", 32, 0);
+  cursor = tools::load_bitmap_ex("images/cursor.png");
 
 
 
@@ -238,6 +239,9 @@ void menu::draw(){
 
 
   }
+  if(Options::draw_cursor)
+    al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
+
 
 
 

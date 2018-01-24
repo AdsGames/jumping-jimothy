@@ -29,6 +29,7 @@
 #include "game.h"
 #include "UIHandler.h"
 #include "CheckBox.h"
+#include "Options.h"
 
 #include "state.h"
 
@@ -64,6 +65,7 @@ class editor : public state{
     ALLEGRO_BITMAP *image_box[6];
     ALLEGRO_BITMAP *tiles[5][15];
     ALLEGRO_BITMAP *help_menu;
+    ALLEGRO_BITMAP *cursor;
 
     // Functions
     void calculate_orientation_global();

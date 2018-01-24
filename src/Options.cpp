@@ -2,12 +2,15 @@
 
 bool Options::music_enabled=true;
 bool Options::sfx_enabled=true;
+int Options::graphics_mode=0;
+bool Options::draw_cursor=false;
 
 Options::Options()
 {
     read_data();
 
     options_font = al_load_ttf_font( "fonts/munro.ttf", 18, 0);
+    cursor = tools::load_bitmap_ex("images/cursor.png");
 
 
     OptionsUI.addElement(new UIElement(50, 50, "Pick a choice",options_font));
@@ -44,10 +47,17 @@ void Options::draw(){
 
     OptionsUI.draw();
 
+    if(draw_cursor)
+      al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
+
+
 
 }
 
 void Options::update(){
+
+  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE])
+    set_next_state(STATE_MENU);
 
   OptionsUI.update();
 

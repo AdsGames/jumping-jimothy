@@ -10,6 +10,7 @@
 
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
+#include "keyListener.h"
 
 
 class Options : public state
@@ -27,6 +28,8 @@ class Options : public state
 
     static bool sfx_enabled;
     static bool music_enabled;
+    static int graphics_mode;
+    static bool draw_cursor;
 
 
   protected:
@@ -35,6 +38,8 @@ class Options : public state
 
     ALLEGRO_FONT *options_font;
     UIHandler OptionsUI;
+
+    ALLEGRO_BITMAP *cursor;
 
 
 

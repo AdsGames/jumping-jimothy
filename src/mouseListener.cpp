@@ -24,6 +24,7 @@ void mouseListener::update(){
   mouse_x = state.x;
   mouse_y = state.y;
 
+
   // Check button just pressed
   for( int i = 0; i < MAX_MOUSE_BUTTONS; i ++){
     // Clear old values
@@ -52,4 +53,6 @@ void mouseListener::update(){
         mouse_old ^= 1 << i;
     }
   }
+
+
 }
