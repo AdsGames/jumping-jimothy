@@ -34,6 +34,7 @@
 #include <button.h>
 #include <LevelSelect.h>
 #include "Sound.h"
+#include "MusicManager.h"
 
 class game : public state{
   public:
@@ -102,8 +103,6 @@ class game : public state{
     //TODO FIX WHEN NOT DEAD INSIDE
 
     // Samples
-    ALLEGRO_SAMPLE *music;
-    ALLEGRO_SAMPLE_ID *currentMusic;
 
     Sound toggle_off;
     Sound toggle_on;

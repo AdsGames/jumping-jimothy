@@ -77,6 +77,7 @@
 		<Unit filename="include/Explosive.h" />
 		<Unit filename="include/Goat.h" />
 		<Unit filename="include/LevelSelect.h" />
+		<Unit filename="include/MusicManager.h" />
 		<Unit filename="include/Options.h" />
 		<Unit filename="include/Sensor.h" />
 		<Unit filename="include/Sound.h" />
@@ -103,6 +104,7 @@
 		<Unit filename="src/Explosive.cpp" />
 		<Unit filename="src/Goat.cpp" />
 		<Unit filename="src/LevelSelect.cpp" />
+		<Unit filename="src/MusicManager.cpp" />
 		<Unit filename="src/Options.cpp" />
 		<Unit filename="src/Sensor.cpp" />
 		<Unit filename="src/Sound.cpp" />

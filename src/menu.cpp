@@ -6,8 +6,6 @@
 
 menu::menu(){
 
-  menu_music=nullptr;
-
   credits_menu=false;
 
   menu_font = al_load_ttf_font( "fonts/munro.ttf", 18, 0);
@@ -50,10 +48,10 @@ menu::menu(){
 
   #if defined(RELEASE)
 
-  //  if(menu_music==nullptr)
-     // menu_music = tools::load_sample_ex( "music/tojam.ogg");
+    if(!MusicManager::menu_music.getIsPlaying())
+      MusicManager::menu_music.play();
 
-  // al_play_sample( menu_music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, currentMusic);
+
 
   #endif
 
@@ -92,12 +90,6 @@ menu::~menu(){
   //al_destroy_bitmap( prompt_image);
   al_destroy_bitmap( play);
   al_destroy_bitmap( title);
-
-  #warning  help me allan wan kenobi, you're my only hope
-   if( menu_music != nullptr){
-    al_stop_sample( currentMusic);
-    al_destroy_sample( menu_music);
-  }
 
 
 }

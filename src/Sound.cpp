@@ -6,11 +6,21 @@ Sound::Sound()
 
 Sound::~Sound()
 {
-  //dtor
+  #warning frick my poop right up
+  //std::cout<<al_is_audio_installed()<<" is the answer to the question.\n";
+  //al_destroy_sample( sample);
+
 }
 
 
-void Sound::load(std::string newPath){
+void Sound::load_wav(std::string newPath){
+
+  is_wav=true;
+  sample = tools::load_sample_ex(newPath);
+
+}
+
+void Sound::load_ogg(std::string newPath){
 
   sample = tools::load_sample_ex(newPath);
 
@@ -18,12 +28,30 @@ void Sound::load(std::string newPath){
 
 void Sound::play(){
 
-  if(Options::sfx_enabled)
+
+  if(is_wav && Options::sfx_enabled){
+    is_playing=true;
     al_play_sample( sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
-  else
-    std::cout<<"ur sound is disabled=-----------------\n";
+  }
+  else if(Options::music_enabled){
+    al_play_sample( sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, sample_id);
+    is_playing=true;
+
+  }
+}
+
+void Sound::stop(){
+
+  is_playing=false;
+  if(!is_wav){
+
+    // well frick you too future self
+    al_stop_samples();
+
+  }
 
 }
+
 
 void Sound::play_random_frequency(int newMin, int newMax){
 
