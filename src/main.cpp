@@ -40,11 +40,31 @@ bool joystick_enabled = false;
 ALLEGRO_EVENT_QUEUE* event_queue = nullptr;
 ALLEGRO_TIMER* timer = nullptr;
 ALLEGRO_DISPLAY *display = nullptr;
+ALLEGRO_BITMAP *buffer;
+ALLEGRO_BITMAP *cursor;
+
+int graphics_mode;
 
 // Input listener wrapper classes
 mouseListener m_listener;
 keyListener k_listener;
 joystickListener j_listener;
+
+float scaleW;
+float scaleH;
+float scaleX;
+float scaleY;
+
+int screenWidth=1024;
+int screenHeight=768;
+
+enum{
+  fullscreen_window_stretch,
+  fullscreen_window_letterbox,
+  fullscreen_window_center,
+  fullscreen_true,
+  windowed,
+};
 
 // Delete game state and free state resources
 void clean_up(){
@@ -139,7 +159,77 @@ void setup(){
       al_set_new_display_flags(ALLEGRO_WINDOWED);
 
   #endif
-  display = al_create_display(1024, 768);
+
+  graphics_mode=fullscreen_window_center;
+
+
+  float windowWidth=1024;
+  float windowHeight=768;
+
+  cursor = tools::load_bitmap_ex("images/cursor.png");
+
+  if(graphics_mode>=1 && graphics_mode<=3)
+    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+
+  else if(graphics_mode==fullscreen_true)
+    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+
+  else
+    al_set_new_display_flags(ALLEGRO_WINDOWED);
+
+
+
+  display = al_create_display(windowWidth, windowHeight);
+
+  if(graphics_mode>=1 && graphics_mode<=3)
+    al_hide_mouse_cursor(display);
+
+
+
+  windowWidth = al_get_display_width(display);
+  windowHeight = al_get_display_height(display);
+
+  buffer = al_create_bitmap(screenWidth, screenHeight);
+
+  // calculate scaling factor
+  float sx = windowWidth / screenWidth;
+  float sy = windowHeight / screenHeight;
+  float scale = std::min(sx, sy);
+
+  if(graphics_mode==fullscreen_window_stretch){
+    // calculate how much the buffer should be scaled
+    scaleW = screenWidth * sx;
+    scaleH = screenHeight * sy;
+    scaleX = (windowWidth - scaleW) / 2;
+    scaleY = (windowHeight - scaleH) / 2;
+  }
+
+  if(graphics_mode==fullscreen_window_center){
+    scaleW = screenWidth * 1;
+    scaleH = screenHeight * 1;
+    scaleX = (windowHeight - scaleH) / 2;
+    scaleY = (windowWidth - scaleW) / 2;;
+  }
+
+   if(graphics_mode==fullscreen_window_letterbox){
+    scaleW = screenWidth * scale;
+    scaleH = screenHeight * scale;
+    scaleX = (windowWidth - scaleW) / 2;
+    scaleY = (windowHeight - scaleH) / 2;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   if( !display)
     tools::abort_on_error( "Screen could not be created", "Error");
@@ -230,8 +320,36 @@ void update(){
     // Clear buffer
     al_clear_to_color( al_map_rgb(0,0,0));
 
-    // Draw state graphics
-    currentState -> draw();
+
+
+      // render a frame
+      if(graphics_mode>=1 && graphics_mode<=3){
+        al_set_target_bitmap(buffer);
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+      }
+
+
+      currentState -> draw();
+
+
+
+      if(graphics_mode>=1 && graphics_mode<=3){
+
+        al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
+        al_set_target_backbuffer(display);
+        al_clear_to_color(al_map_rgb(0, 0, 0));
+        al_draw_scaled_bitmap(buffer, 0, 0, screenWidth, screenHeight, scaleX, scaleY, scaleW, scaleH, 0);
+      }
+
+
+
+
+
+
+      // Draw state graphics
+
+
+
 
     // Flip (OpenGL)
     al_flip_display();
