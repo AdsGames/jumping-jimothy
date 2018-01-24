@@ -28,6 +28,8 @@ Options::Options()
     OptionsUI.addElement(new Button(210,150,"Off","music_toggle",options_font));
     OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
 
+    OptionsUI.addElement(new Button(100, 700, "Back",options_font));
+
 
     read_data();
     updateUI();
@@ -56,7 +58,7 @@ void Options::draw(){
 
 void Options::update(){
 
-  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE])
+  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased())
     set_next_state(STATE_MENU);
 
   OptionsUI.update();

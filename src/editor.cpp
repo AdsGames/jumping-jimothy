@@ -6,6 +6,8 @@ bool editor::modified=false;
 // Init editor
 editor::editor(){
 
+  MusicManager::menu_music.stop();
+
   //al_set_new_display_flags(ALLEGRO_WINDOWED);
   al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 

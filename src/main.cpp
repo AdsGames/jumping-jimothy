@@ -21,6 +21,7 @@
 #include "editor.h"
 #include "LevelSelect.h"
 #include "Options.h"
+#include "MusicManager.h"
 
 // Current state object
 state *currentState = nullptr;
@@ -154,10 +155,12 @@ void setup(){
 
   #if defined(RELEASE)
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-  #elifdef
-      al_set_new_display_flags(ALLEGRO_WINDOWED);
-
   #endif
+
+  #if !defined(RELEASE)
+      al_set_new_display_flags(ALLEGRO_WINDOWED);
+  #endif
+
 
   graphics_mode=fullscreen_window_center;
   Options::graphics_mode=graphics_mode;
@@ -276,6 +279,8 @@ void setup(){
   std::cout<<"Running as "<<al_get_app_name()<<", with "<<al_get_ram_size()<<" MB RAM.\n";
 
   Options::read_data();
+  MusicManager::load();
+
 
 }
 
@@ -384,6 +389,7 @@ int main(int argc, char **argv){
     update();
 
   // Destory display
+  MusicManager::destroy();
   al_destroy_display(display);
 
   return 0;

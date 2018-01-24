@@ -22,9 +22,9 @@ game::game(){
   help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);
   edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
 
-  toggle_on.load("sfx/toggle_on.wav");
-  toggle_off.load("sfx/toggle_off.wav");
-  death.load("sfx/death.wav");
+  toggle_on.load_wav("sfx/toggle_on.wav");
+  toggle_off.load_wav("sfx/toggle_off.wav");
+  death.load_wav("sfx/death.wav");
 
 
 
@@ -38,24 +38,19 @@ game::game(){
   reset();
 
   // Load and play music
-  music = nullptr;
 
 
+  MusicManager::menu_music.stop();
+  MusicManager::game_music.play();
 
 
   #if defined(RELEASE)
-    music = tools::load_sample_ex( "music/tojam.ogg");
-    al_play_sample( music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, currentMusic);
+
   #endif
 }
 
 // Destructor
 game::~game(){
-  // Stop music
-  if( music != nullptr){
-    al_stop_sample( currentMusic);
-    al_destroy_sample( music);
-  }
 
   // Destory bitmaps
   //if( box != nullptr)
@@ -408,6 +403,8 @@ void game::update(){
   }
   if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE]){
     set_next_state(STATE_MENU);
+    MusicManager::game_music.stop();
+
   }
 
   // Next level
