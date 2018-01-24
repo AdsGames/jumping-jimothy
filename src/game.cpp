@@ -40,11 +40,11 @@ game::game(){
   // Load and play music
 
 
-  MusicManager::menu_music.stop();
-  MusicManager::game_music.play();
 
+  MusicManager::menu_music.stop();
 
   #if defined(RELEASE)
+    MusicManager::game_music.play();
 
   #endif
 }
@@ -476,7 +476,6 @@ void game::draw(){
   // Background
   al_clear_to_color( al_map_rgb(40,40,60));
 
-  al_draw_textf( game_font, al_map_rgb( 255, 255, 255), 1010, 15, 2, "Level %i", level);
 
 
   // Help
@@ -514,4 +513,7 @@ void game::draw(){
     al_draw_bitmap(pause,10,10,0);
   else
     al_draw_bitmap(play,10,10,0);
+
+    al_draw_textf( game_font, al_map_rgb( 255, 255, 255), 1010, 15, 2, "Level %i", level);
+
 }

@@ -124,7 +124,7 @@ void Character::update(){
   float x_velocity_air_max=4;
 
 
-  if((keyListener::key[ALLEGRO_KEY_A] || joystickListener::button[JOY_XBOX_PAD_LEFT] ) && initial_key_release){
+  if((keyListener::key[ALLEGRO_KEY_A] || joystickListener::stickDirections[STICK_0_AXIS_0_DOWN]) && initial_key_release){
     direction=false;
     if(sensor_box -> isColliding())
       body -> SetLinearVelocity(b2Vec2(-x_velocity_ground, yVel));
@@ -132,7 +132,7 @@ void Character::update(){
       if(getBody() -> GetLinearVelocity().x > -x_velocity_air_max)
         body -> ApplyLinearImpulse(b2Vec2(-x_velocity_air, 0),position,true);
   }
-  else if((keyListener::key[ALLEGRO_KEY_D] || joystickListener::button[JOY_XBOX_PAD_RIGHT] )&& initial_key_release){
+  else if((keyListener::key[ALLEGRO_KEY_D] || joystickListener::stickDirections[STICK_0_AXIS_0_UP])&& initial_key_release){
     direction=true;
     if(sensor_box -> isColliding())
           body -> SetLinearVelocity(b2Vec2(x_velocity_ground, yVel));

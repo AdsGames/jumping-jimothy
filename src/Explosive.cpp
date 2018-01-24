@@ -83,8 +83,6 @@ void Explosive::update(){
 
   b2Vec2 center = body->GetPosition();
 
-
-
   // Totally not copypasta'd code
   // Should do something about it
   // Ehhhhhhh
@@ -96,6 +94,7 @@ void Explosive::update(){
   aabb.upperBound = center + b2Vec2( blastRadius, blastRadius );
   gameWorld->QueryAABB( &queryCallback, aabb );
 
+  is_exploding=false;
   //check which of these have their center of mass within the blast radius
   for (int i = 0; i < queryCallback.foundBodies.size(); i++) {
     b2Body* newBody = queryCallback.foundBodies[i];
@@ -103,7 +102,10 @@ void Explosive::update(){
     //ignore bodies outside the blast range
     if ( (bodyCom - center).Length() >= blastRadius )
       continue;
-    applyBlastImpulse(newBody, center, bodyCom, blastPower * 0.05f );//scale blast power to roughly match results of other methods at 32 rays
+    else{
+      applyBlastImpulse(newBody, center, bodyCom, blastPower * 0.05f );//scale blast power to roughly match results of other methods at 32 rays
+
+    }
   }
 }
 
@@ -111,7 +113,6 @@ void Explosive::update(){
 void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower){
 
   //ignore the grenade itself, and any non-dynamic bodies
-
   // Fricking feet, how do they work?
   if ( newBody == body || newBody->GetType() != b2_dynamicBody || ((newBody == gameCharacter->getBody()
     || newBody == gameCharacter -> getSensorBody() ) && !affect_character))
@@ -125,7 +126,7 @@ void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 ap
   float impulseMag = blastPower * invDistance * invDistance;
   impulseMag = b2Min( impulseMag, 500.0f );
 
-
+   is_exploding=true;
 
   if(orientation == 0)
     newBody->ApplyLinearImpulse( impulseMag * blastDir, applyPoint,true );
@@ -144,6 +145,7 @@ void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 ap
       new_direction=b2Vec2(-magnitude,0);
 
     newBody->ApplyLinearImpulse( impulseMag*new_direction, applyPoint,true );
+
 
   }
 }
@@ -170,14 +172,12 @@ void Explosive::draw(){
 
   al_use_transform(&trans);
 
-  b2Vec2 draw_velocity = b2Vec2(0,0);
-
-  // Danny... why was this removed?
-  // Lolwutnow
-
-    draw_velocity = b2Vec2( 100,100);
 
 
+  if(is_exploding){
+    //al_draw_filled_circle(0,0,200,al_map_rgba(255,0,0,1));
+    // one day
+  }
 
   if(affect_character)
     al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(255,0,0));

@@ -24,6 +24,7 @@ class Explosive : public Box
     int blastRadius;
     int blastPower;
     bool affect_character;
+    bool is_exploding;
 
   private:
 };

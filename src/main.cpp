@@ -162,7 +162,7 @@ void setup(){
   #endif
 
 
-  graphics_mode=fullscreen_window_center;
+  graphics_mode=windowed;
   Options::graphics_mode=graphics_mode;
 
 
@@ -278,6 +278,14 @@ void setup(){
   // Sorry, your PC is a very nice PC
   std::cout<<"Running as "<<al_get_app_name()<<", with "<<al_get_ram_size()<<" MB RAM.\n";
 
+
+  joystick_enabled = (al_get_num_joysticks() > 0);
+
+  if(joystick_enabled)
+    std::cout<<al_get_joystick_name(al_get_joystick(0)) <<" is installed and being used.\n";
+  else
+    std::cout<<"No joystick is installed.\n";
+
   Options::read_data();
   MusicManager::load();
 
@@ -315,6 +323,7 @@ void update(){
   else if( ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP){
     j_listener.on_event( ev.type, ev.joystick.button);
   }
+
   // Joystick plugged or unplugged
   else if( ev.type == ALLEGRO_EVENT_JOYSTICK_CONFIGURATION){
     al_reconfigure_joysticks();
