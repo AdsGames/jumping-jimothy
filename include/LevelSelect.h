@@ -17,7 +17,8 @@
 #include "button.h"
 #include "keyListener.h"
 #include "game.h"
-#include "tools.h""
+#include "tools.h"
+#include "Options.h"
 
 
 class LevelSelect : public state
@@ -38,6 +39,8 @@ class LevelSelect : public state
   protected:
 
   private:
+
+    ALLEGRO_BITMAP *cursor;
 
     void createLevelButton(int,int,int);
 

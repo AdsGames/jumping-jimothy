@@ -5,6 +5,7 @@ bool LevelSelect::completed_level_list[16]= {};
 LevelSelect::LevelSelect()
 
 {
+
   //Doc
   rapidxml::xml_document<> doc;
 
@@ -37,6 +38,8 @@ LevelSelect::LevelSelect()
   levelselect_font = al_load_ttf_font( "fonts/munro.ttf", 24, 0);
 
   levelselect_font_large = al_load_ttf_font( "fonts/munro.ttf", 48, 0);
+
+  cursor = tools::load_bitmap_ex("images/cursor.png");
 
   levelSelectUI = UIHandler();
 
@@ -144,6 +147,8 @@ void LevelSelect::draw(){
 
   al_clear_to_color( al_map_rgb(75,75,100));
   levelSelectUI.draw();
+  if(Options::draw_cursor)
+    al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
 
 
 }

@@ -16,6 +16,7 @@
 #include "tools.h"
 #include "state.h"
 #include "button.h"
+#include "Options.h"
 
 
 enum{
@@ -53,6 +54,7 @@ class menu : public state{
     ALLEGRO_BITMAP *button_edit;
     ALLEGRO_BITMAP *button_exit;
     ALLEGRO_BITMAP *button_help;
+    ALLEGRO_BITMAP *cursor;
 
     ALLEGRO_BITMAP *logo;
 

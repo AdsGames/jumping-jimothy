@@ -41,7 +41,6 @@ ALLEGRO_EVENT_QUEUE* event_queue = nullptr;
 ALLEGRO_TIMER* timer = nullptr;
 ALLEGRO_DISPLAY *display = nullptr;
 ALLEGRO_BITMAP *buffer;
-ALLEGRO_BITMAP *cursor;
 
 int graphics_mode;
 
@@ -161,15 +160,17 @@ void setup(){
   #endif
 
   graphics_mode=fullscreen_window_center;
+  Options::graphics_mode=graphics_mode;
 
 
   float windowWidth=1024;
   float windowHeight=768;
 
-  cursor = tools::load_bitmap_ex("images/cursor.png");
 
-  if(graphics_mode>=1 && graphics_mode<=3)
+  if(graphics_mode>=1 && graphics_mode<=3){
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+    Options::draw_cursor=true;
+  }
 
   else if(graphics_mode==fullscreen_true)
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
@@ -332,10 +333,8 @@ void update(){
       currentState -> draw();
 
 
-
       if(graphics_mode>=1 && graphics_mode<=3){
 
-        al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0, 0, 0));
         al_draw_scaled_bitmap(buffer, 0, 0, screenWidth, screenHeight, scaleX, scaleY, scaleW, scaleH, 0);
