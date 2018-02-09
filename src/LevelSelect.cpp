@@ -62,7 +62,15 @@ LevelSelect::LevelSelect()
   createLevelButton(320,230,12);
   createLevelButton(465,230,13);
 
-  levelSelectUI.addElement(new Button(837, 10, "Reset Save Game", levelselect_font));
+  levelSelectUI.addElement(new Button(837, 710, "Reset Save Game", levelselect_font));
+  levelSelectUI.addElement(new Button(10, 710, "Back to main menu", levelselect_font));
+  levelSelectUI.addElement(new Button(802, 663, "Really reset?", levelselect_font));
+  levelSelectUI.addElement(new Button(940, 663, "Cancel", levelselect_font));
+
+  levelSelectUI.getElementByText("Cancel") ->setStatus(false);
+  levelSelectUI.getElementByText("Really reset?") ->setStatus(false);
+
+
 
 
 
@@ -155,17 +163,31 @@ void LevelSelect::draw(){
 void LevelSelect::update(){
   levelSelectUI.update();
 
-  if(keyListener::key[ALLEGRO_KEY_ESCAPE])
+  if(keyListener::key[ALLEGRO_KEY_ESCAPE] || levelSelectUI.getElementByText("Back to main menu") -> mouseReleased())
     set_next_state(STATE_MENU);
 
-  if(levelSelectUI.getElementByText("Reset Save Game") -> clicked()){
+  if(levelSelectUI.getElementByText("Really reset?") -> mouseReleased()){
     for(int i=0; i<16; i++)
       completed_level_list[i]=false;
       writeLevelData();
       set_next_state(STATE_LEVELSELECT);
 
+  }
+  if(levelSelectUI.getElementByText("Reset Save Game") -> mouseReleased()){
+    levelSelectUI.getElementByText("Cancel") ->setStatus(true);
+    levelSelectUI.getElementByText("Really reset?") ->setStatus(true);
 
-    }
+
+  }
+
+   if(levelSelectUI.getElementByText("Cancel") -> mouseReleased()){
+    levelSelectUI.getElementByText("Cancel") ->setStatus(false);
+    levelSelectUI.getElementByText("Really reset?") ->setStatus(false);
+
+
+
+
+  }
 
 
   for(int i=1; i<14; i++){

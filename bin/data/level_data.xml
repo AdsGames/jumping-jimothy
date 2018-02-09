@@ -4,7 +4,7 @@
 		<status>complete</status>
 	</level>
 	<level number="1">
-		<status>incomplete</status>
+		<status>complete</status>
 	</level>
 	<level number="2">
 		<status>incomplete</status>
@@ -25,10 +25,10 @@
 		<status>incomplete</status>
 	</level>
 	<level number="8">
-		<status>incomplete</status>
+		<status>complete</status>
 	</level>
 	<level number="9">
-		<status>incomplete</status>
+		<status>complete</status>
 	</level>
 	<level number="10">
 		<status>incomplete</status>
@@ -37,10 +37,10 @@
 		<status>incomplete</status>
 	</level>
 	<level number="12">
-		<status>complete</status>
+		<status>incomplete</status>
 	</level>
 	<level number="13">
-		<status>incomplete</status>
+		<status>complete</status>
 	</level>
 	<level number="14">
 		<status>incomplete</status>
