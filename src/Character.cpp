@@ -79,8 +79,9 @@ void Character::update(){
     counter_sensor_contact++;
   else
     counter_sensor_contact=0;
- // if(counter_sensor_contact>25)
-    //landed=true;
+
+  if(counter_sensor_contact>25)
+    landed=true;
 
   if((body ->GetLinearVelocity().y>=-0.01f && body ->GetLinearVelocity().y<=0.01f) && sensor_box -> isColliding() && velocity_old<-0.01f){
     float land_volume = velocity_old/20;
@@ -144,6 +145,7 @@ void Character::update(){
      body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
   }
 
+  std::cout<<body -> GetLinearVelocity().y<<"\n";
   // Jumping Jimothy
   timer_jump_delay++;
   if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f && landed && initial_key_release){
