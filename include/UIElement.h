@@ -59,6 +59,7 @@ class UIElement
     void setVisibleBackground(bool b){visible_background=b;}
     void setWidth(int newWidth){width=newWidth;}
     void setHeight(int newHeight){height=newHeight;}
+    void setOutlineThickness(int newThickness){outline_thickness=newThickness;}
 
 
     bool mouseReleased();
@@ -89,6 +90,8 @@ class UIElement
     bool old_mouse_down;
     bool mouse_released;
     bool visible_background;
+
+    int outline_thickness;
 
     float alpha;
 

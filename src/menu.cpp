@@ -13,27 +13,45 @@ menu::menu(){
   cursor = tools::load_bitmap_ex("images/cursor.png");
 
 
+    // Title image
+  button_edit = tools::load_bitmap_ex("images/button_edit.png");
+  button_help = tools::load_bitmap_ex("images/button_help.png");
+  button_exit = tools::load_bitmap_ex("images/button_exit.png");
+  button_options = tools::load_bitmap_ex("images/gear.png");
 
-  menu_buttons[menu_button_edit] = Button( 320, 630, "Level Editor", nullptr, 180, 90);
-  menu_buttons[menu_button_edit].setVisibility(false);
 
-  menu_buttons[menu_button_exit] = Button( 750, 630, "Exit", nullptr, 180, 90);
-  menu_buttons[menu_button_exit].setVisibility(false);
+
+  menu_buttons[menu_button_edit] = Button( 340, 630, "Level Editor", nullptr, 180, 90);
+  menu_buttons[menu_button_edit].setOutlineThickness(3);
+  menu_buttons[menu_button_edit].setBackgroundColour(al_map_rgb(94,94,94));
+  menu_buttons[menu_button_edit].setImage(button_edit);
+
+
+  menu_buttons[menu_button_exit] = Button( 660, 630, "Exit", nullptr, 180, 90);
+  menu_buttons[menu_button_exit].setOutlineThickness(3);
+  menu_buttons[menu_button_exit].setBackgroundColour(al_map_rgb(94,94,94));
+  menu_buttons[menu_button_exit].setImage(button_exit);
+
+
 
 
   menu_buttons[menu_button_play] = Button( 40, 590, "Play", nullptr, 250, 140);
   menu_buttons[menu_button_play].setVisibility(false);
 
-  menu_buttons[menu_button_help] = Button( 540, 630, "Halp plz v2", nullptr, 180, 90);
-  menu_buttons[menu_button_help].setVisibility(false);
-
-  menu_buttons[menu_button_options] = Button( 940, 710, "(gear)", credits_font );
 
 
-  // Title image
-  button_edit = tools::load_bitmap_ex("images/button_edit.png");
-  button_help = tools::load_bitmap_ex("images/button_help.png");
-  button_exit = tools::load_bitmap_ex("images/button_exit.png");
+  menu_buttons[menu_button_help] = Button( 495, 630, "Halp plz v2", nullptr, 180, 90);
+  menu_buttons[menu_button_help].setOutlineThickness(3);
+  menu_buttons[menu_button_help].setBackgroundColour(al_map_rgb(94,94,94));
+  menu_buttons[menu_button_help].setImage(button_help);
+
+  menu_buttons[menu_button_options] = Button( 825, 630, "lel if you put nullptr in teh font you can put whatever you want in here", nullptr );
+  menu_buttons[menu_button_options].setOutlineThickness(3);
+  menu_buttons[menu_button_options].setBackgroundColour(al_map_rgb(94,94,94));
+  menu_buttons[menu_button_options].setImage(button_options);
+
+
+
   title = tools::load_bitmap_ex("images/title_static.png");
   title_overlay = tools::load_bitmap_ex("images/title_overlay.png");
   title_shine = tools::load_bitmap_ex("images/title_shine.png");
@@ -174,34 +192,6 @@ void menu::draw(){
       al_draw_scaled_bitmap( playbutton_frame, 0, 0, 70, 38,playbutton_x-12, playbutton_y-12, 280, 152, 0);
 
     al_draw_scaled_bitmap( play_images[counter_play], 0, 0, 64, 32,playbutton_x, playbutton_y, 256, 128, 0);
-
-    if(menu_buttons[menu_button_edit].hover())
-      al_draw_scaled_bitmap( playbutton_frame_hover, 0, 0, 70, 38,320, 630, 70*3, 38*3, 0);
-    else
-      al_draw_scaled_bitmap( playbutton_frame, 0, 0, 70, 38,320, 630, 70*3, 38*3, 0);
-
-    al_draw_scaled_bitmap(button_edit, 0, 0, 70, 38,320, 630, 70*3, 38*3, 0);
-
-
-    if(menu_buttons[menu_button_help].hover())
-      al_draw_scaled_bitmap( playbutton_frame_hover, 0, 0, 70, 38,530, 630, 70*3, 38*3, 0);
-    else
-      al_draw_scaled_bitmap( playbutton_frame, 0, 0, 70, 38,530, 630, 70*3, 38*3, 0);
-
-    al_draw_scaled_bitmap( button_help, 0, 0, 70, 38,530, 630, 70*3, 38*3, 0);
-
-
-
-    if(menu_buttons[menu_button_exit].hover())
-      al_draw_scaled_bitmap( playbutton_frame_hover, 0, 0, 70, 38,740, 630, 70*3, 38*3, 0);
-    else
-      al_draw_scaled_bitmap( playbutton_frame, 0, 0, 70, 38,740, 630, 70*3, 38*3, 0);
-
-    al_draw_scaled_bitmap( button_exit, 0, 0, 70, 38,740, 630, 70*3, 38*3, 0);
-
-
-    //if( counter_prompt)
-     // al_draw_scaled_bitmap( prompt_image, 0, 0, 128, 16, 290, 710, 256, 32, 0);
 
      // Update buttons
     for( int i = 0; i < BUTTON_COUNT; i++){
