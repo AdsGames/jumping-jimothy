@@ -116,7 +116,7 @@ void Button::draw(){
     ALLEGRO_COLOR hover_colour = al_map_rgba(new_r,new_g,new_b,alpha);
     al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, hover_colour);
 
-    al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), 2);
+    al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), outline_thickness);
 
     // Text
 

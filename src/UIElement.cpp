@@ -26,6 +26,7 @@ void UIElement::setDefaults(){
   this -> id = "";
   this -> visible_background =true;
   this -> justification = 0;
+  this -> outline_thickness =2;
 
 }
 
