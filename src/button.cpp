@@ -114,10 +114,11 @@ void Button::draw(){
     int new_b=tools::negative_clamp_thing(0,255,(int)((background_colour.b*255)+(40 * hovering)));
 
     ALLEGRO_COLOR hover_colour = al_map_rgba(new_r,new_g,new_b,alpha);
-    al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, hover_colour);
 
-    al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), outline_thickness);
-
+    if(visible_background){
+      al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, hover_colour);
+      al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), outline_thickness);
+    }
     // Text
 
     if( UIElement_font != nullptr){
