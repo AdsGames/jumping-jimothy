@@ -52,6 +52,7 @@ class menu : public state{
     ALLEGRO_BITMAP *prompt_image;
     ALLEGRO_BITMAP *play_images[50];
     ALLEGRO_BITMAP *title_images[170];
+    ALLEGRO_BITMAP *highlight;
 
     ALLEGRO_BITMAP *button_edit;
     ALLEGRO_BITMAP *button_exit;
@@ -63,6 +64,10 @@ class menu : public state{
 
     ALLEGRO_FONT *menu_font;
     ALLEGRO_FONT *credits_font;
+    ALLEGRO_FONT *button_font;
+
+    int highlight_y_destination=500;
+    int highlight_y=500;
 
     bool credits_menu;
     int counter_title;
