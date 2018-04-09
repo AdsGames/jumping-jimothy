@@ -119,33 +119,59 @@ menu::~menu(){
 void menu::update(){
 
 
+  if(!credits_menu){
+     // Update buttons
+    for( int i = 0; i < BUTTON_COUNT; i++){
+      menu_buttons[i].update();
+    }
 
-   // Update buttons
-  for( int i = 0; i < BUTTON_COUNT; i++){
-    menu_buttons[i].update();
-  }
+    if(menu_buttons[menu_button_play].mouseReleased() || (joystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==500))){
+      set_next_state(STATE_LEVELSELECT);
+    }
 
-  if(menu_buttons[menu_button_play].mouseReleased()){
-    set_next_state(STATE_LEVELSELECT);
-  }
+    if(menu_buttons[menu_button_edit].mouseReleased() || (joystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==550))){
+      set_next_state(STATE_EDIT);
+    }
 
-  if(menu_buttons[menu_button_edit].mouseReleased()){
-    set_next_state(STATE_EDIT);
-  }
+    if(menu_buttons[menu_button_exit].mouseReleased() || (joystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==700))){
+      set_next_state(STATE_EXIT);
+    }
 
-  if(menu_buttons[menu_button_exit].mouseReleased()){
-    set_next_state(STATE_EXIT);
-  }
+    if(menu_buttons[menu_button_options].mouseReleased() || (joystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==600))){
+      set_next_state(STATE_OPTIONS);
+    }
 
-  if(menu_buttons[menu_button_options].mouseReleased()){
-    set_next_state(STATE_OPTIONS);
-  }
+    if(menu_buttons[menu_button_help].mouseReleased() || (joystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==650))){
+      joystickListener::anyButtonReleased=false;
 
-  if(menu_buttons[menu_button_help].mouseReleased()){
-    credits_menu=true;
+      credits_menu=true;
+    }
   }
-  if(keyListener::anyKeyPressed)
+  if(keyListener::anyKeyPressed || joystickListener::anyButtonReleased){
     credits_menu = false;
+    joystickListener::anyButtonReleased=false;
+  }
+
+
+
+  if((joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
+    if(highlight_y_destination<700)
+      highlight_y_destination+=50;
+  }
+
+  if((joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[DPAD_DOWN])  && !joystick_direction_hit){
+    if(highlight_y_destination>500)
+      highlight_y_destination-=50;
+  }
+
+  if(joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_DOWN] || joystickListener::stickDirections[DPAD_UP2]){
+    joystick_direction_hit=true;
+    joystick_mode=true;
+  }else{
+    joystick_direction_hit=false;
+  }
+  if(mouseListener::mouse_moved)
+    joystick_mode=false;
 
 
   if(highlight_y>highlight_y_destination)highlight_y-=10;
@@ -161,12 +187,14 @@ void menu::update(){
   counter_prompt = (counter_play >= 50) ? !counter_prompt : counter_prompt;
   counter_play = (counter_play >= 50) ? 0 : counter_play;
 
-    if(menu_buttons[menu_button_play].hover())highlight_y_destination=500;
-  if(menu_buttons[menu_button_edit].hover())highlight_y_destination=550;
-  if(menu_buttons[menu_button_options].hover())highlight_y_destination=600;
-  if(menu_buttons[menu_button_help].hover())highlight_y_destination=650;
-  if(menu_buttons[menu_button_exit].hover())highlight_y_destination=700;
+  if(!joystick_mode){
 
+    if(menu_buttons[menu_button_play].hover())highlight_y_destination=500;
+    if(menu_buttons[menu_button_edit].hover())highlight_y_destination=550;
+    if(menu_buttons[menu_button_options].hover())highlight_y_destination=600;
+    if(menu_buttons[menu_button_help].hover())highlight_y_destination=650;
+    if(menu_buttons[menu_button_exit].hover())highlight_y_destination=700;
+  }
 
   // Click anywhere
   //if( keyListener::anyKeyPressed || joystickListener::anyButtonPressed)

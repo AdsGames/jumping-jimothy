@@ -2,10 +2,13 @@
 
 int mouseListener::mouse_x = 0;
 int mouseListener::mouse_y = 0;
+int mouseListener::old_mouse_x = 0;
+int mouseListener::old_mouse_y = 0;
 unsigned char mouseListener::mouse_button = 0;
 unsigned char mouseListener::mouse_pressed = 0;
 unsigned char mouseListener::mouse_released = 0;
 unsigned char mouseListener::mouse_old = 0;
+bool mouseListener::mouse_moved=false;
 
 mouseListener::mouseListener(){
 }
@@ -23,6 +26,14 @@ void mouseListener::update(){
   // Position
   mouse_x = state.x;
   mouse_y = state.y;
+
+  mouse_moved=false;
+
+  if(old_mouse_x!=mouse_x || old_mouse_y!=mouse_y)
+    mouse_moved=true;
+
+  old_mouse_x=state.x;
+  old_mouse_y=state.y;
 
 
   // Check button just pressed

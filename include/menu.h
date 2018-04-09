@@ -69,6 +69,8 @@ class menu : public state{
     int highlight_y_destination=500;
     int highlight_y=500;
 
+    bool joystick_direction_hit=false;
+    bool joystick_mode=false;
     bool credits_menu;
     int counter_title;
     int counter_play;
