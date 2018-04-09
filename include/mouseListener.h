@@ -23,9 +23,12 @@ class mouseListener{
 
     static int mouse_x;
     static int mouse_y;
+    static int old_mouse_x;
+    static int old_mouse_y;
     static unsigned char mouse_button;
     static unsigned char mouse_pressed;
     static unsigned char mouse_released;
+    static bool mouse_moved;
   protected:
 
   private:

@@ -29,11 +29,21 @@
 #define JOY_XBOX_PAD_UP       13
 
 
-#define STICK_0_AXIS_0_UP 0
-#define STICK_0_AXIS_0_DOWN 1
-#define STICK_0_AXIS_1_UP 2
-#define STICK_0_AXIS_1_DOWN 3
-
+#define LEFT_STICK_LEFT 0
+#define LEFT_STICK_RIGHT 1
+#define LEFT_STICK_UP 2
+#define LEFT_STICK_DOWN 3
+#define LEFT_TRIGGER_DOWN 4
+#define RIGHT_TRIGGER_DOWN 5
+#define RIGHT_STICK_LEFT 6
+#define RIGHT_STICK_RIGHT 7
+#define RIGHT_STICK_UP 8
+#define RIGHT_STICK_DOWN 9
+#define DPAD_LEFT 10
+#define DPAD_RIGHT 11
+#define DPAD_UP 12
+#define DPAD_UP2 13
+#define DPAD_DOWN 14
 
 #include <iostream>
 #include <allegro5/allegro.h>
@@ -52,10 +62,11 @@ class joystickListener
     static bool buttonPressed[JOY_MAX_BUTTONS];
     static bool buttonReleased[JOY_MAX_BUTTONS];
     static bool anyButtonPressed;
+    static bool anyButtonReleased;
 
     static int lastButtonPressed;
     static int lastButtonReleased;
-    static bool stickDirections[4];
+    static bool stickDirections[20];
 
   protected:
   private:
