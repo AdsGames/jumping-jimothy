@@ -4,6 +4,7 @@ bool Options::music_enabled=true;
 bool Options::sfx_enabled=true;
 int Options::graphics_mode=0;
 bool Options::draw_cursor=false;
+//std::string Options::joystick_data;
 
 Options::Options()
 {
@@ -11,6 +12,8 @@ Options::Options()
 
     options_font = al_load_ttf_font( "fonts/munro.ttf", 18, 0);
     cursor = tools::load_bitmap_ex("images/cursor.png");
+    highlight = tools::load_bitmap_ex("images/highlight.png");
+
 
 
     OptionsUI.addElement(new UIElement(50, 50, "Pick a choice",options_font));
@@ -20,13 +23,23 @@ Options::Options()
 
 
     OptionsUI.addElement(new Button(100, 100, "Toggle SFX",options_font));
+    OptionsUI.getElementByText("Toggle SFX") -> setVisibleBackground(false);
+    OptionsUI.getElementByText("Toggle SFX") -> setTextColour(al_map_rgb(255,255,255));
+
+
     OptionsUI.addElement(new Button(100, 150, "Toggle Music",options_font));
+    OptionsUI.getElementByText("Toggle Music") -> setVisibleBackground(false);
 
-    OptionsUI.addElement(new Button(195,100,"Off","sfx_toggle",options_font));
+
+    OptionsUI.addElement(new Button(260,101,"Off","sfx_toggle",options_font));
     OptionsUI.getElementById("sfx_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
+    OptionsUI.getElementById("sfx_toggle") ->setSize(20,18);
 
-    OptionsUI.addElement(new Button(210,150,"Off","music_toggle",options_font));
+
+
+    OptionsUI.addElement(new Button(260,151,"Off","music_toggle",options_font));
     OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
+    OptionsUI.getElementById("music_toggle") ->setSize(20,18);
 
     OptionsUI.addElement(new Button(100, 700, "Back",options_font));
 
@@ -52,13 +65,16 @@ void Options::draw(){
     if(draw_cursor)
       al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
 
+    al_draw_bitmap(highlight,100,100,0);
+
 
 
 }
 
 void Options::update(){
 
-  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased())
+  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased() ||
+    joystickListener::buttonReleased[JOY_XBOX_B])
     set_next_state(STATE_MENU);
 
   OptionsUI.update();
