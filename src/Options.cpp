@@ -52,7 +52,10 @@ Options::Options()
     OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
     OptionsUI.getElementById("music_toggle") ->setSize(20,18);
 
-    OptionsUI.addElement(new Button(100, 700, "Back",options_font));
+    OptionsUI.addElement(new Button(100, 201, "Back",options_font));
+    OptionsUI.getElementByText("Back") -> setSize(180,18);
+    OptionsUI.getElementByText("Back") -> setTextColour(al_map_rgb(255,255,255));
+    OptionsUI.getElementByText("Back") ->setVisibleBackground(false);
 
 
     read_data();
@@ -83,10 +86,13 @@ void Options::draw(){
 
 void Options::update(){
 
-  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased())
-    set_next_state(STATE_MENU);
 
+  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased() ||
+        (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==200) || joystickListener::buttonReleased[JOY_XBOX_B]){
+    set_next_state(STATE_MENU);
+  }
   OptionsUI.update();
+
 
   if(OptionsUI.getElementById("sfx_toggle") -> mouseReleased() || OptionsUI.getElementByText("Toggle SFX") -> mouseReleased() ||
         (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==100)){
@@ -100,13 +106,20 @@ void Options::update(){
     write_data();
   }
 
-  if(    OptionsUI.getElementByText("Toggle Music") -> hover() && !joystick_mode){
+
+  if(    OptionsUI.getElementByText("Toggle Music") ->hover() && !joystick_mode){
     highlight_y_destination=150;
+
   }
 
 
   if(    OptionsUI.getElementByText("Toggle SFX") -> hover() && !joystick_mode){
     highlight_y_destination=100;
+
+  }
+  if(    OptionsUI.getElementByText("Back") -> hover() && !joystick_mode){
+    highlight_y_destination=200;
+
   }
 
   if(highlight_y>highlight_y_destination)highlight_y-=10;
@@ -114,7 +127,7 @@ void Options::update(){
 
 
   if((joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
-    if(highlight_y_destination<150)
+    if(highlight_y_destination<200)
       highlight_y_destination+=50;
   }
 
@@ -129,8 +142,9 @@ void Options::update(){
   }else{
     joystick_direction_hit=false;
   }
-  if(mouseListener::mouse_moved)
+  if(mouseListener::mouse_moved){
     joystick_mode=false;
+  }
 
   OptionsUI.getElementById("joydata") -> setText("Gamepad: "+ joystick_data);
 
