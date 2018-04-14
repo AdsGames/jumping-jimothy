@@ -163,16 +163,14 @@ void LevelSelect::draw(){
 void LevelSelect::update(){
   levelSelectUI.update();
 
-  if(keyListener::key[ALLEGRO_KEY_ESCAPE] || levelSelectUI.getElementByText("Back to main menu") -> mouseReleased() ||
-        joystickListener::buttonReleased[JOY_XBOX_B])
+  if(keyListener::key[ALLEGRO_KEY_ESCAPE] || levelSelectUI.getElementByText("Back to main menu") -> mouseReleased())
     set_next_state(STATE_MENU);
 
   if(levelSelectUI.getElementByText("Really reset?") -> mouseReleased()){
-    for(int i=0; i<16; i++){
+    for(int i=0; i<16; i++)
       completed_level_list[i]=false;
-    }
-    writeLevelData();
-    set_next_state(STATE_LEVELSELECT);
+      writeLevelData();
+      set_next_state(STATE_LEVELSELECT);
 
   }
   if(levelSelectUI.getElementByText("Reset Save Game") -> mouseReleased()){

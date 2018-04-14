@@ -4,38 +4,41 @@ bool Options::music_enabled=true;
 bool Options::sfx_enabled=true;
 int Options::graphics_mode=0;
 bool Options::draw_cursor=false;
-//std::string Options::joystick_data;
 
 Options::Options()
 {
     read_data();
 
     options_font = al_load_ttf_font( "fonts/munro.ttf", 18, 0);
+    title_font = al_load_ttf_font( "fonts/munro.ttf", 36, 0);
+
     cursor = tools::load_bitmap_ex("images/cursor.png");
     highlight = tools::load_bitmap_ex("images/highlight.png");
 
 
 
-    OptionsUI.addElement(new UIElement(50, 50, "Pick a choice",options_font));
-    OptionsUI.getElementByText("Pick a choice") -> setVisibleBackground(false);
-    OptionsUI.getElementByText("Pick a choice") -> setTextColour(al_map_rgb(255,255,255));
+    OptionsUI.addElement(new UIElement(25, 25, "Options",title_font));
+    OptionsUI.getElementByText("Options") -> setVisibleBackground(false);
+
+    OptionsUI.getElementByText("Options") -> setTextColour(al_map_rgb(255,255,255));
 
 
 
-    OptionsUI.addElement(new Button(100, 100, "Toggle SFX",options_font));
-    OptionsUI.getElementByText("Toggle SFX") -> setVisibleBackground(false);
+    OptionsUI.addElement(new Button(100, 101, "Toggle SFX",options_font));
+    OptionsUI.getElementByText("Toggle SFX") -> setSize(180,18);
     OptionsUI.getElementByText("Toggle SFX") -> setTextColour(al_map_rgb(255,255,255));
+    OptionsUI.getElementByText("Toggle SFX") ->setVisibleBackground(false);
 
 
-    OptionsUI.addElement(new Button(100, 150, "Toggle Music",options_font));
-    OptionsUI.getElementByText("Toggle Music") -> setVisibleBackground(false);
+    OptionsUI.addElement(new Button(100, 151, "Toggle Music",options_font));
+    OptionsUI.getElementByText("Toggle Music") -> setSize(180,18);
+    OptionsUI.getElementByText("Toggle Music") -> setTextColour(al_map_rgb(255,255,255));
+    OptionsUI.getElementByText("Toggle Music") ->setVisibleBackground(false);
 
 
     OptionsUI.addElement(new Button(260,101,"Off","sfx_toggle",options_font));
     OptionsUI.getElementById("sfx_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
     OptionsUI.getElementById("sfx_toggle") ->setSize(20,18);
-
-
 
     OptionsUI.addElement(new Button(260,151,"Off","music_toggle",options_font));
     OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
@@ -65,29 +68,61 @@ void Options::draw(){
     if(draw_cursor)
       al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
 
-    al_draw_bitmap(highlight,100,100,0);
-
+    al_draw_bitmap(highlight,100,highlight_y,0);
 
 
 }
 
 void Options::update(){
 
-  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased() ||
-    joystickListener::buttonReleased[JOY_XBOX_B])
+  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased())
     set_next_state(STATE_MENU);
 
   OptionsUI.update();
 
-  if(OptionsUI.getElementById("sfx_toggle") -> mouseReleased() || OptionsUI.getElementByText("Toggle SFX") -> mouseReleased()){
+  if(OptionsUI.getElementById("sfx_toggle") -> mouseReleased() || OptionsUI.getElementByText("Toggle SFX") -> mouseReleased() ||
+        (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==100)){
     sfx_enabled=!sfx_enabled;
     write_data();
   }
 
-  if(OptionsUI.getElementById("music_toggle") -> mouseReleased() || OptionsUI.getElementByText("Toggle Music") -> mouseReleased()){
+  if(OptionsUI.getElementById("music_toggle") -> mouseReleased() || OptionsUI.getElementByText("Toggle Music") -> mouseReleased() ||
+        (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==150)){
     music_enabled=!music_enabled;
     write_data();
   }
+
+  if(    OptionsUI.getElementByText("Toggle Music") -> hover() && !joystick_mode){
+    highlight_y_destination=150;
+  }
+
+
+  if(    OptionsUI.getElementByText("Toggle SFX") -> hover() && !joystick_mode){
+    highlight_y_destination=100;
+  }
+
+  if(highlight_y>highlight_y_destination)highlight_y-=10;
+  if(highlight_y<highlight_y_destination)highlight_y+=10;
+
+
+  if((joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
+    if(highlight_y_destination<150)
+      highlight_y_destination+=50;
+  }
+
+  if((joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[DPAD_DOWN])  && !joystick_direction_hit){
+    if(highlight_y_destination>100)
+      highlight_y_destination-=50;
+  }
+
+  if(joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_DOWN] || joystickListener::stickDirections[DPAD_UP2]){
+    joystick_direction_hit=true;
+    joystick_mode=true;
+  }else{
+    joystick_direction_hit=false;
+  }
+  if(mouseListener::mouse_moved)
+    joystick_mode=false;
 
 
 }

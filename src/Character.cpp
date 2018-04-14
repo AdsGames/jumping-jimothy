@@ -145,6 +145,7 @@ void Character::update(){
      body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
   }
 
+  std::cout<<body -> GetLinearVelocity().y<<"\n";
   // Jumping Jimothy
   timer_jump_delay++;
   if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f && landed && initial_key_release){

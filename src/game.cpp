@@ -509,11 +509,11 @@ void game::draw(){
   if(testing)
     testing_back_button.draw();
 
-  if(static_mode){
+  if(static_mode)
     al_draw_bitmap(pause,10,10,0);
-  }else{
+  else
     al_draw_bitmap(play,10,10,0);
-  }
-  al_draw_textf( game_font, al_map_rgb( 255, 255, 255), 1010, 15, 2, "Level %i", level);
+
+    al_draw_textf( game_font, al_map_rgb( 255, 255, 255), 1010, 15, 2, "Level %i", level);
 
 }

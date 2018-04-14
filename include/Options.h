@@ -7,12 +7,12 @@
 #include "button.h"
 #include "allegro5/allegro_font.h"
 #include "allegro5/allegro_ttf.h"
-#include <string>
 
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
 #include "keyListener.h"
 #include "joystickListener.h"
+
 
 class Options : public state
 {
@@ -31,7 +31,6 @@ class Options : public state
     static bool music_enabled;
     static int graphics_mode;
     static bool draw_cursor;
-    //static std::string joystick_data;
 
 
   protected:
@@ -39,13 +38,17 @@ class Options : public state
   private:
 
     ALLEGRO_FONT *options_font;
+    ALLEGRO_FONT *title_font;
+
     UIHandler OptionsUI;
 
     ALLEGRO_BITMAP *cursor;
     ALLEGRO_BITMAP *highlight;
 
-    int highlight_y;
-    int highlight_destination_y;
+    int highlight_y=100;;
+    int highlight_y_destination=100;
+    bool joystick_mode=false;
+    bool joystick_direction_hit=false;
 
 
 
