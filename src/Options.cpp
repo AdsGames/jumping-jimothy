@@ -4,6 +4,7 @@ bool Options::music_enabled=true;
 bool Options::sfx_enabled=true;
 int Options::graphics_mode=0;
 bool Options::draw_cursor=false;
+std::string Options::joystick_data="";
 
 Options::Options()
 {
@@ -19,8 +20,15 @@ Options::Options()
 
     OptionsUI.addElement(new UIElement(25, 25, "Options",title_font));
     OptionsUI.getElementByText("Options") -> setVisibleBackground(false);
-
     OptionsUI.getElementByText("Options") -> setTextColour(al_map_rgb(255,255,255));
+
+    if(joystick_data=="")
+      joystick_data="None detected.";
+
+
+    OptionsUI.addElement(new UIElement(400,25,"Gamepad: " + joystick_data,"joydata",options_font));
+    OptionsUI.getElementById("joydata") -> setVisibleBackground(false);
+    OptionsUI.getElementById("joydata") -> setTextColour(al_map_rgb(255,255,255));
 
 
 
@@ -124,7 +132,12 @@ void Options::update(){
   if(mouseListener::mouse_moved)
     joystick_mode=false;
 
+  OptionsUI.getElementById("joydata") -> setText("Gamepad: "+ joystick_data);
 
+
+}
+void Options::updateJoysticks(std::string newJoyData){
+  joystick_data=newJoyData;
 }
 
 void Options::updateUI(){

@@ -12,6 +12,7 @@
 #include "rapidxml_print.hpp"
 #include "keyListener.h"
 #include "joystickListener.h"
+#include <string>
 
 
 class Options : public state
@@ -31,6 +32,8 @@ class Options : public state
     static bool music_enabled;
     static int graphics_mode;
     static bool draw_cursor;
+    static std::string joystick_data;
+    static void updateJoysticks(std::string newJoyData);
 
 
   protected:

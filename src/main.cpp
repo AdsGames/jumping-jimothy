@@ -281,9 +281,10 @@ void setup(){
 
   joystick_enabled = (al_get_num_joysticks() > 0);
 
-  if(joystick_enabled)
+  if(joystick_enabled){
     std::cout<<al_get_joystick_name(al_get_joystick(0)) <<" is installed and being used.\n";
-  else
+    Options::joystick_data=al_get_joystick_name(al_get_joystick(0));
+  }else
     std::cout<<"No joystick is installed.\n";
 
   Options::read_data();
@@ -328,6 +329,15 @@ void update(){
   else if( ev.type == ALLEGRO_EVENT_JOYSTICK_CONFIGURATION){
     al_reconfigure_joysticks();
     joystick_enabled = (al_get_num_joysticks() > 0);
+    if(joystick_enabled){
+      Options::joystick_data=al_get_joystick_name(al_get_joystick(0));
+      std::cout<<"Joystick "<<al_get_joystick_name(al_get_joystick(0))<<"is configured.\n";
+    }else{
+      std::cout<<"Joystick unplugged.";
+      Options::joystick_data="None detected.";
+
+    }
+
   }
 
   // Drawing
