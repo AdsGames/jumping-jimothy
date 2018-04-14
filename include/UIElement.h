@@ -16,6 +16,7 @@ class UIElement
     // Constructor
     UIElement();
     UIElement(int, int, std::string,ALLEGRO_FONT*);
+    UIElement(int, int, std::string,std::string,ALLEGRO_FONT*);
 
     ~UIElement();
 

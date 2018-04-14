@@ -52,6 +52,29 @@ UIElement::UIElement( int x, int y, std::string text, ALLEGRO_FONT *UIElement_fo
 
 }
 
+UIElement::UIElement( int x, int y, std::string text,std::string id, ALLEGRO_FONT *UIElement_font){
+
+  setDefaults();
+  // Literally this
+  this -> x = x;
+  this -> y = y;
+  this -> text = text;
+  this -> id = id;
+  this -> UIElement_font = UIElement_font;
+
+  if( UIElement_font != nullptr){
+    this -> width = al_get_text_width( UIElement_font, text.c_str());
+    this -> height = al_get_font_line_height( UIElement_font);
+  }
+  else{
+    this -> width = 10;
+    this -> height = 10;
+  }
+
+
+}
+
+
 
 
 
