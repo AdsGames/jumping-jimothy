@@ -331,9 +331,9 @@ void update(){
     joystick_enabled = (al_get_num_joysticks() > 0);
     if(joystick_enabled){
       Options::joystick_data=al_get_joystick_name(al_get_joystick(0));
-      std::cout<<"Joystick "<<al_get_joystick_name(al_get_joystick(0))<<"is configured.\n";
+      std::cout<<"Joystick "<<al_get_joystick_name(al_get_joystick(0))<<" is configured.\n";
     }else{
-      std::cout<<"Joystick unplugged.";
+      std::cout<<"Joystick unplugged.\n";
       Options::joystick_data="None detected.";
 
     }
