@@ -38,6 +38,7 @@ class UIElement
     void setX(int newX){x=newX;}
     void setTextColour(ALLEGRO_COLOR newColour){text_colour = newColour;}
     void setBackgroundColour(ALLEGRO_COLOR newColour){background_colour = newColour;}
+    void setCellFillTransparent(bool n){transparent_cell_fill=n;}
     void setStatus(bool newStatus){
       visible = newStatus;
       active = newStatus;
@@ -61,6 +62,7 @@ class UIElement
     void setWidth(int newWidth){width=newWidth;}
     void setHeight(int newHeight){height=newHeight;}
     void setOutlineThickness(int newThickness){outline_thickness=newThickness;}
+    void setDisableHoverEffect(bool b){disabled_hover_effect=b;}
 
 
     bool mouseReleased();
@@ -107,6 +109,9 @@ class UIElement
     // Disabled is both
     bool visible;
     bool active;
+
+    bool transparent_cell_fill;
+    bool disabled_hover_effect;
 
     ALLEGRO_BITMAP *image;
 

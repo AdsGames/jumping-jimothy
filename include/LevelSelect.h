@@ -41,12 +41,22 @@ class LevelSelect : public state
   private:
 
     ALLEGRO_BITMAP *cursor;
+    ALLEGRO_BITMAP *highlight_levelselect;
+    ALLEGRO_BITMAP *highlight;
 
     void createLevelButton(int,int,int);
 
     ALLEGRO_FONT *levelselect_font;
     ALLEGRO_FONT *levelselect_font_large;
     UIHandler levelSelectUI;
+
+    int highlight_y=110;
+    int highlight_y_destination=110;
+    int highlight_x=340;
+    int highlight_x_destination=340;
+
+    bool joystick_direction_hit;
+    bool joystick_mode=false;
 
 };
 

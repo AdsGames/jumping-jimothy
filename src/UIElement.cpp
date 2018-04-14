@@ -27,6 +27,8 @@ void UIElement::setDefaults(){
   this -> visible_background =true;
   this -> justification = 0;
   this -> outline_thickness =2;
+  this -> transparent_cell_fill=false;
+  this -> disabled_hover_effect = false;
 
 }
 

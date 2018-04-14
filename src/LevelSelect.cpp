@@ -40,30 +40,41 @@ LevelSelect::LevelSelect()
   levelselect_font_large = al_load_ttf_font( "fonts/munro.ttf", 48, 0);
 
   cursor = tools::load_bitmap_ex("images/cursor.png");
+  highlight = tools::load_bitmap_ex("images/highlight.png");
+  highlight_levelselect = tools::load_bitmap_ex("images/highlight_levelselect.png");
+
 
   levelSelectUI = UIHandler();
 
-  levelSelectUI.addElement(new UIElement(20+100,20,"Select a level",levelselect_font_large));
+  levelSelectUI.addElement(new UIElement(375,20,"Select a level",levelselect_font_large));
   levelSelectUI.getElementByText("Select a level") -> setVisibleBackground(false);
   levelSelectUI.getElementByText("Select a level") -> setTextColour(al_map_rgb(255,255,255));
 
+  int x_loc=340;
+  int y_spacing=45;
+  int y_init=66;
 
-  createLevelButton(175,110,1);
-  createLevelButton(320,110,2);
-  createLevelButton(465,110,3);
-  createLevelButton(610,110,4);
-  createLevelButton(755,110,5);
-  createLevelButton(125,170,6);
-  createLevelButton(270,170,7);
-  createLevelButton(415,170,8);
-  createLevelButton(560,170,9);
-  createLevelButton(705,170,10);
-  createLevelButton(175,230,11);
-  createLevelButton(320,230,12);
-  createLevelButton(465,230,13);
+  createLevelButton(x_loc,y_init+y_spacing,1);
+  createLevelButton(x_loc,y_init+y_spacing*2,2);
+  createLevelButton(x_loc,y_init+y_spacing*3,3);
+  createLevelButton(x_loc,y_init+y_spacing*4,4);
+  createLevelButton(x_loc,y_init+y_spacing*5,5);
+  createLevelButton(x_loc,y_init+y_spacing*6,6);
+  createLevelButton(x_loc,y_init+y_spacing*7,7);
+  createLevelButton(x_loc,y_init+y_spacing*8,8);
+  createLevelButton(x_loc,y_init+y_spacing*9,9);
+  createLevelButton(x_loc,y_init+y_spacing*10,10);
+  createLevelButton(x_loc,y_init+y_spacing*11,11);
+  createLevelButton(x_loc,y_init+y_spacing*12,12);
+  createLevelButton(x_loc,y_init+y_spacing*13,13);
 
-  levelSelectUI.addElement(new Button(837, 710, "Reset Save Game", levelselect_font));
-  levelSelectUI.addElement(new Button(10, 710, "Back to main menu", levelselect_font));
+  levelSelectUI.addElement(new Button(700, y_spacing*13 + y_init, "Reset Save Game", levelselect_font));
+  levelSelectUI.getElementByText("Reset Save Game") -> setSize(180,18);
+
+  levelSelectUI.addElement(new Button(700, y_spacing + y_init, "Back to main menu", levelselect_font));
+  levelSelectUI.getElementByText("Back to main menu") -> setSize(180,18);
+
+
   levelSelectUI.addElement(new Button(802, 663, "Really reset?", levelselect_font));
   levelSelectUI.addElement(new Button(940, 663, "Cancel", levelselect_font));
 
@@ -86,11 +97,20 @@ LevelSelect::~LevelSelect()
 void LevelSelect::createLevelButton(int newX, int newY, int newLevelNumber){
 
   levelSelectUI.addElement(new Button(newX, newY, "Level "+ tools::toString(newLevelNumber), levelselect_font));
-  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setHeight(25);
-  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setWidth(100);
-  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setJustification(1);
-  if(completed_level_list[newLevelNumber])levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setBackgroundColour(al_map_rgb(0,255,0));
+  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setHeight(18);
+  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setCellFillTransparent(true);
+  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setTextColour(al_map_rgb(255,255,255));
 
+
+  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setWidth(300);
+  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setJustification(1);
+  if(completed_level_list[newLevelNumber]){
+    levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setBackgroundColour(al_map_rgb(0,200,0));
+    levelSelectUI.getElementByText
+        ("Level "+ tools::toString(newLevelNumber)) -> setCellFillTransparent(false);
+    levelSelectUI.getElementByText
+        ("Level "+ tools::toString(newLevelNumber)) -> setDisableHoverEffect(true);
+  }
 
 
 }
@@ -98,6 +118,7 @@ void LevelSelect::createLevelButton(int newX, int newY, int newLevelNumber){
 void LevelSelect::setLevelComplete(int newLevelNumber){
 
   completed_level_list[newLevelNumber]=true;
+
 }
 
 void LevelSelect::writeLevelData(){
@@ -158,9 +179,63 @@ void LevelSelect::draw(){
   if(Options::draw_cursor)
     al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
 
+  if(highlight_x>400)
+    al_draw_bitmap(highlight,highlight_x,highlight_y,0);
+  else
+    al_draw_bitmap(highlight_levelselect,highlight_x,highlight_y,0);
+
+
 
 }
 void LevelSelect::update(){
+
+  if(highlight_y>highlight_y_destination)highlight_y-=5;
+  if(highlight_y<highlight_y_destination)highlight_y+=5;
+  if(highlight_y>highlight_y_destination)highlight_y-=5;
+  if(highlight_y<highlight_y_destination)highlight_y+=5;
+
+  if(highlight_x>highlight_x_destination)highlight_x-=20;
+  if(highlight_x<highlight_x_destination)highlight_x+=20;
+  if(highlight_x>highlight_x_destination)highlight_x-=20;
+  if(highlight_x<highlight_x_destination)highlight_x+=20;
+
+  if(joystickListener::stickDirections[LEFT_STICK_RIGHT] || joystickListener::stickDirections[DPAD_RIGHT]){
+    if(highlight_x_destination!=700)
+      highlight_x_destination=700;
+  }
+
+
+  if(joystickListener::stickDirections[LEFT_STICK_LEFT] || joystickListener::stickDirections[DPAD_LEFT]){
+    if(highlight_x_destination!=340)
+      highlight_x_destination=340;
+  }
+
+
+  if((joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
+    if(highlight_x_destination!=700){
+      if(highlight_y_destination<650)
+        highlight_y_destination+=45;
+    }else{
+
+    }
+  }
+
+  if((joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[DPAD_DOWN])  && !joystick_direction_hit){
+    if(highlight_y_destination>110)
+      highlight_y_destination-=45;
+  }
+
+  if(joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_DOWN] || joystickListener::stickDirections[DPAD_UP2]
+  || joystickListener::stickDirections[LEFT_STICK_LEFT] || joystickListener::stickDirections[LEFT_STICK_RIGHT] || joystickListener::stickDirections[DPAD_LEFT] || joystickListener::stickDirections[DPAD_RIGHT] ){
+    joystick_direction_hit=true;
+    joystick_mode=true;
+  }else{
+    joystick_direction_hit=false;
+  }
+  if(mouseListener::mouse_moved){
+    joystick_mode=false;
+  }
+
   levelSelectUI.update();
 
   if(keyListener::key[ALLEGRO_KEY_ESCAPE] || levelSelectUI.getElementByText("Back to main menu") -> mouseReleased())
@@ -169,8 +244,8 @@ void LevelSelect::update(){
   if(levelSelectUI.getElementByText("Really reset?") -> mouseReleased()){
     for(int i=0; i<16; i++)
       completed_level_list[i]=false;
-      writeLevelData();
-      set_next_state(STATE_LEVELSELECT);
+    writeLevelData();
+    set_next_state(STATE_LEVELSELECT);
 
   }
   if(levelSelectUI.getElementByText("Reset Save Game") -> mouseReleased()){
@@ -187,6 +262,23 @@ void LevelSelect::update(){
 
 
 
+  }
+  if(joystickListener::buttonReleased[JOY_XBOX_A]){
+    if(highlight_x_destination==340){
+      int level=(highlight_y_destination-65)/45;
+      game::level_to_start=level;
+      set_next_state(STATE_GAME);
+
+
+    }
+  }
+
+  if(!joystick_mode){
+    for(int i=1; i<14; i++){
+      if(levelSelectUI.getUIElements().at(i) -> hover()){
+        highlight_y_destination=65+45*i;
+      }
+    }
   }
 
 
