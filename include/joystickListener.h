@@ -67,6 +67,7 @@ class joystickListener
     static int lastButtonPressed;
     static int lastButtonReleased;
     static bool stickDirections[20];
+    static void clearButtons();
 
   protected:
   private:
