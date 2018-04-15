@@ -35,6 +35,15 @@ void joystickListener::on_event( ALLEGRO_EVENT_TYPE event_type, int buttoncode){
   }
 }
 
+void joystickListener::clearButtons(){
+
+ for( int i = 0; i < JOY_MAX_BUTTONS; i++){
+
+    buttonPressed[i] = false;
+    buttonReleased[i] = false;
+  }
+
+}
 
 // Check those button!
 void joystickListener::update(){

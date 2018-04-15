@@ -85,11 +85,20 @@ LevelSelect::LevelSelect()
 
 
 
-  levelSelectUI.addElement(new Button(802, 663, "Really reset?", levelselect_font));
-  levelSelectUI.addElement(new Button(940, 663, "Cancel", levelselect_font));
-
-  levelSelectUI.getElementByText("Cancel") ->setStatus(false);
+  levelSelectUI.addElement(new Button(700, 651, "Really reset?", levelselect_font));
+  levelSelectUI.getElementByText("Really reset?") -> setSize(180,18);
   levelSelectUI.getElementByText("Really reset?") ->setStatus(false);
+  levelSelectUI.getElementByText("Really reset?") -> setDisableHoverEffect(true);
+
+
+  levelSelectUI.addElement(new Button(700, 696, "Cancel", levelselect_font));
+  levelSelectUI.getElementByText("Cancel") -> setSize(180,18);
+  levelSelectUI.getElementByText("Cancel") ->setStatus(false);
+  levelSelectUI.getElementByText("Cancel") -> setDisableHoverEffect(true);
+
+
+
+
 
 
 
@@ -189,7 +198,10 @@ void LevelSelect::draw(){
   if(Options::draw_cursor)
     al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
 
-  al_draw_bitmap(highlight_levelselect,340,highlight_y,0);
+  if(!reset_game_menu)
+    al_draw_bitmap(highlight_levelselect,340,highlight_y,0);
+  else
+    al_draw_bitmap(highlight,700,highlight_game_reset_y,0);
 
 
 
@@ -201,18 +213,26 @@ void LevelSelect::update(){
   if(highlight_y>highlight_y_destination)highlight_y-=5;
   if(highlight_y<highlight_y_destination)highlight_y+=5;
 
-
+  if(highlight_game_reset_y>highlight_game_reset_y_destination)highlight_game_reset_y-=5;
+  if(highlight_game_reset_y<highlight_game_reset_y_destination)highlight_game_reset_y+=5;
+  if(highlight_game_reset_y>highlight_game_reset_y_destination)highlight_game_reset_y-=5;
+  if(highlight_game_reset_y<highlight_game_reset_y_destination)highlight_game_reset_y+=5;
 
 
   if((joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
     if(highlight_y_destination<695)
       highlight_y_destination+=45;
-
+    if(highlight_game_reset_y_destination==650)
+      highlight_game_reset_y_destination=695;
   }
 
   if((joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[DPAD_DOWN])  && !joystick_direction_hit){
     if(highlight_y_destination>65)
       highlight_y_destination-=45;
+
+    if(highlight_game_reset_y_destination==695)
+      highlight_game_reset_y_destination=650;
+
   }
 
   if(joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_DOWN] || joystickListener::stickDirections[DPAD_UP2]
@@ -232,24 +252,16 @@ void LevelSelect::update(){
     set_next_state(STATE_MENU);
 
   if(levelSelectUI.getElementByText("Really reset?") -> mouseReleased()){
-    for(int i=0; i<16; i++)
-      completed_level_list[i]=false;
-    writeLevelData();
-    set_next_state(STATE_LEVELSELECT);
 
   }
   if(levelSelectUI.getElementByText("Reset Save Game") -> mouseReleased()){
+    reset_game_menu=true;
     levelSelectUI.getElementByText("Cancel") ->setStatus(true);
     levelSelectUI.getElementByText("Really reset?") ->setStatus(true);
 
 
   }
 
-   if(levelSelectUI.getElementByText("Cancel") -> mouseReleased()){
-    levelSelectUI.getElementByText("Cancel") ->setStatus(false);
-    levelSelectUI.getElementByText("Really reset?") ->setStatus(false);
-
-  }
 
 
   if(levelSelectUI.getElementByText("Reset Save Game") -> hover() && !Options::joystick_mode){
@@ -260,21 +272,64 @@ void LevelSelect::update(){
     highlight_y_destination = 65;
   }
 
+   if(levelSelectUI.getElementByText("Cancel") -> hover() && !Options::joystick_mode && reset_game_menu){
+    highlight_game_reset_y_destination = 695;
+  }
 
-  if(joystickListener::buttonReleased[JOY_XBOX_A]){
+  if(levelSelectUI.getElementByText("Really reset?") -> hover() && !Options::joystick_mode && reset_game_menu){
+    highlight_game_reset_y_destination = 650;
+  }
+
+
+
+
+  if((joystickListener::buttonReleased[JOY_XBOX_A] && reset_game_menu && highlight_game_reset_y_destination==650)
+   || levelSelectUI.getElementByText("Really reset?") -> mouseReleased()){
+
+    for(int i=0; i<16; i++)
+      completed_level_list[i]=false;
+    writeLevelData();
+    set_next_state(STATE_LEVELSELECT);
+
+  }
+
+  if((joystickListener::buttonReleased[JOY_XBOX_A] && reset_game_menu && highlight_game_reset_y_destination==695)
+   || levelSelectUI.getElementByText("Cancel") -> mouseReleased()){
+    joystickListener::clearButtons();
+    reset_game_menu=false;
+
+    levelSelectUI.getElementByText("Cancel") ->setStatus(false);
+    levelSelectUI.getElementByText("Really reset?") ->setStatus(false);
+
+  }
+
+  if(joystickListener::buttonReleased[JOY_XBOX_B]){
+    if(reset_game_menu){
+      reset_game_menu=false;
+      levelSelectUI.getElementByText("Cancel") ->setStatus(false);
+      levelSelectUI.getElementByText("Really reset?") ->setStatus(false);
+    }else
+      set_next_state(STATE_MENU);
+
+  }
+
+  if(joystickListener::buttonReleased[JOY_XBOX_A] && !reset_game_menu){
+
     if(highlight_y_destination==65){
       set_next_state(STATE_MENU);
-    }
-    else if(highlight_y_destination==695){
-      //do stuff here later on
+    }else if(highlight_y_destination==695){
+
+      reset_game_menu=true;
+      levelSelectUI.getElementByText("Cancel") ->setStatus(true);
+      levelSelectUI.getElementByText("Really reset?") ->setStatus(true);
+
     }else{
       int level=(highlight_y_destination-65)/45;
       game::level_to_start=level;
       set_next_state(STATE_GAME);
     }
-
-
   }
+
 
   if(!Options::joystick_mode){
     for(int i=1; i<14; i++){

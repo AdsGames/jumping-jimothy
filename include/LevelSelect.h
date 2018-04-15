@@ -52,9 +52,12 @@ class LevelSelect : public state
 
     int highlight_y=110;
     int highlight_y_destination=110;
+    int highlight_game_reset_y=650;
+    int highlight_game_reset_y_destination=650;
+
 
     bool joystick_direction_hit;
-
+    bool reset_game_menu=false;
 };
 
 #endif // LEVELSELECT_H
