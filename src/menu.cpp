@@ -166,12 +166,12 @@ void menu::update(){
 
   if(joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_DOWN] || joystickListener::stickDirections[DPAD_UP2]){
     joystick_direction_hit=true;
-    joystick_mode=true;
+    Options::joystick_mode=true;
   }else{
     joystick_direction_hit=false;
   }
   if(mouseListener::mouse_moved)
-    joystick_mode=false;
+    Options::joystick_mode=false;
 
 
   if(highlight_y>highlight_y_destination)highlight_y-=10;
@@ -187,7 +187,7 @@ void menu::update(){
   counter_prompt = (counter_play >= 50) ? !counter_prompt : counter_prompt;
   counter_play = (counter_play >= 50) ? 0 : counter_play;
 
-  if(!joystick_mode){
+  if(!Options::joystick_mode){
 
     if(menu_buttons[menu_button_play].hover())highlight_y_destination=500;
     if(menu_buttons[menu_button_edit].hover())highlight_y_destination=550;

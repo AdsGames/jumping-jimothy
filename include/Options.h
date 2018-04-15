@@ -34,7 +34,7 @@ class Options : public state
     static bool draw_cursor;
     static std::string joystick_data;
     static void updateJoysticks(std::string newJoyData);
-
+    static bool joystick_mode;
 
   protected:
 
@@ -50,7 +50,6 @@ class Options : public state
 
     int highlight_y=100;;
     int highlight_y_destination=100;
-    bool joystick_mode=false;
     bool joystick_direction_hit=false;
 
 

@@ -4,6 +4,7 @@ bool Options::music_enabled=true;
 bool Options::sfx_enabled=true;
 int Options::graphics_mode=0;
 bool Options::draw_cursor=false;
+bool Options::joystick_mode=false;
 std::string Options::joystick_data="";
 
 Options::Options()
