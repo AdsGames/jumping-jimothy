@@ -26,12 +26,19 @@ Options::Options()
     if(joystick_data=="")
       joystick_data="None detected.";
 
+    if(graphics_mode==0)graphics_data="Borderless Fullscreen (Stretched)";
+    if(graphics_mode==1)graphics_data="Borderless Fullscreen (Letterbox)";
+    if(graphics_mode==2)graphics_data="Borderless Fullscreen (Centered)";
+    if(graphics_mode==3)graphics_data="Fullscreen";
+    if(graphics_mode==4)graphics_data="Windowed";
+
+
+
+
 
     OptionsUI.addElement(new UIElement(400,25,"Gamepad: " + joystick_data,"joydata",options_font));
     OptionsUI.getElementById("joydata") -> setVisibleBackground(false);
     OptionsUI.getElementById("joydata") -> setTextColour(al_map_rgb(255,255,255));
-
-
 
     OptionsUI.addElement(new Button(100, 101, "Toggle SFX",options_font));
     OptionsUI.getElementByText("Toggle SFX") -> setSize(180,18);
@@ -44,7 +51,6 @@ Options::Options()
     OptionsUI.getElementByText("Toggle Music") -> setTextColour(al_map_rgb(255,255,255));
     OptionsUI.getElementByText("Toggle Music") ->setVisibleBackground(false);
 
-
     OptionsUI.addElement(new Button(260,101,"Off","sfx_toggle",options_font));
     OptionsUI.getElementById("sfx_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
     OptionsUI.getElementById("sfx_toggle") ->setSize(20,18);
@@ -53,7 +59,23 @@ Options::Options()
     OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
     OptionsUI.getElementById("music_toggle") ->setSize(20,18);
 
-    OptionsUI.addElement(new Button(100, 201, "Back",options_font));
+    OptionsUI.addElement(new Button(100, 201, "Graphics Mode",options_font));
+    OptionsUI.getElementByText("Graphics Mode") -> setSize(180,18);
+    OptionsUI.getElementByText("Graphics Mode") -> setTextColour(al_map_rgb(255,255,255));
+    OptionsUI.getElementByText("Graphics Mode") ->setVisibleBackground(false);
+
+
+    OptionsUI.addElement(new UIElement(300,200,graphics_data,"graphicsdata",options_font));
+    OptionsUI.getElementById("graphicsdata") -> setVisibleBackground(false);
+    OptionsUI.getElementById("graphicsdata") -> setTextColour(al_map_rgb(255,255,255));
+
+
+    OptionsUI.addElement(new Button(100, 251, "Apply Graphics",options_font));
+    OptionsUI.getElementByText("Apply Graphics") -> setSize(180,18);
+    OptionsUI.getElementByText("Apply Graphics") -> setTextColour(al_map_rgb(255,255,255));
+    OptionsUI.getElementByText("Apply Graphics") ->setVisibleBackground(false);
+
+    OptionsUI.addElement(new Button(100, 301, "Back",options_font));
     OptionsUI.getElementByText("Back") -> setSize(180,18);
     OptionsUI.getElementByText("Back") -> setTextColour(al_map_rgb(255,255,255));
     OptionsUI.getElementByText("Back") ->setVisibleBackground(false);
@@ -89,7 +111,7 @@ void Options::update(){
 
 
   if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased() ||
-        (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==200) || joystickListener::buttonReleased[JOY_XBOX_B]){
+        (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==350) || joystickListener::buttonReleased[JOY_XBOX_B]){
     set_next_state(STATE_MENU);
   }
   OptionsUI.update();
@@ -107,6 +129,10 @@ void Options::update(){
     write_data();
   }
 
+  if(OptionsUI.getElementById("graphicsdata") -> mouseReleased() ||
+        (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==300)){
+
+  }
 
   if(    OptionsUI.getElementByText("Toggle Music") ->hover() && !joystick_mode){
     highlight_y_destination=150;
@@ -128,7 +154,7 @@ void Options::update(){
 
 
   if((joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
-    if(highlight_y_destination<200)
+    if(highlight_y_destination<350)
       highlight_y_destination+=50;
   }
 
@@ -281,34 +307,3 @@ void Options::write_data(){
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
