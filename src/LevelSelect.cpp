@@ -46,7 +46,7 @@ LevelSelect::LevelSelect()
 
   levelSelectUI = UIHandler();
 
-  levelSelectUI.addElement(new UIElement(375,20,"Select a level",levelselect_font_large));
+  levelSelectUI.addElement(new UIElement(375,5,"Select a level",levelselect_font_large));
   levelSelectUI.getElementByText("Select a level") -> setVisibleBackground(false);
   levelSelectUI.getElementByText("Select a level") -> setTextColour(al_map_rgb(255,255,255));
 
@@ -68,11 +68,21 @@ LevelSelect::LevelSelect()
   createLevelButton(x_loc,y_init+y_spacing*12,12);
   createLevelButton(x_loc,y_init+y_spacing*13,13);
 
-  levelSelectUI.addElement(new Button(700, y_spacing*13 + y_init, "Reset Save Game", levelselect_font));
-  levelSelectUI.getElementByText("Reset Save Game") -> setSize(180,18);
+  levelSelectUI.addElement(new Button(x_loc, y_spacing*14 + y_init, "Reset Save Game", levelselect_font));
+  levelSelectUI.getElementByText("Reset Save Game") -> setSize(300,18);
+  levelSelectUI.getElementByText("Reset Save Game") -> setDisableHoverEffect(true);
+  levelSelectUI.getElementByText("Reset Save Game") -> setCellFillTransparent(true);
+  levelSelectUI.getElementByText("Reset Save Game") -> setJustification(1);
+  levelSelectUI.getElementByText("Reset Save Game") -> setTextColour(al_map_rgb(255,255,255));
 
-  levelSelectUI.addElement(new Button(700, y_spacing + y_init, "Back to main menu", levelselect_font));
-  levelSelectUI.getElementByText("Back to main menu") -> setSize(180,18);
+  levelSelectUI.addElement(new Button(x_loc, y_init, "Back to main menu", levelselect_font));
+  levelSelectUI.getElementByText("Back to main menu") -> setSize(300,18);
+  levelSelectUI.getElementByText("Back to main menu") -> setDisableHoverEffect(true);
+  levelSelectUI.getElementByText("Back to main menu") -> setCellFillTransparent(true);
+  levelSelectUI.getElementByText("Back to main menu") -> setJustification(1);
+  levelSelectUI.getElementByText("Back to main menu") -> setTextColour(al_map_rgb(255,255,255));
+
+
 
 
   levelSelectUI.addElement(new Button(802, 663, "Really reset?", levelselect_font));
@@ -179,10 +189,7 @@ void LevelSelect::draw(){
   if(Options::draw_cursor)
     al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
 
-  if(highlight_x>400)
-    al_draw_bitmap(highlight,highlight_x,highlight_y,0);
-  else
-    al_draw_bitmap(highlight_levelselect,highlight_x,highlight_y,0);
+  al_draw_bitmap(highlight_levelselect,340,highlight_y,0);
 
 
 
@@ -194,46 +201,29 @@ void LevelSelect::update(){
   if(highlight_y>highlight_y_destination)highlight_y-=5;
   if(highlight_y<highlight_y_destination)highlight_y+=5;
 
-  if(highlight_x>highlight_x_destination)highlight_x-=20;
-  if(highlight_x<highlight_x_destination)highlight_x+=20;
-  if(highlight_x>highlight_x_destination)highlight_x-=20;
-  if(highlight_x<highlight_x_destination)highlight_x+=20;
 
-  if(joystickListener::stickDirections[LEFT_STICK_RIGHT] || joystickListener::stickDirections[DPAD_RIGHT]){
-    if(highlight_x_destination!=700)
-      highlight_x_destination=700;
-  }
-
-
-  if(joystickListener::stickDirections[LEFT_STICK_LEFT] || joystickListener::stickDirections[DPAD_LEFT]){
-    if(highlight_x_destination!=340)
-      highlight_x_destination=340;
-  }
 
 
   if((joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
-    if(highlight_x_destination!=700){
-      if(highlight_y_destination<650)
-        highlight_y_destination+=45;
-    }else{
+    if(highlight_y_destination<695)
+      highlight_y_destination+=45;
 
-    }
   }
 
   if((joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[DPAD_DOWN])  && !joystick_direction_hit){
-    if(highlight_y_destination>110)
+    if(highlight_y_destination>65)
       highlight_y_destination-=45;
   }
 
   if(joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_DOWN] || joystickListener::stickDirections[DPAD_UP2]
   || joystickListener::stickDirections[LEFT_STICK_LEFT] || joystickListener::stickDirections[LEFT_STICK_RIGHT] || joystickListener::stickDirections[DPAD_LEFT] || joystickListener::stickDirections[DPAD_RIGHT] ){
     joystick_direction_hit=true;
-    joystick_mode=true;
+    Options::joystick_mode=true;
   }else{
     joystick_direction_hit=false;
   }
   if(mouseListener::mouse_moved){
-    joystick_mode=false;
+    Options::joystick_mode=false;
   }
 
   levelSelectUI.update();
@@ -259,21 +249,34 @@ void LevelSelect::update(){
     levelSelectUI.getElementByText("Cancel") ->setStatus(false);
     levelSelectUI.getElementByText("Really reset?") ->setStatus(false);
 
-
-
-
   }
+
+
+  if(levelSelectUI.getElementByText("Reset Save Game") -> hover() && !Options::joystick_mode){
+    highlight_y_destination = 695;
+  }
+
+  if(levelSelectUI.getElementByText("Back to main menu") -> hover() && !Options::joystick_mode){
+    highlight_y_destination = 65;
+  }
+
+
   if(joystickListener::buttonReleased[JOY_XBOX_A]){
-    if(highlight_x_destination==340){
+    if(highlight_y_destination==65){
+      set_next_state(STATE_MENU);
+    }
+    else if(highlight_y_destination==695){
+      //do stuff here later on
+    }else{
       int level=(highlight_y_destination-65)/45;
       game::level_to_start=level;
       set_next_state(STATE_GAME);
-
-
     }
+
+
   }
 
-  if(!joystick_mode){
+  if(!Options::joystick_mode){
     for(int i=1; i<14; i++){
       if(levelSelectUI.getUIElements().at(i) -> hover()){
         highlight_y_destination=65+45*i;

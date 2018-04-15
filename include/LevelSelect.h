@@ -52,11 +52,8 @@ class LevelSelect : public state
 
     int highlight_y=110;
     int highlight_y_destination=110;
-    int highlight_x=340;
-    int highlight_x_destination=340;
 
     bool joystick_direction_hit;
-    bool joystick_mode=false;
 
 };
 
