@@ -40,6 +40,8 @@ class Options : public state
 
   private:
 
+    std::string graphics_data="";
+
     ALLEGRO_FONT *options_font;
     ALLEGRO_FONT *title_font;
 

@@ -66,6 +66,7 @@ enum{
   windowed,
 };
 
+
 // Delete game state and free state resources
 void clean_up(){
   delete currentState;
@@ -152,17 +153,18 @@ void setup(){
   al_reserve_samples( 20);
 
   // Aquire screen
+//
+//  #if defined(RELEASE)
+//    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+//  #endif
+//
+//  #if !defined(RELEASE)
+//      al_set_new_display_flags(ALLEGRO_WINDOWED);
+//  #endif
 
-  #if defined(RELEASE)
-    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-  #endif
+  al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 
-  #if !defined(RELEASE)
-      al_set_new_display_flags(ALLEGRO_WINDOWED);
-  #endif
-
-
-  graphics_mode=windowed;
+  graphics_mode=fullscreen_window_stretch;
   Options::graphics_mode=graphics_mode;
 
 
@@ -170,7 +172,7 @@ void setup(){
   float windowHeight=768;
 
 
-  if(graphics_mode>=1 && graphics_mode<=3){
+  if(graphics_mode>=0 && graphics_mode<=3){
     al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
     Options::draw_cursor=true;
   }
@@ -185,7 +187,7 @@ void setup(){
 
   display = al_create_display(windowWidth, windowHeight);
 
-  if(graphics_mode>=1 && graphics_mode<=3)
+  if(Options::graphics_mode>=0 && Options::graphics_mode<=3)
     al_hide_mouse_cursor(display);
 
 
@@ -348,7 +350,7 @@ void update(){
 
 
       // render a frame
-      if(graphics_mode>=1 && graphics_mode<=3){
+      if(Options::graphics_mode>=0 && Options::graphics_mode<=3){
         al_set_target_bitmap(buffer);
         al_clear_to_color(al_map_rgb(0, 0, 0));
       }
@@ -357,7 +359,7 @@ void update(){
       currentState -> draw();
 
 
-      if(graphics_mode>=1 && graphics_mode<=3){
+      if(Options::graphics_mode>=0 && Options::graphics_mode<=3){
 
         al_set_target_backbuffer(display);
         al_clear_to_color(al_map_rgb(0, 0, 0));
