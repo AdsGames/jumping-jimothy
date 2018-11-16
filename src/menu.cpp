@@ -2,9 +2,9 @@
 
 // Init menu
 
-//ALLEGRO_SAMPLE *menu::menu_music = nullptr;
+//ALLEGRO_SAMPLE *Menu::menu_music = nullptr;
 
-menu::menu(){
+Menu::Menu(){
 
   credits_menu=false;
 
@@ -99,7 +99,7 @@ menu::menu(){
 }
 
 // Destory menu
-menu::~menu(){
+Menu::~Menu(){
   // Delete images
   for( int i = 0; i < 50; i++)
     al_destroy_bitmap( play_images[i]);
@@ -116,7 +116,7 @@ menu::~menu(){
 }
 
 // Update animation and wait for input
-void menu::update(){
+void Menu::update(){
 
 
   if(!credits_menu){
@@ -202,7 +202,7 @@ void menu::update(){
 }
 
 // Draw images to screen
-void menu::draw(){
+void Menu::draw(){
 
   // Background
   al_clear_to_color( al_map_rgb(50,50,50));

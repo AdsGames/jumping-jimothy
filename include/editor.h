@@ -21,12 +21,12 @@
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
 
-#include "mouseListener.h"
-#include "keyListener.h"
-#include "tools.h"
-#include "button.h"
-#include "globals.h"
-#include "game.h"
+#include "MouseListener.h"
+#include "KeyListener.h"
+#include "Tools.h"
+#include "Button.h"
+#include "Globals.h"
+#include "Game.h"
 #include "UIHandler.h"
 #include "CheckBox.h"
 #include "Options.h"
@@ -50,10 +50,10 @@ struct editor_box{
 };
 
 // The editor state
-class editor : public state{
+class Editor : public State{
   public:
-    editor();
-    virtual ~editor();
+    Editor();
+    virtual ~Editor();
 
     // Override parent
     void update();

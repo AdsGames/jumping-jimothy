@@ -28,10 +28,10 @@ enum programStates{
 };
 
 // State
-class state{
+class State{
   public:
     // Deconstructor
-    virtual ~state() {};
+    virtual ~State() {};
 
     int getStateID(){
       return stateID;

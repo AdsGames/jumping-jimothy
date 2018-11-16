@@ -3,8 +3,9 @@
 
 #include<vector>
 #include<string>
+
 #include "UIElement.h"
-#include "globals.h"
+#include "Globals.h"
 
 //class UIElement;
 

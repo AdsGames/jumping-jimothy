@@ -6,9 +6,9 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
-#include "globals.h"
+#include "Globals.h"
 #include "Box.h"
-#include "keyListener.h"
+#include "KeyListener.h"
 
 class b2World;
 class b2Body;

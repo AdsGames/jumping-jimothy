@@ -1,21 +1,23 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#include <state.h>
-#include "UIHandler.h"
-#include "UIElement.h"
-#include "button.h"
 #include "allegro5/allegro_font.h"
 #include "allegro5/allegro_ttf.h"
 
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
-#include "keyListener.h"
-#include "joystickListener.h"
+
+#include "UIHandler.h"
+#include "UIElement.h"
+#include "Button.h"
+#include "State.h"
+#include "KeyListener.h"
+#include "JoystickListener.h"
+
 #include <string>
 
 
-class Options : public state
+class Options : public State
 {
   public:
     Options();
