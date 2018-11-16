@@ -100,7 +100,7 @@ void Options::draw(){
     OptionsUI.draw();
 
     if(draw_cursor)
-      al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
+      al_draw_bitmap(cursor,MouseListener::mouse_x,MouseListener::mouse_y,0);
 
     al_draw_bitmap(highlight,100,highlight_y,0);
 
@@ -110,27 +110,27 @@ void Options::draw(){
 void Options::update(){
 
 
-  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased() ||
-        (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==350) || joystickListener::buttonReleased[JOY_XBOX_B]){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased() ||
+        (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==350) || JoystickListener::buttonReleased[JOY_XBOX_B]){
     set_next_state(STATE_MENU);
   }
   OptionsUI.update();
 
 
   if(OptionsUI.getElementById("sfx_toggle") -> mouseReleased() || OptionsUI.getElementByText("Toggle SFX") -> mouseReleased() ||
-        (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==100)){
+        (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==100)){
     sfx_enabled=!sfx_enabled;
     write_data();
   }
 
   if(OptionsUI.getElementById("music_toggle") -> mouseReleased() || OptionsUI.getElementByText("Toggle Music") -> mouseReleased() ||
-        (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==150)){
+        (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==150)){
     music_enabled=!music_enabled;
     write_data();
   }
 
   if(OptionsUI.getElementById("graphicsdata") -> mouseReleased() ||
-        (joystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==300)){
+        (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==300)){
 
   }
 
@@ -153,23 +153,23 @@ void Options::update(){
   if(highlight_y<highlight_y_destination)highlight_y+=10;
 
 
-  if((joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
+  if((JoystickListener::stickDirections[LEFT_STICK_UP] || JoystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
     if(highlight_y_destination<350)
       highlight_y_destination+=50;
   }
 
-  if((joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[DPAD_DOWN])  && !joystick_direction_hit){
+  if((JoystickListener::stickDirections[LEFT_STICK_DOWN] || JoystickListener::stickDirections[DPAD_DOWN])  && !joystick_direction_hit){
     if(highlight_y_destination>100)
       highlight_y_destination-=50;
   }
 
-  if(joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_DOWN] || joystickListener::stickDirections[DPAD_UP2]){
+  if(JoystickListener::stickDirections[LEFT_STICK_DOWN] || JoystickListener::stickDirections[LEFT_STICK_UP] || JoystickListener::stickDirections[DPAD_DOWN] || JoystickListener::stickDirections[DPAD_UP2]){
     joystick_direction_hit=true;
     joystick_mode=true;
   }else{
     joystick_direction_hit=false;
   }
-  if(mouseListener::mouse_moved){
+  if(MouseListener::mouse_moved){
     joystick_mode=false;
   }
 

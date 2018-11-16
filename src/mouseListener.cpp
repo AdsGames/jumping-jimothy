@@ -1,24 +1,24 @@
-#include "mouseListener.h"
+#include "MouseListener.h"
 
-int mouseListener::mouse_x = 0;
-int mouseListener::mouse_y = 0;
-int mouseListener::old_mouse_x = 0;
-int mouseListener::old_mouse_y = 0;
-unsigned char mouseListener::mouse_button = 0;
-unsigned char mouseListener::mouse_pressed = 0;
-unsigned char mouseListener::mouse_released = 0;
-unsigned char mouseListener::mouse_old = 0;
-bool mouseListener::mouse_moved=false;
+int MouseListener::mouse_x = 0;
+int MouseListener::mouse_y = 0;
+int MouseListener::old_mouse_x = 0;
+int MouseListener::old_mouse_y = 0;
+unsigned char MouseListener::mouse_button = 0;
+unsigned char MouseListener::mouse_pressed = 0;
+unsigned char MouseListener::mouse_released = 0;
+unsigned char MouseListener::mouse_old = 0;
+bool MouseListener::mouse_moved=false;
 
-mouseListener::mouseListener(){
+MouseListener::MouseListener(){
 }
 
-mouseListener::~mouseListener(){
+MouseListener::~MouseListener(){
 }
 
 
 // Check those buttons!
-void mouseListener::update(){
+void MouseListener::update(){
   // Get state
   ALLEGRO_MOUSE_STATE state;
   al_get_mouse_state(&state);

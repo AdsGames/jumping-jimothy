@@ -12,11 +12,11 @@
 #include <iostream>
 #include <allegro5/allegro.h>
 
-class keyListener
+class KeyListener
 {
   public:
-    keyListener();
-    virtual ~keyListener();
+    KeyListener();
+    virtual ~KeyListener();
 
     static bool anyKeyPressed;
 

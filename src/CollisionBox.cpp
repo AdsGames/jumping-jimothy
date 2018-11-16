@@ -42,7 +42,7 @@ void CollisionBox::init(float newX, float newY, float newWidth, float newHeight,
 
 void CollisionBox::draw(){
 
-  if( keyListener::key[ALLEGRO_KEY_G]){
+  if( KeyListener::key[ALLEGRO_KEY_G]){
 
     // Collision boxes don't have an update loop, we have to get
     // the location from the Box2D world ourselves in the draw loop

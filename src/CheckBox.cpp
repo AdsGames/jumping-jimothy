@@ -50,14 +50,14 @@ void CheckBox::update(){
 
   mouse_released = false;
   if(active){
-    if( hovering && old_mouse_down && !mouseListener::mouse_button & 1){
+    if( hovering && old_mouse_down && !MouseListener::mouse_button & 1){
       mouse_released = true;
       checked=!checked;
 
     }
-    old_mouse_down = hovering && mouseListener::mouse_button & 1;
-    hovering = mouseListener::mouse_x > x && mouseListener::mouse_x < x + getWidth() &&
-               mouseListener::mouse_y > y && mouseListener::mouse_y < y + getHeight();
+    old_mouse_down = hovering && MouseListener::mouse_button & 1;
+    hovering = MouseListener::mouse_x > x && MouseListener::mouse_x < x + getWidth() &&
+               MouseListener::mouse_y > y && MouseListener::mouse_y < y + getHeight();
   }else{
     hovering=false;
   }

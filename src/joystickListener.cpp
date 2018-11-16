@@ -1,30 +1,30 @@
 #include "joystickListener.h"
 
-bool joystickListener::button[JOY_MAX_BUTTONS] = { false };
-bool joystickListener::buttonPressed[JOY_MAX_BUTTONS] = { false};
-bool joystickListener::buttonReleased[JOY_MAX_BUTTONS] = { false};
-bool joystickListener::lastTicksButton[JOY_MAX_BUTTONS] = { false};
-int joystickListener::lastButtonPressed = -1;
-int joystickListener::lastButtonReleased = -1;
-bool joystickListener::anyButtonPressed=false;
-bool joystickListener::anyButtonReleased=false;
+bool JoystickListener::button[JOY_MAX_BUTTONS] = { false };
+bool JoystickListener::buttonPressed[JOY_MAX_BUTTONS] = { false};
+bool JoystickListener::buttonReleased[JOY_MAX_BUTTONS] = { false};
+bool JoystickListener::lastTicksButton[JOY_MAX_BUTTONS] = { false};
+int JoystickListener::lastButtonPressed = -1;
+int JoystickListener::lastButtonReleased = -1;
+bool JoystickListener::anyButtonPressed=false;
+bool JoystickListener::anyButtonReleased=false;
 
-bool joystickListener::stickDirections[20];
-ALLEGRO_JOYSTICK_STATE joystickListener::joyState;
+bool JoystickListener::stickDirections[20];
+ALLEGRO_JOYSTICK_STATE JoystickListener::joyState;
 
 
 // Constructor
-joystickListener::joystickListener(){
+JoystickListener::JoystickListener(){
 
 }
 
 // Destructor
-joystickListener::~joystickListener(){
+JoystickListener::~JoystickListener(){
 
 }
 
 // For allegro 5, we use events
-void joystickListener::on_event( ALLEGRO_EVENT_TYPE event_type, int buttoncode){
+void JoystickListener::on_event( ALLEGRO_EVENT_TYPE event_type, int buttoncode){
   // Button down
   if( event_type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN){
     button[buttoncode] = true;
@@ -35,7 +35,7 @@ void joystickListener::on_event( ALLEGRO_EVENT_TYPE event_type, int buttoncode){
   }
 }
 
-void joystickListener::clearButtons(){
+void JoystickListener::clearButtons(){
 
  for( int i = 0; i < JOY_MAX_BUTTONS; i++){
 
@@ -46,7 +46,7 @@ void joystickListener::clearButtons(){
 }
 
 // Check those button!
-void joystickListener::update(){
+void JoystickListener::update(){
 
   stickDirections[LEFT_STICK_LEFT]=false;
   stickDirections[LEFT_STICK_RIGHT]=false;

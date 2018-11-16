@@ -233,39 +233,39 @@ void Editor::update(){
   bool over_Button = editorUI.isHovering();
 
   // Changing types
-  if(keyListener::keyPressed[ALLEGRO_KEY_Q] || editorUI.getElementByText("Dynamic") -> mouseReleased()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_Q] || editorUI.getElementByText("Dynamic") -> mouseReleased()){
     tile_type = 0;
     set_explosive_ui_status();
   }
-  if(keyListener::keyPressed[ALLEGRO_KEY_W] || editorUI.getElementByText("Static") -> mouseReleased()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_W] || editorUI.getElementByText("Static") -> mouseReleased()){
     tile_type = 1;
         set_explosive_ui_status();
 
   }
-  if(keyListener::keyPressed[ALLEGRO_KEY_E] || editorUI.getElementByText("Player") -> mouseReleased()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_E] || editorUI.getElementByText("Player") -> mouseReleased()){
     tile_type = 2;
         set_explosive_ui_status();
 
   }
-  if(keyListener::keyPressed[ALLEGRO_KEY_R] || editorUI.getElementByText("Goat") -> mouseReleased()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_R] || editorUI.getElementByText("Goat") -> mouseReleased()){
     tile_type = 3;
         set_explosive_ui_status();
 
   }
-  if(keyListener::keyPressed[ALLEGRO_KEY_T] || editorUI.getElementByText("Collision") -> mouseReleased()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_T] || editorUI.getElementByText("Collision") -> mouseReleased()){
     tile_type = 4;
         set_explosive_ui_status();
 
 
   }
 
-  if(keyListener::keyPressed[ALLEGRO_KEY_H] || editorUI.getElementByText("Help") -> mouseReleased()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_H] || editorUI.getElementByText("Help") -> mouseReleased()){
     display_help=!display_help;
 
 
   }
 
-  if(keyListener::keyPressed[ALLEGRO_KEY_Y] || editorUI.getElementByText("Explosive") -> mouseReleased()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_Y] || editorUI.getElementByText("Explosive") -> mouseReleased()){
     tile_type = 5;
     editorUI.getElementById("left_top_toggle") -> setText("<");
     editorUI.getElementById("left_top_toggle") -> setText("<");
@@ -278,18 +278,18 @@ void Editor::update(){
   }
 
   // Rockin' three liner undo Button
-  if((keyListener::keyPressed[ALLEGRO_KEY_Z] || editorUI.getElementByText("Undo") -> mouseReleased() ) && editorBoxes.size()>0){
+  if((KeyListener::keyPressed[ALLEGRO_KEY_Z] || editorUI.getElementByText("Undo") -> mouseReleased() ) && editorBoxes.size()>0){
     editorBoxes.pop_back();
     calculate_orientation_global();
   }
 
   // Clear world Button
-  if(keyListener::keyPressed[ALLEGRO_KEY_C] || editorUI.getElementByText("Clear") -> mouseReleased()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_C] || editorUI.getElementByText("Clear") -> mouseReleased()){
     if(al_show_native_message_box( nullptr, "Clear?", "Clear the map?", "There is no recovering this masterpiece.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
       editorBoxes.clear();
   }
 
-  if(keyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back") -> mouseReleased() || keyListener::keyReleased[ALLEGRO_KEY_ESCAPE]){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back") -> mouseReleased() || KeyListener::keyReleased[ALLEGRO_KEY_ESCAPE]){
     if(modified){
       if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1){
         modified=false;
@@ -305,12 +305,12 @@ void Editor::update(){
 
   // Activate advanced mode
   // Don't tell Allan, but I really don't like his buttons
-  if(keyListener::keyPressed[ALLEGRO_KEY_X])
+  if(KeyListener::keyPressed[ALLEGRO_KEY_X])
     gui_mode =! gui_mode;
 
   //std::cout<<is_saved<< "is it saved\n";
   // Save
-  if( editorUI.getElementByText("Save") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_S]){
+  if( editorUI.getElementByText("Save") -> mouseReleased() || KeyListener::keyPressed[ALLEGRO_KEY_S]){
     if( editorBoxes.size() > 0){
       ALLEGRO_FILECHOOSER *myChooser;
 
@@ -345,7 +345,7 @@ void Editor::update(){
 
 
   // Save as
-  if(editorUI.getElementByText("Save as") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_D]){
+  if(editorUI.getElementByText("Save as") -> mouseReleased() || KeyListener::keyPressed[ALLEGRO_KEY_D]){
     if( editorBoxes.size() > 0){
       ALLEGRO_FILECHOOSER *myChooser;
 
@@ -375,7 +375,7 @@ void Editor::update(){
 
 
   // Load map
-  if(editorUI.getElementByText("Load") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_A]){
+  if(editorUI.getElementByText("Load") -> mouseReleased() || KeyListener::keyPressed[ALLEGRO_KEY_A]){
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
 
 
@@ -405,7 +405,7 @@ void Editor::update(){
   }
 
   // Play
-  if(editorUI.getElementByText("Play") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_F]){
+  if(editorUI.getElementByText("Play") -> mouseReleased() || KeyListener::keyPressed[ALLEGRO_KEY_F]){
      if(editorBoxes.size()>0){
       if(is_player()){
         save_map( "data/level_0.xml");
@@ -423,11 +423,11 @@ void Editor::update(){
   }
 
   // Grid toggle
-  if(editorUI.getElementByText("Grid") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_G])
+  if(editorUI.getElementByText("Grid") -> mouseReleased() || KeyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
   // Gosh darn toggle hide buttons take so much freakin' room
-  if(editorUI.getElementById("left_bottom_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_LEFT]){
+  if(editorUI.getElementById("left_bottom_toggle") -> mouseReleased() || KeyListener::keyPressed[ALLEGRO_KEY_LEFT]){
     editorUI.getElementByText("Collision") -> toggleStatus();
     editorUI.getElementByText("Static") -> toggleStatus();
     editorUI.getElementByText("Dynamic") -> toggleStatus();
@@ -445,7 +445,7 @@ void Editor::update(){
     }
   }
 
-  if(editorUI.getElementById("right_bottom_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
+  if(editorUI.getElementById("right_bottom_toggle") -> mouseReleased() || KeyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
     editorUI.getElementByText("Undo") -> toggleStatus();
     editorUI.getElementByText("Clear") -> toggleStatus();
     editorUI.getElementByText("Save") -> toggleStatus();
@@ -464,7 +464,7 @@ void Editor::update(){
       editorUI.getElementById("right_bottom_toggle") -> setTransparency(255);
     }
   }
-  if(editorUI.getElementById("right_top_toggle") -> mouseReleased() || keyListener::keyPressed[ALLEGRO_KEY_UP]){
+  if(editorUI.getElementById("right_top_toggle") -> mouseReleased() || KeyListener::keyPressed[ALLEGRO_KEY_UP]){
     editorUI.getElementByText("Back") -> toggleStatus();
     editorUI.getElementByText("Help") -> toggleStatus();
     if(editorUI.getElementById("right_top_toggle") -> getText()==">"){
@@ -498,17 +498,17 @@ void Editor::update(){
   }
   // Add tile
   if(tile_type != 4){
-    if( mouseListener::mouse_button & 1
-      && !box_at_with_type(0,mouseListener::mouse_x, mouseListener::mouse_y)
-      && !box_at_with_type(1,mouseListener::mouse_x, mouseListener::mouse_y)
-      && !box_at_with_type(2,mouseListener::mouse_x, mouseListener::mouse_y)
-      && !box_at_with_type(3,mouseListener::mouse_x, mouseListener::mouse_y)
-      && !box_at_with_type(5,mouseListener::mouse_x, mouseListener::mouse_y)
+    if( MouseListener::mouse_button & 1
+      && !box_at_with_type(0,MouseListener::mouse_x, MouseListener::mouse_y)
+      && !box_at_with_type(1,MouseListener::mouse_x, MouseListener::mouse_y)
+      && !box_at_with_type(2,MouseListener::mouse_x, MouseListener::mouse_y)
+      && !box_at_with_type(3,MouseListener::mouse_x, MouseListener::mouse_y)
+      && !box_at_with_type(5,MouseListener::mouse_x, MouseListener::mouse_y)
 
       && ((!over_Button && gui_mode) || !gui_mode)){
       editor_box newBox;
-      newBox.x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
-      newBox.y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
+      newBox.x = MouseListener::mouse_x - MouseListener::mouse_x % 32;
+      newBox.y = MouseListener::mouse_y - MouseListener::mouse_y % 32;
       newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
       newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
       newBox.type = tile_type;
@@ -539,12 +539,12 @@ void Editor::update(){
   }
   //Drag n drop madness
   if( tile_type == 4 && !dialog_open){
-    if( mouseListener::mouse_pressed & 1 && !box_at_with_type(0,mouseListener::mouse_x, mouseListener::mouse_y) && ((!over_Button && gui_mode) || !gui_mode)){
+    if( MouseListener::mouse_pressed & 1 && !box_at_with_type(0,MouseListener::mouse_x, MouseListener::mouse_y) && ((!over_Button && gui_mode) || !gui_mode)){
       is_dragging_box = true;
-      box_1_x = mouseListener::mouse_x - mouseListener::mouse_x % 32;
-      box_1_y = mouseListener::mouse_y - mouseListener::mouse_y % 32;
+      box_1_x = MouseListener::mouse_x - MouseListener::mouse_x % 32;
+      box_1_y = MouseListener::mouse_y - MouseListener::mouse_y % 32;
     }
-    if(mouseListener::mouse_released & 1){
+    if(MouseListener::mouse_released & 1){
       is_dragging_box = false;
 
       if(!over_Button && gui_mode && (box_2_x - box_1_x) != 0 && (box_2_x - box_1_x) != 0){
@@ -577,16 +577,16 @@ void Editor::update(){
 
       }
     }
-    if(mouseListener::mouse_button & 1){
-      box_2_x = (mouseListener::mouse_x - mouseListener::mouse_x % 32) + 32;
-      box_2_y = (mouseListener::mouse_y - mouseListener::mouse_y % 32) + 32;
+    if(MouseListener::mouse_button & 1){
+      box_2_x = (MouseListener::mouse_x - MouseListener::mouse_x % 32) + 32;
+      box_2_y = (MouseListener::mouse_y - MouseListener::mouse_y % 32) + 32;
     }
   }
 
   // Remove tile
-  if( mouseListener::mouse_button & 2){
+  if( MouseListener::mouse_button & 2){
     for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-      if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)mouseListener::mouse_x, (float)mouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)mouseListener::mouse_y, (float)mouseListener::mouse_y )){
+      if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)MouseListener::mouse_x, (float)MouseListener::mouse_x , editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)MouseListener::mouse_y, (float)MouseListener::mouse_y )){
         editorBoxes.erase( editorBoxes.begin() + i);
         modified=true;
         calculate_orientation_global();
@@ -802,7 +802,7 @@ void Editor::draw(){
   editorUI.draw();
 
   if(Options::draw_cursor)
-    al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
+    al_draw_bitmap(cursor,MouseListener::mouse_x,MouseListener::mouse_y,0);
 
 }
 

@@ -14,10 +14,10 @@
 
 #define MAX_MOUSE_BUTTONS 3
 
-class mouseListener{
+class MouseListener{
   public:
-    mouseListener();
-    virtual ~mouseListener();
+    MouseListener();
+    virtual ~MouseListener();
 
     void update();
 

@@ -46,9 +46,9 @@ ALLEGRO_BITMAP *buffer;
 int graphics_mode;
 
 // Input listener wrapper classes
-mouseListener m_listener;
-keyListener k_listener;
-joystickListener j_listener;
+MouseListener m_listener;
+KeyListener k_listener;
+JoystickListener j_listener;
 
 float scaleW;
 float scaleH;
