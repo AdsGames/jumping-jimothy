@@ -1,25 +1,25 @@
 #include "keyListener.h"
 
-bool keyListener::key[ALLEGRO_KEY_MAX] = { false };
-bool keyListener::keyPressed[ALLEGRO_KEY_MAX] = { false};
-bool keyListener::keyReleased[ALLEGRO_KEY_MAX] = { false};
-bool keyListener::lastTicksKey[ALLEGRO_KEY_MAX] = { false};
-int keyListener::lastKeyPressed = -1;
-int keyListener::lastKeyReleased = -1;
-bool keyListener::anyKeyPressed=false;
+bool KeyListener::key[ALLEGRO_KEY_MAX] = { false };
+bool KeyListener::keyPressed[ALLEGRO_KEY_MAX] = { false};
+bool KeyListener::keyReleased[ALLEGRO_KEY_MAX] = { false};
+bool KeyListener::lastTicksKey[ALLEGRO_KEY_MAX] = { false};
+int KeyListener::lastKeyPressed = -1;
+int KeyListener::lastKeyReleased = -1;
+bool KeyListener::anyKeyPressed=false;
 
 // Constructor
-keyListener::keyListener(){
+KeyListener::KeyListener(){
 
 }
 
 // Destructor
-keyListener::~keyListener(){
+KeyListener::~KeyListener(){
 
 }
 
 // For allegro 5, we use events
-void keyListener::on_event( ALLEGRO_EVENT_TYPE event_type, int keycode){
+void KeyListener::on_event( ALLEGRO_EVENT_TYPE event_type, int keycode){
   // Key down
   if( event_type == ALLEGRO_EVENT_KEY_DOWN){
     key[keycode] = true;
@@ -30,7 +30,7 @@ void keyListener::on_event( ALLEGRO_EVENT_TYPE event_type, int keycode){
 }
 
 // Check those keys!
-void keyListener::update(){
+void KeyListener::update(){
   // Reset last key
   lastKeyPressed = -1;
   lastKeyReleased = -1;

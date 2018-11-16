@@ -72,7 +72,7 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
 
 void Character::update(){
 
-  if(!keyListener::anyKeyPressed && !joystickListener::anyButtonPressed)
+  if(!KeyListener::anyKeyPressed && !JoystickListener::anyButtonPressed)
     initial_key_release=true;
 
   if(sensor_box -> isColliding())
@@ -125,7 +125,7 @@ void Character::update(){
   float x_velocity_air_max=4;
 
 
-  if((keyListener::key[ALLEGRO_KEY_A] || joystickListener::stickDirections[LEFT_STICK_LEFT]) && initial_key_release){
+  if((KeyListener::key[ALLEGRO_KEY_A] || JoystickListener::stickDirections[LEFT_STICK_LEFT]) && initial_key_release){
     direction=false;
     if(sensor_box -> isColliding())
       body -> SetLinearVelocity(b2Vec2(-x_velocity_ground, yVel));
@@ -133,7 +133,7 @@ void Character::update(){
       if(getBody() -> GetLinearVelocity().x > -x_velocity_air_max)
         body -> ApplyLinearImpulse(b2Vec2(-x_velocity_air, 0),position,true);
   }
-  else if((keyListener::key[ALLEGRO_KEY_D] || joystickListener::stickDirections[LEFT_STICK_RIGHT])&& initial_key_release){
+  else if((KeyListener::key[ALLEGRO_KEY_D] || JoystickListener::stickDirections[LEFT_STICK_RIGHT])&& initial_key_release){
     direction=true;
     if(sensor_box -> isColliding())
           body -> SetLinearVelocity(b2Vec2(x_velocity_ground, yVel));
@@ -148,7 +148,7 @@ void Character::update(){
   std::cout<<body -> GetLinearVelocity().y<<"\n";
   // Jumping Jimothy
   timer_jump_delay++;
-  if((keyListener::key[ALLEGRO_KEY_W] || joystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f && landed && initial_key_release){
+  if((KeyListener::key[ALLEGRO_KEY_W] || JoystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f && landed && initial_key_release){
 
     if(timer_jump_delay>20){
         timer_jump_delay=0;

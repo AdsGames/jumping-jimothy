@@ -196,7 +196,7 @@ void LevelSelect::draw(){
   al_clear_to_color( al_map_rgb(75,75,100));
   levelSelectUI.draw();
   if(Options::draw_cursor)
-    al_draw_bitmap(cursor,mouseListener::mouse_x,mouseListener::mouse_y,0);
+    al_draw_bitmap(cursor,MouseListener::mouse_x,MouseListener::mouse_y,0);
 
   if(!reset_game_menu)
     al_draw_bitmap(highlight_levelselect,340,highlight_y,0);
@@ -219,14 +219,14 @@ void LevelSelect::update(){
   if(highlight_game_reset_y<highlight_game_reset_y_destination)highlight_game_reset_y+=5;
 
 
-  if((joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
+  if((JoystickListener::stickDirections[LEFT_STICK_UP] || JoystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
     if(highlight_y_destination<695)
       highlight_y_destination+=45;
     if(highlight_game_reset_y_destination==650)
       highlight_game_reset_y_destination=695;
   }
 
-  if((joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[DPAD_DOWN])  && !joystick_direction_hit){
+  if((JoystickListener::stickDirections[LEFT_STICK_DOWN] || JoystickListener::stickDirections[DPAD_DOWN])  && !joystick_direction_hit){
     if(highlight_y_destination>65)
       highlight_y_destination-=45;
 
@@ -235,20 +235,20 @@ void LevelSelect::update(){
 
   }
 
-  if(joystickListener::stickDirections[LEFT_STICK_DOWN] || joystickListener::stickDirections[LEFT_STICK_UP] || joystickListener::stickDirections[DPAD_DOWN] || joystickListener::stickDirections[DPAD_UP2]
-  || joystickListener::stickDirections[LEFT_STICK_LEFT] || joystickListener::stickDirections[LEFT_STICK_RIGHT] || joystickListener::stickDirections[DPAD_LEFT] || joystickListener::stickDirections[DPAD_RIGHT] ){
+  if(JoystickListener::stickDirections[LEFT_STICK_DOWN] || JoystickListener::stickDirections[LEFT_STICK_UP] || JoystickListener::stickDirections[DPAD_DOWN] || JoystickListener::stickDirections[DPAD_UP2]
+  || JoystickListener::stickDirections[LEFT_STICK_LEFT] || JoystickListener::stickDirections[LEFT_STICK_RIGHT] || JoystickListener::stickDirections[DPAD_LEFT] || JoystickListener::stickDirections[DPAD_RIGHT] ){
     joystick_direction_hit=true;
     Options::joystick_mode=true;
   }else{
     joystick_direction_hit=false;
   }
-  if(mouseListener::mouse_moved){
+  if(MouseListener::mouse_moved){
     Options::joystick_mode=false;
   }
 
   levelSelectUI.update();
 
-  if(keyListener::key[ALLEGRO_KEY_ESCAPE] || levelSelectUI.getElementByText("Back to main menu") -> mouseReleased())
+  if(KeyListener::key[ALLEGRO_KEY_ESCAPE] || levelSelectUI.getElementByText("Back to main menu") -> mouseReleased())
     set_next_state(STATE_MENU);
 
   if(levelSelectUI.getElementByText("Really reset?") -> mouseReleased()){
@@ -283,7 +283,7 @@ void LevelSelect::update(){
 
 
 
-  if((joystickListener::buttonReleased[JOY_XBOX_A] && reset_game_menu && highlight_game_reset_y_destination==650)
+  if((JoystickListener::buttonReleased[JOY_XBOX_A] && reset_game_menu && highlight_game_reset_y_destination==650)
    || levelSelectUI.getElementByText("Really reset?") -> mouseReleased()){
 
     for(int i=0; i<16; i++)
@@ -293,9 +293,9 @@ void LevelSelect::update(){
 
   }
 
-  if((joystickListener::buttonReleased[JOY_XBOX_A] && reset_game_menu && highlight_game_reset_y_destination==695)
+  if((JoystickListener::buttonReleased[JOY_XBOX_A] && reset_game_menu && highlight_game_reset_y_destination==695)
    || levelSelectUI.getElementByText("Cancel") -> mouseReleased()){
-    joystickListener::clearButtons();
+    JoystickListener::clearButtons();
     reset_game_menu=false;
 
     levelSelectUI.getElementByText("Cancel") ->setStatus(false);
@@ -303,7 +303,7 @@ void LevelSelect::update(){
 
   }
 
-  if(joystickListener::buttonReleased[JOY_XBOX_B]){
+  if(JoystickListener::buttonReleased[JOY_XBOX_B]){
     if(reset_game_menu){
       reset_game_menu=false;
       levelSelectUI.getElementByText("Cancel") ->setStatus(false);
@@ -313,7 +313,7 @@ void LevelSelect::update(){
 
   }
 
-  if(joystickListener::buttonReleased[JOY_XBOX_A] && !reset_game_menu){
+  if(JoystickListener::buttonReleased[JOY_XBOX_A] && !reset_game_menu){
 
     if(highlight_y_destination==65){
       set_next_state(STATE_MENU);

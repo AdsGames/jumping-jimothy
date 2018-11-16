@@ -360,10 +360,10 @@ void Game::update(){
 
   }
   // Game mode
-  if( keyListener::keyPressed[ALLEGRO_KEY_P])
+  if( KeyListener::keyPressed[ALLEGRO_KEY_P])
     set_next_state( STATE_EDIT);
   // Change state?
-  if( keyListener::key[ALLEGRO_KEY_I])
+  if( KeyListener::key[ALLEGRO_KEY_I])
     set_next_state( STATE_MENU);
 
   // Touching goat
@@ -395,20 +395,20 @@ void Game::update(){
     gameBoxes[i] -> update();
 
   // Die
-  if( keyListener::keyPressed[ALLEGRO_KEY_Z] || joystickListener::buttonPressed[JOY_XBOX_B] ||  keyListener::keyPressed[ALLEGRO_KEY_R] ){
+  if( KeyListener::keyPressed[ALLEGRO_KEY_Z] || JoystickListener::buttonPressed[JOY_XBOX_B] ||  KeyListener::keyPressed[ALLEGRO_KEY_R] ){
     death.play();
 
     reset();
 
   }
-  if(keyListener::keyPressed[ALLEGRO_KEY_ESCAPE]){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]){
     set_next_state(STATE_MENU);
     MusicManager::game_music.stop();
 
   }
 
   // Next level
-  if( keyListener::keyPressed[ALLEGRO_KEY_C]){
+  if( KeyListener::keyPressed[ALLEGRO_KEY_C]){
     if( !testing){
       std::cout<<"Level " << level<< " skipped\n";
       level++;
@@ -421,7 +421,7 @@ void Game::update(){
   }
 
   // Previous level
-  if( keyListener::keyPressed[ALLEGRO_KEY_X]){
+  if( KeyListener::keyPressed[ALLEGRO_KEY_X]){
     std::cout<<"Level " << level<< " skipped back\n";
     if( level > 1)
       level--;
@@ -429,7 +429,7 @@ void Game::update(){
   }
 
   // Pause/Play time
-  if( keyListener::keyPressed[ALLEGRO_KEY_SPACE]  || joystickListener::buttonPressed[JOY_XBOX_X] ||  joystickListener::buttonPressed[JOY_XBOX_Y] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_LEFT] || joystickListener::buttonPressed[JOY_XBOX_BUMPER_RIGHT]  ){
+  if( KeyListener::keyPressed[ALLEGRO_KEY_SPACE]  || JoystickListener::buttonPressed[JOY_XBOX_X] ||  JoystickListener::buttonPressed[JOY_XBOX_Y] || JoystickListener::buttonPressed[JOY_XBOX_BUMPER_LEFT] || JoystickListener::buttonPressed[JOY_XBOX_BUMPER_RIGHT]  ){
 
 
 

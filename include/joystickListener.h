@@ -49,11 +49,11 @@
 #include <allegro5/allegro.h>
 
 
-class joystickListener
+class JoystickListener
 {
   public:
-    joystickListener();
-    virtual ~joystickListener();
+    JoystickListener();
+    virtual ~JoystickListener();
 
     void on_event( ALLEGRO_EVENT_TYPE event_type, int keycode);
     void update();
