@@ -6,7 +6,7 @@
 #include <allegro5/allegro_font.h>
 
 //#include "Button.h"
-#include <String>
+#include <string>
 #include <MouseListener.h>
 #include <Tools.h>
 
