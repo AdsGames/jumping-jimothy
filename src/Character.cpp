@@ -87,7 +87,7 @@ void Character::update(){
     float land_volume = velocity_old/20;
     if(land_volume>1)
       land_volume=1;
-    al_play_sample( land, land_volume, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+    al_play_sample( land, land_volume, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, nullptr);
     landed=true;
 
   }
@@ -155,7 +155,7 @@ void Character::update(){
       body -> ApplyLinearImpulse(b2Vec2(0,17),position,true);
       landed=false;
       if(timer_sound_delay>10){
-        al_play_sample( jump, 1.0, 0.0, ((float)(tools::random_int(90,110))/100), ALLEGRO_PLAYMODE_ONCE, NULL);
+        al_play_sample( jump, 1.0, 0.0, ((float)(tools::random_int(90,110))/100), ALLEGRO_PLAYMODE_ONCE, nullptr);
         timer_sound_delay=0;
       }
     }

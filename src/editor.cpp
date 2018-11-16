@@ -3,13 +3,14 @@
 
 const char* Editor::testing_file_name = "Untitled";
 bool Editor::modified=false;
+
 // Init editor
 Editor::Editor(){
 
   MusicManager::menu_music.stop();
 
-  //al_set_new_display_flags(ALLEGRO_WINDOWED);
-  al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
+  al_set_new_display_flags(ALLEGRO_WINDOWED);
+  //al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 
 
   editorUI = UIHandler();
@@ -19,8 +20,8 @@ Editor::Editor(){
   // Level to edit
   level_number = 1;
 
-  if(testing_file_name !="Untitled" || testing_file_name !=nullptr)
-    is_saved=true;
+  if (std::string(testing_file_name) != "Untitled" || testing_file_name != nullptr)
+    is_saved = true;
 
   // Filename
   file_name = testing_file_name;
@@ -352,7 +353,7 @@ void Editor::update(){
       myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
 
       // Display open dialog
-      const char *temp_name;
+      const char *temp_name = nullptr;
       if( al_show_native_file_dialog( nullptr, myChooser))
         temp_name = al_get_native_file_dialog_path( myChooser, 0);
 
@@ -853,21 +854,21 @@ bool Editor::load_map( std::string mapName){
     std::string affect_character = "false";
 
     // Load data
-    if( object_node -> first_attribute("type") != 0)
+    if( object_node -> first_attribute("type") != nullptr)
       type_str = object_node -> first_attribute("type") -> value();
-    if( object_node -> first_node("x") != 0)
+    if( object_node -> first_node("x") != nullptr)
       x = object_node -> first_node("x") -> value();
-    if( object_node -> first_node("y") != 0)
+    if( object_node -> first_node("y") != nullptr)
       y = object_node -> first_node("y") -> value();
-    if( object_node -> first_node("width") != 0)
+    if( object_node -> first_node("width") != nullptr)
       width = object_node -> first_node("width") -> value();
-    if( object_node -> first_node("height") != 0)
+    if( object_node -> first_node("height") != nullptr)
       height = object_node -> first_node("height") -> value();
-   // if( object_node -> first_node("type_str") != 0)
+   // if( object_node -> first_node("type_str") != nullptr)
    //   type_str = object_node -> first_node("type_str") -> value();
-    if( object_node -> first_node("orientation") != 0)
+    if( object_node -> first_node("orientation") != nullptr)
       orientation = object_node -> first_node("orientation") -> value();
-    if( object_node -> first_node("affect_character") != 0)
+    if( object_node -> first_node("affect_character") != nullptr)
       affect_character = object_node -> first_node("affect_character") -> value();
 
     std::cout<<type_str <<" is type_str\n";

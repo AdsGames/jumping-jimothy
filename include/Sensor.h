@@ -22,7 +22,7 @@ class Sensor : public Box{
   public:
     void draw();
     Sensor();
-    ~Sensor();
+    virtual ~Sensor();
     bool isColliding();
 	bool isCollidingWithDynamicBody();
     bool isCollidingWithBody(b2Body*);

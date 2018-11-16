@@ -28,7 +28,7 @@ class Box{
 
     // Constructors / Destructors
     Box();
-    ~Box();
+    virtual ~Box();
 
     virtual void init();
 

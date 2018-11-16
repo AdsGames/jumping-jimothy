@@ -22,7 +22,7 @@ class keyListener;
 class Character : public Box{
   public:
     Character();
-    ~Character();
+    virtual ~Character();
     void init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld);
     void draw();
     void update();
