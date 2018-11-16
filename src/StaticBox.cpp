@@ -1,9 +1,10 @@
-#include "StaticBox.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <Box2D/Box2D.h>
 #include <iostream>
-#include <globals.h>
+
+#include "StaticBox.h"
+#include "Globals.h"
 
 // I'm trying to make static boxes really just for show,
 // and have the collision handled elsewhere. So, this class

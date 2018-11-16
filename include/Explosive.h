@@ -1,9 +1,9 @@
 #ifndef EXPLOSIVE_H
 #define EXPLOSIVE_H
 
-#include <Box.h>
-#include <Character.h>
-#include <globals.h>
+#include "Box.h"
+#include "Character.h"
+#include "Globals.h"
 
 
 class Explosive : public Box

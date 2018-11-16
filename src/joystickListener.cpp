@@ -1,4 +1,4 @@
-#include "joystickListener.h"
+#include "JoystickListener.h"
 
 bool JoystickListener::button[JOY_MAX_BUTTONS] = { false };
 bool JoystickListener::buttonPressed[JOY_MAX_BUTTONS] = { false};

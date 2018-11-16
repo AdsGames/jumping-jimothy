@@ -16,9 +16,9 @@
 				<Compiler>
 					<Add option="-std=c++11" />
 					<Add option="-g" />
-					<Add option="-static-libgcc -static-libstdc++" />
 					<Add option="-DRELEASE" />
 					<Add directory="include" />
+					<Add directory="include/rapidxml" />
 				</Compiler>
 				<Linker>
 					<Add option="-lallegro" />
@@ -70,63 +70,67 @@
 			<Add option="-s" />
 		</Linker>
 		<Unit filename="include/Box.h" />
+		<Unit filename="include/Button.h" />
 		<Unit filename="include/Character.h" />
 		<Unit filename="include/CheckBox.h" />
 		<Unit filename="include/CollisionBox.h" />
 		<Unit filename="include/Controls.h" />
 		<Unit filename="include/DisplayMode.h" />
 		<Unit filename="include/DynamicBox.h" />
+		<Unit filename="include/Editor.h" />
 		<Unit filename="include/Explosive.h" />
+		<Unit filename="include/Game.h" />
+		<Unit filename="include/Globals.h" />
 		<Unit filename="include/Goat.h" />
+		<Unit filename="include/Init.h" />
+		<Unit filename="include/JoystickListener.h" />
+		<Unit filename="include/KeyListener.h" />
 		<Unit filename="include/LevelSelect.h" />
+		<Unit filename="include/Menu.h" />
+		<Unit filename="include/MouseListener.h" />
 		<Unit filename="include/MusicManager.h" />
 		<Unit filename="include/Options.h" />
 		<Unit filename="include/Sensor.h" />
 		<Unit filename="include/Sound.h" />
+		<Unit filename="include/State.h" />
 		<Unit filename="include/StaticBox.h" />
 		<Unit filename="include/ToggleBox.h" />
+		<Unit filename="include/Tools.h" />
 		<Unit filename="include/UIElement.h" />
 		<Unit filename="include/UIHandler.h" />
-		<Unit filename="include/button.h" />
-		<Unit filename="include/editor.h" />
-		<Unit filename="include/game.h" />
-		<Unit filename="include/globals.h" />
-		<Unit filename="include/init.h" />
-		<Unit filename="include/joystickListener.h" />
-		<Unit filename="include/keyListener.h" />
-		<Unit filename="include/menu.h" />
-		<Unit filename="include/mouseListener.h" />
-		<Unit filename="include/state.h" />
-		<Unit filename="include/tools.h" />
+		<Unit filename="include/rapidxml/rapidxml.hpp" />
+		<Unit filename="include/rapidxml/rapidxml_iterators.hpp" />
+		<Unit filename="include/rapidxml/rapidxml_print.hpp" />
+		<Unit filename="include/rapidxml/rapidxml_utils.hpp" />
 		<Unit filename="src/Box.cpp" />
+		<Unit filename="src/Button.cpp" />
 		<Unit filename="src/Character.cpp" />
 		<Unit filename="src/CheckBox.cpp" />
 		<Unit filename="src/CollisionBox.cpp" />
 		<Unit filename="src/Controls.cpp" />
 		<Unit filename="src/DisplayMode.cpp" />
 		<Unit filename="src/DynamicBox.cpp" />
+		<Unit filename="src/Editor.cpp" />
 		<Unit filename="src/Explosive.cpp" />
+		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/Goat.cpp" />
+		<Unit filename="src/Init.cpp" />
+		<Unit filename="src/JoystickListener.cpp" />
+		<Unit filename="src/KeyListener.cpp" />
 		<Unit filename="src/LevelSelect.cpp" />
+		<Unit filename="src/Menu.cpp" />
+		<Unit filename="src/MouseListener.cpp" />
 		<Unit filename="src/MusicManager.cpp" />
 		<Unit filename="src/Options.cpp" />
 		<Unit filename="src/Sensor.cpp" />
 		<Unit filename="src/Sound.cpp" />
+		<Unit filename="src/State.cpp" />
 		<Unit filename="src/StaticBox.cpp" />
 		<Unit filename="src/ToggleBox.cpp" />
+		<Unit filename="src/Tools.cpp" />
 		<Unit filename="src/UIElement.cpp" />
 		<Unit filename="src/UIHandler.cpp" />
-		<Unit filename="src/button.cpp" />
-		<Unit filename="src/editor.cpp" />
-		<Unit filename="src/game.cpp" />
-		<Unit filename="src/init.cpp" />
-		<Unit filename="src/joystickListener.cpp" />
-		<Unit filename="src/keyListener.cpp" />
 		<Unit filename="src/main.cpp" />
-		<Unit filename="src/menu.cpp" />
-		<Unit filename="src/mouseListener.cpp" />
-		<Unit filename="src/state.cpp" />
-		<Unit filename="src/tools.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

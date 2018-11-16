@@ -1,5 +1,6 @@
-#include "DynamicBox.h"
 #include <allegro5/allegro_primitives.h>
+
+#include "DynamicBox.h"
 
 DynamicBox::DynamicBox()
 {

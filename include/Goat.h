@@ -1,10 +1,11 @@
 #ifndef GOAT_H
 #define GOAT_H
 
-#include <Box.h>
-#include <Character.h>
-#include <Sensor.h>
 #include <allegro5/allegro_primitives.h>
+
+#include "Box.h"
+#include "Character.h"
+#include "Sensor.h"
 
 class Goat : public Box
 {

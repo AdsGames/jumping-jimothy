@@ -1,7 +1,8 @@
-#include "game.h"
 #include <allegro5/bitmap.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_native_dialog.h>
+
+#include "Game.h"
 
 bool Game::testing = false;
 const char* Game::testing_file_name = nullptr;

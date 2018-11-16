@@ -1,5 +1,5 @@
 #include "UIHandler.h"
-#include "button.h"
+#include "Button.h"
 
 void UIHandler::addElement(UIElement *newUIElement){
   ui_elements.push_back(newUIElement);

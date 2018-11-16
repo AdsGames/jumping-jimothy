@@ -15,12 +15,12 @@
 #include <allegro5/allegro_font.h>
 #include <Box2D/Box2D.h>
 
-#include <MouseListener.h>
-#include <KeyListener.h>
-#include <JoystickListener.h>
+#include "MouseListener.h"
+#include "KeyListener.h"
+#include "JoystickListener.h"
 
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_print.hpp"
+#include "rapidxml.hpp"
+#include "rapidxml_print.hpp"
 
 #include "State.h"
 #include "Box.h"

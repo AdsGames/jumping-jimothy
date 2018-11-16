@@ -5,10 +5,12 @@
 **/
 #ifndef BOX_H
 #define BOX_H
+
 #include <allegro5/allegro.h>
 #include <Box2D/Box2D.h>
-#include <Tools.h>
-#include <Globals.h>
+
+#include "Tools.h"
+#include "Globals.h"
 
 #define BOX 0
 #define GOAT 2

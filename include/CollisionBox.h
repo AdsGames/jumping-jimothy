@@ -1,10 +1,10 @@
 #ifndef COLLISIONBOX_H
 #define COLLISIONBOX_H
 
-#include <Box.h>
 #include <allegro5/allegro_primitives.h>
-#include <keyListener.h>
 
+#include "Box.h"
+#include "KeyListener.h"
 
 class CollisionBox : public Box
 {
