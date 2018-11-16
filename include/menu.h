@@ -11,11 +11,11 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 
-#include "keyListener.h"
-#include "joystickListener.h"
-#include "tools.h"
-#include "state.h"
-#include "button.h"
+#include "KeyListener.h"
+#include "JoystickListener.h"
+#include "Tools.h"
+#include "State.h"
+#include "Button.h"
 #include "Options.h"
 #include "Sound.h"
 #include "MusicManager.h"
@@ -30,10 +30,10 @@ enum{
 };
 
 // Menu
-class menu : public state{
+class Menu : public State {
   public:
-    menu();
-    virtual ~menu();
+    Menu();
+    virtual ~Menu();
 
     void update();
     void draw();

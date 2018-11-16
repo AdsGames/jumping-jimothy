@@ -1,10 +1,10 @@
-#include "editor.h"
+#include "Editor.h"
 
 
-const char* editor::testing_file_name = "Untitled";
-bool editor::modified=false;
+const char* Editor::testing_file_name = "Untitled";
+bool Editor::modified=false;
 // Init editor
-editor::editor(){
+Editor::Editor(){
 
   MusicManager::menu_music.stop();
 
@@ -128,14 +128,14 @@ editor::editor(){
 
 
   // Is it edit mode?
-  if( game::testing){
+  if( Game::testing){
     load_map( "data/level_0.xml");
-    game::testing = false;
+    Game::testing = false;
   }
 }
 
 // Destruct
-editor::~editor(){
+Editor::~Editor(){
  // Destroy resources if loaded
   if( edit_font != nullptr)
     al_destroy_font( edit_font);
@@ -154,7 +154,7 @@ editor::~editor(){
    if( image_box[i] != nullptr)
       al_destroy_bitmap( image_box[i]);
 }
-bool editor::is_player(){
+bool Editor::is_player(){
 
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
     if(editorBoxes.at(i).type==2)
@@ -165,7 +165,7 @@ bool editor::is_player(){
 
 }
 
-void editor::set_explosive_ui_status(){
+void Editor::set_explosive_ui_status(){
 
   // Learned a few things from you
   editorUI.getElementByText("Block affects character") -> setStatus(tile_type==5);
@@ -180,7 +180,7 @@ void editor::set_explosive_ui_status(){
 }
 
 // Update editor
-void editor::update(){
+void Editor::update(){
   // Update buttons
   editorUI.update();
 
@@ -410,7 +410,7 @@ void editor::update(){
       if(is_player()){
         save_map( "data/level_0.xml");
         set_next_state( STATE_GAME);
-        game::testing = true;
+        Game::testing = true;
         testing_file_name = file_name;
       }else
         al_show_native_message_box( nullptr, "Missing player", "You must place a player spawn to test the level.","", "Whoopsie!", 0);
@@ -593,12 +593,11 @@ void editor::update(){
       }
     }
   }
-
 }
 
 
 // Calculate all the orientations of blocks
-void editor::calculate_orientation_global(){
+void Editor::calculate_orientation_global(){
   // Calc boxes
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
 
@@ -704,7 +703,7 @@ void editor::calculate_orientation_global(){
 }
 
 // Draw to screen
-void editor::draw(){
+void Editor::draw(){
   // Background
   al_clear_to_color( al_map_rgb(200,200,255));
 
@@ -809,7 +808,7 @@ void editor::draw(){
 
 
 // Check if box is at location
-bool editor::box_at_with_type( int newType, int x, int y){
+bool Editor::box_at_with_type( int newType, int x, int y){
   for( unsigned int i = 0; i < editorBoxes.size(); i ++)
     if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)x, (float)x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)y, (float)y + 1) && editorBoxes.at(i).type == newType)
       return true;
@@ -817,7 +816,7 @@ bool editor::box_at_with_type( int newType, int x, int y){
 }
 
 // Check if box is at location
-bool editor::box_at(int x, int y){
+bool Editor::box_at(int x, int y){
   for( unsigned int i = 0; i < editorBoxes.size(); i ++)
     if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)x, (float)x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)y, (float)y + 1))
       return true;
@@ -825,7 +824,7 @@ bool editor::box_at(int x, int y){
 }
 
 // Load map from xml-
-bool editor::load_map( std::string mapName){
+bool Editor::load_map( std::string mapName){
 // Doc
   std::cout<<"we're loading a level now you POS\n";
   // Doc
@@ -948,7 +947,7 @@ bool editor::load_map( std::string mapName){
 }
 
 // Save map to xml
-bool editor::save_map( std::string mapName){
+bool Editor::save_map( std::string mapName){
 
   //NSFW haxx to prevent goat loading before player
   for( unsigned int i=0;i<editorBoxes.size();i++){

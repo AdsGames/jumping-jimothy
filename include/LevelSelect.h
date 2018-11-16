@@ -1,7 +1,6 @@
 #ifndef LEVELSELECT_H
 #define LEVELSELECT_H
 
-#include <state.h>
 #include <allegro5/allegro_color.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
@@ -12,16 +11,17 @@
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
 
+#include "State.h"
 #include "UIHandler.h"
 #include "UIElement.h"
-#include "button.h"
-#include "keyListener.h"
-#include "game.h"
-#include "tools.h"
+#include "Button.h"
+#include "KeyListener.h"
+#include "Game.h"
+#include "Tools.h"
 #include "Options.h"
 
 
-class LevelSelect : public state
+class LevelSelect : public State
 {
   public:
     LevelSelect();

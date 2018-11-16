@@ -6,9 +6,9 @@
 #include <allegro5/allegro_font.h>
 
 //#include "Button.h"
-#include <string>
-#include <mouseListener.h>
-#include <tools.h>
+#include <String>
+#include <MouseListener.h>
+#include <Tools.h>
 
 class UIElement
 {

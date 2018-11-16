@@ -24,7 +24,7 @@
 #include "MusicManager.h"
 
 // Current state object
-state *currentState = nullptr;
+State *currentState = nullptr;
 
 // FPS system variables
 int fps;
@@ -84,19 +84,19 @@ void change_state(){
     //Change the state
     switch( nextState ){
       case STATE_INIT:
-        currentState = new init();
+        currentState = new Init();
         std::cout<<"Switched state to initialization.\n";
         break;
       case STATE_GAME:
-        currentState = new game();
+        currentState = new Game();
         std::cout<<"Switched state to game.\n";
         break;
       case STATE_EDIT:
-        currentState = new editor();
+        currentState = new Editor();
         std::cout<<"Switched state to editor.\n";
         break;
       case STATE_MENU:
-        currentState = new menu();
+        currentState = new Menu();
         std::cout<<"Switched state to main menu.\n";
         break;
       case STATE_EXIT:
@@ -113,7 +113,7 @@ void change_state(){
         break;
 
       default:
-        currentState = new game();
+        currentState = new Game();
     }
 
     //Change the current state ID
@@ -403,7 +403,7 @@ int main(int argc, char **argv){
 
   //Set the current state ID
   stateID = STATE_INIT;
-  currentState = new init();
+  currentState = new Init();
 
   // Run game
   while(!closing)

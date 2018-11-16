@@ -15,32 +15,32 @@
 #include <allegro5/allegro_font.h>
 #include <Box2D/Box2D.h>
 
-#include <mouseListener.h>
-#include <keyListener.h>
-#include <joystickListener.h>
+#include <MouseListener.h>
+#include <KeyListener.h>
+#include <JoystickListener.h>
 
-#include "state.h"
-#include "rapidxml.hpp"
-#include "rapidxml_print.hpp"
+#include "rapidxml/rapidxml.hpp"
+#include "rapidxml/rapidxml_print.hpp"
 
-#include <Box.h>
-#include <StaticBox.h>
-#include <tools.h>
-#include <Character.h>
-#include <Goat.h>
-#include <CollisionBox.h>
-#include <DynamicBox.h>
-#include <Explosive.h>
-#include <button.h>
-#include <LevelSelect.h>
+#include "State.h"
+#include "Box.h"
+#include "StaticBox.h"
+#include "Tools.h"
+#include "Character.h"
+#include "Goat.h"
+#include "CollisionBox.h"
+#include "DynamicBox.h"
+#include "Explosive.h"
+#include "Button.h"
+#include "LevelSelect.h"
 #include "Sound.h"
 #include "MusicManager.h"
 
-class game : public state{
+class Game : public State{
   public:
     // Construct / destruct
-    game();
-    ~game();
+    Game();
+    ~Game();
 
     // Override parent
     void update();

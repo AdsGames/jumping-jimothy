@@ -6,11 +6,11 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "globals.h"
+#include "Globals.h"
 #include "Box.h"
 #include "Sensor.h"
-#include "keyListener.h"
-#include "joystickListener.h"
+#include "KeyListener.h"
+#include "JoystickListener.h"
 
 class b2World;
 class b2Body;

@@ -12,13 +12,13 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 
-#include "state.h"
+#include "State.h"
 
-class init : public state
+class Init : public State
 {
   public:
-    init();
-    ~init(){};
+    Init();
+    ~Init(){};
 
     void update(){};
     void draw(){}

@@ -3,12 +3,12 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_native_dialog.h>
 
-bool game::testing = false;
-const char* game::testing_file_name = nullptr;
-int game::level_to_start = 1;
+bool Game::testing = false;
+const char* Game::testing_file_name = nullptr;
+int Game::level_to_start = 1;
 
 // Constructor
-game::game(){
+Game::Game(){
 
   gameCharacter = new Character();
   // Init first time
@@ -50,7 +50,7 @@ game::game(){
 }
 
 // Destructor
-game::~game(){
+Game::~Game(){
 
   // Destory bitmaps
   //if( box != nullptr)
@@ -72,7 +72,7 @@ game::~game(){
 }
 
 // Creates box in world
-Goat *game::create_goat( float newX, float newY){
+Goat *Game::create_goat( float newX, float newY){
   Goat *newGoat = new Goat();
   newGoat -> init( newX, newY,goat_map, gameWorld,gameCharacter);
   if(gameCharacter==nullptr)
@@ -82,7 +82,7 @@ Goat *game::create_goat( float newX, float newY){
 }
 
 // Creates box in world
-Box *game::create_dynamic_box( float newX, float newY, float newWidth, float newHeight, float newVelX,float newVelY, BITMAP *newSprite, bool newBodyType, bool newIsSensor){
+Box *Game::create_dynamic_box( float newX, float newY, float newWidth, float newHeight, float newVelX,float newVelY, BITMAP *newSprite, bool newBodyType, bool newIsSensor){
   DynamicBox *newDynamicBox = new DynamicBox();
   newDynamicBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, newSprite, gameWorld);
   gameBoxes.push_back( newDynamicBox);
@@ -90,21 +90,21 @@ Box *game::create_dynamic_box( float newX, float newY, float newWidth, float new
 }
 
 // Creates box in world
-Box *game::create_static_box( float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4){
+Box *Game::create_static_box( float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4){
   StaticBox *newStaticBox = new StaticBox();
   newStaticBox -> init( newX, newY, sp_1,sp_2,sp_3,sp_4);
   gameBoxes.push_back( newStaticBox);
   return newStaticBox;
 }
 
-Box *game::create_collision_box( float newX, float newY,float newWidth,float newHeight){
+Box *Game::create_collision_box( float newX, float newY,float newWidth,float newHeight){
   CollisionBox *newCollisionBox = new CollisionBox();
   newCollisionBox -> init( newX, newY, newWidth,newHeight,gameWorld);
   gameBoxes.push_back( newCollisionBox);
   return newCollisionBox;
 }
 
-Box *game::create_explosive_box(float newX, float newY,int newOrientation, bool newAffectCharacter){
+Box *Game::create_explosive_box(float newX, float newY,int newOrientation, bool newAffectCharacter){
   Explosive *newExplosive = new Explosive();
   ALLEGRO_BITMAP *newBoxImage;
 
@@ -123,7 +123,7 @@ Box *game::create_explosive_box(float newX, float newY,int newOrientation, bool 
 }
 
 // Add character to world
-Character *game::create_character( float newX, float newY){
+Character *Game::create_character( float newX, float newY){
   Character *newCharacter = new Character();
   newCharacter -> init( newX, newY,character, gameWorld);
   gameBoxes.push_back( newCharacter);
@@ -131,7 +131,7 @@ Character *game::create_character( float newX, float newY){
 }
 
 // Sets up Box2D world
-void game::b2_setup(){
+void Game::b2_setup(){
   // Box2D world parameters
   gravity = b2Vec2(0.0f, -10.0f);
   timeStep = 1.0f / 60.0f;
@@ -162,7 +162,7 @@ void game::b2_setup(){
 }
 
 // Load world from xml
-void game::load_world(int newLevel){
+void Game::load_world(int newLevel){
 
   std::cout << "Attempting to load level_" << newLevel << ".xml into game\n";
 
@@ -299,7 +299,7 @@ void game::load_world(int newLevel){
 }
 
 // Reset game
-void game::reset(){
+void Game::reset(){
   // Reset variables
   gameBoxes.clear();
   gameGoat = nullptr;
@@ -324,7 +324,7 @@ void game::reset(){
 }
 
 // Load all sprites for in game
-void game::load_sprites(){
+void Game::load_sprites(){
   box = tools::load_bitmap_ex( "images/box.png");
   box_repel = tools::load_bitmap_ex( "images/box_repel.png");
   box_repel_direction = tools::load_bitmap_ex( "images/box_repel_direction.png");
@@ -348,7 +348,7 @@ void game::load_sprites(){
 }
 
 // Update game logic
-void game::update(){
+void Game::update(){
 
 
   if(testing){
@@ -472,7 +472,7 @@ void game::update(){
 }
 
 // Draw to screen
-void game::draw(){
+void Game::draw(){
   // Background
   al_clear_to_color( al_map_rgb(40,40,60));
 

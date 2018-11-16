@@ -1,7 +1,7 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include "tools.h"
+#include "Tools.h"
 #include "allegro5/allegro_audio.h"
 #include "Options.h"
 

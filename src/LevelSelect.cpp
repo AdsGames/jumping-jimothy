@@ -325,7 +325,7 @@ void LevelSelect::update(){
 
     }else{
       int level=(highlight_y_destination-65)/45;
-      game::level_to_start=level;
+      Game::level_to_start=level;
       set_next_state(STATE_GAME);
     }
   }
@@ -342,7 +342,7 @@ void LevelSelect::update(){
 
   for(int i=1; i<14; i++){
     if(levelSelectUI.getUIElements().at(i) -> clicked()){
-      game::level_to_start=i;
+      Game::level_to_start=i;
       set_next_state(STATE_GAME);
       }
 
