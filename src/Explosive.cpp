@@ -97,7 +97,7 @@ void Explosive::update(){
 
   is_exploding=false;
   //check which of these have their center of mass within the blast radius
-  for (int i = 0; i < queryCallback.foundBodies.size(); i++) {
+  for (unsigned int i = 0; i < queryCallback.foundBodies.size(); i++) {
     b2Body* newBody = queryCallback.foundBodies[i];
     b2Vec2 bodyCom = newBody->GetWorldCenter();
     //ignore bodies outside the blast range

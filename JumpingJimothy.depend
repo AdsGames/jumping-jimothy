@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1542338454 source:c:\users\allan\documents\games indev\jumpingjimothy\src\box.cpp
+1542344899 source:c:\users\allan\documents\games indev\jumpingjimothy\src\box.cpp
 	<allegro5/allegro.h>
 	<allegro5/allegro_primitives.h>
 	<Box2D/Box2D.h>
@@ -8,7 +8,7 @@
 	"Sensor.h"
 	"Character.h"
 
-1542344060 c:\users\allan\documents\games indev\jumpingjimothy\include\box.h
+1542345172 c:\users\allan\documents\games indev\jumpingjimothy\include\box.h
 	<allegro5/allegro.h>
 	<Box2D/Box2D.h>
 	"Tools.h"
@@ -29,7 +29,7 @@
 
 1542344158 c:\users\allan\documents\games indev\jumpingjimothy\include\globals.h
 
-1542342588 c:\users\allan\documents\games indev\jumpingjimothy\include\sensor.h
+1542345175 c:\users\allan\documents\games indev\jumpingjimothy\include\sensor.h
 	"Globals.h"
 	"Box.h"
 	"KeyListener.h"
@@ -38,7 +38,7 @@
 	<iostream>
 	<allegro5/allegro.h>
 
-1542342099 c:\users\allan\documents\games indev\jumpingjimothy\include\character.h
+1542345177 c:\users\allan\documents\games indev\jumpingjimothy\include\character.h
 	"Globals.h"
 	"Box.h"
 	"Sensor.h"
@@ -49,7 +49,7 @@
 	<iostream>
 	<allegro5/allegro.h>
 
-1542343543 source:c:\users\allan\documents\games indev\jumpingjimothy\src\character.cpp
+1542345554 source:c:\users\allan\documents\games indev\jumpingjimothy\src\character.cpp
 	<Box2D/Box2D.h>
 	<allegro5/allegro.h>
 	<allegro5/allegro_primitives.h>
@@ -62,7 +62,7 @@
 1542344111 c:\users\allan\documents\games indev\jumpingjimothy\include\checkbox.h
 	"UIElement.h"
 
-1542342610 c:\users\allan\documents\games indev\jumpingjimothy\include\uielement.h
+1542345145 c:\users\allan\documents\games indev\jumpingjimothy\include\uielement.h
 	<allegro5/allegro5.h>
 	<allegro5/allegro_primitives.h>
 	<allegro5/allegro_font.h>
@@ -83,7 +83,7 @@
 
 1542338453 c:\users\allan\documents\games indev\jumpingjimothy\include\displaymode.h
 
-1542343543 source:c:\users\allan\documents\games indev\jumpingjimothy\src\editor.cpp
+1542345591 source:c:\users\allan\documents\games indev\jumpingjimothy\src\editor.cpp
 	"Editor.h"
 
 1542343175 c:\users\allan\documents\games indev\jumpingjimothy\include\editor.h
@@ -110,7 +110,7 @@
 	"Options.h"
 	"state.h"
 
-1542338453 c:\users\allan\documents\games indev\jumpingjimothy\include\rapidxml\rapidxml.hpp
+1542345259 c:\users\allan\documents\games indev\jumpingjimothy\include\rapidxml\rapidxml.hpp
 	<cstdlib>
 	<cassert>
 	<new>
@@ -124,7 +124,7 @@
 1542344063 c:\users\allan\documents\games indev\jumpingjimothy\include\button.h
 	"UIElement.h"
 
-1542344151 c:\users\allan\documents\games indev\jumpingjimothy\include\game.h
+1542344897 c:\users\allan\documents\games indev\jumpingjimothy\include\game.h
 	<vector>
 	<allegro5/allegro.h>
 	<allegro5/allegro_primitives.h>
@@ -260,4 +260,86 @@
 
 1542343543 source:c:\users\allan\documents\games indev\jumpingjimothy\src\uielement.cpp
 	"UIElement.h"
+
+1542344254 source:c:\users\allan\documents\games indev\jumpingjimothy\src\button.cpp
+	"Button.h"
+
+1542344263 source:c:\users\allan\documents\games indev\jumpingjimothy\src\collisionbox.cpp
+	"CollisionBox.h"
+
+1542344271 source:c:\users\allan\documents\games indev\jumpingjimothy\src\dynamicbox.cpp
+	<allegro5/allegro_primitives.h>
+	"DynamicBox.h"
+
+1542345218 source:c:\users\allan\documents\games indev\jumpingjimothy\src\explosive.cpp
+	<allegro5/allegro_primitives.h>
+	"Explosive.h"
+
+1542344289 source:c:\users\allan\documents\games indev\jumpingjimothy\src\game.cpp
+	<allegro5/bitmap.h>
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_native_dialog.h>
+	"Game.h"
+
+1542344300 source:c:\users\allan\documents\games indev\jumpingjimothy\src\joysticklistener.cpp
+	"JoystickListener.h"
+
+1542344303 source:c:\users\allan\documents\games indev\jumpingjimothy\src\keylistener.cpp
+	"KeyListener.h"
+
+1542344335 source:c:\users\allan\documents\games indev\jumpingjimothy\src\main.cpp
+	<allegro5/allegro.h>
+	<allegro5/allegro_primitives.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_audio.h>
+	<allegro5/allegro_acodec.h>
+	"MouseListener.h"
+	"KeyListener.h"
+	"JoystickListener.h"
+	"Init.h"
+	"State.h"
+	"Game.h"
+	"Menu.h"
+	"Editor.h"
+	"LevelSelect.h"
+	"Options.h"
+	"MusicManager.h"
+
+1542343327 c:\users\allan\documents\games indev\jumpingjimothy\include\menu.h
+	<allegro5/allegro.h>
+	<allegro5/allegro_image.h>
+	<allegro5/allegro_font.h>
+	<allegro5/allegro_ttf.h>
+	"KeyListener.h"
+	"JoystickListener.h"
+	"Tools.h"
+	"State.h"
+	"Button.h"
+	"Options.h"
+	"Sound.h"
+	"MusicManager.h"
+
+1542345365 source:c:\users\allan\documents\games indev\jumpingjimothy\src\menu.cpp
+	"Menu.h"
+
+1542344902 source:c:\users\allan\documents\games indev\jumpingjimothy\src\sensor.cpp
+	<Box2D/Box2D.h>
+	<allegro5/allegro_color.h>
+	<allegro5/allegro_primitives.h>
+	"Sensor.h"
+
+1542344903 source:c:\users\allan\documents\games indev\jumpingjimothy\src\staticbox.cpp
+	<allegro5/allegro.h>
+	<allegro5/allegro_primitives.h>
+	<Box2D/Box2D.h>
+	<iostream>
+	"StaticBox.h"
+	"Globals.h"
+
+1542344369 source:c:\users\allan\documents\games indev\jumpingjimothy\src\tools.cpp
+	"Tools.h"
+
+1542344377 source:c:\users\allan\documents\games indev\jumpingjimothy\src\uihandler.cpp
+	"UIHandler.h"
+	"Button.h"
 

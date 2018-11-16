@@ -221,8 +221,8 @@ void Menu::draw(){
     //al_draw_bitmap(title,300,300,0);
     //al_draw_bitmap(playbutton_frame,297,562,0);
 
-    int playbutton_x = 50;
-    int playbutton_y = 605;
+    //int playbutton_x = 50;
+    //int playbutton_y = 605;
 
 
     //if(menu_buttons[menu_button_play].hover())
