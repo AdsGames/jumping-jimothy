@@ -1,7 +1,7 @@
 #ifndef DYNAMICBOX_H
 #define DYNAMICBOX_H
 
-#include <Box.h>
+#include "Box.h"
 
 
 class DynamicBox : public Box

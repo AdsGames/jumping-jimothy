@@ -1,7 +1,8 @@
 #include <Box2D/Box2D.h>
-#include "Sensor.h"
 #include <allegro5/allegro_color.h>
 #include <allegro5/allegro_primitives.h>
+
+#include "Sensor.h"
 
 Sensor::Sensor(){
 

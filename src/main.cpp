@@ -10,15 +10,15 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 
-#include <mouseListener.h>
-#include <keyListener.h>
-#include <joystickListener.h>
+#include "MouseListener.h"
+#include "KeyListener.h"
+#include "JoystickListener.h"
 
-#include "init.h"
-#include "state.h"
-#include "game.h"
-#include "menu.h"
-#include "editor.h"
+#include "Init.h"
+#include "State.h"
+#include "Game.h"
+#include "Menu.h"
+#include "Editor.h"
 #include "LevelSelect.h"
 #include "Options.h"
 #include "MusicManager.h"

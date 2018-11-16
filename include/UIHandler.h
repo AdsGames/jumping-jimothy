@@ -1,8 +1,8 @@
 #ifndef UIHANDLER_H
 #define UIHANDLER_H
 
-#include<vector>
-#include<string>
+#include <vector>
+#include <string>
 
 #include "UIElement.h"
 #include "Globals.h"

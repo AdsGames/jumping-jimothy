@@ -14,7 +14,6 @@
 #define GOAT 2
 #define STATIC 3
 
-
 #define DYNAMIC true
 #define KINEMATIC false
 

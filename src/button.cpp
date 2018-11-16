@@ -1,4 +1,4 @@
-#include "button.h"
+#include "Button.h"
 
 
 Button::Button( int x, int y, std::string text, ALLEGRO_BITMAP *image, float newRotation){

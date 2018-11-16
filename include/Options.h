@@ -1,8 +1,9 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#include "allegro5/allegro_font.h"
-#include "allegro5/allegro_ttf.h"
+#include <string>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"
@@ -13,8 +14,6 @@
 #include "State.h"
 #include "KeyListener.h"
 #include "JoystickListener.h"
-
-#include <string>
 
 
 class Options : public State

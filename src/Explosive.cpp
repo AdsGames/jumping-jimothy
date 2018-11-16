@@ -1,5 +1,6 @@
-#include "Explosive.h"
 #include <allegro5/allegro_primitives.h>
+
+#include "Explosive.h"
 
 Explosive::Explosive()
 {

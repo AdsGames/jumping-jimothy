@@ -1,11 +1,11 @@
 #include "CollisionBox.h"
 
 
-
 CollisionBox::CollisionBox()
 {
   //ctor
 }
+
 void CollisionBox::init(float newX, float newY, float newWidth, float newHeight, b2World *newGameWorld){
 
   width = newWidth;

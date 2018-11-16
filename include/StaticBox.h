@@ -3,7 +3,6 @@
 
 #include <Box.h>
 
-
 class StaticBox : public Box
 {
   public:
