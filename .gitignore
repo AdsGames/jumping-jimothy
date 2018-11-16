@@ -1,4 +1,4 @@
 *.o
-A5Template.depend
-A5Template.layout
+*.depend
+*.layout
 *.exe
