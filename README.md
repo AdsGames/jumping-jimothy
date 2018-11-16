@@ -21,3 +21,5 @@ Link with the following options in this order:
 -lBox2D
 ```
 
+Rapid XML is included in the /include/rapidxml/ directory. Rapid XML license can be found [here](https://github.com/discordapp/rapidxmlhere).
+
