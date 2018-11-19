@@ -3,19 +3,18 @@
 
 #include <allegro5/display.h>
 
-enum{
+enum {
   fullscreen_window_stretch,
   fullscreen_window_letterbox,
   fullscreen_window_center,
   fullscreen_true,
-  windowed,
+  windowed
 };
 
-class DisplayMode
-{
+class DisplayMode {
   public:
-    DisplayMode();
-    virtual ~DisplayMode();
+    DisplayMode() {};
+    virtual ~DisplayMode() {};
 
     static int mode;
     static int game_render_width;
@@ -32,7 +31,6 @@ class DisplayMode
   protected:
 
   private:
-
 
 };
 
