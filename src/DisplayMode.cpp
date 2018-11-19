@@ -2,11 +2,11 @@
 #include "allegro5/allegro.h"
 #include "Options.h"
 
-int DisplayMode::window_render_width=1024;
-int DisplayMode::window_render_height=768;
+int DisplayMode::window_render_width = 1024;
+int DisplayMode::window_render_height = 768;
 
-int DisplayMode::game_render_width=1024;
-int DisplayMode::game_render_height=768;
+int DisplayMode::game_render_width = 1024;
+int DisplayMode::game_render_height = 768;
 
 float DisplayMode::scale_h = 0;
 float DisplayMode::scale_w = 0;
@@ -14,7 +14,7 @@ float DisplayMode::scale_x = 0;
 float DisplayMode::scale_y = 0;
 
 
-ALLEGRO_DISPLAY *DisplayMode::gameDisplay=nullptr;
+ALLEGRO_DISPLAY *DisplayMode::gameDisplay = nullptr;
 int DisplayMode::mode = 0;
 
 DisplayMode::DisplayMode()
