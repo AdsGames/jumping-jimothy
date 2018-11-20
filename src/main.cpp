@@ -137,7 +137,7 @@ void setup(){
   // Set display mode to windowed
   DisplayMode::setActiveDisplay(&display);
   DisplayMode::setMode(FULLSCREEN_WINDOW_LETTERBOX);
-  buffer = al_create_bitmap(DisplayMode::draw_width, DisplayMode::draw_height);
+  buffer = al_create_bitmap(DisplayMode::getDrawWidth(), DisplayMode::getDrawHeight());
 
   if (!display)
     tools::abort_on_error("Screen could not be created", "Error");
@@ -258,12 +258,12 @@ void update(){
     al_draw_scaled_bitmap(buffer,
                           0,
                           0,
-                          DisplayMode::draw_width,
-                          DisplayMode::draw_height,
-                          DisplayMode::scale_x,
-                          DisplayMode::scale_y,
-                          DisplayMode::scale_w * DisplayMode::draw_width,
-                          DisplayMode::scale_h * DisplayMode::draw_height,
+                          DisplayMode::getDrawWidth(),
+                          DisplayMode::getDrawHeight(),
+                          DisplayMode::getTranslationX(),
+                          DisplayMode::getTranslationY(),
+                          DisplayMode::getScaleWidth(),
+                          DisplayMode::getScaleHeight(),
                           0);
 
     // Flip (OpenGL)
