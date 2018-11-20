@@ -58,12 +58,12 @@ int DisplayMode::getTranslationY() {
 
 // Gets scale width
 int DisplayMode::getScaleWidth() {
-  return (int)(scale_x * (float)draw_w);
+  return scale_x * draw_w;
 }
 
 // Gets scale height
 int DisplayMode::getScaleHeight() {
-  return (int)(scale_y * (float)draw_h);
+  return scale_y * draw_h;
 }
 
 // Gets scale x
@@ -131,7 +131,7 @@ void DisplayMode::setMode(int mode) {
 
       // Set up screen size and positions
       setWindowSize(info.x2 - info.x1, info.y2 - info.y1);
-      setScale((float)window_w / (float)draw_w, (float)window_h / (float)draw_h);
+      setScale((float)window_w / draw_w, (float)window_h / draw_h);
       setTranslation(0.0f, 0.0f);
 
       break;
@@ -147,7 +147,7 @@ void DisplayMode::setMode(int mode) {
       // Set up screen size and positions
       setWindowSize(info.x2 - info.x1, info.y2 - info.y1);
       setScale(1.0f, 1.0f);
-      setTranslation((window_w  - scale_x * (float)draw_w) / 2, (window_h - scale_y * (float)draw_h) / 2);
+      setTranslation((window_w  - scale_x * draw_w) / 2, (window_h - scale_y * draw_h) / 2);
 
       break;
 
@@ -161,11 +161,11 @@ void DisplayMode::setMode(int mode) {
 
       // Set up screen size and positions
       setWindowSize(info.x2 - info.x1, info.y2 - info.y1);
-      setScale(std::min((float)window_w / (float)draw_w,
-                        (float)window_h / (float)draw_h),
-               std::min((float)window_w / (float)draw_w,
-                        (float)window_h / (float)draw_h));
-      setTranslation((window_w  - scale_x * (float)draw_w) / 2, (window_h - scale_y * (float)draw_h) / 2);
+      setScale(std::min((float)window_w / draw_w,
+                        (float)window_h / draw_h),
+               std::min((float)window_w / draw_w,
+                        (float)window_h / draw_h));
+      setTranslation((window_w  - scale_x * draw_w) / 2, (window_h - scale_y * draw_h) / 2);
 
       break;
 
