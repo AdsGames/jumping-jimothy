@@ -31,7 +31,6 @@ class Options : public State
 
     static bool sfx_enabled;
     static bool music_enabled;
-    static int graphics_mode;
     static bool draw_cursor;
     static std::string joystick_data;
     static void updateJoysticks(std::string newJoyData);
@@ -40,9 +39,6 @@ class Options : public State
   protected:
 
   private:
-
-    std::string graphics_data="";
-
     ALLEGRO_FONT *options_font;
     ALLEGRO_FONT *title_font;
 

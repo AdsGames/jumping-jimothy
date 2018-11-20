@@ -9,6 +9,8 @@
 //#include <iostream>
 #include <allegro5/allegro.h>
 
+#include "DisplayMode.h"
+
 #ifndef MOUSELISTENER_H
 #define MOUSELISTENER_H
 

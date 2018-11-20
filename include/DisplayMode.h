@@ -1,14 +1,22 @@
+/*
+ * Display Mode
+ * Sets up and changes passed display
+ * Danny Vanstemp and Allan Legemaate
+ * 20/11/2018
+ */
 #ifndef DISPLAYMODE_H
 #define DISPLAYMODE_H
 
 #include <allegro5/display.h>
+#include <string>
+
+#define NUM_GRAPHICS_MODES 4
 
 enum {
-  fullscreen_window_stretch,
-  fullscreen_window_letterbox,
-  fullscreen_window_center,
-  fullscreen_true,
-  windowed
+  FULLSCREEN_WINDOW_STRETCH,
+  FULLSCREEN_WINDOW_LETTERBOX,
+  FULLSCREEN_WINDOW_CENTER,
+  WINDOWED
 };
 
 class DisplayMode {
@@ -16,21 +24,37 @@ class DisplayMode {
     DisplayMode() {};
     virtual ~DisplayMode() {};
 
-    static int mode;
-    static int game_render_width;
-    static int game_render_height;
-    static int window_render_height;
-    static int window_render_width;
-    static ALLEGRO_DISPLAY *init(int);
-    static ALLEGRO_DISPLAY *gameDisplay;
+    static void setMode(int);
+    static void setActiveDisplay(ALLEGRO_DISPLAY **display);
+
+    static int getDisplayMode() { return mode; }
+    static std::string getDisplayModeString() { return mode_string; }
+
+    // Size of drawing buffer
+    static float draw_width;
+    static float draw_height;
+
+    // Size of window
+    static float window_height;
+    static float window_width;
+
+    // Translation amount
     static float scale_x;
     static float scale_y;
+
+    // Draw buffer scale percent (as decimal)
     static float scale_w;
     static float scale_h;
-    static void setMode(ALLEGRO_DISPLAY *newDisplay,int);
+
+    // Draw cursor enabled?
+    static bool draw_cursor;
   protected:
 
   private:
+    static int mode;
+    static ALLEGRO_DISPLAY** display;
+
+    static std::string mode_string;
 
 };
 
