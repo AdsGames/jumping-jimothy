@@ -1,8 +1,8 @@
 #include "Options.h"
+#include "DisplayMode.h"
 
 bool Options::music_enabled=true;
 bool Options::sfx_enabled=true;
-int Options::graphics_mode=0;
 bool Options::draw_cursor=false;
 bool Options::joystick_mode=false;
 std::string Options::joystick_data="";
@@ -17,24 +17,12 @@ Options::Options()
     cursor = tools::load_bitmap_ex("images/cursor.png");
     highlight = tools::load_bitmap_ex("images/highlight.png");
 
-
-
     OptionsUI.addElement(new UIElement(25, 25, "Options",title_font));
     OptionsUI.getElementByText("Options") -> setVisibleBackground(false);
     OptionsUI.getElementByText("Options") -> setTextColour(al_map_rgb(255,255,255));
 
     if(joystick_data=="")
       joystick_data="None detected.";
-
-    if(graphics_mode==0)graphics_data="Borderless Fullscreen (Stretched)";
-    if(graphics_mode==1)graphics_data="Borderless Fullscreen (Letterbox)";
-    if(graphics_mode==2)graphics_data="Borderless Fullscreen (Centered)";
-    if(graphics_mode==3)graphics_data="Fullscreen";
-    if(graphics_mode==4)graphics_data="Windowed";
-
-
-
-
 
     OptionsUI.addElement(new UIElement(400,25,"Gamepad: " + joystick_data,"joydata",options_font));
     OptionsUI.getElementById("joydata") -> setVisibleBackground(false);
@@ -62,10 +50,10 @@ Options::Options()
     OptionsUI.addElement(new Button(100, 201, "Graphics Mode",options_font));
     OptionsUI.getElementByText("Graphics Mode") -> setSize(180,18);
     OptionsUI.getElementByText("Graphics Mode") -> setTextColour(al_map_rgb(255,255,255));
-    OptionsUI.getElementByText("Graphics Mode") ->setVisibleBackground(false);
+    OptionsUI.getElementByText("Graphics Mode") -> setVisibleBackground(false);
 
 
-    OptionsUI.addElement(new UIElement(300,200,graphics_data,"graphicsdata",options_font));
+    OptionsUI.addElement(new UIElement(300,200,DisplayMode::getDisplayModeString(),"graphicsdata",options_font));
     OptionsUI.getElementById("graphicsdata") -> setVisibleBackground(false);
     OptionsUI.getElementById("graphicsdata") -> setTextColour(al_map_rgb(255,255,255));
 
@@ -131,7 +119,9 @@ void Options::update(){
 
   if(OptionsUI.getElementById("graphicsdata") -> mouseReleased() ||
         (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==300)){
-
+    int graphics_mode = (DisplayMode::getDisplayMode() + 1) % NUM_GRAPHICS_MODES;
+    DisplayMode::setMode(graphics_mode);
+    OptionsUI.getElementById("graphicsdata") -> setText(DisplayMode::getDisplayModeString());
   }
 
   if(    OptionsUI.getElementByText("Toggle Music") ->hover() && !joystick_mode){

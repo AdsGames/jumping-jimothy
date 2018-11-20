@@ -22,6 +22,7 @@
 #include "LevelSelect.h"
 #include "Options.h"
 #include "MusicManager.h"
+#include "DisplayMode.h"
 
 // Current state object
 State *currentState = nullptr;
@@ -43,29 +44,10 @@ ALLEGRO_TIMER* timer = nullptr;
 ALLEGRO_DISPLAY *display = nullptr;
 ALLEGRO_BITMAP *buffer;
 
-int graphics_mode;
-
 // Input listener wrapper classes
 MouseListener m_listener;
 KeyListener k_listener;
 JoystickListener j_listener;
-
-float scaleW;
-float scaleH;
-float scaleX;
-float scaleY;
-
-int screenWidth=1024;
-int screenHeight=768;
-
-enum{
-  fullscreen_window_stretch,
-  fullscreen_window_letterbox,
-  fullscreen_window_center,
-  fullscreen_true,
-  windowed,
-};
-
 
 // Delete game state and free state resources
 void clean_up(){
@@ -127,13 +109,13 @@ void change_state(){
 // Setup game
 void setup(){
 
-  std::cout<<"Initializing Allegro.";
+  std::cout << "Initializing Allegro.\n";
   // Init allegro
   if( !al_init())
     tools::abort_on_error( "Allegro could not initilize", "Error");
 
   // Window title
-  al_set_window_title(display,"Loading...");
+  al_set_window_title(display, "Loading...");
 
   // Controls
   al_install_keyboard();
@@ -152,103 +134,23 @@ void setup(){
   al_init_acodec_addon();
   al_reserve_samples( 20);
 
-  // Aquire screen
-//
-//  #if defined(RELEASE)
-//    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-//  #endif
-//
-//  #if !defined(RELEASE)
-//      al_set_new_display_flags(ALLEGRO_WINDOWED);
-//  #endif
+  // Set display mode to windowed
+  DisplayMode::setActiveDisplay(&display);
+  DisplayMode::setMode(FULLSCREEN_WINDOW_LETTERBOX);
+  buffer = al_create_bitmap(DisplayMode::draw_width, DisplayMode::draw_height);
 
-  al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-
-  graphics_mode=fullscreen_window_stretch;
-  Options::graphics_mode=graphics_mode;
-
-
-  float windowWidth=1024;
-  float windowHeight=768;
-
-
-  if(graphics_mode>=0 && graphics_mode<=3){
-    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-    Options::draw_cursor=true;
-  }
-
-  else if(graphics_mode==fullscreen_true)
-    al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-
-  else
-    al_set_new_display_flags(ALLEGRO_WINDOWED);
-
-
-
-  display = al_create_display(windowWidth, windowHeight);
-
-  if(Options::graphics_mode>=0 && Options::graphics_mode<=3)
-    al_hide_mouse_cursor(display);
-
-
-
-  windowWidth = al_get_display_width(display);
-  windowHeight = al_get_display_height(display);
-
-  buffer = al_create_bitmap(screenWidth, screenHeight);
-
-  // calculate scaling factor
-  float sx = windowWidth / screenWidth;
-  float sy = windowHeight / screenHeight;
-  float scale = std::min(sx, sy);
-
-  if(graphics_mode==fullscreen_window_stretch){
-    // calculate how much the buffer should be scaled
-    scaleW = screenWidth * sx;
-    scaleH = screenHeight * sy;
-    scaleX = (windowWidth - scaleW) / 2;
-    scaleY = (windowHeight - scaleH) / 2;
-  }
-
-  if(graphics_mode==fullscreen_window_center){
-    scaleW = screenWidth * 1;
-    scaleH = screenHeight * 1;
-    scaleX = (windowHeight - scaleH) / 2;
-    scaleY = (windowWidth - scaleW) / 2;;
-  }
-
-   if(graphics_mode==fullscreen_window_letterbox){
-    scaleW = screenWidth * scale;
-    scaleH = screenHeight * scale;
-    scaleX = (windowWidth - scaleW) / 2;
-    scaleY = (windowHeight - scaleH) / 2;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  if( !display)
-    tools::abort_on_error( "Screen could not be created", "Error");
+  if (!display)
+    tools::abort_on_error("Screen could not be created", "Error");
 
   // Timer
   timer = al_create_timer(1.0 / MAX_FPS);
 
   // Register events
   event_queue = al_create_event_queue();
-  al_register_event_source( event_queue, al_get_display_event_source(display));
-  al_register_event_source( event_queue, al_get_timer_event_source(timer));
-  al_register_event_source( event_queue, al_get_keyboard_event_source());
-  al_register_event_source( event_queue, al_get_joystick_event_source());
+  al_register_event_source(event_queue, al_get_display_event_source(display));
+  al_register_event_source(event_queue, al_get_timer_event_source(timer));
+  al_register_event_source(event_queue, al_get_keyboard_event_source());
+  al_register_event_source(event_queue, al_get_joystick_event_source());
 
   // Timer
   al_start_timer(timer);
@@ -265,7 +167,6 @@ void setup(){
   #if defined(RELEASE)
     std::cout<<"Build target: Release\n";
   #endif
-
 
   // Probably never going to be relevant but pretty cool anyways
   uint32_t version = al_get_allegro_version();
@@ -331,68 +232,58 @@ void update(){
   else if( ev.type == ALLEGRO_EVENT_JOYSTICK_CONFIGURATION){
     al_reconfigure_joysticks();
     joystick_enabled = (al_get_num_joysticks() > 0);
-    if(joystick_enabled){
+
+    if(joystick_enabled) {
       Options::joystick_data=al_get_joystick_name(al_get_joystick(0));
       std::cout<<"Joystick "<<al_get_joystick_name(al_get_joystick(0))<<" is configured.\n";
-    }else{
+    }
+    else{
       std::cout<<"Joystick unplugged.\n";
       Options::joystick_data="None detected.";
-
     }
-
   }
 
   // Drawing
-  if( al_is_event_queue_empty(event_queue)){
+  if( al_is_event_queue_empty(event_queue)) {
     // Clear buffer
     al_clear_to_color( al_map_rgb(0,0,0));
 
+    // Render a frame
+    al_set_target_bitmap(buffer);
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    currentState -> draw();
 
-
-      // render a frame
-      if(Options::graphics_mode>=0 && Options::graphics_mode<=3){
-        al_set_target_bitmap(buffer);
-        al_clear_to_color(al_map_rgb(0, 0, 0));
-      }
-
-
-      currentState -> draw();
-
-
-      if(Options::graphics_mode>=0 && Options::graphics_mode<=3){
-
-        al_set_target_backbuffer(display);
-        al_clear_to_color(al_map_rgb(0, 0, 0));
-        al_draw_scaled_bitmap(buffer, 0, 0, screenWidth, screenHeight, scaleX, scaleY, scaleW, scaleH, 0);
-      }
-
-
-
-
-
-
-      // Draw state graphics
-
-
-
+    al_set_target_backbuffer(display);
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_draw_scaled_bitmap(buffer,
+                          0,
+                          0,
+                          DisplayMode::draw_width,
+                          DisplayMode::draw_height,
+                          DisplayMode::scale_x,
+                          DisplayMode::scale_y,
+                          DisplayMode::scale_w * DisplayMode::draw_width,
+                          DisplayMode::scale_h * DisplayMode::draw_height,
+                          0);
 
     // Flip (OpenGL)
     al_flip_display();
 
     // Update fps buffer
-    for( int i = 99; i > 0; i--)
+    for( int i = 99; i > 0; i--) {
       frames_array[i] = frames_array[i - 1];
+    }
     frames_array[0] = (1.0/(al_get_time() - old_time));
     old_time = al_get_time();
 
     int fps_total = 0;
-    for( int i = 0; i < 100; i++)
+    for( int i = 0; i < 100; i++) {
       fps_total += frames_array[i];
+    }
 
     // FPS = average
     fps = fps_total/100;
-   // al_set_window_title(display,tools::convertIntToString(fps).c_str());
-
+    // al_set_window_title(display,tools::convertIntToString(fps).c_str());
   }
 }
 
@@ -406,8 +297,9 @@ int main(int argc, char **argv){
   currentState = new Init();
 
   // Run game
-  while(!closing)
+  while(!closing) {
     update();
+  }
 
   // Destory display
   MusicManager::destroy();

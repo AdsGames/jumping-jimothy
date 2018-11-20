@@ -24,8 +24,8 @@ void MouseListener::update(){
   al_get_mouse_state(&state);
 
   // Position
-  mouse_x = state.x;
-  mouse_y = state.y;
+  mouse_x = (state.x - DisplayMode::scale_x) / DisplayMode::scale_w;
+  mouse_y = (state.y - DisplayMode::scale_y) / DisplayMode::scale_h;
 
   mouse_moved=false;
 
