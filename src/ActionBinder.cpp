@@ -6,12 +6,12 @@ binding ActionBinder::game_binding[10];
 bool ActionBinder::actionPressed(int newAction){
 
   for(int i=0; i<NUM_BINDABLE_BUTTONS; i++){
-    if(keyListener::keyPressed[game_binding[newAction].key_code[i]])
+    if(KeyListener::keyPressed[game_binding[newAction].key_code[i]])
       return true;
-    if(joystickListener::stickDirections[game_binding[newAction].stick[i]])
+    if(JoystickListener::stickDirections[game_binding[newAction].stick[i]])
       return true;
 
-     if(joystickListener::buttonPressed[game_binding[newAction].joystick_button[i]])
+     if(JoystickListener::buttonPressed[game_binding[newAction].joystick_button[i]])
       return true;
     }
   return false;
@@ -21,12 +21,12 @@ bool ActionBinder::actionPressed(int newAction){
 bool ActionBinder::actionHeld(int newAction){
 
   for(int i=0; i<NUM_BINDABLE_BUTTONS; i++){
-    if(keyListener::key[game_binding[newAction].key_code[i]])
+    if(KeyListener::key[game_binding[newAction].key_code[i]])
       return true;
-    if(joystickListener::stickDirections[game_binding[newAction].stick[i]])
+    if(JoystickListener::stickDirections[game_binding[newAction].stick[i]])
       return true;
 
-    if(joystickListener::button[game_binding[newAction].joystick_button[i]])
+    if(JoystickListener::button[game_binding[newAction].joystick_button[i]])
       return true;
     }
   return false;
