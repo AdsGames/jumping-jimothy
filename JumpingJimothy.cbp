@@ -11,7 +11,7 @@
 				<Option output="bin/JumpingJimothy" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/" />
-				<Option type="0" />
+				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-Wnon-virtual-dtor" />
@@ -76,6 +76,7 @@
 		<Linker>
 			<Add option="-s" />
 		</Linker>
+		<Unit filename="include/ActionBinder.h" />
 		<Unit filename="include/Box.h" />
 		<Unit filename="include/Button.h" />
 		<Unit filename="include/Character.h" />
@@ -90,6 +91,7 @@
 		<Unit filename="include/Globals.h" />
 		<Unit filename="include/Goat.h" />
 		<Unit filename="include/Init.h" />
+		<Unit filename="include/JoystickCodes.h" />
 		<Unit filename="include/JoystickListener.h" />
 		<Unit filename="include/KeyListener.h" />
 		<Unit filename="include/LevelSelect.h" />
@@ -109,6 +111,7 @@
 		<Unit filename="include/rapidxml/rapidxml_iterators.hpp" />
 		<Unit filename="include/rapidxml/rapidxml_print.hpp" />
 		<Unit filename="include/rapidxml/rapidxml_utils.hpp" />
+		<Unit filename="src/ActionBinder.cpp" />
 		<Unit filename="src/Box.cpp" />
 		<Unit filename="src/Button.cpp" />
 		<Unit filename="src/Character.cpp" />
