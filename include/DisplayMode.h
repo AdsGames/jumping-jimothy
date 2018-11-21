@@ -1,7 +1,7 @@
 /*
  * Display Mode
  * Sets up and changes passed display
- * Danny Vanstemp and Allan Legemaate
+ * Danny Van Stemp and Allan Legemaate
  * 20/11/2018
  */
 #ifndef DISPLAYMODE_H
