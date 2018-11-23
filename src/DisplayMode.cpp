@@ -1,6 +1,9 @@
+#include <iostream>
+
 #include "DisplayMode.h"
 #include "allegro5/allegro.h"
-#include "Options.h"
+
+#include "Config.h"
 
 // Initialize
 int DisplayMode::window_w = 1024;
@@ -15,18 +18,16 @@ float DisplayMode::scale_y = 0;
 int DisplayMode::translation_x = 0;
 int DisplayMode::translation_y = 0;
 
-int DisplayMode::mode = 0;
-
 ALLEGRO_DISPLAY** DisplayMode::display = nullptr;
 
 // Returns current display mode
 int DisplayMode::getDisplayMode() {
-  return DisplayMode::mode;
+  return Config::graphics_mode;
 }
 
 // Returns string version of current display mode
 std::string DisplayMode::getDisplayModeString() {
-  return getDisplayModeString(mode);
+  return getDisplayModeString(Config::graphics_mode);
 }
 
 
@@ -139,7 +140,7 @@ void DisplayMode::setMode(int mode) {
   }
 
   // Set mode
-  DisplayMode::mode = mode;
+  Config::graphics_mode = mode;
 
   // Get monitor width
   ALLEGRO_MONITOR_INFO info;
@@ -218,7 +219,7 @@ void DisplayMode::setMode(int mode) {
   al_hide_mouse_cursor(*display);
   if (display_cursor)
     al_show_mouse_cursor(*display);
-  Options::draw_cursor = !display_cursor;
+  Config::draw_cursor = !display_cursor;
 
   // Debug screen mode
   std::cout << "Scren mode set to " << getDisplayModeString() << ".\n";

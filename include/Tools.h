@@ -22,9 +22,6 @@
 
 
 class tools{
-
-
-
     public:
 
         // Convert char to float

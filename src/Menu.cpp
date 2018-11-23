@@ -1,5 +1,7 @@
 #include "Menu.h"
 
+#include "Config.h"
+
 // Init menu
 
 //ALLEGRO_SAMPLE *Menu::menu_music = nullptr;
@@ -166,12 +168,12 @@ void Menu::update(){
 
   if(JoystickListener::stickDirections[LEFT_STICK_DOWN] || JoystickListener::stickDirections[LEFT_STICK_UP] || JoystickListener::stickDirections[DPAD_DOWN] || JoystickListener::stickDirections[DPAD_UP2]){
     joystick_direction_hit=true;
-    Options::joystick_mode=true;
+    Config::joystick_mode=true;
   }else{
     joystick_direction_hit=false;
   }
   if(MouseListener::mouse_moved)
-    Options::joystick_mode=false;
+    Config::joystick_mode=false;
 
 
   if(highlight_y>highlight_y_destination)highlight_y-=10;
@@ -187,7 +189,7 @@ void Menu::update(){
   counter_prompt = (counter_play >= 50) ? !counter_prompt : counter_prompt;
   counter_play = (counter_play >= 50) ? 0 : counter_play;
 
-  if(!Options::joystick_mode){
+  if(!Config::joystick_mode){
 
     if(menu_buttons[menu_button_play].hover())highlight_y_destination=500;
     if(menu_buttons[menu_button_edit].hover())highlight_y_destination=550;
@@ -271,7 +273,7 @@ void Menu::draw(){
 
 
 
-  if(Options::draw_cursor)
+  if(Config::draw_cursor)
     al_draw_bitmap(cursor,MouseListener::mouse_x,MouseListener::mouse_y,0);
 
 

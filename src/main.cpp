@@ -21,6 +21,7 @@
 #include "Editor.h"
 #include "LevelSelect.h"
 #include "Options.h"
+#include "Config.h"
 #include "MusicManager.h"
 #include "DisplayMode.h"
 
@@ -134,9 +135,12 @@ void setup(){
   al_init_acodec_addon();
   al_reserve_samples( 20);
 
+  // Load config
+  Config::read_data("data/options_data.xml");
+
   // Set display mode to windowed
   DisplayMode::setActiveDisplay(&display);
-  DisplayMode::setMode(FULLSCREEN_WINDOW_LETTERBOX);
+  DisplayMode::setMode(Config::graphics_mode);
   buffer = al_create_bitmap(DisplayMode::getDrawWidth(), DisplayMode::getDrawHeight());
 
   if (!display)
@@ -186,11 +190,12 @@ void setup(){
 
   if(joystick_enabled){
     std::cout<<al_get_joystick_name(al_get_joystick(0)) <<" is installed and being used.\n";
-    Options::joystick_data=al_get_joystick_name(al_get_joystick(0));
-  }else
+    Config::joystick_data=al_get_joystick_name(al_get_joystick(0));
+  }
+  else {
     std::cout<<"No joystick is installed.\n";
+  }
 
-  Options::read_data();
   MusicManager::load();
 
 
@@ -234,12 +239,12 @@ void update(){
     joystick_enabled = (al_get_num_joysticks() > 0);
 
     if(joystick_enabled) {
-      Options::joystick_data=al_get_joystick_name(al_get_joystick(0));
+      Config::joystick_data=al_get_joystick_name(al_get_joystick(0));
       std::cout<<"Joystick "<<al_get_joystick_name(al_get_joystick(0))<<" is configured.\n";
     }
     else{
       std::cout<<"Joystick unplugged.\n";
-      Options::joystick_data="None detected.";
+      Config::joystick_data="None detected.";
     }
   }
 

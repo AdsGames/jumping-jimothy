@@ -1,5 +1,6 @@
 #include "Editor.h"
 
+#include "Config.h"
 
 const char* Editor::testing_file_name = "Untitled";
 bool Editor::modified=false;
@@ -802,7 +803,7 @@ void Editor::draw(){
   // Draw buttons
   editorUI.draw();
 
-  if(Options::draw_cursor)
+  if(Config::draw_cursor)
     al_draw_bitmap(cursor,MouseListener::mouse_x,MouseListener::mouse_y,0);
 
 }

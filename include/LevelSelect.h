@@ -18,7 +18,6 @@
 #include "KeyListener.h"
 #include "Game.h"
 #include "Tools.h"
-#include "Options.h"
 
 
 class LevelSelect : public State

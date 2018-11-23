@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-	<value sfx="enabled"/>
-	<value music="enabled"/>
+	<value sfx="disabled"/>
+	<value music="disabled"/>
+	<value graphics_mode="3"/>
 </data>
 

@@ -63,9 +63,6 @@ class DisplayMode {
     static float scale_x;
     static float scale_y;
 
-    // Current graphics mode
-    static int mode;
-
     // Active display
     static ALLEGRO_DISPLAY** display;
 
