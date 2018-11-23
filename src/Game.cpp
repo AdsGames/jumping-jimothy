@@ -182,7 +182,7 @@ void Game::load_world(int newLevel){
   rapidxml::xml_node<> * root_node;
 
   // Make an xml object
-  std::ifstream theFile( "data/level_"+tools::convertIntToString(newLevel) +".xml");
+  std::ifstream theFile( "data/level_"+tools::toString(newLevel) +".xml");
   std::vector<char> xml_buffer( (std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
   xml_buffer.push_back('\0');
 
@@ -234,29 +234,29 @@ void Game::load_world(int newLevel){
             std::vector<std::string> splits = tools::split_string( orientation, ' ');
             if( splits.size() == 4)
               for( int k = 0; k < 4; k++)
-                orientation_array[k] = (tools::convertStringToInt(splits.at(k)));
+                orientation_array[k] = (tools::stringToInt(splits.at(k)));
 
-          newBox = create_static_box( tools::string_to_float(x), tools::string_to_float(y), new_dynamic_tile[orientation_array[0]],new_dynamic_tile[orientation_array[1]],
+          newBox = create_static_box( tools::stringToFloat(x), tools::stringToFloat(y), new_dynamic_tile[orientation_array[0]],new_dynamic_tile[orientation_array[1]],
                                    new_dynamic_tile[orientation_array[2]],new_dynamic_tile[orientation_array[3]]);
 
 
           static_count++;
 
         }else if(type=="Dynamic"){
-          newBox = create_dynamic_box( tools::string_to_float(x), tools::string_to_float(y), 1.6, 1.6, tools::string_to_float(width), tools::string_to_float(height), box,true, false);
+          newBox = create_dynamic_box( tools::stringToFloat(x), tools::stringToFloat(y), 1.6, 1.6, tools::stringToFloat(width), tools::stringToFloat(height), box,true, false);
           dynamic_count++;
         }else if(type=="Collision"){
-          newBox = create_collision_box( tools::string_to_float(x), tools::string_to_float(y), tools::string_to_float(width), tools::string_to_float(height) );
+          newBox = create_collision_box( tools::stringToFloat(x), tools::stringToFloat(y), tools::stringToFloat(width), tools::stringToFloat(height) );
 
 
 
       }
       else if( type == "Character"){
-        gameCharacter = create_character( tools::string_to_float(x), tools::string_to_float(y)-1.6);
+        gameCharacter = create_character( tools::stringToFloat(x), tools::stringToFloat(y)-1.6);
         character_count++;
       }
       else if( type == "Finish"){
-        gameGoat = create_goat( tools::string_to_float(x), tools::string_to_float(y)-1);
+        gameGoat = create_goat( tools::stringToFloat(x), tools::stringToFloat(y)-1);
         if(gameCharacter==nullptr)
           std::cout<<"WARNING: Game: goat is passed nullptr gameCharacter\n";
         goat_count++;
@@ -275,7 +275,7 @@ void Game::load_world(int newLevel){
           gameWorld -> CreateJoint(jointDef);
         }*/
       }else if(type == "Explosive"){
-       newBox = create_explosive_box( tools::string_to_float(x), tools::string_to_float(y),tools::string_to_float(orientation), (affect_character=="true"));
+       newBox = create_explosive_box( tools::stringToFloat(x), tools::stringToFloat(y),tools::stringToFloat(orientation), (affect_character=="true"));
       }
 
     }
