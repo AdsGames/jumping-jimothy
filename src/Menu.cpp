@@ -3,9 +3,6 @@
 #include "Config.h"
 
 // Init menu
-
-//ALLEGRO_SAMPLE *Menu::menu_music = nullptr;
-
 Menu::Menu(){
 
   credits_menu=false;

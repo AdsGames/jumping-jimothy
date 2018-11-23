@@ -11,6 +11,7 @@
 #include "Sensor.h"
 #include "KeyListener.h"
 #include "JoystickListener.h"
+#include "Sound.h"
 
 class b2World;
 class b2Body;
@@ -48,8 +49,8 @@ class Character : public Box{
     ALLEGRO_BITMAP *sprite;
     ALLEGRO_BITMAP *sprites[20];
 
-    ALLEGRO_SAMPLE *jump;
-    ALLEGRO_SAMPLE *land;
+    Sound jump;
+    Sound land;
 
 
 };

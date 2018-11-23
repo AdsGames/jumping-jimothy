@@ -188,17 +188,18 @@ void setup(){
 
   joystick_enabled = (al_get_num_joysticks() > 0);
 
-  if(joystick_enabled){
-    std::cout<<al_get_joystick_name(al_get_joystick(0)) <<" is installed and being used.\n";
-    Config::joystick_data=al_get_joystick_name(al_get_joystick(0));
+  if (joystick_enabled) {
+    std::cout << al_get_joystick_name(al_get_joystick(0)) <<" is installed and being used.\n";
+    Config::joystick_data = al_get_joystick_name(al_get_joystick(0));
   }
   else {
-    std::cout<<"No joystick is installed.\n";
+    std::cout << "No joystick is installed.\n";
+    Config::joystick_data = "None detected.";
   }
 
-  MusicManager::load();
-
-
+  if (Config::music_enabled) {
+    MusicManager::load();
+  }
 }
 
 // Handle events
@@ -239,12 +240,12 @@ void update(){
     joystick_enabled = (al_get_num_joysticks() > 0);
 
     if(joystick_enabled) {
-      Config::joystick_data=al_get_joystick_name(al_get_joystick(0));
-      std::cout<<"Joystick "<<al_get_joystick_name(al_get_joystick(0))<<" is configured.\n";
+      Config::joystick_data = al_get_joystick_name(al_get_joystick(0));
+      std::cout << "Joystick " << al_get_joystick_name(al_get_joystick(0)) << " is configured.\n";
     }
     else{
-      std::cout<<"Joystick unplugged.\n";
-      Config::joystick_data="None detected.";
+      std::cout << "Joystick unplugged.\n";
+      Config::joystick_data = "None detected.";
     }
   }
 
