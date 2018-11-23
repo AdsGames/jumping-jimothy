@@ -50,6 +50,7 @@ class Options : public State
     int highlight_y=100;;
     int highlight_y_destination=100;
     bool joystick_direction_hit=false;
+    int temp_graphics_mode=0;
 
 
 

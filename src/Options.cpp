@@ -72,6 +72,9 @@ Options::Options()
     read_data();
     updateUI();
 
+    // Graphics mode
+    temp_graphics_mode = DisplayMode::getDisplayMode();
+
 
 
 }
@@ -117,26 +120,30 @@ void Options::update(){
     write_data();
   }
 
-  if(OptionsUI.getElementById("graphicsdata") -> mouseReleased() ||
-        (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination==300)){
-    int graphics_mode = (DisplayMode::getDisplayMode() + 1) % NUM_GRAPHICS_MODES;
-    DisplayMode::setMode(graphics_mode);
-    OptionsUI.getElementById("graphicsdata") -> setText(DisplayMode::getDisplayModeString());
+  if(OptionsUI.getElementByText("Graphics Mode") -> mouseReleased()){
+    temp_graphics_mode = (temp_graphics_mode + 1) % NUM_GRAPHICS_MODES;
+    OptionsUI.getElementById("graphicsdata") -> setText(DisplayMode::getDisplayModeString(temp_graphics_mode));
   }
 
-  if(    OptionsUI.getElementByText("Toggle Music") ->hover() && !joystick_mode){
-    highlight_y_destination=150;
-
+  if(OptionsUI.getElementByText("Apply Graphics") -> mouseReleased()){
+    DisplayMode::setMode(temp_graphics_mode);
   }
 
 
-  if(    OptionsUI.getElementByText("Toggle SFX") -> hover() && !joystick_mode){
+  if (OptionsUI.getElementByText("Toggle SFX") -> hover() && !joystick_mode) {
     highlight_y_destination=100;
-
   }
-  if(    OptionsUI.getElementByText("Back") -> hover() && !joystick_mode){
+  if (OptionsUI.getElementByText("Toggle Music") ->hover() && !joystick_mode) {
+    highlight_y_destination=150;
+  }
+  if (OptionsUI.getElementByText("Graphics Mode") -> hover() && !joystick_mode) {
     highlight_y_destination=200;
-
+  }
+  if (OptionsUI.getElementByText("Apply Graphics") -> hover() && !joystick_mode) {
+    highlight_y_destination=250;
+  }
+  if (OptionsUI.getElementByText("Back") -> hover() && !joystick_mode) {
+    highlight_y_destination=300;
   }
 
   if(highlight_y>highlight_y_destination)highlight_y-=10;

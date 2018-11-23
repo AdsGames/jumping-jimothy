@@ -17,8 +17,6 @@ int DisplayMode::translation_y = 0;
 
 int DisplayMode::mode = 0;
 
-std::string DisplayMode::mode_string = "";
-
 ALLEGRO_DISPLAY** DisplayMode::display = nullptr;
 
 // Returns current display mode
@@ -28,7 +26,38 @@ int DisplayMode::getDisplayMode() {
 
 // Returns string version of current display mode
 std::string DisplayMode::getDisplayModeString() {
-  return mode_string;
+  return getDisplayModeString(mode);
+}
+
+
+std::string DisplayMode::getDisplayModeString(int mode) {
+// Window mode
+  switch (mode) {
+    // Fullscreen windowed stretch
+    case FULLSCREEN_WINDOW_STRETCH:
+      return "Borderless Fullscreen (Stretched)";
+      break;
+
+    // Fullscreen window center
+    case FULLSCREEN_WINDOW_CENTER:
+      return "Borderless Fullscreen (Centered)";
+      break;
+
+    // Fullscreen window center
+    case FULLSCREEN_WINDOW_LETTERBOX:
+      return "Borderless Fullscreen (Letterbox)";
+      break;
+
+    // Windowed
+    case WINDOWED:
+      return "Windowed";
+      break;
+
+    // Invalid mode
+    default:
+      return "Invalid Display Mode";
+      break;
+  }
 }
 
 // Set active display
@@ -123,9 +152,6 @@ void DisplayMode::setMode(int mode) {
   switch (mode) {
     // Fullscreen windowed stretch
     case FULLSCREEN_WINDOW_STRETCH:
-      // Mode name
-      mode_string = "Borderless Fullscreen (Stretched)";
-
       // Set flags
       al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 
@@ -138,9 +164,6 @@ void DisplayMode::setMode(int mode) {
 
     // Fullscreen window center
     case FULLSCREEN_WINDOW_CENTER:
-      // Mode name
-      mode_string = "Borderless Fullscreen (Centered)";
-
       // Set flags
       al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 
@@ -153,9 +176,6 @@ void DisplayMode::setMode(int mode) {
 
     // Fullscreen window center
     case FULLSCREEN_WINDOW_LETTERBOX:
-      // Mode name
-      mode_string = "Borderless Fullscreen (Letterbox)";
-
       // Set flags
       al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 
@@ -171,9 +191,6 @@ void DisplayMode::setMode(int mode) {
 
     // Windowed
     case WINDOWED:
-      // Mode name
-      mode_string = "Windowed";
-
       // Set flags
       al_set_new_display_flags(ALLEGRO_WINDOWED);
 
@@ -204,5 +221,5 @@ void DisplayMode::setMode(int mode) {
   Options::draw_cursor = !display_cursor;
 
   // Debug screen mode
-  std::cout << "Scren mode set to " << mode_string << ".\n";
+  std::cout << "Scren mode set to " << getDisplayModeString() << ".\n";
 }

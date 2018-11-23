@@ -32,6 +32,7 @@ class DisplayMode {
     // Getters
     static int getDisplayMode();
     static std::string getDisplayModeString();
+    static std::string getDisplayModeString(int mode);
 
     static int getDrawWidth();
     static int getDrawHeight();
@@ -64,7 +65,6 @@ class DisplayMode {
 
     // Current graphics mode
     static int mode;
-    static std::string mode_string;
 
     // Active display
     static ALLEGRO_DISPLAY** display;
