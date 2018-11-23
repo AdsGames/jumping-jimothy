@@ -16,13 +16,16 @@
 				<Compiler>
 					<Add option="-Wnon-virtual-dtor" />
 					<Add option="-Winit-self" />
+					<Add option="-Wredundant-decls" />
 					<Add option="-Wunreachable-code" />
 					<Add option="-Wmissing-include-dirs" />
 					<Add option="-Wmain" />
+					<Add option="-Wextra" />
 					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add option="-Wno-strict-aliasing" />
 					<Add option="-Wno-shadow" />
+					<Add option="-Wno-unused-parameter" />
 					<Add option="-DRELEASE" />
 					<Add directory="include" />
 					<Add directory="include/rapidxml" />
@@ -82,6 +85,7 @@
 		<Unit filename="include/Character.h" />
 		<Unit filename="include/CheckBox.h" />
 		<Unit filename="include/CollisionBox.h" />
+		<Unit filename="include/Config.h" />
 		<Unit filename="include/Controls.h" />
 		<Unit filename="include/DisplayMode.h" />
 		<Unit filename="include/DynamicBox.h" />
@@ -107,16 +111,13 @@
 		<Unit filename="include/Tools.h" />
 		<Unit filename="include/UIElement.h" />
 		<Unit filename="include/UIHandler.h" />
-		<Unit filename="include/rapidxml/rapidxml.hpp" />
-		<Unit filename="include/rapidxml/rapidxml_iterators.hpp" />
-		<Unit filename="include/rapidxml/rapidxml_print.hpp" />
-		<Unit filename="include/rapidxml/rapidxml_utils.hpp" />
 		<Unit filename="src/ActionBinder.cpp" />
 		<Unit filename="src/Box.cpp" />
 		<Unit filename="src/Button.cpp" />
 		<Unit filename="src/Character.cpp" />
 		<Unit filename="src/CheckBox.cpp" />
 		<Unit filename="src/CollisionBox.cpp" />
+		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/Controls.cpp" />
 		<Unit filename="src/DisplayMode.cpp" />
 		<Unit filename="src/DynamicBox.cpp" />

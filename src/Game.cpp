@@ -278,7 +278,7 @@ void Game::load_world(int newLevel){
 
     if (help_node) {
       std::vector<std::string> temp_help = tools::split_string(help_node -> value(), '%');
-      for (int i = 0; i < temp_help.size(); i++) {
+      for (unsigned int i = 0; i < temp_help.size(); i++) {
         help_text.push_back(temp_help.at(i));
       }
     }
@@ -470,7 +470,7 @@ void Game::draw(){
   al_clear_to_color( al_map_rgb(40,40,60));
 
   // Help text
-  for (int i = 0; i < help_text.size(); i++) {
+  for (unsigned int i = 0; i < help_text.size(); i++) {
     al_draw_textf(help_font, al_map_rgb(255, 255, 255), 500, 75 + i * 50, 1, help_text.at(i).c_str());
   }
 
