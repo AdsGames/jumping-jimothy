@@ -256,5 +256,6 @@
 		<y>-8.8</y>
 		<orientation>4 4 4 4</orientation>
 	</Object>
+  <Help>Green blocks' gravity can be toggled.%Use Spacebar to toggle gravity.</Help>
 </data>
 

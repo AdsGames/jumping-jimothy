@@ -82,6 +82,8 @@ class Game : public State{
     bool first_play;
     bool static_mode;
 
+    std::vector<std::string> help_text;
+
     ALLEGRO_FONT *game_font;
     ALLEGRO_FONT *help_font;
     ALLEGRO_FONT *edit_font;
@@ -100,14 +102,13 @@ class Game : public State{
     ALLEGRO_BITMAP *help;
 
     ALLEGRO_BITMAP *new_dynamic_tile[100];
-    //TODO FIX WHEN NOT DEAD INSIDE
+
+    //TODO: FIX WHEN NOT DEAD INSIDE
 
     // Samples
-
     Sound toggle_off;
     Sound toggle_on;
     Sound death;
-
     Button testing_back_button;
 
 
