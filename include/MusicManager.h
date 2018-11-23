@@ -3,11 +3,10 @@
 
 #include "Sound.h"
 
-class MusicManager
-{
+class MusicManager {
   public:
-    MusicManager();
-    virtual ~MusicManager();
+    MusicManager() {};
+    virtual ~MusicManager() {};
 
     static Sound menu_music;
     static Sound game_music;
@@ -15,10 +14,6 @@ class MusicManager
     static void load();
 
     static void destroy();
-
-  protected:
-
-  private:
 };
 
 #endif // MUSICMANAGER_H

@@ -1,6 +1,7 @@
 #include "Options.h"
 #include "DisplayMode.h"
 #include "Config.h"
+#include "MusicManager.h"
 
 // Initialize options screen
 Options::Options() {
@@ -16,9 +17,6 @@ Options::Options() {
   OptionsUI.addElement(new UIElement(25, 25, "Options", title_font));
   OptionsUI.getElementByText("Options") -> setVisibleBackground(false);
   OptionsUI.getElementByText("Options") -> setTextColour(al_map_rgb(255, 255, 255));
-
-  if(Config::joystick_data == "")
-    Config::joystick_data = "None detected.";
 
   // Joystick data
   OptionsUI.addElement(new UIElement(400, 25, "Gamepad: " + Config::joystick_data, "joydata", options_font));
@@ -88,8 +86,9 @@ void Options::draw(){
   OptionsUI.draw();
 
   // Draw cursor if enabled
-  if(Config::draw_cursor)
+  if (Config::draw_cursor) {
     al_draw_bitmap(cursor, MouseListener::mouse_x, MouseListener::mouse_y, 0);
+  }
 
   // Draw highlight
   al_draw_bitmap(highlight, 100, highlight_y, 0);
@@ -114,7 +113,7 @@ void Options::update(){
     (OptionsUI.getElementById("sfx_toggle") -> mouseReleased() ||
      OptionsUI.getElementByText("Toggle SFX") -> mouseReleased() ||
     (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination == 100))) {
-    Config::sfx_enabled=!Config::sfx_enabled;
+    Config::sfx_enabled = !Config::sfx_enabled;
   }
 
   // Toggle Music pressed
@@ -122,7 +121,15 @@ void Options::update(){
     (OptionsUI.getElementById("music_toggle") -> mouseReleased() ||
      OptionsUI.getElementByText("Toggle Music") -> mouseReleased() ||
     (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination == 150))) {
-    Config::music_enabled=!Config::music_enabled;
+    Config::music_enabled = !Config::music_enabled;
+
+    // Enable / disable music
+    if (Config::music_enabled) {
+      MusicManager::menu_music.play();
+    }
+    else {
+      MusicManager::menu_music.stop();
+    }
   }
 
   // Cycle graphics mode pressed
