@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
 	<level number="0">
-		<status>incomplete</status>
+		<status>complete</status>
 	</level>
 	<level number="1">
-		<status>complete</status>
+		<status>incomplete</status>
 	</level>
 	<level number="2">
 		<status>incomplete</status>

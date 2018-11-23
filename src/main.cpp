@@ -293,7 +293,7 @@ void update(){
 }
 
 // Start here
-int main(int argc, char **argv){
+int main(){
   // Basic init
   setup();
 
