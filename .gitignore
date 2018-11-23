@@ -2,3 +2,4 @@
 *.depend
 *.layout
 *.exe
+bin/data/options_data.xml

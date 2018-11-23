@@ -16,7 +16,6 @@
 #include "Tools.h"
 #include "State.h"
 #include "Button.h"
-#include "Options.h"
 #include "Sound.h"
 #include "MusicManager.h"
 
