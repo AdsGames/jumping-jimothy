@@ -886,18 +886,18 @@ bool Editor::load_map( std::string mapName){
     // Idek dude but it works
     if(newBox.type_str == "Collision"){
 
-      newBox.width = (tools::string_to_float(width) * 20.0f);
-      newBox.height = (tools::string_to_float(height) * 20.0f);
-      newBox.x = (tools::string_to_float(x) - tools::string_to_float(width)/2)*20.0f;
+      newBox.width = (tools::stringToFloat(width) * 20.0f);
+      newBox.height = (tools::stringToFloat(height) * 20.0f);
+      newBox.x = (tools::stringToFloat(x) - tools::stringToFloat(width)/2)*20.0f;
       // This guy is positive because we make it negative later
-      newBox.y = (tools::string_to_float(y) + tools::string_to_float(height)/2)*-20.0f;
+      newBox.y = (tools::stringToFloat(y) + tools::stringToFloat(height)/2)*-20.0f;
 
     }
     if(newBox.type_str != "Collision"){
-      newBox.width = (tools::string_to_float(width) * 20.0f) - 16.0f;
-      newBox.height = (tools::string_to_float(height) * 20.0f) - 16.0f;
-      newBox.x = (tools::string_to_float(x) * 20.0f) - 16.0f;
-      newBox.y = (tools::string_to_float(y) * -20.0f) - 16.0f;
+      newBox.width = (tools::stringToFloat(width) * 20.0f) - 16.0f;
+      newBox.height = (tools::stringToFloat(height) * 20.0f) - 16.0f;
+      newBox.x = (tools::stringToFloat(x) * 20.0f) - 16.0f;
+      newBox.y = (tools::stringToFloat(y) * -20.0f) - 16.0f;
     }
 
     newBox.height_str = height;
@@ -908,12 +908,12 @@ bool Editor::load_map( std::string mapName){
     std::vector<std::string> splits = tools::split_string( orientation, ' ');
     if( splits.size() == 4){
       for( int k = 0; k < 4; k++)
-        newBox.orientation[k] = (tools::convertStringToInt(splits.at(k)));
+        newBox.orientation[k] = (tools::stringToInt(splits.at(k)));
     }
     // Maybe we can salvage it?
     else if( splits.size() > 0){
       for( int k = 0; k < 4; k++)
-        newBox.orientation[k] = (tools::convertStringToInt(splits.at(0)));
+        newBox.orientation[k] = (tools::stringToInt(splits.at(0)));
     }
     // All hope is lost!
     else{

@@ -50,7 +50,7 @@ void Config::read_data(std::string path) {
     // Graphics Mode
     if(object_node -> first_attribute("graphics_mode") != nullptr){
       std::string result = object_node -> first_attribute("graphics_mode") -> value();
-      graphics_mode = tools::convertStringToInt(result);
+      graphics_mode = tools::stringToInt(result);
     }
   }
 }
