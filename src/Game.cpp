@@ -10,8 +10,9 @@ int Game::level_to_start = 1;
 
 // Constructor
 Game::Game(){
-
+  // Create character
   gameCharacter = new Character();
+
   // Init first time
   newBox = nullptr;
   rootBox = nullptr;
@@ -27,9 +28,6 @@ Game::Game(){
   toggle_off.load_wav("sfx/toggle_off.wav");
   death.load_wav("sfx/death.wav");
 
-
-
-
   if( testing){
     level = 0;
     testing_back_button = Button(966,728,"Back",edit_font);
@@ -39,20 +37,15 @@ Game::Game(){
   reset();
 
   // Load and play music
-
-
-
   MusicManager::menu_music.stop();
 
   #if defined(RELEASE)
     MusicManager::game_music.play();
-
   #endif
 }
 
 // Destructor
 Game::~Game(){
-
   // Destory bitmaps
   //if( box != nullptr)
   //  al_destroy_bitmap( box);
@@ -164,10 +157,8 @@ void Game::b2_setup(){
 
 // Load world from xml
 void Game::load_world(int newLevel){
-
+  // Load level message
   std::cout << "Attempting to load level_" << newLevel << ".xml into game\n";
-
-  //gameCharacter = new Character();
 
   int goat_count = 0;
   int character_count = 0;
@@ -194,8 +185,8 @@ void Game::load_world(int newLevel){
 
   // Make sure node exists
   if( root_node != 0){
-    // Iteratboole over the nodes
-    for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
+    // Iteratboole over objects
+    for (rapidxml::xml_node<> *object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()) {
       // All the variables we will load
       std::string type = "Static";
       std::string x = "0";
@@ -218,38 +209,36 @@ void Game::load_world(int newLevel){
         width = object_node -> first_node("width") -> value();
       if( object_node -> first_node("height") != 0)
         height = object_node -> first_node("height") -> value();
-     // if( object_node -> first_node("bodytype") != 0)
-    //  bodytype = object_node -> first_node("bodytype") -> value();
+      // if( object_node -> first_node("bodytype") != 0)
+      //   bodytype = object_node -> first_node("bodytype") -> value();
       if( object_node -> first_node("orientation") != 0)
         orientation = object_node -> first_node("orientation") -> value();
       if( object_node -> first_node("affect_character") != 0)
         affect_character = object_node -> first_node("affect_character") -> value();
 
-    // std::cout<<type<<"\n";
-
-     //TODO:: CLEAN THIS POOP UP
-
       if( type == "Static"){
+        std::vector<std::string> splits = tools::split_string( orientation, ' ');
+        if( splits.size() == 4) {
+          for( int k = 0; k < 4; k++) {
+            orientation_array[k] = (tools::stringToInt(splits.at(k)));
+          }
+        }
 
-            std::vector<std::string> splits = tools::split_string( orientation, ' ');
-            if( splits.size() == 4)
-              for( int k = 0; k < 4; k++)
-                orientation_array[k] = (tools::stringToInt(splits.at(k)));
+        newBox = create_static_box( tools::stringToFloat(x),
+                                    tools::stringToFloat(y),
+                                    new_dynamic_tile[orientation_array[0]],
+                                    new_dynamic_tile[orientation_array[1]],
+                                    new_dynamic_tile[orientation_array[2]],
+                                    new_dynamic_tile[orientation_array[3]]);
 
-          newBox = create_static_box( tools::stringToFloat(x), tools::stringToFloat(y), new_dynamic_tile[orientation_array[0]],new_dynamic_tile[orientation_array[1]],
-                                   new_dynamic_tile[orientation_array[2]],new_dynamic_tile[orientation_array[3]]);
-
-
-          static_count++;
-
-        }else if(type=="Dynamic"){
-          newBox = create_dynamic_box( tools::stringToFloat(x), tools::stringToFloat(y), 1.6, 1.6, tools::stringToFloat(width), tools::stringToFloat(height), box,true, false);
-          dynamic_count++;
-        }else if(type=="Collision"){
-          newBox = create_collision_box( tools::stringToFloat(x), tools::stringToFloat(y), tools::stringToFloat(width), tools::stringToFloat(height) );
-
-
-
+        static_count++;
+      }
+      else if(type=="Dynamic"){
+        newBox = create_dynamic_box( tools::stringToFloat(x), tools::stringToFloat(y), 1.6, 1.6, tools::stringToFloat(width), tools::stringToFloat(height), box,true, false);
+        dynamic_count++;
+      }
+      else if(type=="Collision"){
+        newBox = create_collision_box( tools::stringToFloat(x), tools::stringToFloat(y), tools::stringToFloat(width), tools::stringToFloat(height) );
       }
       else if( type == "Character"){
         gameCharacter = create_character( tools::stringToFloat(x), tools::stringToFloat(y)-1.6);
@@ -261,23 +250,37 @@ void Game::load_world(int newLevel){
           std::cout<<"WARNING: Game: goat is passed nullptr gameCharacter\n";
         goat_count++;
 
-      // Once killed 17 people
-      // Use at own risk
-      /*if(group=="1"){
-        if(rootBox==nullptr)
-          rootBox=newBox;
-        else{
-          b2Vec2 FeetAnchor(0,0);
-          b2WeldJointDef *jointDef = new b2WeldJointDef();
-          jointDef -> Initialize(newBox -> getBody(), rootBox -> getBody(), FeetAnchor);
-          jointDef -> collideConnected = false;
-          jointDef  -> referenceAngle = 0;
-          gameWorld -> CreateJoint(jointDef);
-        }*/
-      }else if(type == "Explosive"){
+        // Once killed 17 people
+        // Use at own risk
+        /*
+        if(group=="1"){
+          if(rootBox==nullptr)
+            rootBox=newBox;
+          else{
+            b2Vec2 FeetAnchor(0,0);
+            b2WeldJointDef *jointDef = new b2WeldJointDef();
+            jointDef -> Initialize(newBox -> getBody(), rootBox -> getBody(), FeetAnchor);
+            jointDef -> collideConnected = false;
+            jointDef  -> referenceAngle = 0;
+            gameWorld -> CreateJoint(jointDef);
+          }
+        }
+        */
+      }
+      else if(type == "Explosive"){
        newBox = create_explosive_box( tools::stringToFloat(x), tools::stringToFloat(y),tools::stringToFloat(orientation), (affect_character=="true"));
       }
+    }
 
+    // Get game help text
+    rapidxml::xml_node<> *help_node = root_node -> first_node("Help");
+    help_text.clear();
+
+    if (help_node) {
+      std::vector<std::string> temp_help = tools::split_string(help_node -> value(), '%');
+      for (int i = 0; i < temp_help.size(); i++) {
+        help_text.push_back(temp_help.at(i));
+      }
     }
   }
 
@@ -286,17 +289,16 @@ void Game::load_world(int newLevel){
   std::cout << "===============================\n";
   std::cout << "Level loaded: " << static_count << " static, " << dynamic_count << " dynamic, " << character_count << " character(s), " << goat_count << " goat(s)\n";
   if( character_count > 1)
-    std::cout << "WARNING: Multiple characters loaded, will have undesired results...\n";
+    std::cout << "  WARNING: Multiple characters loaded, will have undesired results...\n";
   if( goat_count > 1)
-    std::cout << "WARNING: Multiple goats loaded, will have undesired results...\n";
+    std::cout << "  WARNING: Multiple goats loaded, will have undesired results...\n";
   if( character_count == 0)
-    std::cout << "WARNING: No character loaded, will have undesired results...\n";
+    std::cout << "  WARNING: No character loaded, will have undesired results...\n";
   if( goat_count == 0)
-    std::cout << "WARNING: No goat loaded, will have undesired results...\n";
+    std::cout << "  WARNING: No goat loaded, will have undesired results...\n";
   if( static_count == 0 && dynamic_count == 0 && goat_count == 0 && character_count == 0)
-    std::cout << "WARNING: No data loaded!\n";
+    std::cout << "  WARNING: No data loaded!\n";
   std::cout << "===============================\n";
-
 }
 
 // Reset game
@@ -315,13 +317,13 @@ void Game::reset(){
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
     if( gameBoxes[i] -> getType() == BOX){
       gameBoxes[i] -> setStatic();
-   }
+    }
   }
   if( gameGoat == nullptr)
-    std::cout << "WARNING: Goat pointer is undeclared in game\n";
+    std::cout << "WARNING: Goat is undeclared in game\n";
 
   if( gameCharacter == nullptr)
-    std::cout << "WARNING: gameCharacter pointer is undeclared in game\n";
+    std::cout << "WARNING: gameCharacter is undeclared in game\n";
 }
 
 // Load all sprites for in game
@@ -350,19 +352,17 @@ void Game::load_sprites(){
 
 // Update game logic
 void Game::update(){
-
-
   if(testing){
     testing_back_button.update();
 
     if(testing_back_button.mouseReleased())
       set_next_state( STATE_EDIT);
-
-
   }
+
   // Game mode
   if( KeyListener::keyPressed[ALLEGRO_KEY_P])
     set_next_state( STATE_EDIT);
+
   // Change state?
   if( KeyListener::key[ALLEGRO_KEY_I])
     set_next_state( STATE_MENU);
@@ -386,8 +386,6 @@ void Game::update(){
     }
   }
 
-
-
   // Update the Box2D game world
   gameWorld -> Step( timeStep, velocityIterations, positionIterations);
 
@@ -398,14 +396,12 @@ void Game::update(){
   // Die
   if( KeyListener::keyPressed[ALLEGRO_KEY_Z] || JoystickListener::buttonPressed[JOY_XBOX_B] ||  KeyListener::keyPressed[ALLEGRO_KEY_R] ){
     death.play();
-
     reset();
-
   }
+
   if(KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]){
     set_next_state(STATE_MENU);
     MusicManager::game_music.stop();
-
   }
 
   // Next level
@@ -430,25 +426,23 @@ void Game::update(){
   }
 
   // Pause/Play time
-  if( KeyListener::keyPressed[ALLEGRO_KEY_SPACE]  || JoystickListener::buttonPressed[JOY_XBOX_X] ||  JoystickListener::buttonPressed[JOY_XBOX_Y] || JoystickListener::buttonPressed[JOY_XBOX_BUMPER_LEFT] || JoystickListener::buttonPressed[JOY_XBOX_BUMPER_RIGHT]  ){
-
-
-
+  if( KeyListener::keyPressed[ALLEGRO_KEY_SPACE]  ||
+      JoystickListener::buttonPressed[JOY_XBOX_X] ||
+      JoystickListener::buttonPressed[JOY_XBOX_Y] ||
+      JoystickListener::buttonPressed[JOY_XBOX_BUMPER_LEFT] ||
+      JoystickListener::buttonPressed[JOY_XBOX_BUMPER_RIGHT]  ){
     static_mode =! static_mode;
+
     if(static_mode){
       toggle_off.play();
-
       for( unsigned int i = 0; i < gameBoxes.size(); i++){
         if( gameBoxes[i] -> getType() == BOX){
-          // Character *newCharacter = dynamic_cast<Character*>(&gameBoxes[i]);
           gameBoxes[i] -> setStatic();
-
         }
       }
     }
     else{
       toggle_on.play();
-
       for( unsigned int i = 0; i < gameBoxes.size(); i++){
         if( gameBoxes[i] -> getType()==BOX){
           gameBoxes[i] -> setDynamic(!first_play);
@@ -459,15 +453,13 @@ void Game::update(){
     }
   }
 
-   // Off screen
-   // Brutal hack don't look. Prevens character from dying when the character's location is undefined or something. It's really big anyways
+  // Off screen
+  // Brutal hack don't look. Prevens character from dying when the character's location is undefined or something. It's really big anyways
   if(gameCharacter != nullptr && gameCharacter -> getX()>-5000 && gameCharacter -> getX()<5000 && gameCharacter -> getY()>-5000 && gameCharacter -> getY()<5000 ){
     if(gameCharacter -> getX() < -1 || gameCharacter -> getX() > 51.5f || gameCharacter -> getY() > 2 || gameCharacter -> getY() < -40){
       death.play();
-
       reset();
       std::cout<<"==========="<<gameCharacter -> getX() <<"\n";
-
     }
   }
 }
@@ -477,29 +469,10 @@ void Game::draw(){
   // Background
   al_clear_to_color( al_map_rgb(40,40,60));
 
-
-
-  // Help
-  if( level == 1){
-    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Use WASD keys to move around.");
-    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 125, 1, "Reach the goat to complete the level.");
+  // Help text
+  for (int i = 0; i < help_text.size(); i++) {
+    al_draw_textf(help_font, al_map_rgb(255, 255, 255), 500, 75 + i * 50, 1, help_text.at(i).c_str());
   }
-
-  if( level == 3){
-    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Green blocks' gravity can be toggled. ");
-    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 125, 1, "Use Spacebar to toggle gravity.");
-  }
-
-  if( level == 4){
-    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Use R to restart the level.");
-  }
-
-//  if( level == 11){
-//    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Green launcher blocks shoot dynamic blocks. ");
-//    al_draw_textf( help_font, al_map_rgb( 255, 255, 255), 500, 75, 1, "Red launchers launch blocks and the character. ");
-//
-//  }
-
 
   // Draw boxes
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
@@ -515,6 +488,5 @@ void Game::draw(){
   else
     al_draw_bitmap(play,10,10,0);
 
-    al_draw_textf( game_font, al_map_rgb( 255, 255, 255), 1010, 15, 2, "Level %i", level);
-
+  al_draw_textf( game_font, al_map_rgb( 255, 255, 255), 1010, 15, 2, "Level %i", level);
 }
