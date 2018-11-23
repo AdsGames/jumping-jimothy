@@ -1,9 +1,11 @@
 #include "Editor.h"
 
 #include "Config.h"
+#include "DisplayMode.h"
 
 const char* Editor::testing_file_name = "Untitled";
 bool Editor::modified=false;
+
 
 // Init editor
 Editor::Editor(){
@@ -126,7 +128,7 @@ Editor::Editor(){
   set_explosive_ui_status();
 
 
-
+  DisplayMode::setMode(WINDOWED);
 
 
   // Is it edit mode?
