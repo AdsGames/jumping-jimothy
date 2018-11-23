@@ -1,4 +1,5 @@
 #include "LevelSelect.h"
+#include "Config.h"
 
 bool LevelSelect::completed_level_list[16]= {};
 
@@ -195,7 +196,7 @@ void LevelSelect::draw(){
 
   al_clear_to_color( al_map_rgb(75,75,100));
   levelSelectUI.draw();
-  if(Options::draw_cursor)
+  if(Config::draw_cursor)
     al_draw_bitmap(cursor,MouseListener::mouse_x,MouseListener::mouse_y,0);
 
   if(!reset_game_menu)
@@ -238,12 +239,12 @@ void LevelSelect::update(){
   if(JoystickListener::stickDirections[LEFT_STICK_DOWN] || JoystickListener::stickDirections[LEFT_STICK_UP] || JoystickListener::stickDirections[DPAD_DOWN] || JoystickListener::stickDirections[DPAD_UP2]
   || JoystickListener::stickDirections[LEFT_STICK_LEFT] || JoystickListener::stickDirections[LEFT_STICK_RIGHT] || JoystickListener::stickDirections[DPAD_LEFT] || JoystickListener::stickDirections[DPAD_RIGHT] ){
     joystick_direction_hit=true;
-    Options::joystick_mode=true;
+    Config::joystick_mode=true;
   }else{
     joystick_direction_hit=false;
   }
   if(MouseListener::mouse_moved){
-    Options::joystick_mode=false;
+    Config::joystick_mode=false;
   }
 
   levelSelectUI.update();
@@ -264,19 +265,19 @@ void LevelSelect::update(){
 
 
 
-  if(levelSelectUI.getElementByText("Reset Save Game") -> hover() && !Options::joystick_mode){
+  if(levelSelectUI.getElementByText("Reset Save Game") -> hover() && !Config::joystick_mode){
     highlight_y_destination = 695;
   }
 
-  if(levelSelectUI.getElementByText("Back to main menu") -> hover() && !Options::joystick_mode){
+  if(levelSelectUI.getElementByText("Back to main menu") -> hover() && !Config::joystick_mode){
     highlight_y_destination = 65;
   }
 
-   if(levelSelectUI.getElementByText("Cancel") -> hover() && !Options::joystick_mode && reset_game_menu){
+   if(levelSelectUI.getElementByText("Cancel") -> hover() && !Config::joystick_mode && reset_game_menu){
     highlight_game_reset_y_destination = 695;
   }
 
-  if(levelSelectUI.getElementByText("Really reset?") -> hover() && !Options::joystick_mode && reset_game_menu){
+  if(levelSelectUI.getElementByText("Really reset?") -> hover() && !Config::joystick_mode && reset_game_menu){
     highlight_game_reset_y_destination = 650;
   }
 
@@ -331,7 +332,7 @@ void LevelSelect::update(){
   }
 
 
-  if(!Options::joystick_mode){
+  if(!Config::joystick_mode){
     for(int i=1; i<14; i++){
       if(levelSelectUI.getUIElements().at(i) -> hover()){
         highlight_y_destination=65+45*i;

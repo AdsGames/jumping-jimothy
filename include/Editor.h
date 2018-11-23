@@ -29,7 +29,6 @@
 #include "Game.h"
 #include "UIHandler.h"
 #include "CheckBox.h"
-#include "Options.h"
 
 #include "State.h"
 
