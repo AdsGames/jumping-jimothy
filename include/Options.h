@@ -1,3 +1,10 @@
+/*
+ * Options
+ * The options menu state. Works with config
+ * Danny Van Stemp and Allan Legemaate
+ * 22/11/2018
+ */
+
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
@@ -6,13 +13,12 @@
 #include <allegro5/allegro_ttf.h>
 
 #include "UIHandler.h"
-#include "UIElement.h"
 #include "Button.h"
 #include "State.h"
 #include "KeyListener.h"
 #include "JoystickListener.h"
 
-
+// Options state
 class Options : public State {
   public:
     Options();
@@ -25,13 +31,13 @@ class Options : public State {
   protected:
 
   private:
-    ALLEGRO_FONT *options_font;
-    ALLEGRO_FONT *title_font;
+    ALLEGRO_FONT *options_font = nullptr;
+    ALLEGRO_FONT *title_font = nullptr;
 
     UIHandler OptionsUI;
 
     ALLEGRO_BITMAP *cursor;
-    ALLEGRO_BITMAP *highlight;
+    ALLEGRO_BITMAP *highlight = nullptr;
 
     int highlight_y = 100;
     int highlight_y_destination = 100;

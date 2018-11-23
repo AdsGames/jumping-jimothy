@@ -10,8 +10,7 @@
 #include <MouseListener.h>
 #include <Tools.h>
 
-class UIElement
-{
+class UIElement {
   public:
     // Constructor
     UIElement();

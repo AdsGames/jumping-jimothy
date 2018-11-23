@@ -4,7 +4,6 @@
 #include <allegro5/allegro_audio.h>
 
 #include "Tools.h"
-#include "Options.h"
 
 class Sound
 {
