@@ -1,7 +1,6 @@
 #include "ui/UIHandler.h"
 
 #include "ui/Button.h"
-#include "ui/ToggleBox.h"
 #include "ui/Label.h"
 
 #include "Globals.h"
