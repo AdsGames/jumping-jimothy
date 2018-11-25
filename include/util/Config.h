@@ -45,21 +45,28 @@ class Config {
     static void setValue(std::string key, const char* value);
 
     // Set int value
-    static void setValue(std::string key, int value);
+    static void setValue(std::string key, const int value);
 
     // Set boolean value
-    static void setValue(std::string key, bool value);
+    static void setValue(std::string key, const bool value);
 
   private:
     // Key value pairs
     class Dict {
       public:
-        Dict(std::string key, std::string value, bool active = false) {
+        Dict(std::string key, std::string value) {
           this -> key = key;
           this -> value = value;
         }
 
+        std::string getKey() { return key; }
+        std::string getValue() { return value; }
+        void setValue(std::string value) { this -> value = value; }
+      private:
+        // Key
         std::string key;
+
+        // Value
         std::string value;
     };
 

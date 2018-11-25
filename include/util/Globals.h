@@ -8,19 +8,19 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#define LEFT false
-#define RIGHT true
+extern const bool LEFT;
+extern const bool RIGHT;
 
-#define BOX 0
-#define CHARACTER 1
-#define GOAT 2
-#define STATIC 3
+extern const int BOX;
+extern const int CHARACTER;
+extern const int GOAT;
+extern const int STATIC;
 
-#define DYNAMIC true
-#define KINEMATIC false
+extern const bool DYNAMIC;
+extern const bool KINEMATIC;
 
-#define PI 3.14159263
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
+extern const float PI;
+extern const float DEGTORAD;
+extern const float RADTODEG;
 
 #endif // GLOBALS_H

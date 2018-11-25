@@ -13,7 +13,7 @@ bool JoystickListener::stickDirections[20];
 ALLEGRO_JOYSTICK_STATE JoystickListener::joyState;
 
 // For allegro 5, we use events
-void JoystickListener::on_event( ALLEGRO_EVENT_TYPE event_type, int buttoncode){
+void JoystickListener::on_event(ALLEGRO_EVENT_TYPE event_type, const int buttoncode){
   // Button down
   if( event_type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN){
     button[buttoncode] = true;
@@ -52,11 +52,7 @@ void JoystickListener::update(){
   stickDirections[DPAD_LEFT]=false;
   stickDirections[DPAD_RIGHT]=false;
 
-
-
    if(al_get_num_joysticks() > 0){
-
-
     al_get_joystick_state(al_get_joystick(0),&joyState);
 
     float tolerance=0.4f;
@@ -97,15 +93,12 @@ void JoystickListener::update(){
     if(joyState.stick[3].axis[0]==1)
       stickDirections[DPAD_RIGHT]=true;
 
-   if(joyState.stick[3].axis[1]==1)
+    if(joyState.stick[3].axis[1]==1)
       stickDirections[DPAD_UP2]=true;
 
     if(joyState.stick[3].axis[1]==-1)
       stickDirections[DPAD_DOWN]=true;
-
-
   }
-
 
   // Reset last button
   lastButtonPressed = -1;
@@ -114,29 +107,25 @@ void JoystickListener::update(){
   anyButtonPressed = false;
   anyButtonReleased=false;
 
-
-
-
   // Check button just pressed
   for( int i = 0; i < JOY_MAX_BUTTONS; i++){
-
+    // Global button pressed
     if(button[i])
-      anyButtonPressed=true;
-
+      anyButtonPressed = true;
 
     // Clear old values
     buttonPressed[i] = false;
     buttonReleased[i] = false;
 
     // Pressed since last tick?
-    if( button[i] == true && lastTicksButton[i] == false){
+    if (button[i] == true && lastTicksButton[i] == false) {
       buttonPressed[i] = true;
       lastButtonPressed = i;
       //std::cout << "Button: " << i << " pressed. \n";
     }
 
     // Released since last tick?
-    if( button[i] == false && lastTicksButton[i] == true){
+    if (button[i] == false && lastTicksButton[i] == true) {
       buttonReleased[i] = true;
       lastButtonReleased = i;
       anyButtonReleased=true;
@@ -146,14 +135,11 @@ void JoystickListener::update(){
 
 
   // Get new values
-  for( int i = 0; i < JOY_MAX_BUTTONS; i++){
+  for (int i = 0; i < JOY_MAX_BUTTONS; i++) {
     // Button changed
-    if( lastTicksButton[i] != button[i]){
-        //std::cout << "Button: " << i << " was " << lastTicksButton[i] << " and became " << (bool)button[i] << "\n";
+    if (lastTicksButton[i] != button[i]) {
         lastTicksButton[i] = button[i];
     }
   }
-
-
 }
 

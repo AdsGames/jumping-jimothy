@@ -72,17 +72,17 @@ class tools{
     static float stringToFloat(std::string);
 
     // Split string
-    static std::vector<std::string> split_string(const std::string& p_pcstStr, char delim);
+    static std::vector<std::string> split_string(const std::string& p_pcstStr, const char delim);
 
     // Random number
-    static int random_int(int min, int max);
+    static int random_int(const int min, const int max);
 
     // Debug message
     static void log_message(std::string message, bool debug = false);
 
     // Mouse over
-    static bool mouse_over(int x, int y, int width, int height);
-    static bool mouse_clicked(int button, bool reset = true);
+    static bool mouse_over(const int x, const int y, const int width, const int height);
+    static bool mouse_clicked(const int button, bool reset = true);
 };
 
 #endif // TOOLS_H

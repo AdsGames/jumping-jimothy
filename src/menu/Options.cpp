@@ -129,7 +129,7 @@ void Options::update(){
   // Cycle graphics mode pressed
   if(OptionsUI.getElementById("btnGraphicsMode") &&
      OptionsUI.getElementById("btnGraphicsMode") -> clicked()) {
-    temp_graphics_mode = (temp_graphics_mode + 1) % NUM_GRAPHICS_MODES;
+    temp_graphics_mode = (temp_graphics_mode + 1) % DisplayMode::NUM_GRAPHICS_MODES;
     OptionsUI.getElementById("lblGraphicsMode") -> setText(DisplayMode::getDisplayModeString(temp_graphics_mode));
   }
 

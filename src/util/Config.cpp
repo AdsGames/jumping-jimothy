@@ -64,10 +64,10 @@ void Config::writeFile(std::string path){
   doc.append_node(root_node);
 
   // Parse key val pairs
-  char *entry = doc.allocate_string("entry");
+  const char *entry = doc.allocate_string("entry");
   for (unsigned int i = 0; i < Config::data.size(); i++) {
     rapidxml::xml_node<> * object_node = doc.allocate_node(rapidxml::node_element, entry);
-    object_node -> append_attribute(doc.allocate_attribute(doc.allocate_string(Config::data.at(i) -> key.c_str()), doc.allocate_string(Config::data.at(i) -> value.c_str())));
+    object_node -> append_attribute(doc.allocate_attribute(doc.allocate_string(Config::data.at(i) -> getKey().c_str()), doc.allocate_string(Config::data.at(i) -> getValue().c_str())));
     root_node -> append_node(object_node);
   }
 
@@ -96,7 +96,7 @@ std::string Config::getValue(std::string key) {
 
   // Return value
   if (element != nullptr) {
-    return element -> value;
+    return element -> getValue();
   }
 
   // Not found
@@ -120,7 +120,7 @@ void Config::setValue(std::string key, std::string value) {
 
   // Update value
   if (element != nullptr) {
-    element -> value = value;
+    element -> setValue(value);
     return;
   }
 
@@ -134,12 +134,12 @@ void Config::setValue(std::string key, const char* value) {
 }
 
 // Set int value
-void Config::setValue(std::string key, int value) {
+void Config::setValue(std::string key, const int value) {
   setValue(key, tools::toString(value));
 }
 
 // Set boolean value
-void Config::setValue(std::string key, bool value) {
+void Config::setValue(std::string key, const bool value) {
   setValue(key, tools::toString(value));
 }
 
@@ -147,7 +147,7 @@ void Config::setValue(std::string key, bool value) {
 Config::Dict* Config::findKey(std::string key) {
   // Search by key
   for(unsigned int i = 0; i < Config::data.size(); i++) {
-    if (Config::data.at(i) -> key == key) {
+    if (Config::data.at(i) -> getKey() == key) {
       return Config::data.at(i);
     }
   }

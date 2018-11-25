@@ -23,6 +23,7 @@
 #include "util/Tools.h"
 #include "util/Config.h"
 #include "util/MusicManager.h"
+#include "util/Globals.h"
 
 #include "menu/LevelSelect.h"
 

@@ -133,6 +133,7 @@
 		<Unit filename="src/util/Config.cpp" />
 		<Unit filename="src/util/Controls.cpp" />
 		<Unit filename="src/util/DisplayMode.cpp" />
+		<Unit filename="src/util/Globals.cpp" />
 		<Unit filename="src/util/JoystickListener.cpp" />
 		<Unit filename="src/util/KeyListener.cpp" />
 		<Unit filename="src/util/MouseListener.cpp" />

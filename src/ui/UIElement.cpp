@@ -232,5 +232,5 @@ bool UIElement::hover() {
 
 // True if clicked
 bool UIElement::clicked() {
-  return !disabled && hover() && tools::mouse_clicked(MOUSE_LEFT);
+  return !disabled && hover() && tools::mouse_clicked(MouseListener::MOUSE_LEFT);
 }

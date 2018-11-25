@@ -28,15 +28,15 @@ ALLEGRO_SAMPLE* Sound::getSample() {
 }
 
 // Load WAV from file
-void Sound::load_wav(std::string newPath) {
+void Sound::load_wav(std::string path) {
   is_wav = true;
-  sample = tools::load_sample_ex(newPath);
+  sample = tools::load_sample_ex(path);
 }
 
 // Load OGG frim file
-void Sound::load_ogg(std::string newPath) {
+void Sound::load_ogg(std::string path) {
   is_wav = false;
-  sample = tools::load_sample_ex(newPath);
+  sample = tools::load_sample_ex(path);
 }
 
 // Play sound
@@ -45,7 +45,7 @@ void Sound::play() {
 }
 
 // Play sound at volume
-void Sound::play(float volume) {
+void Sound::play(const float volume) {
   if (!sample)
     return;
 
@@ -60,7 +60,7 @@ void Sound::play(float volume) {
 }
 
 // Play at sample random frequency
-void Sound::play_random_frequency(int newMin, int newMax) {
+void Sound::play_random_frequency(const int newMin, const int newMax) {
   if (!sample)
     return;
 

@@ -12,23 +12,23 @@
 #include "allegro5/keycodes.h"
 #include "JoystickCodes.h"
 
-// If your keyboard has a Kanji key, you might experience untested behaviour
-#define ALLEGRO_KEY_NONE ALLEGRO_KEY_KANJI
-
-#define NUM_BINDABLE_BUTTONS 3
-#define NUM_BINDABLE_ACTIONS 10
-
-struct binding {
-  int key_code[NUM_BINDABLE_BUTTONS]={ALLEGRO_KEY_NONE,ALLEGRO_KEY_NONE,ALLEGRO_KEY_NONE};
-  int joystick_button[NUM_BINDABLE_BUTTONS]={JOY_NONE,JOY_NONE,JOY_NONE};
-  int stick[NUM_BINDABLE_BUTTONS]={NONE,NONE,NONE};
-};
-
 class ActionBinder {
   public:
     ActionBinder();
     virtual ~ActionBinder();
+
+    static const int ALLEGRO_KEY_NONE = ALLEGRO_KEY_KANJI;
+    static const int NUM_BINDABLE_BUTTONS = 3;
+    static const int NUM_BINDABLE_ACTIONS = 10;
+
+    struct binding {
+      int key_code[NUM_BINDABLE_BUTTONS] = {ALLEGRO_KEY_NONE,ALLEGRO_KEY_NONE,ALLEGRO_KEY_NONE};
+      int joystick_button[NUM_BINDABLE_BUTTONS] = {JOY_NONE,JOY_NONE,JOY_NONE};
+      int stick[NUM_BINDABLE_BUTTONS] = {NONE,NONE,NONE};
+    };
+
     static binding game_binding[NUM_BINDABLE_ACTIONS];
+
     enum actions {
       jump,
       move_left,
@@ -36,11 +36,11 @@ class ActionBinder {
       freeze,
       restart,
       confirm,
-      back,
-
+      back
     };
-    static bool actionPressed(int);
-    static bool actionHeld(int);
+
+    static bool actionPressed(const int action);
+    static bool actionHeld(const int action);
     static void setDefaults();
 };
 

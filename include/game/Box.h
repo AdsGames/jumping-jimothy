@@ -11,9 +11,6 @@
 #include <allegro5/allegro.h>
 #include <Box2D/Box2D.h>
 
-#define BOX 0
-#define GOAT 2
-
 #define NUM_TILES 4
 
 class b2World;
