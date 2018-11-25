@@ -1,4 +1,4 @@
-#include "UIElement.h"
+#include "ui/UIElement.h"
 
 #include <allegro5/allegro5.h>
 
@@ -221,11 +221,6 @@ void UIElement::disableHoverEffect() {
 // Disable hover effect
 void UIElement::enableHoverEffect() {
   hover_effect = true;
-}
-
-// Checked or not
-bool UIElement::getChecked() {
-  return false;
 }
 
 // True if hovering
