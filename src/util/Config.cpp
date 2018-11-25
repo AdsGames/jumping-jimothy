@@ -1,63 +1,55 @@
 #include "util/Config.h"
 
 #include <fstream>
-#include <vector>
 
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_print.hpp"
 
 #include "util/Tools.h"
 
-bool Config::music_enabled = true;
-bool Config::sfx_enabled = true;
-bool Config::draw_cursor = false;
-int Config::graphics_mode = 0;
+std::vector<Config::Dict*>  Config::data;
 
-int Config::level_to_start = 1;
-
-bool Config::joystick_mode = false;
-std::string Config::joystick_data = "";
-
-// Load options from xml
-void Config::read_data(std::string path) {
-  // Create XML doc
-  rapidxml::xml_document<> doc;
+// Read config data from file
+void Config::readFile(std::string path) {
+  // Clear old config
+  Config::data.clear();
 
   // Load XML from file
-  std::ifstream theFile(path.c_str());
-  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
+  std::ifstream f(path.c_str());
+
+  // Ensure file exists
+  if (!f.good()) {
+    tools::log_message("Warning: Could not find file " + path);
+    return;
+  }
+
+  // Make buffer
+  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
 
   // Push EOF
   xml_buffer.push_back('\0');
+
+  // Create XML doc
+  rapidxml::xml_document<> doc;
 
   // Parse the buffer using the xml file parsing library into doc
   doc.parse<0>(&xml_buffer[0]);
 
   // Find our root node
-  rapidxml::xml_node<> * root_node;
-  root_node = doc.first_node("data");
+  rapidxml::xml_node<> *root_node = doc.first_node("data");
 
   // Iterate over the nodes
-  for (rapidxml::xml_node<> * object_node = root_node -> first_node("value"); object_node; object_node = object_node -> next_sibling()){
-    // SFX
-    if(object_node -> first_attribute("sfx") != nullptr){
-      std::string result = object_node -> first_attribute("sfx") -> value();
-      sfx_enabled = result == "enabled";
-    }
-    // Music
-    if(object_node -> first_attribute("music") != nullptr){
-      std::string result = object_node -> first_attribute("music") -> value();
-      music_enabled = result == "enabled";
-    }
-    // Graphics Mode
-    if(object_node -> first_attribute("graphics_mode") != nullptr){
-      std::string result = object_node -> first_attribute("graphics_mode") -> value();
-      graphics_mode = tools::stringToInt(result);
-    }
+  for (rapidxml::xml_node<> *entry = root_node -> first_node("entry"); entry; entry = entry -> next_sibling()) {
+    addKey(entry -> first_attribute() -> name(), entry -> first_attribute() -> value());
   }
+
+  // Clean up
+  f.close();
+  doc.clear();
 }
 
-void Config::write_data(std::string path){
+// Write config data to file
+void Config::writeFile(std::string path){
   // Create XML doc
   rapidxml::xml_document<> doc;
 
@@ -68,38 +60,103 @@ void Config::write_data(std::string path){
   doc.append_node(decl);
 
   // Create root node
-  rapidxml::xml_node<>* root_node = doc.allocate_node( rapidxml::node_element, "data");
+  rapidxml::xml_node<>* root_node = doc.allocate_node(rapidxml::node_element, "data");
   doc.append_node(root_node);
 
-  // SFX
-  char *node_name = doc.allocate_string("value");
-  rapidxml::xml_node<>* object_node = doc.allocate_node( rapidxml::node_element, node_name);
-
-  if(sfx_enabled)
-    object_node -> append_attribute( doc.allocate_attribute("sfx", doc.allocate_string("enabled")));
-  else
-    object_node -> append_attribute( doc.allocate_attribute("sfx", doc.allocate_string("disabled")));
-
-  root_node -> append_node( object_node);
-
-  // Music
-  object_node = doc.allocate_node( rapidxml::node_element, node_name);
-
-  if(music_enabled)
-    object_node -> append_attribute( doc.allocate_attribute("music", doc.allocate_string("enabled")));
-  else
-    object_node -> append_attribute( doc.allocate_attribute("music", doc.allocate_string("disabled")));
-
-  root_node -> append_node( object_node);
-
-  // Graphics
-  object_node = doc.allocate_node( rapidxml::node_element, node_name);
-  object_node -> append_attribute( doc.allocate_attribute("graphics_mode", doc.allocate_string(tools::toString(graphics_mode).c_str())));
-  root_node -> append_node( object_node);
+  // Parse key val pairs
+  char *entry = doc.allocate_string("entry");
+  for (unsigned int i = 0; i < Config::data.size(); i++) {
+    rapidxml::xml_node<> * object_node = doc.allocate_node(rapidxml::node_element, entry);
+    object_node -> append_attribute(doc.allocate_attribute(doc.allocate_string(Config::data.at(i) -> key.c_str()), doc.allocate_string(Config::data.at(i) -> value.c_str())));
+    root_node -> append_node(object_node);
+  }
 
   // Save to file
-  std::ofstream file_stored(path);
-  file_stored << doc;
-  file_stored.close();
+  std::ofstream f(path);
+
+  // Ensure file exists
+  if (!f.good()) {
+    tools::log_message("Warning: Could not find file " + path);
+    return;
+  }
+
+  // Output
+  f << doc;
+
+  // Clean up
+  f.close();
   doc.clear();
+}
+
+
+// Get string value from key
+std::string Config::getValue(std::string key) {
+  // Find key
+  Dict *element = findKey(key);
+
+  // Return value
+  if (element != nullptr) {
+    return element -> value;
+  }
+
+  // Not found
+  return "";
+}
+
+// Get int value from key
+int Config::getIntValue(std::string key) {
+  return tools::stringToInt(getValue(key));
+}
+
+// Get boolean value from key
+bool Config::getBooleanValue(std::string key) {
+  return (bool)tools::stringToInt(getValue(key));
+}
+
+// Set string value
+void Config::setValue(std::string key, std::string value) {
+  // Search for key
+  Dict *element = findKey(key);
+
+  // Update value
+  if (element != nullptr) {
+    element -> value = value;
+    return;
+  }
+
+  // Create key value if not found
+  addKey(key, value);
+}
+
+// Set int const char
+void Config::setValue(std::string key, const char* value) {
+  setValue(key, tools::toString(value));
+}
+
+// Set int value
+void Config::setValue(std::string key, int value) {
+  setValue(key, tools::toString(value));
+}
+
+// Set boolean value
+void Config::setValue(std::string key, bool value) {
+  setValue(key, tools::toString(value));
+}
+
+// Find values
+Config::Dict* Config::findKey(std::string key) {
+  // Search by key
+  for(unsigned int i = 0; i < Config::data.size(); i++) {
+    if (Config::data.at(i) -> key == key) {
+      return Config::data.at(i);
+    }
+  }
+
+  // Not found
+  return nullptr;
+}
+
+// Add key
+void Config::addKey(std::string key, std::string value) {
+  Config::data.push_back(new Dict(key, value));
 }

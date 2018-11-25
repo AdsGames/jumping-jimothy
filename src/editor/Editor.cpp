@@ -877,7 +877,7 @@ void Editor::draw(){
   // Draw buttons
   editorUI.draw();
 
-  if(Config::draw_cursor)
+  if(Config::getBooleanValue("draw_cursor"))
     al_draw_bitmap(cursor,MouseListener::mouse_x,MouseListener::mouse_y,0);
 
 }
