@@ -10,28 +10,68 @@
 #define CONFIG_H
 
 #include <string>
+#include <vector>
 
+// Static config class
 class Config {
   public:
+    // Constructor
     Config() {};
+
+    // Destructor
     virtual ~Config() {};
 
-    static void read_data(std::string path);
-    static void write_data(std::string path);
+    // Read keyvals from file
+    static void readFile(std::string path);
 
-    static bool sfx_enabled;
-    static bool music_enabled;
-    static int graphics_mode;
-    static bool draw_cursor;
+    // Write keyvals to file
+    static void writeFile(std::string path);
 
-    static std::string joystick_data;
-    static bool joystick_mode;
 
-    static int level_to_start;
+    // Get string value from key
+    static std::string getValue(std::string key);
 
-  protected:
+    // Get int value from key
+    static int getIntValue(std::string key);
+
+    // Get boolean value from key
+    static bool getBooleanValue(std::string key);
+
+
+    // Set string value
+    static void setValue(std::string key, std::string value);
+
+    // String literal (so int is not called)
+    static void setValue(std::string key, const char* value);
+
+    // Set int value
+    static void setValue(std::string key, int value);
+
+    // Set boolean value
+    static void setValue(std::string key, bool value);
 
   private:
+    // Key value pairs
+    class Dict {
+      public:
+        Dict(std::string key, std::string value, bool active = false) {
+          this -> key = key;
+          this -> value = value;
+        }
+
+        std::string key;
+        std::string value;
+    };
+
+
+    // Find key val pair
+    static Dict* findKey(std::string key);
+
+    // Add ket val pair
+    static void addKey(std::string key, std::string value);
+
+    // Values
+    static std::vector<Dict*> data;
 };
 
 #endif // CONFIG_H

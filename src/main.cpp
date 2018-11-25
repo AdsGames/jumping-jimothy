@@ -138,11 +138,11 @@ void setup(){
   al_reserve_samples( 20);
 
   // Load config
-  Config::read_data("data/options_data.xml");
+  Config::readFile("data/config.xml");
 
   // Set display mode to windowed
   DisplayMode::setActiveDisplay(&display);
-  DisplayMode::setMode(Config::graphics_mode);
+  DisplayMode::setMode(Config::getIntValue("graphics_mode"));
   buffer = al_create_bitmap(DisplayMode::getDrawWidth(), DisplayMode::getDrawHeight());
 
   if (!display)
@@ -188,16 +188,15 @@ void setup(){
   // Sorry, your PC is a very nice PC
   tools::log_message("Running as " + tools::toString(al_get_app_name()) + ", with " + tools::toString(al_get_ram_size()) + " MB RAM.");
 
-
   joystick_enabled = (al_get_num_joysticks() > 0);
 
   if (joystick_enabled) {
+    Config::setValue("joystick_data", al_get_joystick_name(al_get_joystick(0)));
     tools::log_message(tools::toString(al_get_joystick_name(al_get_joystick(0))) + " is installed and being used.");
-    Config::joystick_data = al_get_joystick_name(al_get_joystick(0));
   }
   else {
     tools::log_message("No joystick is installed.");
-    Config::joystick_data = "None detected.";
+    Config::setValue("joystick_data", "None detected.");
   }
 
   // Load music files
@@ -242,12 +241,12 @@ void update(){
     joystick_enabled = (al_get_num_joysticks() > 0);
 
     if(joystick_enabled) {
-      Config::joystick_data = al_get_joystick_name(al_get_joystick(0));
+      Config::setValue("joystick_data", al_get_joystick_name(al_get_joystick(0)));
       tools::log_message("Joystick " + tools::toString(al_get_joystick_name(al_get_joystick(0))) + " is configured.");
     }
     else{
       tools::log_message("Joystick unplugged.");
-      Config::joystick_data = "None detected.";
+      Config::setValue("joystick_data", "None detected.");
     }
   }
 
@@ -308,6 +307,9 @@ int main(){
   while(!closing) {
     update();
   }
+
+  // Save settings
+  Config::writeFile("data/config.xml");
 
   // Destory display
   MusicManager::destroy();

@@ -38,8 +38,7 @@ Game::Game() {
   newBox = nullptr;
   rootBox = nullptr;
 
-  level = Config::level_to_start;
-  Config::level_to_start = 1;
+  level = Config::getIntValue("level_to_start");
 
   game_font = al_load_ttf_font( "fonts/munro.ttf", 30, 0);
   help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);

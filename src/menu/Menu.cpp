@@ -150,12 +150,15 @@ void Menu::update(){
 
   if(JoystickListener::stickDirections[LEFT_STICK_DOWN] || JoystickListener::stickDirections[LEFT_STICK_UP] || JoystickListener::stickDirections[DPAD_DOWN] || JoystickListener::stickDirections[DPAD_UP2]){
     joystick_direction_hit=true;
-    Config::joystick_mode=true;
-  }else{
-    joystick_direction_hit=false;
+    Config::setValue("joystick_mode", true);
   }
-  if(MouseListener::mouse_moved)
-    Config::joystick_mode=false;
+  else{
+    Config::setValue("joystick_mode", false);
+  }
+
+  if(MouseListener::mouse_moved) {
+    Config::setValue("joystick_mode", false);
+  }
 
 
   if(highlight_y>highlight_y_destination)highlight_y-=10;
@@ -171,7 +174,7 @@ void Menu::update(){
   counter_prompt = (counter_play >= 50) ? !counter_prompt : counter_prompt;
   counter_play = (counter_play >= 50) ? 0 : counter_play;
 
-  if(!Config::joystick_mode){
+  if(!Config::getBooleanValue("joystick_mode")){
     if(menu_buttons[menu_button_play].hover())highlight_y_destination=500;
     if(menu_buttons[menu_button_edit].hover())highlight_y_destination=550;
     if(menu_buttons[menu_button_options].hover())highlight_y_destination=600;
@@ -254,7 +257,7 @@ void Menu::draw(){
 
 
 
-  if(Config::draw_cursor)
+  if(Config::getBooleanValue("draw_cursor"))
     al_draw_bitmap(cursor,MouseListener::mouse_x,MouseListener::mouse_y,0);
 
 

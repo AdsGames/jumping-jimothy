@@ -21,12 +21,12 @@ ALLEGRO_DISPLAY** DisplayMode::display = nullptr;
 
 // Returns current display mode
 int DisplayMode::getDisplayMode() {
-  return Config::graphics_mode;
+  return Config::getIntValue("graphics_mode");
 }
 
 // Returns string version of current display mode
 std::string DisplayMode::getDisplayModeString() {
-  return getDisplayModeString(Config::graphics_mode);
+  return getDisplayModeString(getDisplayMode());
 }
 
 
@@ -139,7 +139,7 @@ void DisplayMode::setMode(int mode) {
   }
 
   // Set mode
-  Config::graphics_mode = mode;
+  Config::setValue("graphics_mode", mode);
 
   // Get monitor width
   ALLEGRO_MONITOR_INFO info;
@@ -218,7 +218,7 @@ void DisplayMode::setMode(int mode) {
   al_hide_mouse_cursor(*display);
   if (display_cursor)
     al_show_mouse_cursor(*display);
-  Config::draw_cursor = !display_cursor;
+  Config::setValue("draw_cursor", !display_cursor);
 
   // Debug screen mode
   tools::log_message("Scren mode set to " + getDisplayModeString() + ".", true);

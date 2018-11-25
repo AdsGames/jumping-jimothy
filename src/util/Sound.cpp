@@ -49,11 +49,11 @@ void Sound::play(float volume) {
   if (!sample)
     return;
 
-  if(is_wav && Config::sfx_enabled) {
+  if(is_wav && Config::getBooleanValue("sfx_enabled")) {
     is_playing = true;
     al_play_sample(sample, volume, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
   }
-  else if(!is_wav && Config::music_enabled) {
+  else if(!is_wav && Config::getBooleanValue("music_enabled")) {
     is_playing = true;
     al_play_sample(sample, volume, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, sample_id);
   }
@@ -64,7 +64,7 @@ void Sound::play_random_frequency(int newMin, int newMax) {
   if (!sample)
     return;
 
-  if(is_wav && Config::sfx_enabled) {
+  if(is_wav && Config::getBooleanValue("sfx_enabled")) {
     al_play_sample(sample, 1.0, 0.0, (float)tools::random_int(newMin,newMax)/100, ALLEGRO_PLAYMODE_ONCE, NULL);
   }
 }
