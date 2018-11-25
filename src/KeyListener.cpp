@@ -8,16 +8,6 @@ int KeyListener::lastKeyPressed = -1;
 int KeyListener::lastKeyReleased = -1;
 bool KeyListener::anyKeyPressed=false;
 
-// Constructor
-KeyListener::KeyListener(){
-
-}
-
-// Destructor
-KeyListener::~KeyListener(){
-
-}
-
 // For allegro 5, we use events
 void KeyListener::on_event( ALLEGRO_EVENT_TYPE event_type, int keycode){
   // Key down
@@ -42,25 +32,19 @@ void KeyListener::update(){
     keyPressed[i] = false;
     keyReleased[i] = false;
 
-
     if(key[i])
       anyKeyPressed=true;
-
-
-
 
     // Pressed since last tick?
     if( key[i] == true && lastTicksKey[i] == false){
       keyPressed[i] = true;
       lastKeyPressed = i;
-      //std::cout << "Key: " << i << " pressed. \n";
     }
 
     // Released since last tick?
     if( key[i] == false && lastTicksKey[i] == true){
       keyReleased[i] = true;
       lastKeyReleased = i;
-      //std::cout << "Key: " << i << " released. \n";
     }
   }
 
@@ -69,7 +53,6 @@ void KeyListener::update(){
   for( int i = 0; i < ALLEGRO_KEY_MAX; i++){
     // Key changed
     if( lastTicksKey[i] != key[i]){
-        //std::cout << "Key: " << i << " was " << lastTicksKey[i] << " and became " << (bool)key[i] << "\n";
         lastTicksKey[i] = key[i];
     }
   }

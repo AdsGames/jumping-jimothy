@@ -6,11 +6,7 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "Globals.h"
-#include "Box.h"
 #include "Sensor.h"
-#include "KeyListener.h"
-#include "JoystickListener.h"
 #include "Sound.h"
 
 class b2World;
@@ -22,8 +18,9 @@ class keyListener;
 
 class Character : public Box{
   public:
-    Character();
+    Character() {};
     virtual ~Character();
+
     void init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld);
     void draw();
     void update();
@@ -51,8 +48,6 @@ class Character : public Box{
 
     Sound jump;
     Sound land;
-
-
 };
 
 

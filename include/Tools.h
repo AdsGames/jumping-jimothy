@@ -8,14 +8,9 @@
 #define TOOLS_H
 
 #include <string>
-#include <math.h>
-#include <sstream>
-#include <iostream>
-#include <fstream>
 #include <vector>
+#include <sstream>
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
@@ -80,6 +75,9 @@ class tools{
 
     // Random number
     static int random_int(int min, int max);
+
+    // Debug message
+    static void log_message(std::string message, bool debug = false);
 };
 
 #endif // TOOLS_H

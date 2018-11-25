@@ -1,15 +1,35 @@
-#include <allegro5/bitmap.h>
+#include "Game.h"
+
+#include <fstream>
+#include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_native_dialog.h>
+#include <allegro5/bitmap.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_ttf.h>
 
-#include "Game.h"
+#include "MouseListener.h"
+#include "KeyListener.h"
+#include "JoystickListener.h"
+
+#include "rapidxml.hpp"
+#include "rapidxml_print.hpp"
+
+#include "StaticBox.h"
+#include "Tools.h"
+#include "Config.h"
+
+#include "CollisionBox.h"
+#include "DynamicBox.h"
+#include "Explosive.h"
+#include "LevelSelect.h"
+#include "MusicManager.h"
 
 bool Game::testing = false;
 const char* Game::testing_file_name = nullptr;
-int Game::level_to_start = 1;
 
 // Constructor
-Game::Game(){
+Game::Game() {
   // Create character
   gameCharacter = new Character();
 
@@ -17,8 +37,8 @@ Game::Game(){
   newBox = nullptr;
   rootBox = nullptr;
 
-  level = level_to_start;
-  level_to_start=1;
+  level = Config::level_to_start;
+  Config::level_to_start = 1;
 
   game_font = al_load_ttf_font( "fonts/munro.ttf", 30, 0);
   help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);
@@ -66,17 +86,17 @@ Game::~Game(){
 }
 
 // Creates box in world
-Goat *Game::create_goat( float newX, float newY){
+Goat* Game::create_goat( float newX, float newY){
   Goat *newGoat = new Goat();
   newGoat -> init( newX, newY,goat_map, gameWorld,gameCharacter);
   if(gameCharacter==nullptr)
-    std::cout<<"WARNING: gameCharacter is nullptr when creating an explosive box.\n";
+    tools::log_message("WARNING: gameCharacter is nullptr when creating an explosive box.");
   gameBoxes.push_back( newGoat);
   return newGoat;
 }
 
 // Creates box in world
-Box *Game::create_dynamic_box( float newX, float newY, float newWidth, float newHeight, float newVelX,float newVelY, BITMAP *newSprite, bool newBodyType, bool newIsSensor){
+Box* Game::create_dynamic_box( float newX, float newY, float newWidth, float newHeight, float newVelX,float newVelY, ALLEGRO_BITMAP *newSprite, bool newBodyType, bool newIsSensor){
   DynamicBox *newDynamicBox = new DynamicBox();
   newDynamicBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, newSprite, gameWorld);
   gameBoxes.push_back( newDynamicBox);
@@ -84,21 +104,21 @@ Box *Game::create_dynamic_box( float newX, float newY, float newWidth, float new
 }
 
 // Creates box in world
-Box *Game::create_static_box( float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4){
+Box* Game::create_static_box( float newX, float newY,  ALLEGRO_BITMAP *sp_1,ALLEGRO_BITMAP *sp_2,ALLEGRO_BITMAP *sp_3,ALLEGRO_BITMAP *sp_4){
   StaticBox *newStaticBox = new StaticBox();
   newStaticBox -> init( newX, newY, sp_1,sp_2,sp_3,sp_4);
   gameBoxes.push_back( newStaticBox);
   return newStaticBox;
 }
 
-Box *Game::create_collision_box( float newX, float newY,float newWidth,float newHeight){
+Box* Game::create_collision_box( float newX, float newY,float newWidth,float newHeight){
   CollisionBox *newCollisionBox = new CollisionBox();
   newCollisionBox -> init( newX, newY, newWidth,newHeight,gameWorld);
   gameBoxes.push_back( newCollisionBox);
   return newCollisionBox;
 }
 
-Box *Game::create_explosive_box(float newX, float newY,int newOrientation, bool newAffectCharacter){
+Box* Game::create_explosive_box(float newX, float newY,int newOrientation, bool newAffectCharacter){
   Explosive *newExplosive = new Explosive();
   ALLEGRO_BITMAP *newBoxImage;
 
@@ -109,7 +129,7 @@ Box *Game::create_explosive_box(float newX, float newY,int newOrientation, bool 
 
   newExplosive -> init( newX, newY,newOrientation, newBoxImage,newAffectCharacter, gameWorld,gameCharacter);
   if(gameCharacter==nullptr)
-    std::cout<<"WARNING: gameCharacter is nullptr when creating an explosive box.\n";
+    tools::log_message("WARNING: gameCharacter is nullptr when creating an explosive box.");
 
   gameBoxes.push_back( newExplosive);
   return newExplosive;
@@ -158,7 +178,7 @@ void Game::b2_setup(){
 // Load world from xml
 void Game::load_world(int newLevel){
   // Load level message
-  std::cout << "Attempting to load level_" << newLevel << ".xml into game\n";
+  tools::log_message("Attempting to load level_" + tools::toString(newLevel) + ".xml into game");
 
   int goat_count = 0;
   int character_count = 0;
@@ -247,7 +267,7 @@ void Game::load_world(int newLevel){
       else if( type == "Finish"){
         gameGoat = create_goat( tools::stringToFloat(x), tools::stringToFloat(y)-1);
         if(gameCharacter==nullptr)
-          std::cout<<"WARNING: Game: goat is passed nullptr gameCharacter\n";
+          tools::log_message("WARNING: Game: goat is passed nullptr gameCharacter");
         goat_count++;
 
         // Once killed 17 people
@@ -286,19 +306,19 @@ void Game::load_world(int newLevel){
 
   // Nice debug code
   // Allan's big ol' debug lines, they're pretty tho
-  std::cout << "===============================\n";
-  std::cout << "Level loaded: " << static_count << " static, " << dynamic_count << " dynamic, " << character_count << " character(s), " << goat_count << " goat(s)\n";
+  tools::log_message("===============================");
+  //std::cout << "Level loaded: " << static_count << " static, " << dynamic_count << " dynamic, " << character_count << " character(s), " << goat_count << " goat(s)\n";
   if( character_count > 1)
-    std::cout << "  WARNING: Multiple characters loaded, will have undesired results...\n";
+    tools::log_message("  WARNING: Multiple characters loaded, will have undesired results...");
   if( goat_count > 1)
-    std::cout << "  WARNING: Multiple goats loaded, will have undesired results...\n";
+    tools::log_message("  WARNING: Multiple goats loaded, will have undesired results...");
   if( character_count == 0)
-    std::cout << "  WARNING: No character loaded, will have undesired results...\n";
+    tools::log_message("  WARNING: No character loaded, will have undesired results...");
   if( goat_count == 0)
-    std::cout << "  WARNING: No goat loaded, will have undesired results...\n";
+    tools::log_message("  WARNING: No goat loaded, will have undesired results...");
   if( static_count == 0 && dynamic_count == 0 && goat_count == 0 && character_count == 0)
-    std::cout << "  WARNING: No data loaded!\n";
-  std::cout << "===============================\n";
+    tools::log_message("  WARNING: No data loaded!");
+  tools::log_message("===============================");
 }
 
 // Reset game
@@ -320,10 +340,10 @@ void Game::reset(){
     }
   }
   if( gameGoat == nullptr)
-    std::cout << "WARNING: Goat is undeclared in game\n";
+    tools::log_message("WARNING: Goat is undeclared in game");
 
   if( gameCharacter == nullptr)
-    std::cout << "WARNING: gameCharacter is undeclared in game\n";
+    tools::log_message("WARNING: gameCharacter is undeclared in game");
 }
 
 // Load all sprites for in game
@@ -374,7 +394,7 @@ void Game::update(){
       set_next_state(STATE_MENU);
     }
     else{
-      std::cout<<"Level " << level-1 << " completed, loading next level\n";
+      tools::log_message("Level " + tools::toString(level-1) + " completed, loading next level.");
       LevelSelect::setLevelComplete(level-1);
       LevelSelect::writeLevelData();
       if( !testing)
@@ -407,7 +427,7 @@ void Game::update(){
   // Next level
   if( KeyListener::keyPressed[ALLEGRO_KEY_C]){
     if( !testing){
-      std::cout<<"Level " << level<< " skipped\n";
+      tools::log_message("Level " + tools::toString(level) + " skipped.");
       level++;
       reset();
     }
@@ -419,7 +439,7 @@ void Game::update(){
 
   // Previous level
   if( KeyListener::keyPressed[ALLEGRO_KEY_X]){
-    std::cout<<"Level " << level<< " skipped back\n";
+    tools::log_message("Level " + tools::toString(level) + " skipped back.");
     if( level > 1)
       level--;
     reset();
@@ -459,7 +479,7 @@ void Game::update(){
     if(gameCharacter -> getX() < -1 || gameCharacter -> getX() > 51.5f || gameCharacter -> getY() > 2 || gameCharacter -> getY() < -40){
       death.play();
       reset();
-      std::cout<<"==========="<<gameCharacter -> getX() <<"\n";
+      tools::log_message("===========" + tools::toString(gameCharacter -> getX()));
     }
   }
 }

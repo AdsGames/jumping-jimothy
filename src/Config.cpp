@@ -13,6 +13,8 @@ bool Config::sfx_enabled = true;
 bool Config::draw_cursor = false;
 int Config::graphics_mode = 0;
 
+int Config::level_to_start = 1;
+
 bool Config::joystick_mode = false;
 std::string Config::joystick_data = "";
 

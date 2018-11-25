@@ -1,14 +1,10 @@
 #ifndef UIELEMENT_H
 #define UIELEMENT_H
 
-#include <allegro5/allegro5.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 
-//#include "Button.h"
 #include <string>
-#include <MouseListener.h>
-#include <Tools.h>
 
 class UIElement {
   public:

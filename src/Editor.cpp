@@ -1,5 +1,25 @@
 #include "Editor.h"
 
+#include <fstream>
+#include <math.h>
+#include <algorithm>
+
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_native_dialog.h>
+#include <allegro5/allegro_ttf.h>
+
+#include "rapidxml.hpp"
+#include "rapidxml_print.hpp"
+
+#include "MouseListener.h"
+#include "KeyListener.h"
+#include "Tools.h"
+#include "Button.h"
+#include "Globals.h"
+#include "CheckBox.h"
+#include "MusicManager.h"
+
 #include "Config.h"
 #include "DisplayMode.h"
 
@@ -12,13 +32,7 @@ Editor::Editor(){
 
   MusicManager::menu_music.stop();
 
-  al_set_new_display_flags(ALLEGRO_WINDOWED);
-  //al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
-
-
   editorUI = UIHandler();
-
-  std::cout << "Initializing editor\n";
 
   // Level to edit
   level_number = 1;
@@ -30,12 +44,8 @@ Editor::Editor(){
   file_name = testing_file_name;
   testing_file_name = "Untitled";
 
-
-
   gui_mode = true;
-
   help_menu = tools::load_bitmap_ex( "images/help_menu.png");
-
 
   // Load box image
   image_box[0] = tools::load_bitmap_ex( "images/box_green.png");
@@ -46,7 +56,6 @@ Editor::Editor(){
   image_box[5] = tools::load_bitmap_ex( "images/box_repel_direction.png");
 
   cursor = tools::load_bitmap_ex("images/cursor.png");
-
 
   for( int i = 0; i < 4; i++)
     for( int t = 0; t < 15; t++)
@@ -72,8 +81,6 @@ Editor::Editor(){
   // Explode/repel
   tiles[4][0] = image_box[4];
   tiles[4][1] = image_box[5];
-
-
 
   tile_type = 0;
 
@@ -132,10 +139,10 @@ Editor::Editor(){
 
 
   // Is it edit mode?
-  if( Game::testing){
+  /*if( Game::testing){
     load_map( "data/level_0.xml");
     Game::testing = false;
-  }
+  }*/
 }
 
 // Destruct
@@ -312,7 +319,6 @@ void Editor::update(){
   if(KeyListener::keyPressed[ALLEGRO_KEY_X])
     gui_mode =! gui_mode;
 
-  //std::cout<<is_saved<< "is it saved\n";
   // Save
   if( editorUI.getElementByText("Save") -> mouseReleased() || KeyListener::keyPressed[ALLEGRO_KEY_S]){
     if( editorBoxes.size() > 0){
@@ -393,7 +399,6 @@ void Editor::update(){
       if( temp_name != nullptr){
         file_name=temp_name;
         editorBoxes.clear();
-      //  std::cout<<"Does the file name==nullptr? No.\n";
 
         // Make sure loads correctly
         if( load_map( file_name)){
@@ -414,10 +419,12 @@ void Editor::update(){
       if(is_player()){
         save_map( "data/level_0.xml");
         set_next_state( STATE_GAME);
-        Game::testing = true;
+        //Game::testing = true;
         testing_file_name = file_name;
-      }else
+      }
+      else {
         al_show_native_message_box( nullptr, "Missing player", "You must place a player spawn to test the level.","", "Whoopsie!", 0);
+      }
 
      }
      else
@@ -829,8 +836,6 @@ bool Editor::box_at(int x, int y){
 
 // Load map from xml-
 bool Editor::load_map( std::string mapName){
-// Doc
-  std::cout<<"we're loading a level now you POS\n";
   // Doc
   rapidxml::xml_document<> doc;
 
@@ -874,11 +879,8 @@ bool Editor::load_map( std::string mapName){
     if( object_node -> first_node("affect_character") != nullptr)
       affect_character = object_node -> first_node("affect_character") -> value();
 
-    std::cout<<type_str <<" is type_str\n";
 
     editor_box newBox;
-
-
     newBox.type_str = type_str;
     newBox.x_str = x;
     newBox.y_str = y;
@@ -922,7 +924,7 @@ bool Editor::load_map( std::string mapName){
       return false;
     }
 
-    std::cout<<type_str <<" is type_str\n";
+    tools::log_message(type_str + " is type_str");
 
     // Body
     if( newBox.type_str == "Dynamic")
@@ -939,7 +941,7 @@ bool Editor::load_map( std::string mapName){
       newBox.type = 5;
     else{
       newBox.type = 0;
-      std::cout<<"WARNING: Tile created as no type (type 0).\n";
+      tools::log_message("WARNING: Tile created as no type (type 0).");
 
     }
     // Add box

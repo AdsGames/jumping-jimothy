@@ -1,6 +1,15 @@
 #include "Menu.h"
 
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_ttf.h>
+
 #include "Config.h"
+#include "Tools.h"
+#include "MusicManager.h"
+
+#include "KeyListener.h"
+#include "JoystickListener.h"
+#include "MouseListener.h"
 
 // Init menu
 Menu::Menu(){
@@ -20,8 +29,6 @@ Menu::Menu(){
   button_exit = tools::load_bitmap_ex("images/button_exit.png");
   button_options = tools::load_bitmap_ex("images/gear.png");
   highlight = tools::load_bitmap_ex("images/highlight.png");
-
-
 
   int button_offset_x = 40;
 

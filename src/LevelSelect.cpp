@@ -1,11 +1,26 @@
 #include "LevelSelect.h"
 #include "Config.h"
 
+#include <fstream>
+#include <allegro5/allegro_color.h>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_ttf.h>
+
+#include "rapidxml.hpp"
+#include "rapidxml_print.hpp"
+
+#include "Button.h"
+
+#include "KeyListener.h"
+#include "MouseListener.h"
+#include "JoystickListener.h"
+
+#include "Tools.h"
+
 bool LevelSelect::completed_level_list[16]= {};
 
-LevelSelect::LevelSelect()
-
-{
+LevelSelect::LevelSelect() {
 
   //Doc
   rapidxml::xml_document<> doc;
@@ -326,7 +341,7 @@ void LevelSelect::update(){
 
     }else{
       int level=(highlight_y_destination-65)/45;
-      Game::level_to_start=level;
+      Config::level_to_start = level;
       set_next_state(STATE_GAME);
     }
   }
@@ -343,7 +358,7 @@ void LevelSelect::update(){
 
   for(int i=1; i<14; i++){
     if(levelSelectUI.getUIElements().at(i) -> clicked()){
-      Game::level_to_start=i;
+      Config::level_to_start = i;
       set_next_state(STATE_GAME);
       }
 

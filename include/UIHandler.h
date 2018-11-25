@@ -5,12 +5,8 @@
 #include <string>
 
 #include "UIElement.h"
-#include "Globals.h"
 
-//class UIElement;
-
-class UIHandler
-{
+class UIHandler {
   public:
     UIHandler() {};
     virtual ~UIHandler() {};

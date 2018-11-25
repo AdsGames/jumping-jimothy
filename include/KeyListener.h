@@ -9,14 +9,13 @@
 #ifndef KEYLISTENER_H
 #define KEYLISTENER_H
 
-#include <iostream>
 #include <allegro5/allegro.h>
 
 class KeyListener
 {
   public:
-    KeyListener();
-    virtual ~KeyListener();
+    KeyListener() {};
+    virtual ~KeyListener() {};
 
     static bool anyKeyPressed;
 

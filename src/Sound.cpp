@@ -14,7 +14,6 @@ Sound::Sound() {
 // Dtor
 Sound::~Sound() {
   #warning Memory Leak
-  //std::cout<<al_is_audio_installed()<<" is the answer to the question.\n";
   //al_destroy_sample( sample);
 }
 

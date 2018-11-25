@@ -1,9 +1,7 @@
 #include "CheckBox.h"
 
-CheckBox::CheckBox()
-{
-  //ctor
-}
+#include "MouseListener.h"
+
 CheckBox::CheckBox(int newX, int newY,std::string newText, ALLEGRO_FONT *newFont){
   this -> alpha = 255;
 
@@ -11,7 +9,6 @@ CheckBox::CheckBox(int newX, int newY,std::string newText, ALLEGRO_FONT *newFont
 
   this -> image = nullptr;
   this -> UIElement_font = newFont;
-
 
   this -> x = newX;
   this -> y = newY;
@@ -38,16 +35,9 @@ CheckBox::CheckBox(int newX, int newY,std::string newText, ALLEGRO_FONT *newFont
     this -> width = 10;
     this -> height = 10;
   }
-
-
 }
 
-CheckBox::~CheckBox()
-{
-  //dtor
-}
 void CheckBox::update(){
-
   mouse_released = false;
   if(active){
     if( hovering && old_mouse_down && !MouseListener::mouse_button & 1){
@@ -58,12 +48,10 @@ void CheckBox::update(){
     old_mouse_down = hovering && MouseListener::mouse_button & 1;
     hovering = MouseListener::mouse_x > x && MouseListener::mouse_x < x + getWidth() &&
                MouseListener::mouse_y > y && MouseListener::mouse_y < y + getHeight();
-  }else{
+  }
+  else{
     hovering=false;
   }
-
-
-
 }
 
 void CheckBox::draw(){

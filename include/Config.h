@@ -27,6 +27,8 @@ class Config {
     static std::string joystick_data;
     static bool joystick_mode;
 
+    static int level_to_start;
+
   protected:
 
   private:

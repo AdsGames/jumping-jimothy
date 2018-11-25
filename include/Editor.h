@@ -6,30 +6,13 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/allegro_native_dialog.h>
 
 #include <vector>
 #include <string>
-#include <math.h>
-#include <algorithm>
 
-#include "rapidxml.hpp"
-#include "rapidxml_print.hpp"
-
-#include "MouseListener.h"
-#include "KeyListener.h"
-#include "Tools.h"
-#include "Button.h"
-#include "Globals.h"
-#include "Game.h"
 #include "UIHandler.h"
-#include "CheckBox.h"
-
 #include "State.h"
 
 // Nice editor boxes
@@ -89,9 +72,6 @@ class Editor : public State{
     static const char *testing_file_name;
 
     bool gui_mode;
-
-
-
     float box_1_x;
     float box_1_y;
 

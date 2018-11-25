@@ -1,16 +1,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "Explosive.h"
-
-Explosive::Explosive()
-{
-  //ctor
-}
-
-Explosive::~Explosive()
-{
-  //dtor
-}
+#include "Globals.h"
 
 //subclass b2QueryCallback for proximity query callback
 class MyQueryCallback : public b2QueryCallback {
@@ -23,7 +14,7 @@ public:
     }
 };
 
-void Explosive::init(float newX, float newY, int newOrientation,BITMAP *newSprite,bool newAffectCharacter, b2World *newGameWorld, Character *newGameCharacter){
+void Explosive::init(float newX, float newY, int newOrientation,ALLEGRO_BITMAP *newSprite,bool newAffectCharacter, b2World *newGameWorld, Character *newGameCharacter){
 
   sprite = newSprite;
   gameCharacter = newGameCharacter;
