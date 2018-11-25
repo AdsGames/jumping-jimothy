@@ -16,22 +16,22 @@ class CheckBox : public UIElement {
     CheckBox();
 
     // Detailed constructor
-    CheckBox(int x, int y, std::string text, std::string id, ALLEGRO_FONT *font);
+    CheckBox(const int x, const int y, std::string text, std::string id, ALLEGRO_FONT *font);
 
     // Dtor
     virtual ~CheckBox() {};
 
     // Update
-    void update() override;
+    virtual void update() override;
 
     // Draw
-    void draw() override;
+    virtual void draw() override;
 
     // Check
     bool getChecked();
 
     // Set checked
-    void setChecked(bool checked);
+    void setChecked(const bool checked);
 
     // Get toggled
     bool getToggled();

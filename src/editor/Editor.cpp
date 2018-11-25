@@ -98,30 +98,30 @@ Editor::Editor(){
 
   // buttons
   editorUI.addElement(new Button(0, 728, "Dynamic", "btnDynamic", edit_font));
-  editorUI.createAnchoredButton("Static",edit_font,"Dynamic","btnStatic", RIGHT);
-  editorUI.createAnchoredButton("Player",edit_font,"Static","btnPlayer", RIGHT);
-  editorUI.createAnchoredButton("Goat",edit_font,"Player","btnGoat", RIGHT);
-  editorUI.createAnchoredButton("Collision",edit_font,"Goat","btnCollision", RIGHT);
-  editorUI.createAnchoredButton("Explosive",edit_font,"Collision","btnExplosive", RIGHT);
+  editorUI.createAnchoredButton("Static",edit_font,"btnDynamic","btnStatic", RIGHT);
+  editorUI.createAnchoredButton("Player",edit_font,"btnStatic","btnPlayer", RIGHT);
+  editorUI.createAnchoredButton("Goat",edit_font,"btnPlayer","btnGoat", RIGHT);
+  editorUI.createAnchoredButton("Collision",edit_font,"btnGoat","btnCollision", RIGHT);
+  editorUI.createAnchoredButton("Explosive",edit_font,"btnCollision","btnExplosive", RIGHT);
 
-  editorUI.createAnchoredButton("<",edit_font,"Explosive","left_bottom_toggle",RIGHT);
+  editorUI.createAnchoredButton("<",edit_font,"btnExplosive","left_bottom_toggle",RIGHT);
 
 
   editorUI.addElement(new Button(566,728,">","right_bottom_toggle", edit_font));
-  editorUI.createAnchoredButton("Undo",edit_font,">","btnUndo",LEFT);
-  editorUI.createAnchoredButton("Clear",edit_font,"Undo","btnClear",LEFT);
-  editorUI.createAnchoredButton("Save",edit_font,"Clear","btnSave",LEFT);
-  editorUI.createAnchoredButton("Save as",edit_font,"Save","btnSaveAs",LEFT);
-  editorUI.createAnchoredButton("Load",edit_font,"Save as","btnLoad",LEFT);
-  editorUI.createAnchoredButton("Grid",edit_font,"Load","btnGrid",LEFT);
-  editorUI.createAnchoredButton("Play",edit_font,"Grid","btnPlay",LEFT);
+  editorUI.createAnchoredButton("Undo",edit_font,"right_bottom_toggle","btnUndo",LEFT);
+  editorUI.createAnchoredButton("Clear",edit_font,"btnUndo","btnClear",LEFT);
+  editorUI.createAnchoredButton("Save",edit_font,"btnClear","btnSave",LEFT);
+  editorUI.createAnchoredButton("Save as",edit_font,"btnSave","btnSaveAs",LEFT);
+  editorUI.createAnchoredButton("Load",edit_font,"btnSaveAs","btnLoad",LEFT);
+  editorUI.createAnchoredButton("Grid",edit_font,"btnLoad","btnGrid",LEFT);
+  editorUI.createAnchoredButton("Play",edit_font,"btnGrid","btnPlay",LEFT);
 
   editorUI.addElement(new Button(882,0,">","right_top_toggle",edit_font));
   editorUI.addElement(new Button(898+13,0,"Help","btnHelp",edit_font));
-  editorUI.createAnchoredButton("Back",edit_font,"Help","btnBack",LEFT);
+  editorUI.createAnchoredButton("Back",edit_font,"btnHelp","btnBack",LEFT);
 
   editorUI.addElement(new CheckBox(0,60,"Block affects character","chkBlockAffectsChar",edit_font));
-  editorUI.createAnchoredButton("<",edit_font,"Block affects character","left_top_toggle",RIGHT);
+  editorUI.createAnchoredButton("<",edit_font,"chkBlockAffectsChar","left_top_toggle",RIGHT);
 
 
   editorUI.addElement(new Button(0,100,"","explosive_up", nullptr));

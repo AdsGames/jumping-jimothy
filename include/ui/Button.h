@@ -13,11 +13,11 @@
 class Button : public UIElement {
   public:
     Button();
-    Button(int x, int y, std::string text, std::string id, ALLEGRO_FONT *font);
-    virtual ~Button() {};
+    Button(const int x, const int y, std::string text, std::string id, ALLEGRO_FONT *font);
+    inline virtual ~Button() {};
 
-    void draw() override;
-    void update() override;
+    virtual void draw() override;
+    virtual void update() override;
 };
 
 #endif // BUTTON_H

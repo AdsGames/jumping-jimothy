@@ -9,7 +9,7 @@ CheckBox::CheckBox()
 }
 
 // Detailed constructor
-CheckBox::CheckBox(int x, int y, std::string text, std::string id, ALLEGRO_FONT *font)
+CheckBox::CheckBox(const int x, const int y, std::string text, std::string id, ALLEGRO_FONT *font)
   : UIElement(x, y, text, id, font) {
 
   this -> checkbox_size = 20;
@@ -68,7 +68,7 @@ bool CheckBox::getChecked() {
 }
 
 // Set checked state
-void CheckBox::setChecked(bool checked) {
+void CheckBox::setChecked(const bool checked) {
   this -> checked = checked;
 }
 
