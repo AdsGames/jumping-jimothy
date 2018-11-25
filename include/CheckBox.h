@@ -1,7 +1,7 @@
 #ifndef CHECKBOX_H
 #define CHECKBOX_H
 
-#include "UIElement.h"
+#include "ui/UIElement.h"
 
 class CheckBox : public UIElement {
   public:

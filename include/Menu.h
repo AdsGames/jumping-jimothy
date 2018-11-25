@@ -9,7 +9,7 @@
 #include <allegro5/allegro_image.h>
 
 #include "State.h"
-#include "Button.h"
+#include "ui/Button.h"
 #include "Sound.h"
 
 enum{
