@@ -1,18 +1,11 @@
-#include <allegro5/allegro_primitives.h>
-
 #include "DynamicBox.h"
 
-DynamicBox::DynamicBox()
-{
-  //ctor
-}
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 
-DynamicBox::~DynamicBox()
-{
-  //dtor
-}
+#include "Tools.h"
 
-void DynamicBox::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,BITMAP *newSprite, b2World *newGameWorld){
+void DynamicBox::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
 
   sprite = newSprite;
 

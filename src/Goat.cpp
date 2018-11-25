@@ -1,5 +1,7 @@
 #include "Goat.h"
 
+#include "Tools.h"
+
 // We'll use this for the goat
 void Goat::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGameWorld, Character *newCharacter){
 
@@ -9,7 +11,7 @@ void Goat::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newG
   gameCharacter = newCharacter;
 
   if( gameCharacter == nullptr)
-    std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
+    tools::log_message("WARNING: Box: gameCharacter is undeclared");
 
   // Image
   for( int i = 0; i < 16; i++)
@@ -103,7 +105,7 @@ void Goat::draw(){
 bool Goat::getWinCondition(){
 
   if(gameCharacter==nullptr)
-    std::cout<<"WARNING: Box: gameCharacter is undeclared\n";
+    tools::log_message("WARNING: Box: gameCharacter is undeclared");
 
 
   if(sensor_box -> isCollidingWithBody(gameCharacter -> getBody())){

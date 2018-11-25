@@ -45,15 +45,14 @@
 #define DPAD_UP2 13
 #define DPAD_DOWN 14
 
-#include <iostream>
 #include <allegro5/allegro.h>
 
 
 class JoystickListener
 {
   public:
-    JoystickListener();
-    virtual ~JoystickListener();
+    JoystickListener() {};
+    virtual ~JoystickListener() {};
 
     void on_event( ALLEGRO_EVENT_TYPE event_type, int keycode);
     void update();

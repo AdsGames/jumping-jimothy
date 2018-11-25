@@ -1,12 +1,15 @@
 #include "Button.h"
 
+#include "Tools.h"
 
-Button::Button( int x, int y, std::string text, ALLEGRO_BITMAP *image, float newRotation){
+Button::Button( int x, int y, std::string text, ALLEGRO_BITMAP *image, float newRotation) {
 
   setDefaults();
+
   // Naming schemes are frickin' hard
   this -> image = image;
   this -> bitmap_rotation_angle=newRotation;
+
   // Literally this
   this -> x = x;
   this -> y = y;
@@ -15,16 +18,11 @@ Button::Button( int x, int y, std::string text, ALLEGRO_BITMAP *image, float new
   // Oh Allan you can frick right the frick off
   // Just spent an hour debugging why my image was always nullptr
   // this -> image = nullptr;
-
-
   this -> UIElement_font = UIElement_font;
 
-  if(image!=nullptr){
+  if(image != nullptr){
     this -> width = al_get_bitmap_width(image);
     this -> height = al_get_bitmap_height(image);
-  }else{
-    std::cout<<"WARNING: Button " << text << " has been given a nullptr image!\n";
-
   }
 
   this -> padding_x = 2;
@@ -93,18 +91,9 @@ Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font, in
   this -> width = newWidth;
   this -> height = newHeight;
 
-
 }
 
-
-
-Button::~Button()
-{
-  //dtor
-}
 void Button::draw(){
-
-
   if(visible){
     // Backdrop
 
@@ -115,10 +104,12 @@ void Button::draw(){
 
     ALLEGRO_COLOR hover_colour = al_map_rgba(new_r,new_g,new_b,alpha);
 
-    if(disabled_hover_effect)hover_colour=background_colour;
+    if(disabled_hover_effect)
+      hover_colour=background_colour;
 
     if(visible_background){
-      if(!transparent_cell_fill)al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, hover_colour);
+      if(!transparent_cell_fill)
+        al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, hover_colour);
       al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), outline_thickness);
     }
     // Text
@@ -151,4 +142,13 @@ void Button::draw(){
         al_draw_rotated_bitmap(image,width/2,width/2,x+padding_x+(width/2),y+padding_y+(height/2),bitmap_rotation_angle,0);
     }
   }
+}
+
+
+void Button::setWidth(int newWidth){
+  width = newWidth;
+}
+
+void Button::setHeight(int newHeight){
+  height = newHeight;
 }

@@ -6,9 +6,7 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
-#include "Globals.h"
 #include "Box.h"
-#include "KeyListener.h"
 
 class b2World;
 class b2Body;
@@ -27,11 +25,6 @@ class Sensor : public Box{
 	bool isCollidingWithDynamicBody();
     bool isCollidingWithBody(b2Body*);
     void init(float, float,float,float,ALLEGRO_COLOR, b2World *, b2Body *);
-
-
-
-
 };
-
 
 #endif // SENSOR_H

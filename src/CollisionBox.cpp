@@ -1,10 +1,9 @@
 #include "CollisionBox.h"
 
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 
-CollisionBox::CollisionBox()
-{
-  //ctor
-}
+#include "KeyListener.h"
 
 void CollisionBox::init(float newX, float newY, float newWidth, float newHeight, b2World *newGameWorld){
 
@@ -70,10 +69,5 @@ void CollisionBox::draw(){
 
 void CollisionBox::update(){
 
-}
-
-CollisionBox::~CollisionBox()
-{
-  //dtor
 }
 

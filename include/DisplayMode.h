@@ -12,6 +12,7 @@
 
 #define NUM_GRAPHICS_MODES 4
 
+// Possible screen modes
 enum {
   FULLSCREEN_WINDOW_STRETCH,
   FULLSCREEN_WINDOW_LETTERBOX,

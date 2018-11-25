@@ -1,5 +1,12 @@
 #include "Tools.h"
 
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_native_dialog.h>
+
+#include <iostream>
+#include <math.h>
+#include <fstream>
+
 // A function to streamline error reporting in file loading
 void tools::abort_on_error(std::string message, std::string title) {
   al_show_native_message_box(nullptr, "Error", title.c_str(), message.c_str(), nullptr, ALLEGRO_MESSAGEBOX_ERROR);
@@ -8,7 +15,8 @@ void tools::abort_on_error(std::string message, std::string title) {
 
 // Load sample if exits, or throw error
 ALLEGRO_SAMPLE *tools::load_sample_ex(std::string file) {
-  std::cout << "Loading sound " << file << ".";
+  // Log file
+  log_message("Loading sound " + file, true);
 
   // Check if file exists
   std::ifstream f(file.c_str());
@@ -20,14 +28,13 @@ ALLEGRO_SAMPLE *tools::load_sample_ex(std::string file) {
   if(!(temp_sample = al_load_sample(file.c_str())))
     abort_on_error(std::string("There was an error loading " + file + "\nOh no :("), "Loading Error");
 
-  std::cout << " Success.\n";
-
   return temp_sample;
 }
 
 // Load bitmap if exits, or throw error
 ALLEGRO_BITMAP * tools::load_bitmap_ex(std::string file) {
-  std::cout << "Loading bitmap " << file << ".";
+  // Log file
+  log_message("Loading bitmap " + file, true);
 
   // Check if file exists
   std::ifstream f(file.c_str());
@@ -38,8 +45,6 @@ ALLEGRO_BITMAP * tools::load_bitmap_ex(std::string file) {
   ALLEGRO_BITMAP *temp_image = nullptr;
   if(!(temp_image = al_load_bitmap(file.c_str())))
     abort_on_error(std::string("There was an error loading " + file + "... \nSorry..."), "Loading Error");
-
-  std::cout<<" Success.\n";
 
   return temp_image;
 }
@@ -119,4 +124,16 @@ std::vector<std::string> tools::split_string(const std::string& p_pcstStr, char 
 // Random number
 int tools::random_int(int min, int max){
   return (rand() % (max + 1 - min)) + min;
+}
+
+// Log message to console
+void tools::log_message(std::string message, bool debug) {
+  if (debug) {
+    #ifdef Debug
+      std::cout << message << "\n";
+    #endif
+  }
+  else {
+    std::cout << message << "\n";
+  }
 }

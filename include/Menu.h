@@ -6,19 +6,11 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_ttf.h>
 
-#include "KeyListener.h"
-#include "JoystickListener.h"
-#include "Tools.h"
 #include "State.h"
 #include "Button.h"
 #include "Sound.h"
-#include "MusicManager.h"
-
 
 enum{
   menu_button_play,

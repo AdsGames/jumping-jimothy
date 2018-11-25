@@ -3,16 +3,14 @@
 
 #include "Box.h"
 
-
-class DynamicBox : public Box
-{
+class DynamicBox : public Box {
   public:
-    DynamicBox();
-    virtual ~DynamicBox();
+    DynamicBox() {};
+    virtual ~DynamicBox() {};
 
-    void init(float, float, float, float,float,float,bool,BITMAP*, b2World *);
+    void init(float, float, float, float,float,float,bool,ALLEGRO_BITMAP*, b2World *);
 
-       // Updates
+    // Updates
     void draw();
     void update();
 
@@ -20,11 +18,6 @@ class DynamicBox : public Box
     void setStatic();
     void setDynamic(bool);
     void setOrientation(int);
-
-
-  protected:
-
-  private:
 };
 
 #endif // DYNAMICBOX_H

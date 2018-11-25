@@ -1,9 +1,8 @@
-#include <iostream>
-
 #include "DisplayMode.h"
 #include "allegro5/allegro.h"
 
 #include "Config.h"
+#include "Tools.h"
 
 // Initialize
 int DisplayMode::window_w = 1024;
@@ -129,7 +128,7 @@ void DisplayMode::setTranslation(int x, int y) {
 void DisplayMode::setMode(int mode) {
   // Display hasnt been set
   if (display == nullptr) {
-    std::cout << "Display not set.\n";
+    tools::log_message("Display not set.", true);
     return;
   }
 
@@ -207,7 +206,7 @@ void DisplayMode::setMode(int mode) {
 
     // Invalid mode
     default:
-      std::cout << "WARNING: Invalid display mode passed.\n";
+      tools::log_message("WARNING: Invalid display mode passed.");
       return;
       break;
   }
@@ -222,5 +221,5 @@ void DisplayMode::setMode(int mode) {
   Config::draw_cursor = !display_cursor;
 
   // Debug screen mode
-  std::cout << "Scren mode set to " << getDisplayModeString() << ".\n";
+  tools::log_message("Scren mode set to " + getDisplayModeString() + ".", true);
 }

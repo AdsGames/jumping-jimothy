@@ -1,5 +1,7 @@
 #include "UIHandler.h"
+
 #include "Button.h"
+#include "Globals.h"
 
 // Add element to handler
 void UIHandler::addElement(UIElement *elem){

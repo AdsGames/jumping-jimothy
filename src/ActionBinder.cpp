@@ -1,5 +1,8 @@
 #include "ActionBinder.h"
 
+#include "keyListener.h"
+#include "joystickListener.h"
+
 binding ActionBinder::game_binding[10];
 
 

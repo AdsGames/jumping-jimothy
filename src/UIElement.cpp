@@ -1,5 +1,10 @@
 #include "UIElement.h"
 
+#include <allegro5/allegro5.h>
+
+#include "MouseListener.h"
+#include "Tools.h"
+
 // Defaults
 UIElement::UIElement(){
   setDefaults();
@@ -145,8 +150,6 @@ bool UIElement::mouseReleased(){
 
 void UIElement::draw(){
   if(visible){
-
-   // std::cout<<"How do I actually oop?\n";
     // Backdrop
     if(visible_background){
       al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering,alpha));

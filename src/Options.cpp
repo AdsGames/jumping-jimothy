@@ -1,7 +1,15 @@
+#include <allegro5/allegro_ttf.h>
+
 #include "Options.h"
 #include "DisplayMode.h"
 #include "Config.h"
 #include "MusicManager.h"
+
+#include "KeyListener.h"
+#include "JoystickListener.h"
+#include "MouseListener.h"
+
+#include "Tools.h"
 
 // Initialize options screen
 Options::Options() {

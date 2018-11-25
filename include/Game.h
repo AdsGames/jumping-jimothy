@@ -7,36 +7,17 @@
 #define GAME_H
 
 #include <vector>
-
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/allegro_font.h>
 #include <Box2D/Box2D.h>
 
-#include "MouseListener.h"
-#include "KeyListener.h"
-#include "JoystickListener.h"
-
-#include "rapidxml.hpp"
-#include "rapidxml_print.hpp"
-
 #include "State.h"
+
 #include "Box.h"
-#include "StaticBox.h"
-#include "Tools.h"
 #include "Character.h"
 #include "Goat.h"
-#include "CollisionBox.h"
-#include "DynamicBox.h"
-#include "Explosive.h"
-#include "Button.h"
-#include "LevelSelect.h"
 #include "Sound.h"
-#include "MusicManager.h"
+#include "Button.h"
 
-class Game : public State{
+class Game : public State {
   public:
     // Construct / destruct
     Game();
@@ -50,7 +31,6 @@ class Game : public State{
     // Test mode
     static bool testing;
     static const char *testing_file_name;
-    static int level_to_start;
 
   private:
     // Functions
@@ -60,9 +40,9 @@ class Game : public State{
     void reset();
 
     // Creation code
-    Box *create_dynamic_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,BITMAP*,  bool newBodyType, bool newIsSensor);
+    Box *create_dynamic_box(float newX, float newY, float newWidth, float newHeight,float newVelX,float newVelY,ALLEGRO_BITMAP*, bool newBodyType, bool newIsSensor);
     Box *create_explosive_box(float,float,int,bool);
-    Box *create_static_box(float newX, float newY,BITMAP*,BITMAP*, BITMAP*, BITMAP*);
+    Box *create_static_box(float newX, float newY,ALLEGRO_BITMAP*,ALLEGRO_BITMAP*, ALLEGRO_BITMAP*, ALLEGRO_BITMAP*);
     Box *create_collision_box(float newX, float newY,float,float);
 
     Goat *create_goat(float,float);
@@ -110,7 +90,6 @@ class Game : public State{
     Sound toggle_on;
     Sound death;
     Button testing_back_button;
-
 
     // Box2D world parameters
     b2Vec2 gravity;

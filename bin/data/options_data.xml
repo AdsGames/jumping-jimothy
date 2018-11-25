@@ -2,6 +2,6 @@
 <data>
 	<value sfx="disabled"/>
 	<value music="enabled"/>
-	<value graphics_mode="0"/>
+	<value graphics_mode="3"/>
 </data>
 

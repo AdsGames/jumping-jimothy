@@ -12,17 +12,6 @@ bool JoystickListener::anyButtonReleased=false;
 bool JoystickListener::stickDirections[20];
 ALLEGRO_JOYSTICK_STATE JoystickListener::joyState;
 
-
-// Constructor
-JoystickListener::JoystickListener(){
-
-}
-
-// Destructor
-JoystickListener::~JoystickListener(){
-
-}
-
 // For allegro 5, we use events
 void JoystickListener::on_event( ALLEGRO_EVENT_TYPE event_type, int buttoncode){
   // Button down

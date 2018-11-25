@@ -1,9 +1,8 @@
+#include "StaticBox.h"
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
-#include <Box2D/Box2D.h>
-#include <iostream>
 
-#include "StaticBox.h"
 #include "Globals.h"
 
 // I'm trying to make static boxes really just for show,
@@ -11,17 +10,12 @@
 // will inherit for Box.cpp but will (should) only hold
 // the location and the image
 
-StaticBox::StaticBox()
-{
-  //ctor
-}
 // Update box
 void StaticBox::update(){
 
 }
 
-void StaticBox::init(float newX, float newY,  BITMAP *sp_1,BITMAP *sp_2,BITMAP *sp_3,BITMAP *sp_4)
-{
+void StaticBox::init(float newX, float newY,  ALLEGRO_BITMAP *sp_1,ALLEGRO_BITMAP *sp_2,ALLEGRO_BITMAP *sp_3,ALLEGRO_BITMAP *sp_4) {
 
   x=newX;
   y=newY;
@@ -66,7 +60,8 @@ void StaticBox::draw(){
   // - Danny Van Stemp, July 30, 2017
 
 }
-StaticBox::~StaticBox()
-{
-  //dtor
+
+// Get type
+int StaticBox::getType() {
+  return STATIC;
 }

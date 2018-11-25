@@ -1,24 +1,18 @@
 #ifndef STATICBOX_H
 #define STATICBOX_H
 
-#include <Box.h>
+#include "Box.h"
 
-class StaticBox : public Box
-{
+class StaticBox : public Box {
   public:
-    StaticBox();
-    virtual ~StaticBox();
-    void init(float,float,BITMAP*, BITMAP*, BITMAP*, BITMAP*);
+    StaticBox() {};
+    virtual ~StaticBox() {};
+
+    void init(float,float,ALLEGRO_BITMAP*, ALLEGRO_BITMAP*, ALLEGRO_BITMAP*, ALLEGRO_BITMAP*);
     void draw();
     void update();
 
-    int getType(){ return STATIC; };
-
-
-  protected:
-
-  private:
-
+    int getType();;
 };
 
 #endif // STATICBOX_H

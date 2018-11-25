@@ -3,16 +3,10 @@
 
 #include <UIElement.h>
 
-
-class ToggleBox : public UIElement
-{
+class ToggleBox : public UIElement {
   public:
-    ToggleBox();
-    virtual ~ToggleBox();
-
-  protected:
-
-  private:
+    ToggleBox() {};
+    virtual ~ToggleBox() {};
 };
 
 #endif // TOGGLEBOX_H

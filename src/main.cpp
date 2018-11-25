@@ -9,6 +9,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_ttf.h>
 
 #include "MouseListener.h"
 #include "KeyListener.h"
@@ -24,6 +25,7 @@
 #include "Config.h"
 #include "MusicManager.h"
 #include "DisplayMode.h"
+#include "Tools.h"
 
 // Current state object
 State *currentState = nullptr;
@@ -68,31 +70,31 @@ void change_state(){
     switch( nextState ){
       case STATE_INIT:
         currentState = new Init();
-        std::cout<<"Switched state to initialization.\n";
+        tools::log_message("Switched state to initialization.");
         break;
       case STATE_GAME:
         currentState = new Game();
-        std::cout<<"Switched state to game.\n";
+        tools::log_message("Switched state to game.");
         break;
       case STATE_EDIT:
         currentState = new Editor();
-        std::cout<<"Switched state to editor.\n";
+        tools::log_message("Switched state to editor.");
         break;
       case STATE_MENU:
         currentState = new Menu();
-        std::cout<<"Switched state to main menu.\n";
+        tools::log_message("Switched state to main menu.");
         break;
       case STATE_EXIT:
-        std::cout<<"Exiting program.\n";
+        tools::log_message("Exiting program.");
         closing = true;
         break;
       case STATE_LEVELSELECT:
         currentState = new LevelSelect();
-        std::cout<<"Switched state to level select.\n";
+        tools::log_message("Switched state to level select.");
         break;
       case STATE_OPTIONS:
         currentState = new Options();
-        std::cout<<"Switched state to options.\n";
+        tools::log_message("Switched state to options.");
         break;
 
       default:
@@ -109,8 +111,8 @@ void change_state(){
 
 // Setup game
 void setup(){
+  tools::log_message("Initializing Allegro.");
 
-  std::cout << "Initializing Allegro.\n";
   // Init allegro
   if( !al_init())
     tools::abort_on_error( "Allegro could not initilize", "Error");
@@ -162,14 +164,15 @@ void setup(){
   // Window title
   al_set_window_title(display,"Jumping Jimothy");
 
-  std::cout<<" Sucesss.\n";
+  tools::log_message(" Sucesss.");
+
 
   #if defined(DEBUG)
-    std::cout<<"Build target: Debug\n";
+    tools::log_message("Build target: Debug");
   #endif
 
   #if defined(RELEASE)
-    std::cout<<"Build target: Release\n";
+    tools::log_message("Build target: Release");
   #endif
 
   // Probably never going to be relevant but pretty cool anyways
@@ -179,21 +182,21 @@ void setup(){
   int revision = (version >> 8) & 255;
   int release = version & 255;
 
-  std::cout<<"Allegro version "<<major<<"."<<minor<<"."<<revision<<"."<<release<<"\n";
+  tools::log_message("Allegro version " + tools::toString(major) + "." + tools::toString(minor) + "." + tools::toString(revision) + "." + tools::toString(release));
 
   // This is actually completely irrelevant other than making fun of Allan's PC when he runs this
   // Sorry, your PC is a very nice PC
-  std::cout<<"Running as "<<al_get_app_name()<<", with "<<al_get_ram_size()<<" MB RAM.\n";
+  tools::log_message("Running as " + tools::toString(al_get_app_name()) + ", with " + tools::toString(al_get_ram_size()) + " MB RAM.");
 
 
   joystick_enabled = (al_get_num_joysticks() > 0);
 
   if (joystick_enabled) {
-    std::cout << al_get_joystick_name(al_get_joystick(0)) <<" is installed and being used.\n";
+    tools::log_message(tools::toString(al_get_joystick_name(al_get_joystick(0))) + " is installed and being used.");
     Config::joystick_data = al_get_joystick_name(al_get_joystick(0));
   }
   else {
-    std::cout << "No joystick is installed.\n";
+    tools::log_message("No joystick is installed.");
     Config::joystick_data = "None detected.";
   }
 
@@ -241,10 +244,10 @@ void update(){
 
     if(joystick_enabled) {
       Config::joystick_data = al_get_joystick_name(al_get_joystick(0));
-      std::cout << "Joystick " << al_get_joystick_name(al_get_joystick(0)) << " is configured.\n";
+      tools::log_message("Joystick " + tools::toString(al_get_joystick_name(al_get_joystick(0))) + " is configured.");
     }
     else{
-      std::cout << "Joystick unplugged.\n";
+      tools::log_message("Joystick unplugged.");
       Config::joystick_data = "None detected.";
     }
   }
