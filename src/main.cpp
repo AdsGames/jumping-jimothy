@@ -1,9 +1,10 @@
-/*
+/**
  * Main
+ * Allan Legemaate and Danny Van Stemp
  * This is the main for Jumping Jimothy
  * Calls state machine update and draw functions
  * 09/05/2017
- */
+ **/
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>

@@ -1,6 +1,6 @@
 /**
  * Joystick Listener
- *   Allan Legemaate
+ * Allan Legemaate
  * Listens for joystick buttons JUST pressed or JUST released
  *   since the last tick
  * 23/01/2017

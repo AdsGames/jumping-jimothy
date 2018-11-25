@@ -1,9 +1,10 @@
-/*
+/**
  * Display Mode
- * Sets up and changes passed display
  * Danny Van Stemp and Allan Legemaate
+ * Sets up and changes passed display
  * 20/11/2018
- */
+ **/
+
 #ifndef DISPLAYMODE_H
 #define DISPLAYMODE_H
 

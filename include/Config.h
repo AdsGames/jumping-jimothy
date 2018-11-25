@@ -1,10 +1,10 @@
-/*
+/**
  * Config
- * Global configuration. Responsible for
- * reading config data and updating on close.
  * Allan Legemaate
+ * Global configuration. Responsible for
+ *   reading config data and updating on close.
  * 22/11/2018
- */
+ **/
 
 #ifndef CONFIG_H
 #define CONFIG_H

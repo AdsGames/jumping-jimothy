@@ -1,9 +1,9 @@
-/*
+/**
  * Options
- * The options menu state. Works with config
  * Danny Van Stemp and Allan Legemaate
+ * The options menu state. Works with config
  * 22/11/2018
- */
+ **/
 
 #ifndef OPTIONS_H
 #define OPTIONS_H

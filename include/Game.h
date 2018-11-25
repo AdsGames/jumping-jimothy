@@ -1,8 +1,10 @@
 /**
- * GAME
- * A.D.S. Games
+ * Game
+ * Allan Legemaate and Danny Van Stemp
+ * Game state
  * 05/05/2017
 **/
+
 #ifndef GAME_H
 #define GAME_H
 

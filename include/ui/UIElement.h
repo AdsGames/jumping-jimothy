@@ -1,3 +1,10 @@
+/**
+ * UI Element
+ * Danny Van Stemp and Allan Legemaate
+ * Top level UI element
+ * 24/09/2017
+ **/
+
 #ifndef UIELEMENT_H
 #define UIELEMENT_H
 

@@ -1,3 +1,10 @@
+/**
+ * Button
+ * Danny Van Stemp and Allan Legemaate
+ * UI Button
+ * 11/04/2017
+ **/
+
 #ifndef BUTTON_H
 #define BUTTON_H
 

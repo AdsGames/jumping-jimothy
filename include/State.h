@@ -4,6 +4,7 @@
  * 30/12/2016
  * Compartmentalize program
  */
+
 #ifndef STATE_H
 #define STATE_H
 

@@ -1,8 +1,10 @@
 /**
  * Editor
- * Allan Legemaate & Danny Van Stemp
+ * Allan Legemaate and Danny Van Stemp
+ * Level editor to create/edit levels
  * 05/05/2017
 **/
+
 #ifndef EDITOR_H
 #define EDITOR_H
 

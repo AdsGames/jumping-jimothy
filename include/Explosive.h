@@ -1,3 +1,10 @@
+/**
+ * Explosive
+ * Danny Van Stemp
+ * Box that applys gravity in a direction
+ * 21/09/2017
+**/
+
 #ifndef EXPLOSIVE_H
 #define EXPLOSIVE_H
 

@@ -1,3 +1,11 @@
+/**
+ * Action Binder
+ * Danny Van Stemp
+ * Abstraction layer on top of key/joy
+ *   codes for keybindings
+ * 05/05/2017
+**/
+
 #ifndef ACTIONBINDER_H
 #define ACTIONBINDER_H
 
