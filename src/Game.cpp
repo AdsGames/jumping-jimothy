@@ -50,7 +50,7 @@ Game::Game() {
 
   if( testing){
     level = 0;
-    testing_back_button = Button(966,728,"Back",edit_font);
+    testing_back_button = Button(966,728,"Back","btnBack",edit_font);
   }
 
   // Reset fresh

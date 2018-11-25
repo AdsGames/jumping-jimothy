@@ -33,29 +33,34 @@ Menu::Menu(){
   int button_offset_x = 40;
 
 
-  menu_buttons[menu_button_edit] = Button( button_offset_x, 550, "Level Editor", button_font, 200, 20);
+  menu_buttons[menu_button_edit] = Button(button_offset_x, 550, "Level Editor", "btnEditor",  button_font);
+  menu_buttons[menu_button_edit].setSize(200, 20);
   menu_buttons[menu_button_edit].setVisibleBackground(false);
   menu_buttons[menu_button_edit].setTextColour(al_map_rgb(255,255,255));
 
 
-  menu_buttons[menu_button_exit] = Button( button_offset_x, 700, "Exit", button_font, 200, 20);
+  menu_buttons[menu_button_exit] = Button(button_offset_x, 700, "Exit", "btnExit", button_font);
+  menu_buttons[menu_button_exit].setSize(200, 20);
   menu_buttons[menu_button_exit].setVisibleBackground(false);
   menu_buttons[menu_button_exit].setTextColour(al_map_rgb(255,255,255));
 
 
 
 
-  menu_buttons[menu_button_play] = Button( button_offset_x, 500, "Play",button_font, 200, 20);
+  menu_buttons[menu_button_play] = Button(button_offset_x, 500, "Play", "btnPlay", button_font);
+  menu_buttons[menu_button_play].setSize(200, 20);
   menu_buttons[menu_button_play].setVisibleBackground(false);
   menu_buttons[menu_button_play].setTextColour(al_map_rgb(255,255,255));
 
 
 
-  menu_buttons[menu_button_help] = Button( button_offset_x, 650, "Credits", button_font, 200, 20);
+  menu_buttons[menu_button_help] = Button(button_offset_x, 650, "Credits", "btnCredits", button_font);
+  menu_buttons[menu_button_help].setSize(200, 20);
   menu_buttons[menu_button_help].setVisibleBackground(false);
   menu_buttons[menu_button_help].setTextColour(al_map_rgb(255,255,255));
 
-  menu_buttons[menu_button_options] = Button( button_offset_x, 600, "Settings", button_font,200,20 );
+  menu_buttons[menu_button_options] = Button(button_offset_x, 600, "Settings", "btnSettings", button_font);
+  menu_buttons[menu_button_options].setSize(200, 20);
   menu_buttons[menu_button_options].setVisibleBackground(false);
   menu_buttons[menu_button_options].setTextColour(al_map_rgb(255,255,255));
 

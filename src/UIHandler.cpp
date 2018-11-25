@@ -2,6 +2,7 @@
 
 #include "Button.h"
 #include "Globals.h"
+#include "Tools.h"
 
 // Add element to handler
 void UIHandler::addElement(UIElement *elem){
@@ -24,20 +25,8 @@ std::vector<UIElement*> UIHandler::getUIElements() {
 }
 
 // Create button
-void UIHandler::createButton(int newX, int newY, std::string newText, ALLEGRO_FONT *newFont){
-  Button *newButton = new Button(newX, newY, newText, newFont);
-  ui_elements.push_back(newButton);
-}
-
-// Create anchored button
-void UIHandler::createAnchoredButton(std::string newText, ALLEGRO_FONT *newFont, std::string newAnchor, bool newJustification){
-  Button *newButton = new Button(0, getElementByText(newAnchor) -> getY(), newText, newFont);
-
-  if(newJustification)
-    newButton -> setX(getElementByText(newAnchor) -> getRightX());
-  else
-    newButton -> setX(getElementByText(newAnchor) -> getRightX());
-
+void UIHandler::createButton(int newX, int newY, std::string newText, std::string id, ALLEGRO_FONT *newFont){
+  Button *newButton = new Button(newX, newY, newText, id, newFont);
   ui_elements.push_back(newButton);
 }
 
@@ -46,9 +35,9 @@ void UIHandler::createAnchoredButton(std::string newText, ALLEGRO_FONT *newFont,
   Button *newButton = new Button(0, getElementByText(newAnchor) -> getY(), newText, newId, newFont);
 
   if (newJustification)
-    newButton -> setX(getElementByText(newAnchor) -> getRightX());
+    newButton -> setX(getElementByText(newAnchor) -> getX() + getElementByText(newAnchor) -> getWidth());
   else
-    newButton -> setX(getElementByText(newAnchor) -> getRightX());
+    newButton -> setX(getElementByText(newAnchor) -> getX() + getElementByText(newAnchor) -> getWidth());
 
   ui_elements.push_back(newButton);
 }
@@ -60,6 +49,7 @@ UIElement* UIHandler::getElementByText(std::string text) {
       return ui_elements.at(i);
     }
   }
+  tools::log_message("Warning: not found " + text);
   // Not found
   return nullptr;
 }
@@ -71,6 +61,7 @@ UIElement* UIHandler::getElementById(std::string id) {
       return ui_elements.at(i);
     }
   }
+  tools::log_message("Warning: not found " + id);
   // Not found
   return nullptr;
 }
