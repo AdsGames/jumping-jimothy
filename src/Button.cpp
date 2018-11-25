@@ -2,7 +2,12 @@
 
 #include "Tools.h"
 
-Button::Button( int x, int y, std::string text, ALLEGRO_BITMAP *image, float newRotation) {
+// Default empty button
+Button::Button() {
+  setDefaults();
+}
+
+Button::Button(int x, int y, std::string text, ALLEGRO_BITMAP *image, float newRotation) {
 
   setDefaults();
 
@@ -31,10 +36,11 @@ Button::Button( int x, int y, std::string text, ALLEGRO_BITMAP *image, float new
 
 
 
-Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font){
+Button::Button(int x, int y, std::string text, ALLEGRO_FONT *UIElement_font){
 
   setDefaults();
-  this -> bitmap_rotation_angle=0;
+
+  this -> bitmap_rotation_angle = 0;
   // Literally this
   this -> x = x;
   this -> y = y;
@@ -52,10 +58,12 @@ Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font){
   }
 
 }
-Button::Button( int x, int y, std::string text, std::string id, ALLEGRO_FONT *UIElement_font){
+Button::Button(int x, int y, std::string text, std::string id, ALLEGRO_FONT *UIElement_font){
 
   setDefaults();
-  this -> bitmap_rotation_angle=0;
+
+  this -> bitmap_rotation_angle = 0;
+
   // Literally this
   this -> id = id;
   this -> x = x;
@@ -72,7 +80,6 @@ Button::Button( int x, int y, std::string text, std::string id, ALLEGRO_FONT *UI
     this -> width = 10;
     this -> height = 10;
   }
-
 }
 
 Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font, int newWidth, int newHeight){
@@ -87,10 +94,8 @@ Button::Button( int x, int y, std::string text, ALLEGRO_FONT *UIElement_font, in
   this -> image = nullptr;
   this -> UIElement_font = UIElement_font;
 
-
   this -> width = newWidth;
   this -> height = newHeight;
-
 }
 
 void Button::draw(){
@@ -98,9 +103,9 @@ void Button::draw(){
     // Backdrop
 
     // This hover colour has more lines than the whole game loop
-    int new_r=tools::negative_clamp_thing(0,255,(int)((background_colour.r*255)+(40 * hovering)));
-    int new_g=tools::negative_clamp_thing(0,255,(int)((background_colour.g*255)+(40 * hovering)));
-    int new_b=tools::negative_clamp_thing(0,255,(int)((background_colour.b*255)+(40 * hovering)));
+    int new_r=tools::negative_clamp_thing(0,255,(int)((background_colour.r*255)+(40 * hover())));
+    int new_g=tools::negative_clamp_thing(0,255,(int)((background_colour.g*255)+(40 * hover())));
+    int new_b=tools::negative_clamp_thing(0,255,(int)((background_colour.b*255)+(40 * hover())));
 
     ALLEGRO_COLOR hover_colour = al_map_rgba(new_r,new_g,new_b,alpha);
 
@@ -115,12 +120,10 @@ void Button::draw(){
     // Text
 
     if( UIElement_font != nullptr){
-
       if(justification==0){
         al_draw_text( UIElement_font, text_colour, x + padding_x, y + padding_y, 0, text.c_str());
       }
       if(justification==1){
-
         int text_x;
         int text_y;
 
@@ -128,15 +131,12 @@ void Button::draw(){
         text_y=y+padding_y-(tools::get_text_height(UIElement_font,text)-height)/2;
 
         al_draw_textf(UIElement_font,text_colour,text_x,(text_y-tools::get_text_offset_y(UIElement_font,text)),justification,text.c_str());
-
       }
-
-
     }
 
     // Image if avail
-    if( image != nullptr){
-      if(bitmap_rotation_angle==0)
+    if (image != nullptr) {
+      if (bitmap_rotation_angle == 0)
         al_draw_bitmap( image, x + padding_x, y + padding_y, 0);
       else
         al_draw_rotated_bitmap(image,width/2,width/2,x+padding_x+(width/2),y+padding_y+(height/2),bitmap_rotation_angle,0);
@@ -145,10 +145,10 @@ void Button::draw(){
 }
 
 
-void Button::setWidth(int newWidth){
+void Button::setWidth(int newWidth) {
   width = newWidth;
 }
 
-void Button::setHeight(int newHeight){
+void Button::setHeight(int newHeight) {
   height = newHeight;
 }

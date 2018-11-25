@@ -66,28 +66,13 @@ Menu::Menu(){
   title_shine = tools::load_bitmap_ex("images/title_shine.png");
   logo = tools::load_bitmap_ex("images/logo.png");
 
-
-
   playbutton_frame = tools::load_bitmap_ex("images/playbutton_frame.png");
   playbutton_frame_hover = tools::load_bitmap_ex("images/playbutton_frame_hover.png");
 
-
-
   #if defined(RELEASE)
-
     if(!MusicManager::menu_music.getIsPlaying())
       MusicManager::menu_music.play();
-
-
-
   #endif
-
-
-
-  // Slice up title images
- // for( int i = 0; i < 10; i++)
-  //  for( int t = 0; t < 17; t++)
-  //    title_images[i + t * 10] = al_create_sub_bitmap( title, i * 256, t * 256, 256, 256);
 
   // Load play button
   play = tools::load_bitmap_ex("images/playbutton.png");
@@ -110,46 +95,36 @@ Menu::~Menu(){
   for( int i = 0; i < 50; i++)
     al_destroy_bitmap( play_images[i]);
 
-  //for( int i = 0; i < 10; i++)
-    //for( int t = 0; t < 17; t++)
-      //al_destroy_bitmap( title_images[i + t * 10]);
-
-  //al_destroy_bitmap( prompt_image);
   al_destroy_bitmap( play);
   al_destroy_bitmap( title);
-
-
 }
 
 // Update animation and wait for input
 void Menu::update(){
-
-
   if(!credits_menu){
      // Update buttons
     for( int i = 0; i < BUTTON_COUNT; i++){
       menu_buttons[i].update();
     }
 
-    if(menu_buttons[menu_button_play].mouseReleased() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==500))){
+    if(menu_buttons[menu_button_play].clicked() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==500))){
       set_next_state(STATE_LEVELSELECT);
     }
 
-    if(menu_buttons[menu_button_edit].mouseReleased() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==550))){
+    if(menu_buttons[menu_button_edit].clicked() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==550))){
       set_next_state(STATE_EDIT);
     }
 
-    if(menu_buttons[menu_button_exit].mouseReleased() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==700))){
+    if(menu_buttons[menu_button_exit].clicked() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==700))){
       set_next_state(STATE_EXIT);
     }
 
-    if(menu_buttons[menu_button_options].mouseReleased() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==600))){
+    if(menu_buttons[menu_button_options].clicked() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==600))){
       set_next_state(STATE_OPTIONS);
     }
 
-    if(menu_buttons[menu_button_help].mouseReleased() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==650))){
+    if(menu_buttons[menu_button_help].clicked() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==650))){
       JoystickListener::anyButtonReleased=false;
-
       credits_menu=true;
     }
   }
@@ -157,8 +132,6 @@ void Menu::update(){
     credits_menu = false;
     JoystickListener::anyButtonReleased=false;
   }
-
-
 
   if((JoystickListener::stickDirections[LEFT_STICK_UP] || JoystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
     if(highlight_y_destination<700)
@@ -194,7 +167,6 @@ void Menu::update(){
   counter_play = (counter_play >= 50) ? 0 : counter_play;
 
   if(!Config::joystick_mode){
-
     if(menu_buttons[menu_button_play].hover())highlight_y_destination=500;
     if(menu_buttons[menu_button_edit].hover())highlight_y_destination=550;
     if(menu_buttons[menu_button_options].hover())highlight_y_destination=600;

@@ -78,6 +78,10 @@ class tools{
 
     // Debug message
     static void log_message(std::string message, bool debug = false);
+
+    // Mouse over
+    static bool mouse_over(int x, int y, int width, int height);
+    static bool mouse_clicked(int button, bool reset = true);
 };
 
 #endif // TOOLS_H

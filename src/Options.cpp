@@ -108,8 +108,8 @@ void Options::update(){
   OptionsUI.update();
 
   // Back button pressed
-  if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> mouseReleased() ||
-        (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination == 350) || JoystickListener::buttonReleased[JOY_XBOX_B]) {
+  if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementByText("Back") -> clicked() ||
+     (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination == 350) || JoystickListener::buttonReleased[JOY_XBOX_B]) {
     set_next_state(STATE_MENU);
 
     // Save settings
@@ -118,16 +118,16 @@ void Options::update(){
 
   // Toggle SFX pressed
   if(OptionsUI.getElementById("sfx_toggle") &&
-    (OptionsUI.getElementById("sfx_toggle") -> mouseReleased() ||
-     OptionsUI.getElementByText("Toggle SFX") -> mouseReleased() ||
+    (OptionsUI.getElementById("sfx_toggle") -> clicked() ||
+     OptionsUI.getElementByText("Toggle SFX") -> clicked() ||
     (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination == 100))) {
     Config::sfx_enabled = !Config::sfx_enabled;
   }
 
   // Toggle Music pressed
   if(OptionsUI.getElementById("music_toggle") &&
-    (OptionsUI.getElementById("music_toggle") -> mouseReleased() ||
-     OptionsUI.getElementByText("Toggle Music") -> mouseReleased() ||
+    (OptionsUI.getElementById("music_toggle") -> clicked() ||
+     OptionsUI.getElementByText("Toggle Music") -> clicked() ||
     (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination == 150))) {
     Config::music_enabled = !Config::music_enabled;
 
@@ -142,13 +142,13 @@ void Options::update(){
 
   // Cycle graphics mode pressed
   if(OptionsUI.getElementByText("Graphics Mode") &&
-     OptionsUI.getElementByText("Graphics Mode") -> mouseReleased()) {
+     OptionsUI.getElementByText("Graphics Mode") -> clicked()) {
     temp_graphics_mode = (temp_graphics_mode + 1) % NUM_GRAPHICS_MODES;
   }
 
   // Apply graphics pressed
   if(OptionsUI.getElementByText("Apply Graphics") &&
-     OptionsUI.getElementByText("Apply Graphics") -> mouseReleased()) {
+     OptionsUI.getElementByText("Apply Graphics") -> clicked()) {
     DisplayMode::setMode(temp_graphics_mode);
   }
 

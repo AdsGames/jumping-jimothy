@@ -5,11 +5,11 @@
 
 class Button : public UIElement {
   public:
+    Button();
     Button(int x, int y, std::string text, ALLEGRO_FONT *button_font);
     Button(int x, int y, std::string text, std::string id, ALLEGRO_FONT *button_font);
     Button(int x, int y, std::string text, ALLEGRO_FONT *button_font, int w, int h);
     Button(int x, int y, std::string text, ALLEGRO_BITMAP *newImage,float newRotation);
-    Button() {};
     virtual ~Button() {};
 
     void setWidth(int newWidth);

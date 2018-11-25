@@ -375,7 +375,7 @@ void Game::update(){
   if(testing){
     testing_back_button.update();
 
-    if(testing_back_button.mouseReleased())
+    if(testing_back_button.clicked())
       set_next_state( STATE_EDIT);
   }
 
