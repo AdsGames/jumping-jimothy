@@ -232,32 +232,3 @@ bool UIElement::hover() {
 bool UIElement::clicked() {
   return !disabled && hover() && tools::mouse_clicked(MOUSE_LEFT);
 }
-
-// Draw default ui element
-// TODO (Allan#1#): Document and clean up messy code
-void UIElement::draw() {
-  if (visible) {
-    // Backdrop
-    if (visible_background) {
-      al_draw_filled_rectangle(x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba(200 + 20 * hover(), 200 + 20 * hover(), 200 + 20 * hover(),alpha));
-      al_draw_rectangle(x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba(0, 0, 0,alpha), 2);
-    }
-    // Text
-    if (UIElement_font != nullptr) {
-      if (justification == 0) {
-        al_draw_text(UIElement_font, text_colour, x + padding_x, y + padding_y, 0, text.c_str());
-      }
-
-      if (justification == 1) {
-        int text_x = x + padding_x + width / 2;
-        int text_y = y + padding_y - (tools::get_text_height(UIElement_font,text) - height) / 2 - tools::get_text_offset_y(UIElement_font,text);
-        al_draw_textf(UIElement_font, text_colour, text_x, text_y, justification, text.c_str());
-      }
-    }
-
-    // Image if avail
-    if (image != nullptr) {
-      al_draw_bitmap(image, x + padding_x, y + padding_y, 0);
-    }
-  }
-}

@@ -121,10 +121,10 @@ class UIElement {
     bool clicked();
 
     // Update element
-    virtual void update() {};
+    virtual void update() = 0;
 
     // Draw element
-    virtual void draw();
+    virtual void draw() = 0;
 
   protected:
     // Variables

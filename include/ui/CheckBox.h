@@ -5,9 +5,11 @@
 
 class CheckBox : public UIElement {
   public:
-    // Ctor
+    // Default constructor
     CheckBox();
-    CheckBox(int, int, std::string, std::string, ALLEGRO_FONT*);
+
+    // Detailed constructor
+    CheckBox(int x, int y, std::string text, std::string id, ALLEGRO_FONT *font);
 
     // Dtor
     virtual ~CheckBox() {};
@@ -16,13 +18,16 @@ class CheckBox : public UIElement {
     void update() override;
 
     // Draw
-    virtual void draw();
+    void draw() override;
 
     // Check
     bool getChecked();
 
   private:
-    int checkbox_width = 20;
+    // Width of checkbox
+    int checkbox_size;
+
+    // Checked
     bool checked;
 };
 
