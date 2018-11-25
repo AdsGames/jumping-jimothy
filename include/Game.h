@@ -15,7 +15,7 @@
 #include "Character.h"
 #include "Goat.h"
 #include "Sound.h"
-#include "Button.h"
+#include "ui/Button.h"
 
 class Game : public State {
   public:

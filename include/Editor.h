@@ -12,7 +12,7 @@
 #include <vector>
 #include <string>
 
-#include "UIHandler.h"
+#include "ui/UIHandler.h"
 #include "State.h"
 
 // Nice editor boxes

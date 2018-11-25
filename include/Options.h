@@ -11,8 +11,8 @@
 #include <string>
 #include <allegro5/allegro_font.h>
 
-#include "UIHandler.h"
-#include "Button.h"
+#include "ui/UIHandler.h"
+#include "ui/Button.h"
 #include "State.h"
 
 // Options state

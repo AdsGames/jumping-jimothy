@@ -76,7 +76,7 @@ class UIElement {
     int getHeight();
 
     // Set padding
-    void setPadding(int padding_x, int padding_y);
+    void setPadding(int x, int y);
 
     // Set position
     void setPosition(int x, int y);

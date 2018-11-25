@@ -81,7 +81,6 @@
 		</Linker>
 		<Unit filename="include/ActionBinder.h" />
 		<Unit filename="include/Box.h" />
-		<Unit filename="include/Button.h" />
 		<Unit filename="include/Character.h" />
 		<Unit filename="include/CheckBox.h" />
 		<Unit filename="include/CollisionBox.h" />
@@ -107,16 +106,14 @@
 		<Unit filename="include/Sound.h" />
 		<Unit filename="include/State.h" />
 		<Unit filename="include/StaticBox.h" />
-		<Unit filename="include/ToggleBox.h" />
 		<Unit filename="include/Tools.h" />
-		<Unit filename="include/UIControlElement.h" />
-		<Unit filename="include/UIElement.h" />
-		<Unit filename="include/UIHandler.h" />
-		<Unit filename="include/UIInformationElement.h" />
-		<Unit filename="include/UILabel.h" />
+		<Unit filename="include/ui/Button.h" />
+		<Unit filename="include/ui/Label.h" />
+		<Unit filename="include/ui/ToggleBox.h" />
+		<Unit filename="include/ui/UIElement.h" />
+		<Unit filename="include/ui/UIHandler.h" />
 		<Unit filename="src/ActionBinder.cpp" />
 		<Unit filename="src/Box.cpp" />
-		<Unit filename="src/Button.cpp" />
 		<Unit filename="src/Character.cpp" />
 		<Unit filename="src/CheckBox.cpp" />
 		<Unit filename="src/CollisionBox.cpp" />
@@ -140,14 +137,13 @@
 		<Unit filename="src/Sound.cpp" />
 		<Unit filename="src/State.cpp" />
 		<Unit filename="src/StaticBox.cpp" />
-		<Unit filename="src/ToggleBox.cpp" />
 		<Unit filename="src/Tools.cpp" />
-		<Unit filename="src/UIControlElement.cpp" />
-		<Unit filename="src/UIElement.cpp" />
-		<Unit filename="src/UIHandler.cpp" />
-		<Unit filename="src/UIInformationElement.cpp" />
-		<Unit filename="src/UILabel.cpp" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/ui/Button.cpp" />
+		<Unit filename="src/ui/Label.cpp" />
+		<Unit filename="src/ui/ToggleBox.cpp" />
+		<Unit filename="src/ui/UIElement.cpp" />
+		<Unit filename="src/ui/UIHandler.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
