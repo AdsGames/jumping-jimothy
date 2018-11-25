@@ -109,7 +109,6 @@
 		<Unit filename="include/ui/Button.h" />
 		<Unit filename="include/ui/CheckBox.h" />
 		<Unit filename="include/ui/Label.h" />
-		<Unit filename="include/ui/ToggleBox.h" />
 		<Unit filename="include/ui/UIElement.h" />
 		<Unit filename="include/ui/UIHandler.h" />
 		<Unit filename="src/ActionBinder.cpp" />
@@ -141,7 +140,6 @@
 		<Unit filename="src/ui/Button.cpp" />
 		<Unit filename="src/ui/CheckBox.cpp" />
 		<Unit filename="src/ui/Label.cpp" />
-		<Unit filename="src/ui/ToggleBox.cpp" />
 		<Unit filename="src/ui/UIElement.cpp" />
 		<Unit filename="src/ui/UIHandler.cpp" />
 		<Extensions>
