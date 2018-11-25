@@ -22,7 +22,7 @@ Options::Options() {
   highlight = tools::load_bitmap_ex("images/highlight.png");
 
   // Options text
-  OptionsUI.addElement(new UIElement(25, 25, "Options", title_font));
+  OptionsUI.addElement(new UIElement(25, 25, "Options", "options", title_font));
   OptionsUI.getElementByText("Options") -> setVisibleBackground(false);
   OptionsUI.getElementByText("Options") -> setTextColour(al_map_rgb(255, 255, 255));
 
@@ -32,7 +32,7 @@ Options::Options() {
   OptionsUI.getElementById("joydata") -> setTextColour(al_map_rgb(255, 255, 255));
 
   // SFX toggle button
-  OptionsUI.addElement(new Button(100, 101, "Toggle SFX", options_font));
+  OptionsUI.addElement(new Button(100, 101, "Toggle SFX", "btnToggleSFX", options_font));
   OptionsUI.getElementByText("Toggle SFX") -> setSize(180, 18);
   OptionsUI.getElementByText("Toggle SFX") -> setTextColour(al_map_rgb(255, 255, 255));
   OptionsUI.getElementByText("Toggle SFX") -> setVisibleBackground(false);
@@ -43,7 +43,7 @@ Options::Options() {
   OptionsUI.getElementById("sfx_toggle") -> setSize(20, 18);
 
   // Music toggle button
-  OptionsUI.addElement(new Button(100, 151, "Toggle Music", options_font));
+  OptionsUI.addElement(new Button(100, 151, "Toggle Music", "btnToggleMusic", options_font));
   OptionsUI.getElementByText("Toggle Music") -> setSize(180, 18);
   OptionsUI.getElementByText("Toggle Music") -> setTextColour(al_map_rgb(255, 255, 255));
   OptionsUI.getElementByText("Toggle Music") -> setVisibleBackground(false);
@@ -54,7 +54,7 @@ Options::Options() {
   OptionsUI.getElementById("music_toggle") -> setSize(20, 18);
 
   // Graphics mode button
-  OptionsUI.addElement(new Button(100, 201, "Graphics Mode", options_font));
+  OptionsUI.addElement(new Button(100, 201, "Graphics Mode", "btnGraphicsMode", options_font));
   OptionsUI.getElementByText("Graphics Mode") -> setSize(180, 18);
   OptionsUI.getElementByText("Graphics Mode") -> setTextColour(al_map_rgb(255, 255, 255));
   OptionsUI.getElementByText("Graphics Mode") -> setVisibleBackground(false);
@@ -65,13 +65,13 @@ Options::Options() {
   OptionsUI.getElementById("graphicsdata") -> setTextColour(al_map_rgb(255, 255, 255));
 
   // Apply graphics
-  OptionsUI.addElement(new Button(100, 251, "Apply Graphics", options_font));
+  OptionsUI.addElement(new Button(100, 251, "Apply Graphics", "btnApplyGFX", options_font));
   OptionsUI.getElementByText("Apply Graphics") -> setSize(180, 18);
   OptionsUI.getElementByText("Apply Graphics") -> setTextColour(al_map_rgb(255, 255, 255));
   OptionsUI.getElementByText("Apply Graphics") -> setVisibleBackground(false);
 
   // Back
-  OptionsUI.addElement(new Button(100, 301, "Back", options_font));
+  OptionsUI.addElement(new Button(100, 301, "Back", "btnBack", options_font));
   OptionsUI.getElementByText("Back") -> setSize(180, 18);
   OptionsUI.getElementByText("Back") -> setTextColour(al_map_rgb(255, 255, 255));
   OptionsUI.getElementByText("Back") -> setVisibleBackground(false);

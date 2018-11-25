@@ -5,11 +5,20 @@
 
 class CheckBox : public UIElement {
   public:
+    // Ctor
     CheckBox();
-    CheckBox(int, int, std::string, ALLEGRO_FONT*);
+    CheckBox(int, int, std::string, std::string, ALLEGRO_FONT*);
+
+    // Dtor
     virtual ~CheckBox() {};
+
+    // Update
     void update() override;
+
+    // Draw
     virtual void draw();
+
+    // Check
     bool getChecked();
 
   private:

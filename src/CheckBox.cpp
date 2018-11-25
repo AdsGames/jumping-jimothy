@@ -2,30 +2,15 @@
 
 #include "MouseListener.h"
 
-CheckBox::CheckBox() {
-  setDefaults();
+CheckBox::CheckBox()
+  : UIElement()  {
 }
 
-CheckBox::CheckBox(int newX, int newY,std::string newText, ALLEGRO_FONT *newFont){
-  this -> alpha = 255;
+CheckBox::CheckBox(int newX, int newY,std::string newText, std::string id, ALLEGRO_FONT *newFont)
+  : UIElement(newX, newY, newText, id, newFont){
 
   this -> checkbox_width = 20;
-
-  this -> image = nullptr;
-  this -> UIElement_font = newFont;
-
-  this -> x = newX;
-  this -> y = newY;
-
-  this -> text = newText;
-
-  this -> UIElement_font = UIElement_font;
-
-  this -> visible = true;
-  this -> active = true;
-
   this -> checked = false;
-
 
   if( UIElement_font != nullptr){
     this -> width = al_get_text_width( UIElement_font, text.c_str()) + checkbox_width+padding_x;
@@ -38,7 +23,7 @@ CheckBox::CheckBox(int newX, int newY,std::string newText, ALLEGRO_FONT *newFont
 }
 
 void CheckBox::update(){
-  if(active && clicked()){
+  if(!disabled && clicked()){
     checked =! checked;
   }
 }
@@ -55,7 +40,6 @@ void CheckBox::draw() {
 
     if(checked)
       al_draw_filled_rectangle( x+padding_x+2, y+padding_y+2, x + padding_x +checkbox_width-2, y + padding_y + checkbox_width-2, al_map_rgba( 0,0,0,alpha));
-
 
     // Text
     if( UIElement_font != nullptr)

@@ -96,39 +96,57 @@ Editor::Editor(){
 
 
   // buttons
-  editorUI.addElement(new Button(0, 728, "Dynamic", edit_font));
-  editorUI.createAnchoredButton("Static",edit_font,"Dynamic",RIGHT);
-  editorUI.createAnchoredButton("Player",edit_font,"Static",RIGHT);
-  editorUI.createAnchoredButton("Goat",edit_font,"Player",RIGHT);
-  editorUI.createAnchoredButton("Collision",edit_font,"Goat",RIGHT);
-  editorUI.createAnchoredButton("Explosive",edit_font,"Collision",RIGHT);
+  editorUI.addElement(new Button(0, 728, "Dynamic", "btnDynamic", edit_font));
+  editorUI.createAnchoredButton("Static",edit_font,"Dynamic","btnStatic", RIGHT);
+  editorUI.createAnchoredButton("Player",edit_font,"Static","btnPlayer", RIGHT);
+  editorUI.createAnchoredButton("Goat",edit_font,"Player","btnGoat", RIGHT);
+  editorUI.createAnchoredButton("Collision",edit_font,"Goat","btnCollision", RIGHT);
+  editorUI.createAnchoredButton("Explosive",edit_font,"Collision","btnExplosive", RIGHT);
 
   editorUI.createAnchoredButton("<",edit_font,"Explosive","left_bottom_toggle",RIGHT);
 
 
-  editorUI.addElement( new Button(566,728,">","right_bottom_toggle", edit_font));
-  editorUI.createAnchoredButton("Undo",edit_font,">",LEFT);
-  editorUI.createAnchoredButton("Clear",edit_font,"Undo",LEFT);
-  editorUI.createAnchoredButton("Save",edit_font,"Clear",LEFT);
-  editorUI.createAnchoredButton("Save as",edit_font,"Save",LEFT);
-  editorUI.createAnchoredButton("Load",edit_font,"Save as",LEFT);
-  editorUI.createAnchoredButton("Grid",edit_font,"Load",LEFT);
-  editorUI.createAnchoredButton("Play",edit_font,"Grid",LEFT);
+  editorUI.addElement(new Button(566,728,">","right_bottom_toggle", edit_font));
+  editorUI.createAnchoredButton("Undo",edit_font,">","btnUndo",LEFT);
+  editorUI.createAnchoredButton("Clear",edit_font,"Undo","btnClear",LEFT);
+  editorUI.createAnchoredButton("Save",edit_font,"Clear","btnSave",LEFT);
+  editorUI.createAnchoredButton("Save as",edit_font,"Save","btnSaveAs",LEFT);
+  editorUI.createAnchoredButton("Load",edit_font,"Save as","btnLoad",LEFT);
+  editorUI.createAnchoredButton("Grid",edit_font,"Load","btnGrid",LEFT);
+  editorUI.createAnchoredButton("Play",edit_font,"Grid","btnPlay",LEFT);
 
-  editorUI.addElement( new Button(882,0,">","right_top_toggle",edit_font));
-  editorUI.addElement( new Button(898+13,0,"Help",edit_font));
-  editorUI.createAnchoredButton("Back",edit_font,"Help",LEFT);
+  editorUI.addElement(new Button(882,0,">","right_top_toggle",edit_font));
+  editorUI.addElement(new Button(898+13,0,"Help","btnHelp",edit_font));
+  editorUI.createAnchoredButton("Back",edit_font,"Help","btnBack",LEFT);
 
-  //                                        huehuehue
-  editorUI.addElement( new CheckBox(0000000000000000000000000,60,"Block affects character",edit_font));
+  editorUI.addElement(new CheckBox(0,60,"Block affects character","chkBlockAffectsChar",edit_font));
   editorUI.createAnchoredButton("<",edit_font,"Block affects character","left_top_toggle",RIGHT);
 
 
-  editorUI.addElement( new Button(0,100,"explosive_up",image_box[5],0));
-  editorUI.addElement( new Button(38,100,"explosive_right",image_box[5],PI/2));
-  editorUI.addElement( new Button(76,100,"explosive_down",image_box[5],PI));
-  editorUI.addElement( new Button(114,100,"explosive_left",image_box[5],PI*3/2));
-  editorUI.addElement( new Button(152,100,"explosive_circle",image_box[4],PI*3/2));
+  editorUI.addElement(new Button(0,100,"","explosive_up", nullptr));
+  editorUI.getElementById("explosive_up") -> setImage(image_box[5]);
+  editorUI.getElementById("explosive_up") -> setBitmapRotationAngle(0);
+  editorUI.getElementById("explosive_up") -> setPadding(2,2);
+
+  editorUI.addElement(new Button(38,100,"", "explosive_right", nullptr));
+  editorUI.getElementById("explosive_right") -> setImage(image_box[5]);
+  editorUI.getElementById("explosive_right") -> setBitmapRotationAngle(PI/2);
+  editorUI.getElementById("explosive_right") -> setPadding(2,2);
+
+  editorUI.addElement(new Button(76,100,"", "explosive_down", nullptr));
+  editorUI.getElementById("explosive_down") -> setImage(image_box[5]);
+  editorUI.getElementById("explosive_down") -> setBitmapRotationAngle(PI);
+  editorUI.getElementById("explosive_down") -> setPadding(2,2);
+
+  editorUI.addElement(new Button(114,100,"", "explosive_left", nullptr));
+  editorUI.getElementById("explosive_left") -> setImage(image_box[5]);
+  editorUI.getElementById("explosive_left") -> setBitmapRotationAngle(PI*3/2);
+  editorUI.getElementById("explosive_left") -> setPadding(2,2);
+
+  editorUI.addElement(new Button(152,100,"", "explosive_circle", nullptr));
+  editorUI.getElementById("explosive_circle") -> setImage(image_box[5]);
+  editorUI.getElementById("explosive_circle") -> setBitmapRotationAngle(PI*3/2);
+  editorUI.getElementById("explosive_circle") -> setPadding(2,2);
 
   explosive_orientation = 1;
 
@@ -177,17 +195,41 @@ bool Editor::is_player(){
 }
 
 void Editor::set_explosive_ui_status(){
-
   // Learned a few things from you
-  editorUI.getElementByText("Block affects character") -> setStatus(tile_type==5);
-  editorUI.getElementByText("explosive_up") -> setStatus(tile_type==5);
-  editorUI.getElementByText("explosive_left") -> setStatus(tile_type==5);
-  editorUI.getElementByText("explosive_right") -> setStatus(tile_type==5);
-  editorUI.getElementByText("explosive_down") -> setStatus(tile_type==5);
-  editorUI.getElementByText("explosive_circle") -> setStatus(tile_type==5);
-  editorUI.getElementById("left_top_toggle") -> setStatus(tile_type==5);
+  if (tile_type==5) {
+    editorUI.getElementByText("Block affects character") -> enable();
+    editorUI.getElementById("explosive_up") -> enable();
+    editorUI.getElementById("explosive_left") -> enable();
+    editorUI.getElementById("explosive_right") -> enable();
+    editorUI.getElementById("explosive_down") -> enable();
+    editorUI.getElementById("explosive_circle") -> enable();
+    editorUI.getElementById("left_top_toggle") -> enable();
 
+    editorUI.getElementByText("Block affects character") -> show();
+    editorUI.getElementById("explosive_up") -> show();
+    editorUI.getElementById("explosive_left") -> show();
+    editorUI.getElementById("explosive_right") -> show();
+    editorUI.getElementById("explosive_down") -> show();
+    editorUI.getElementById("explosive_circle") -> show();
+    editorUI.getElementById("left_top_toggle") -> show();
+  }
+  else {
+    editorUI.getElementByText("Block affects character") -> disable();
+    editorUI.getElementById("explosive_up") -> disable();
+    editorUI.getElementById("explosive_left") -> disable();
+    editorUI.getElementById("explosive_right") -> disable();
+    editorUI.getElementById("explosive_down") -> disable();
+    editorUI.getElementById("explosive_circle") -> disable();
+    editorUI.getElementById("left_top_toggle") -> disable();
 
+    editorUI.getElementByText("Block affects character") -> hide();
+    editorUI.getElementById("explosive_up") -> hide();
+    editorUI.getElementById("explosive_left") -> hide();
+    editorUI.getElementById("explosive_right") -> hide();
+    editorUI.getElementById("explosive_down") -> hide();
+    editorUI.getElementById("explosive_circle") -> hide();
+    editorUI.getElementById("left_top_toggle") -> hide();
+  }
 }
 
 // Update editor
@@ -195,50 +237,48 @@ void Editor::update(){
   // Update buttons
   editorUI.update();
 
-
-
-  if( editorUI.getElementByText("explosive_circle") -> clicked())
+  if( editorUI.getElementById("explosive_circle") -> clicked())
     explosive_orientation = 0;
 
-  if( editorUI.getElementByText("explosive_up") -> clicked())
+  if( editorUI.getElementById("explosive_up") -> clicked())
     explosive_orientation = 1;
 
-  if( editorUI.getElementByText("explosive_right") -> clicked())
+  if( editorUI.getElementById("explosive_right") -> clicked())
     explosive_orientation = 2;
 
-  if( editorUI.getElementByText("explosive_down") -> clicked())
+  if( editorUI.getElementById("explosive_down") -> clicked())
     explosive_orientation = 3;
 
-  if( editorUI.getElementByText("explosive_left") -> clicked())
+  if( editorUI.getElementById("explosive_left") -> clicked())
     explosive_orientation = 4;
 
 
   ALLEGRO_COLOR selected_colour = al_map_rgba(0,150,0,255);
 
   if(explosive_orientation == 0)
-    editorUI.getElementByText("explosive_circle") -> setBackgroundColour(selected_colour);
+    editorUI.getElementById("explosive_circle") -> setBackgroundColour(selected_colour);
   else
-    editorUI.getElementByText("explosive_circle") -> setBackgroundColour(al_map_rgba(200,200,200,255));
+    editorUI.getElementById("explosive_circle") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
   if(explosive_orientation == 1)
-    editorUI.getElementByText("explosive_up") -> setBackgroundColour(selected_colour);
+    editorUI.getElementById("explosive_up") -> setBackgroundColour(selected_colour);
   else
-    editorUI.getElementByText("explosive_up") -> setBackgroundColour(al_map_rgba(200,200,200,255));
+    editorUI.getElementById("explosive_up") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
   if(explosive_orientation == 2)
-    editorUI.getElementByText("explosive_right") -> setBackgroundColour(selected_colour);
+    editorUI.getElementById("explosive_right") -> setBackgroundColour(selected_colour);
   else
-    editorUI.getElementByText("explosive_right") -> setBackgroundColour(al_map_rgba(200,200,200,255));
+    editorUI.getElementById("explosive_right") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
   if(explosive_orientation == 3)
-    editorUI.getElementByText("explosive_down") -> setBackgroundColour(selected_colour);
+    editorUI.getElementById("explosive_down") -> setBackgroundColour(selected_colour);
   else
-    editorUI.getElementByText("explosive_down") -> setBackgroundColour(al_map_rgba(200,200,200,255));
+    editorUI.getElementById("explosive_down") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
   if(explosive_orientation == 4)
-    editorUI.getElementByText("explosive_left") -> setBackgroundColour(selected_colour);
+    editorUI.getElementById("explosive_left") -> setBackgroundColour(selected_colour);
   else
-    editorUI.getElementByText("explosive_left") -> setBackgroundColour(al_map_rgba(200,200,200,255));
+    editorUI.getElementById("explosive_left") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
   // Check if over Button
   bool over_Button = editorUI.isHovering();
@@ -435,12 +475,19 @@ void Editor::update(){
 
   // Gosh darn toggle hide buttons take so much freakin' room
   if(editorUI.getElementById("left_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_LEFT]){
-    editorUI.getElementByText("Collision") -> toggleStatus();
-    editorUI.getElementByText("Static") -> toggleStatus();
-    editorUI.getElementByText("Dynamic") -> toggleStatus();
-    editorUI.getElementByText("Player") -> toggleStatus();
-    editorUI.getElementByText("Goat") -> toggleStatus();
-    editorUI.getElementByText("Explosive") -> toggleStatus();
+    editorUI.getElementByText("Collision") -> toggleVisibility();
+    editorUI.getElementByText("Static") -> toggleVisibility();
+    editorUI.getElementByText("Dynamic") -> toggleVisibility();
+    editorUI.getElementByText("Player") -> toggleVisibility();
+    editorUI.getElementByText("Goat") -> toggleVisibility();
+    editorUI.getElementByText("Explosive") -> toggleVisibility();
+
+    editorUI.getElementByText("Collision") -> toggleDisabled();
+    editorUI.getElementByText("Static") -> toggleDisabled();
+    editorUI.getElementByText("Dynamic") -> toggleDisabled();
+    editorUI.getElementByText("Player") -> toggleDisabled();
+    editorUI.getElementByText("Goat") -> toggleDisabled();
+    editorUI.getElementByText("Explosive") -> toggleDisabled();
 
     if(editorUI.getElementById("left_bottom_toggle") -> getText()=="<"){
       editorUI.getElementById("left_bottom_toggle") -> setPosition( 0, 728);
@@ -455,13 +502,21 @@ void Editor::update(){
   }
 
   if(editorUI.getElementById("right_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
-    editorUI.getElementByText("Undo") -> toggleStatus();
-    editorUI.getElementByText("Clear") -> toggleStatus();
-    editorUI.getElementByText("Save") -> toggleStatus();
-    editorUI.getElementByText("Save as") -> toggleStatus();
-    editorUI.getElementByText("Load") -> toggleStatus();
-    editorUI.getElementByText("Play") -> toggleStatus();
-    editorUI.getElementByText("Grid") -> toggleStatus();
+    editorUI.getElementByText("Undo") -> toggleVisibility();
+    editorUI.getElementByText("Clear") -> toggleVisibility();
+    editorUI.getElementByText("Save") -> toggleVisibility();
+    editorUI.getElementByText("Save as") -> toggleVisibility();
+    editorUI.getElementByText("Load") -> toggleVisibility();
+    editorUI.getElementByText("Play") -> toggleVisibility();
+    editorUI.getElementByText("Grid") -> toggleVisibility();
+
+    editorUI.getElementByText("Undo") -> toggleDisabled();
+    editorUI.getElementByText("Clear") -> toggleDisabled();
+    editorUI.getElementByText("Save") -> toggleDisabled();
+    editorUI.getElementByText("Save as") -> toggleDisabled();
+    editorUI.getElementByText("Load") -> toggleDisabled();
+    editorUI.getElementByText("Play") -> toggleDisabled();
+    editorUI.getElementByText("Grid") -> toggleDisabled();
 
     if(editorUI.getElementById("right_bottom_toggle") -> getText()==">"){
       editorUI.getElementById("right_bottom_toggle") -> setPosition( 994, 728);
@@ -474,8 +529,11 @@ void Editor::update(){
     }
   }
   if(editorUI.getElementById("right_top_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_UP]){
-    editorUI.getElementByText("Back") -> toggleStatus();
-    editorUI.getElementByText("Help") -> toggleStatus();
+    editorUI.getElementByText("Back") -> toggleVisibility();
+    editorUI.getElementByText("Help") -> toggleVisibility();
+
+    editorUI.getElementByText("Back") -> toggleDisabled();
+    editorUI.getElementByText("Help") -> toggleDisabled();
     if(editorUI.getElementById("right_top_toggle") -> getText()==">"){
       editorUI.getElementById("right_top_toggle") -> setPosition( 994, 0);
       editorUI.getElementById("right_top_toggle") -> setText("<");
@@ -488,12 +546,19 @@ void Editor::update(){
   }
 
   if(editorUI.getElementById("left_top_toggle") -> clicked()){
-    editorUI.getElementByText("explosive_up") -> toggleStatus();
-    editorUI.getElementByText("explosive_down") -> toggleStatus();
-    editorUI.getElementByText("explosive_left") -> toggleStatus();
-    editorUI.getElementByText("explosive_right") -> toggleStatus();
-    editorUI.getElementByText("explosive_circle") -> toggleStatus();
-    editorUI.getElementByText("Block affects character") -> toggleStatus();
+    editorUI.getElementById("explosive_up") -> toggleVisibility();
+    editorUI.getElementById("explosive_down") -> toggleVisibility();
+    editorUI.getElementById("explosive_left") -> toggleVisibility();
+    editorUI.getElementById("explosive_right") -> toggleVisibility();
+    editorUI.getElementById("explosive_circle") -> toggleVisibility();
+    editorUI.getElementByText("Block affects character") -> toggleVisibility();
+
+    editorUI.getElementById("explosive_up") -> toggleDisabled();
+    editorUI.getElementById("explosive_down") -> toggleDisabled();
+    editorUI.getElementById("explosive_left") -> toggleDisabled();
+    editorUI.getElementById("explosive_right") -> toggleDisabled();
+    editorUI.getElementById("explosive_circle") -> toggleDisabled();
+    editorUI.getElementByText("Block affects character") -> toggleDisabled();
 
     if(editorUI.getElementById("left_top_toggle") -> getText()==">"){
       editorUI.getElementById("left_top_toggle") -> setPosition( 257, 60);

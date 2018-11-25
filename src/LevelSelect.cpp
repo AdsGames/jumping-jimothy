@@ -62,7 +62,7 @@ LevelSelect::LevelSelect() {
 
   levelSelectUI = UIHandler();
 
-  levelSelectUI.addElement(new UIElement(375,5,"Select a level",levelselect_font_large));
+  levelSelectUI.addElement(new UIElement(375,5,"Select a level","lblSelectLevel", levelselect_font_large));
   levelSelectUI.getElementByText("Select a level") -> setVisibleBackground(false);
   levelSelectUI.getElementByText("Select a level") -> setTextColour(al_map_rgb(255,255,255));
 
@@ -84,44 +84,35 @@ LevelSelect::LevelSelect() {
   createLevelButton(x_loc,y_init+y_spacing*12,12);
   createLevelButton(x_loc,y_init+y_spacing*13,13);
 
-  levelSelectUI.addElement(new Button(x_loc, y_spacing*14 + y_init, "Reset Save Game", levelselect_font));
+  levelSelectUI.addElement(new Button(x_loc, y_spacing*14 + y_init, "Reset Save Game", "btnResetSave", levelselect_font));
   levelSelectUI.getElementByText("Reset Save Game") -> setSize(300,18);
-  levelSelectUI.getElementByText("Reset Save Game") -> setDisableHoverEffect(true);
+  levelSelectUI.getElementByText("Reset Save Game") -> disableHoverEffect();
   levelSelectUI.getElementByText("Reset Save Game") -> setCellFillTransparent(true);
-  levelSelectUI.getElementByText("Reset Save Game") -> setJustification(1);
+  levelSelectUI.getElementByText("Reset Save Game") -> setTextJustification(1);
   levelSelectUI.getElementByText("Reset Save Game") -> setTextColour(al_map_rgb(255,255,255));
 
-  levelSelectUI.addElement(new Button(x_loc, y_init, "Back to main menu", levelselect_font));
+  levelSelectUI.addElement(new Button(x_loc, y_init, "Back to main menu", "btnBack", levelselect_font));
   levelSelectUI.getElementByText("Back to main menu") -> setSize(300,18);
-  levelSelectUI.getElementByText("Back to main menu") -> setDisableHoverEffect(true);
+  levelSelectUI.getElementByText("Back to main menu") -> disableHoverEffect();
   levelSelectUI.getElementByText("Back to main menu") -> setCellFillTransparent(true);
-  levelSelectUI.getElementByText("Back to main menu") -> setJustification(1);
+  levelSelectUI.getElementByText("Back to main menu") -> setTextJustification(1);
   levelSelectUI.getElementByText("Back to main menu") -> setTextColour(al_map_rgb(255,255,255));
 
 
 
 
-  levelSelectUI.addElement(new Button(700, 651, "Really reset?", levelselect_font));
+  levelSelectUI.addElement(new Button(700, 651, "Really reset?", "btnReallyReset", levelselect_font));
   levelSelectUI.getElementByText("Really reset?") -> setSize(180,18);
-  levelSelectUI.getElementByText("Really reset?") ->setStatus(false);
-  levelSelectUI.getElementByText("Really reset?") -> setDisableHoverEffect(true);
+  levelSelectUI.getElementByText("Really reset?") -> disable();
+  levelSelectUI.getElementByText("Really reset?") -> hide();
+  levelSelectUI.getElementByText("Really reset?") -> disableHoverEffect();
 
 
-  levelSelectUI.addElement(new Button(700, 696, "Cancel", levelselect_font));
+  levelSelectUI.addElement(new Button(700, 696, "Cancel", "btnCancel", levelselect_font));
   levelSelectUI.getElementByText("Cancel") -> setSize(180,18);
-  levelSelectUI.getElementByText("Cancel") ->setStatus(false);
-  levelSelectUI.getElementByText("Cancel") -> setDisableHoverEffect(true);
-
-
-
-
-
-
-
-
-
-
-
+  levelSelectUI.getElementByText("Cancel") -> disable();
+  levelSelectUI.getElementByText("Cancel") -> hide();
+  levelSelectUI.getElementByText("Cancel") -> disableHoverEffect();
 }
 
 LevelSelect::~LevelSelect()
@@ -131,29 +122,27 @@ LevelSelect::~LevelSelect()
 
 void LevelSelect::createLevelButton(int newX, int newY, int newLevelNumber){
 
-  levelSelectUI.addElement(new Button(newX, newY, "Level "+ tools::toString(newLevelNumber), levelselect_font));
+  levelSelectUI.addElement(new Button(newX, newY, "Level " + tools::toString(newLevelNumber), "btnLevel" + tools::toString(newLevelNumber) ,levelselect_font));
   levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setHeight(18);
   levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setCellFillTransparent(true);
   levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setTextColour(al_map_rgb(255,255,255));
 
 
   levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setWidth(300);
-  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setJustification(1);
+  levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setTextJustification(1);
   if(completed_level_list[newLevelNumber]){
     levelSelectUI.getElementByText("Level "+ tools::toString(newLevelNumber)) -> setBackgroundColour(al_map_rgb(0,200,0));
     levelSelectUI.getElementByText
         ("Level "+ tools::toString(newLevelNumber)) -> setCellFillTransparent(false);
     levelSelectUI.getElementByText
-        ("Level "+ tools::toString(newLevelNumber)) -> setDisableHoverEffect(true);
+        ("Level "+ tools::toString(newLevelNumber)) -> disableHoverEffect();
   }
 
 
 }
 
 void LevelSelect::setLevelComplete(int newLevelNumber){
-
-  completed_level_list[newLevelNumber]=true;
-
+  completed_level_list[newLevelNumber] = true;
 }
 
 void LevelSelect::writeLevelData(){
@@ -272,13 +261,11 @@ void LevelSelect::update(){
   }
   if(levelSelectUI.getElementByText("Reset Save Game") -> clicked()){
     reset_game_menu=true;
-    levelSelectUI.getElementByText("Cancel") ->setStatus(true);
-    levelSelectUI.getElementByText("Really reset?") ->setStatus(true);
-
-
+    levelSelectUI.getElementByText("Cancel") -> show();
+    levelSelectUI.getElementByText("Cancel") -> enable();
+    levelSelectUI.getElementByText("Really reset?") -> show();
+    levelSelectUI.getElementByText("Really reset?") -> enable();
   }
-
-
 
   if(levelSelectUI.getElementByText("Reset Save Game") -> hover() && !Config::joystick_mode){
     highlight_y_destination = 695;
@@ -314,16 +301,19 @@ void LevelSelect::update(){
     JoystickListener::clearButtons();
     reset_game_menu=false;
 
-    levelSelectUI.getElementByText("Cancel") ->setStatus(false);
-    levelSelectUI.getElementByText("Really reset?") ->setStatus(false);
-
+    levelSelectUI.getElementByText("Cancel") -> hide();
+    levelSelectUI.getElementByText("Cancel") -> disable();
+    levelSelectUI.getElementByText("Really reset?") -> hide();
+    levelSelectUI.getElementByText("Really reset?") -> disable();
   }
 
   if(JoystickListener::buttonReleased[JOY_XBOX_B]){
     if(reset_game_menu){
       reset_game_menu=false;
-      levelSelectUI.getElementByText("Cancel") ->setStatus(false);
-      levelSelectUI.getElementByText("Really reset?") ->setStatus(false);
+      levelSelectUI.getElementByText("Cancel") -> hide();
+      levelSelectUI.getElementByText("Cancel") -> disable();
+      levelSelectUI.getElementByText("Really reset?") -> hide();
+      levelSelectUI.getElementByText("Really reset?") -> disable();
     }else
       set_next_state(STATE_MENU);
 
@@ -336,8 +326,10 @@ void LevelSelect::update(){
     }else if(highlight_y_destination==695){
 
       reset_game_menu=true;
-      levelSelectUI.getElementByText("Cancel") ->setStatus(true);
-      levelSelectUI.getElementByText("Really reset?") ->setStatus(true);
+      levelSelectUI.getElementByText("Cancel") -> show();
+      levelSelectUI.getElementByText("Cancel") -> enable();
+      levelSelectUI.getElementByText("Really reset?") -> show();
+      levelSelectUI.getElementByText("Really reset?") -> enable();
 
     }else{
       int level=(highlight_y_destination-65)/45;
