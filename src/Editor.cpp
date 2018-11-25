@@ -15,9 +15,11 @@
 #include "MouseListener.h"
 #include "KeyListener.h"
 #include "Tools.h"
+
 #include "ui/Button.h"
+#include "ui/CheckBox.h"
+
 #include "Globals.h"
-#include "CheckBox.h"
 #include "MusicManager.h"
 
 #include "Config.h"
