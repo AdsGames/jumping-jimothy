@@ -201,9 +201,8 @@ void setup(){
     Config::joystick_data = "None detected.";
   }
 
-  if (Config::music_enabled) {
-    MusicManager::load();
-  }
+  // Load music files
+  MusicManager::load();
 }
 
 // Handle events
