@@ -586,7 +586,7 @@ void Editor::update(){
       newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
       newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
       newBox.type = tile_type;
-      newBox.affect_character = editorUI.getElementByText("Block affects character") -> getChecked();
+      newBox.affect_character = dynamic_cast<CheckBox*>(editorUI.getElementByText("Block affects character")) -> getChecked();
 
       for( int i = 0; i < 4; i++)
         newBox.orientation[i] = 0;

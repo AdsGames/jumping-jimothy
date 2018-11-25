@@ -114,9 +114,6 @@ class UIElement {
     // Disable hover effect
     void enableHoverEffect();
 
-    // Checked or not
-    virtual bool getChecked();
-
     // Mouse over
     bool hover();
 

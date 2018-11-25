@@ -1,6 +1,9 @@
-#include "UIHandler.h"
+#include "ui/UIHandler.h"
 
-#include "Button.h"
+#include "ui/Button.h"
+#include "ui/ToggleBox.h"
+#include "ui/Label.h"
+
 #include "Globals.h"
 #include "Tools.h"
 
