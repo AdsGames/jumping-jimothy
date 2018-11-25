@@ -13,7 +13,7 @@ Sound::Sound() {
 
 // Dtor
 Sound::~Sound() {
-  #warning Memory Leak
+  // TODO (Allan#1#): Memory Leak
   //al_destroy_sample( sample);
 }
 

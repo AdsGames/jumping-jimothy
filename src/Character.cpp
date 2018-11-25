@@ -120,7 +120,7 @@ void Character::update(){
   angle = body -> GetAngle();
   double yVel = getBody() -> GetLinearVelocity().y;
 
-  #warning this is too slow!
+  // TODO (Danny#1#): Movement too slow
   float x_velocity_ground = 4;
   float x_velocity_air = 0.8;
   float x_velocity_air_max=4;

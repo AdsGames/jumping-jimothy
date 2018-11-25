@@ -168,16 +168,17 @@ Editor::~Editor(){
  // Destroy resources if loaded
   if( edit_font != nullptr)
     al_destroy_font( edit_font);
-//
-#warning horrible hack that will create a memory leak
 
-// HORRIBLE HACK PLZ DONT LET THIS GO INTO RELEASE
-//  // Tile images
-//  for( int i = 0; i < 4; i++)
-//    for( int t = 0; t < 15; t++)
-//      if( tiles[i][t] != nullptr)
-//        al_destroy_bitmap( tiles[i][t]);
-//
+  // TODO (Allan#1#): Fix memory leak
+
+  // HORRIBLE HACK PLZ DONT LET THIS GO INTO RELEASE
+  //  // Tile images
+  //  for( int i = 0; i < 4; i++)
+  //    for( int t = 0; t < 15; t++)
+  //      if( tiles[i][t] != nullptr)
+  //        al_destroy_bitmap( tiles[i][t]);
+  //
+
   // Parent bitmaps
   for( int i = 0; i < 4; i++)
    if( image_box[i] != nullptr)

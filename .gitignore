@@ -3,3 +3,4 @@
 *.layout
 *.exe
 bin/data/options_data.xml
+bin/data/level_data.xml

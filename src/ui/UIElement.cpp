@@ -234,7 +234,7 @@ bool UIElement::clicked() {
 }
 
 // Draw default ui element
-// TODO (user#1#): Document and clean up messy code
+// TODO (Allan#1#): Document and clean up messy code
 void UIElement::draw() {
   if (visible) {
     // Backdrop
