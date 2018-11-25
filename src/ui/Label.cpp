@@ -22,6 +22,11 @@ Label::Label(int x, int y, std::string text, std::string id, ALLEGRO_FONT *font)
 
 // Draw label
 void Label::draw() {
+  // Do not draw if not visible
+  if (!visible)
+    return;
+
+  // Draw text
   if (UIElement_font != nullptr && getText() != "") {
     al_draw_text(UIElement_font, text_colour, x + padding_x + padding_x, y + padding_y, 0, text.c_str());
   }

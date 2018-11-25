@@ -30,12 +30,21 @@ class CheckBox : public UIElement {
     // Check
     bool getChecked();
 
+    // Set checked
+    void setChecked(bool checked);
+
+    // Get toggled
+    bool getToggled();
+
   private:
     // Width of checkbox
     int checkbox_size;
 
     // Checked
     bool checked;
+
+    // Just toggled
+    bool toggled;
 };
 
 #endif // CHECKBOX_H

@@ -100,6 +100,8 @@ void UIElement::toggleDisabled() {
 // Set transparency level
 void UIElement::setTransparency(float alpha) {
   this -> alpha = alpha;
+  text_colour.a = alpha;
+  background_colour.a = alpha;
 }
 
 // Set image rotation

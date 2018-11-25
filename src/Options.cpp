@@ -11,6 +11,7 @@
 
 #include "ui/Button.h"
 #include "ui/Label.h"
+#include "ui/CheckBox.h"
 
 #include "Tools.h"
 
@@ -33,26 +34,18 @@ Options::Options() {
   OptionsUI.getElementById("joydata") -> setTextColour(al_map_rgb(255, 255, 255));
 
   // SFX toggle button
-  OptionsUI.addElement(new Button(100, 101, "Toggle SFX", "btnToggleSFX", options_font));
-  OptionsUI.getElementByText("Toggle SFX") -> setSize(180, 18);
-  OptionsUI.getElementByText("Toggle SFX") -> setTextColour(al_map_rgb(255, 255, 255));
-  OptionsUI.getElementByText("Toggle SFX") -> setVisibleBackground(false);
-
-  // SFX toggle label
-  OptionsUI.addElement(new Button(260, 101,"Off", "sfx_toggle", options_font));
-  OptionsUI.getElementById("sfx_toggle") -> setBackgroundColour(al_map_rgb(150, 0, 0));
-  OptionsUI.getElementById("sfx_toggle") -> setSize(20, 18);
+  OptionsUI.addElement(new CheckBox(100, 101, "SFX Enabled", "chkSFX", options_font));
+  OptionsUI.getElementById("chkSFX") -> setSize(180, 18);
+  OptionsUI.getElementById("chkSFX") -> setTextColour(al_map_rgb(255, 255, 255));
+  OptionsUI.getElementById("chkSFX") -> setVisibleBackground(false);
+  dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkSFX")) -> setChecked(Config::sfx_enabled);
 
   // Music toggle button
-  OptionsUI.addElement(new Button(100, 151, "Toggle Music", "btnToggleMusic", options_font));
-  OptionsUI.getElementByText("Toggle Music") -> setSize(180, 18);
-  OptionsUI.getElementByText("Toggle Music") -> setTextColour(al_map_rgb(255, 255, 255));
-  OptionsUI.getElementByText("Toggle Music") -> setVisibleBackground(false);
-
-  // Music toggle label
-  OptionsUI.addElement(new Button(260,151,"Off","music_toggle", options_font));
-  OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(150, 0, 0));
-  OptionsUI.getElementById("music_toggle") -> setSize(20, 18);
+  OptionsUI.addElement(new CheckBox(100, 151, "Music Enabled", "chkMusic", options_font));
+  OptionsUI.getElementById("chkMusic") -> setSize(180, 18);
+  OptionsUI.getElementById("chkMusic") -> setTextColour(al_map_rgb(255, 255, 255));
+  OptionsUI.getElementById("chkMusic") -> setVisibleBackground(false);
+  dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkMusic")) -> setChecked(Config::music_enabled);
 
   // Graphics mode button
   OptionsUI.addElement(new Button(100, 201, "Graphics Mode", "btnGraphicsMode", options_font));
@@ -117,22 +110,14 @@ void Options::update(){
     Config::write_data("data/options_data.xml");
   }
 
-  // Toggle SFX pressed
-  if(OptionsUI.getElementById("sfx_toggle") &&
-    (OptionsUI.getElementById("sfx_toggle") -> clicked() ||
-     OptionsUI.getElementByText("Toggle SFX") -> clicked() ||
-    (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination == 100))) {
-    Config::sfx_enabled = !Config::sfx_enabled;
-  }
+  // SFX checkbox
+  Config::sfx_enabled = dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkSFX")) -> getChecked();
+
+  // Music checkbox
+  Config::music_enabled = dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkMusic")) -> getChecked();
 
   // Toggle Music pressed
-  if(OptionsUI.getElementById("music_toggle") &&
-    (OptionsUI.getElementById("music_toggle") -> clicked() ||
-     OptionsUI.getElementByText("Toggle Music") -> clicked() ||
-    (JoystickListener::buttonReleased[JOY_XBOX_A] && highlight_y_destination == 150))) {
-    Config::music_enabled = !Config::music_enabled;
-
-    // Enable / disable music
+  if (dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkMusic")) -> getToggled()) {
     if (Config::music_enabled) {
       MusicManager::menu_music.play();
     }
@@ -154,12 +139,10 @@ void Options::update(){
   }
 
   // Button highlights
-  if (OptionsUI.getElementByText("Toggle SFX") &&
-      OptionsUI.getElementByText("Toggle SFX") -> hover() && !Config::joystick_mode) {
+  if (OptionsUI.getElementById("chkSFX") -> hover() && !Config::joystick_mode) {
     highlight_y_destination = 100;
   }
-  if (OptionsUI.getElementByText("Toggle Music") &&
-      OptionsUI.getElementByText("Toggle Music") -> hover() && !Config::joystick_mode) {
+  if (OptionsUI.getElementById("chkMusic") -> hover() && !Config::joystick_mode) {
     highlight_y_destination = 150;
   }
   if (OptionsUI.getElementByText("Graphics Mode") &&
@@ -211,28 +194,8 @@ void Options::update(){
 }
 
 void Options::updateUI() {
-  // SFX
-  if(Config::sfx_enabled && OptionsUI.getElementById("sfx_toggle")) {
-    OptionsUI.getElementById("sfx_toggle") -> setBackgroundColour(al_map_rgb(0,150,0));
-    OptionsUI.getElementById("sfx_toggle") -> setText("On");
-  }
-  else{
-    OptionsUI.getElementById("sfx_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
-    OptionsUI.getElementById("sfx_toggle") -> setText("Off");
-  }
-
-  // Music
-  if(Config::music_enabled && OptionsUI.getElementById("music_toggle")) {
-    OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(0,150,0));
-    OptionsUI.getElementById("music_toggle") -> setText("On");
-  }
-  else{
-    OptionsUI.getElementById("music_toggle") -> setBackgroundColour(al_map_rgb(150,0,0));
-    OptionsUI.getElementById("music_toggle") -> setText("Off");
-  }
-
   // Graphics Mode
-  if (OptionsUI.getElementById("music_toggle")) {
+  if (OptionsUI.getElementById("graphicsdata")) {
     OptionsUI.getElementById("graphicsdata") -> setText(DisplayMode::getDisplayModeString(temp_graphics_mode));
   }
 
