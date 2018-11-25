@@ -199,7 +199,7 @@ bool Editor::is_player(){
 void Editor::set_explosive_ui_status(){
   // Learned a few things from you
   if (tile_type==5) {
-    editorUI.getElementByText("Block affects character") -> enable();
+    editorUI.getElementById("chkBlockAffectsChar") -> enable();
     editorUI.getElementById("explosive_up") -> enable();
     editorUI.getElementById("explosive_left") -> enable();
     editorUI.getElementById("explosive_right") -> enable();
@@ -207,7 +207,7 @@ void Editor::set_explosive_ui_status(){
     editorUI.getElementById("explosive_circle") -> enable();
     editorUI.getElementById("left_top_toggle") -> enable();
 
-    editorUI.getElementByText("Block affects character") -> show();
+    editorUI.getElementById("chkBlockAffectsChar") -> show();
     editorUI.getElementById("explosive_up") -> show();
     editorUI.getElementById("explosive_left") -> show();
     editorUI.getElementById("explosive_right") -> show();
@@ -216,7 +216,7 @@ void Editor::set_explosive_ui_status(){
     editorUI.getElementById("left_top_toggle") -> show();
   }
   else {
-    editorUI.getElementByText("Block affects character") -> disable();
+    editorUI.getElementById("chkBlockAffectsChar") -> disable();
     editorUI.getElementById("explosive_up") -> disable();
     editorUI.getElementById("explosive_left") -> disable();
     editorUI.getElementById("explosive_right") -> disable();
@@ -224,7 +224,7 @@ void Editor::set_explosive_ui_status(){
     editorUI.getElementById("explosive_circle") -> disable();
     editorUI.getElementById("left_top_toggle") -> disable();
 
-    editorUI.getElementByText("Block affects character") -> hide();
+    editorUI.getElementById("chkBlockAffectsChar") -> hide();
     editorUI.getElementById("explosive_up") -> hide();
     editorUI.getElementById("explosive_left") -> hide();
     editorUI.getElementById("explosive_right") -> hide();
@@ -286,35 +286,35 @@ void Editor::update(){
   bool over_Button = editorUI.isHovering();
 
   // Changing types
-  if(KeyListener::keyPressed[ALLEGRO_KEY_Q] || editorUI.getElementByText("Dynamic") -> clicked()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_Q] || editorUI.getElementById("btnDynamic") -> clicked()){
     tile_type = 0;
     set_explosive_ui_status();
   }
-  if(KeyListener::keyPressed[ALLEGRO_KEY_W] || editorUI.getElementByText("Static") -> clicked()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_W] || editorUI.getElementById("btnStatic") -> clicked()){
     tile_type = 1;
     set_explosive_ui_status();
   }
 
-  if(KeyListener::keyPressed[ALLEGRO_KEY_E] || editorUI.getElementByText("Player") -> clicked()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_E] || editorUI.getElementById("btnPlayer") -> clicked()){
     tile_type = 2;
     set_explosive_ui_status();
   }
 
-  if(KeyListener::keyPressed[ALLEGRO_KEY_R] || editorUI.getElementByText("Goat") -> clicked()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_R] || editorUI.getElementById("btnGoat") -> clicked()){
     tile_type = 3;
     set_explosive_ui_status();
   }
 
-  if(KeyListener::keyPressed[ALLEGRO_KEY_T] || editorUI.getElementByText("Collision") -> clicked()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_T] || editorUI.getElementById("btnCollision") -> clicked()){
     tile_type = 4;
     set_explosive_ui_status();
   }
 
-  if(KeyListener::keyPressed[ALLEGRO_KEY_H] || editorUI.getElementByText("Help") -> clicked()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_H] || editorUI.getElementById("btnHelp") -> clicked()){
     display_help=!display_help;
   }
 
-  if(KeyListener::keyPressed[ALLEGRO_KEY_Y] || editorUI.getElementByText("Explosive") -> clicked()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_Y] || editorUI.getElementById("btnExplosive") -> clicked()){
     tile_type = 5;
     editorUI.getElementById("left_top_toggle") -> setText("<");
     editorUI.getElementById("left_top_toggle") -> setText("<");
@@ -327,18 +327,18 @@ void Editor::update(){
   }
 
   // Rockin' three liner undo Button
-  if((KeyListener::keyPressed[ALLEGRO_KEY_Z] || editorUI.getElementByText("Undo") -> clicked() ) && editorBoxes.size()>0){
+  if((KeyListener::keyPressed[ALLEGRO_KEY_Z] || editorUI.getElementById("btnUndo") -> clicked() ) && editorBoxes.size()>0){
     editorBoxes.pop_back();
     calculate_orientation_global();
   }
 
   // Clear world Button
-  if(KeyListener::keyPressed[ALLEGRO_KEY_C] || editorUI.getElementByText("Clear") -> clicked()){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_C] || editorUI.getElementById("btnClear") -> clicked()){
     if(al_show_native_message_box( nullptr, "Clear?", "Clear the map?", "There is no recovering this masterpiece.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
       editorBoxes.clear();
   }
 
-  if(KeyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementByText("Back") -> clicked() || KeyListener::keyReleased[ALLEGRO_KEY_ESCAPE]){
+  if(KeyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementById("btnBack") -> clicked() || KeyListener::keyReleased[ALLEGRO_KEY_ESCAPE]){
     if(modified){
       if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1){
         modified=false;
@@ -358,7 +358,7 @@ void Editor::update(){
     gui_mode =! gui_mode;
 
   // Save
-  if( editorUI.getElementByText("Save") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_S]){
+  if( editorUI.getElementById("btnSave") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_S]){
     if( editorBoxes.size() > 0){
       ALLEGRO_FILECHOOSER *myChooser;
 
@@ -393,7 +393,7 @@ void Editor::update(){
 
 
   // Save as
-  if(editorUI.getElementByText("Save as") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_D]){
+  if(editorUI.getElementById("btnSaveAs") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_D]){
     if( editorBoxes.size() > 0){
       ALLEGRO_FILECHOOSER *myChooser;
 
@@ -423,7 +423,7 @@ void Editor::update(){
 
 
   // Load map
-  if(editorUI.getElementByText("Load") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_A]){
+  if(editorUI.getElementById("btnLoad") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_A]){
     ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
 
 
@@ -452,7 +452,7 @@ void Editor::update(){
   }
 
   // Play
-  if(editorUI.getElementByText("Play") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_F]){
+  if(editorUI.getElementById("btnPlay") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_F]){
      if(editorBoxes.size()>0){
       if(is_player()){
         save_map( "data/level_0.xml");
@@ -472,24 +472,24 @@ void Editor::update(){
   }
 
   // Grid toggle
-  if(editorUI.getElementByText("Grid") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_G])
+  if(editorUI.getElementById("btnGrid") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
   // Gosh darn toggle hide buttons take so much freakin' room
   if(editorUI.getElementById("left_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_LEFT]){
-    editorUI.getElementByText("Collision") -> toggleVisibility();
-    editorUI.getElementByText("Static") -> toggleVisibility();
-    editorUI.getElementByText("Dynamic") -> toggleVisibility();
-    editorUI.getElementByText("Player") -> toggleVisibility();
-    editorUI.getElementByText("Goat") -> toggleVisibility();
-    editorUI.getElementByText("Explosive") -> toggleVisibility();
+    editorUI.getElementById("btnCollision") -> toggleVisibility();
+    editorUI.getElementById("btnStatic") -> toggleVisibility();
+    editorUI.getElementById("btnDynamic") -> toggleVisibility();
+    editorUI.getElementById("btnPlayer") -> toggleVisibility();
+    editorUI.getElementById("btnGoat") -> toggleVisibility();
+    editorUI.getElementById("btnExplosive") -> toggleVisibility();
 
-    editorUI.getElementByText("Collision") -> toggleDisabled();
-    editorUI.getElementByText("Static") -> toggleDisabled();
-    editorUI.getElementByText("Dynamic") -> toggleDisabled();
-    editorUI.getElementByText("Player") -> toggleDisabled();
-    editorUI.getElementByText("Goat") -> toggleDisabled();
-    editorUI.getElementByText("Explosive") -> toggleDisabled();
+    editorUI.getElementById("btnCollision") -> toggleDisabled();
+    editorUI.getElementById("btnStatic") -> toggleDisabled();
+    editorUI.getElementById("btnDynamic") -> toggleDisabled();
+    editorUI.getElementById("btnPlayer") -> toggleDisabled();
+    editorUI.getElementById("btnGoat") -> toggleDisabled();
+    editorUI.getElementById("btnExplosive") -> toggleDisabled();
 
     if(editorUI.getElementById("left_bottom_toggle") -> getText()=="<"){
       editorUI.getElementById("left_bottom_toggle") -> setPosition( 0, 728);
@@ -504,21 +504,21 @@ void Editor::update(){
   }
 
   if(editorUI.getElementById("right_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
-    editorUI.getElementByText("Undo") -> toggleVisibility();
-    editorUI.getElementByText("Clear") -> toggleVisibility();
-    editorUI.getElementByText("Save") -> toggleVisibility();
-    editorUI.getElementByText("Save as") -> toggleVisibility();
-    editorUI.getElementByText("Load") -> toggleVisibility();
-    editorUI.getElementByText("Play") -> toggleVisibility();
-    editorUI.getElementByText("Grid") -> toggleVisibility();
+    editorUI.getElementById("btnUndo") -> toggleVisibility();
+    editorUI.getElementById("btnClear") -> toggleVisibility();
+    editorUI.getElementById("btnSave") -> toggleVisibility();
+    editorUI.getElementById("btnSaveAs") -> toggleVisibility();
+    editorUI.getElementById("btnLoad") -> toggleVisibility();
+    editorUI.getElementById("btnPlay") -> toggleVisibility();
+    editorUI.getElementById("btnGrid") -> toggleVisibility();
 
-    editorUI.getElementByText("Undo") -> toggleDisabled();
-    editorUI.getElementByText("Clear") -> toggleDisabled();
-    editorUI.getElementByText("Save") -> toggleDisabled();
-    editorUI.getElementByText("Save as") -> toggleDisabled();
-    editorUI.getElementByText("Load") -> toggleDisabled();
-    editorUI.getElementByText("Play") -> toggleDisabled();
-    editorUI.getElementByText("Grid") -> toggleDisabled();
+    editorUI.getElementById("btnUndo") -> toggleDisabled();
+    editorUI.getElementById("btnClear") -> toggleDisabled();
+    editorUI.getElementById("btnSave") -> toggleDisabled();
+    editorUI.getElementById("btnSaveAs") -> toggleDisabled();
+    editorUI.getElementById("btnLoad") -> toggleDisabled();
+    editorUI.getElementById("btnPlay") -> toggleDisabled();
+    editorUI.getElementById("btnGrid") -> toggleDisabled();
 
     if(editorUI.getElementById("right_bottom_toggle") -> getText()==">"){
       editorUI.getElementById("right_bottom_toggle") -> setPosition( 994, 728);
@@ -531,11 +531,11 @@ void Editor::update(){
     }
   }
   if(editorUI.getElementById("right_top_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_UP]){
-    editorUI.getElementByText("Back") -> toggleVisibility();
-    editorUI.getElementByText("Help") -> toggleVisibility();
+    editorUI.getElementById("btnBack") -> toggleVisibility();
+    editorUI.getElementById("btnHelp") -> toggleVisibility();
 
-    editorUI.getElementByText("Back") -> toggleDisabled();
-    editorUI.getElementByText("Help") -> toggleDisabled();
+    editorUI.getElementById("btnBack") -> toggleDisabled();
+    editorUI.getElementById("btnHelp") -> toggleDisabled();
     if(editorUI.getElementById("right_top_toggle") -> getText()==">"){
       editorUI.getElementById("right_top_toggle") -> setPosition( 994, 0);
       editorUI.getElementById("right_top_toggle") -> setText("<");
@@ -553,14 +553,14 @@ void Editor::update(){
     editorUI.getElementById("explosive_left") -> toggleVisibility();
     editorUI.getElementById("explosive_right") -> toggleVisibility();
     editorUI.getElementById("explosive_circle") -> toggleVisibility();
-    editorUI.getElementByText("Block affects character") -> toggleVisibility();
+    editorUI.getElementById("chkBlockAffectsChar") -> toggleVisibility();
 
     editorUI.getElementById("explosive_up") -> toggleDisabled();
     editorUI.getElementById("explosive_down") -> toggleDisabled();
     editorUI.getElementById("explosive_left") -> toggleDisabled();
     editorUI.getElementById("explosive_right") -> toggleDisabled();
     editorUI.getElementById("explosive_circle") -> toggleDisabled();
-    editorUI.getElementByText("Block affects character") -> toggleDisabled();
+    editorUI.getElementById("chkBlockAffectsChar") -> toggleDisabled();
 
     if(editorUI.getElementById("left_top_toggle") -> getText()==">"){
       editorUI.getElementById("left_top_toggle") -> setPosition( 257, 60);
@@ -588,7 +588,7 @@ void Editor::update(){
       newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
       newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
       newBox.type = tile_type;
-      newBox.affect_character = dynamic_cast<CheckBox*>(editorUI.getElementByText("Block affects character")) -> getChecked();
+      newBox.affect_character = dynamic_cast<CheckBox*>(editorUI.getElementById("getElementById")) -> getChecked();
 
       for( int i = 0; i < 4; i++)
         newBox.orientation[i] = 0;

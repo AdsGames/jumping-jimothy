@@ -21,7 +21,7 @@
 					<Add option="-Wmissing-include-dirs" />
 					<Add option="-Wmain" />
 					<Add option="-Wextra" />
-					<Add option="-std=c++11" />
+					<Add option="-std=c++14" />
 					<Add option="-g" />
 					<Add option="-Wno-strict-aliasing" />
 					<Add option="-Wno-shadow" />
