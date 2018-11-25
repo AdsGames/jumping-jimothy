@@ -16,23 +16,24 @@
 class UIHandler {
   public:
     UIHandler() {};
-    virtual ~UIHandler() {};
+    inline virtual ~UIHandler() {};
     void addElement(UIElement *newUIElement);
     void draw();
     void update();
     bool isHovering();
 
-    void createButton(int x, int y,std::string newText,std::string id,ALLEGRO_FONT *newFont);
-    void createAnchoredButton(std::string,ALLEGRO_FONT *,std::string,std::string,bool);
+    void createButton(const int x, const int y, std::string text,std::string id, ALLEGRO_FONT *font);
+    void createAnchoredButton(std::string text, ALLEGRO_FONT *font, std::string anchorID, std::string id, const bool justification);
 
-    [[deprecated("Look up by ID instead using getElementById")]]
-    UIElement* getElementByText(std::string);
+    [[deprecated("Look up using getElementById instead using getElementByText")]]
+    UIElement* getElementByText(std::string text);
 
-    UIElement* getElementById(std::string);
+    UIElement* getElementById(std::string id);
 
     std::vector<UIElement*> getUIElements();
 
   private:
+    // Container for UI Elements
     std::vector<UIElement*> ui_elements;
 };
 

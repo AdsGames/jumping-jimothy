@@ -17,7 +17,7 @@ class UIElement {
   public:
     // Constructor
     UIElement();
-    UIElement(int, int, std::string, std::string, ALLEGRO_FONT*);
+    UIElement(const int x, const int y, std::string text, std::string id, ALLEGRO_FONT *font);
 
     // Dtor
     virtual ~UIElement();
@@ -53,16 +53,16 @@ class UIElement {
     void toggleDisabled();
 
     // Set transparency level
-    void setTransparency(float alpha);
+    void setTransparency(const float alpha);
 
     // Set image rotation
-    void setBitmapRotationAngle(float rotation);
+    void setBitmapRotationAngle(const float rotation);
 
     // Set x
-    void setX(int x);
+    void setX(const int x);
 
     // Set y
-    void setY(int y);
+    void setY(const int y);
 
     // Set text colour
     void setTextColour(ALLEGRO_COLOR colour);
@@ -71,10 +71,10 @@ class UIElement {
     void setBackgroundColour(ALLEGRO_COLOR colour);
 
     // Set cell fill
-    void setCellFillTransparent(bool n);
+    void setCellFillTransparent(const bool n);
 
     // Set text justification
-    void setTextJustification(int justification);
+    void setTextJustification(const int justification);
 
     // Element width
     int getWidth();
@@ -83,13 +83,13 @@ class UIElement {
     int getHeight();
 
     // Set padding
-    void setPadding(int x, int y);
+    void setPadding(const int x, const int y);
 
     // Set position
-    void setPosition(int x, int y);
+    void setPosition(const int x, const int y);
 
     // Set element size
-    void setSize(int width, int height);
+    void setSize(const int width, const int height);
 
     // Set text
     void setText(std::string text);
@@ -104,16 +104,16 @@ class UIElement {
     void setFont(ALLEGRO_FONT *font);
 
     // Set background visibility
-    void setVisibleBackground(bool b);
+    void setVisibleBackground(const bool b);
 
     // Set width
-    void setWidth(int width);
+    void setWidth(const int width);
 
     // Set height
-    void setHeight(int height);
+    void setHeight(const int height);
 
     // Set border thickness
-    void setBorderThickness(int thickness);
+    void setBorderThickness(const int thickness);
 
     // Disable hover effect
     void disableHoverEffect();
@@ -134,47 +134,63 @@ class UIElement {
     virtual void draw() = 0;
 
   protected:
-    // Variables
-    int x;
-    int y;
-    int width;
-    int height;
+    // Position
+    int x, y;
 
-    int padding_x;
-    int padding_y;
+    // Dimensions of element
+    int width, height;
 
-    float bitmap_rotation_angle;
-    bool visible_background;
+    // Padding
+    int padding_x, padding_y;
 
-    int border_thickness;
 
-    float alpha;
-
-    int justification;
-
-    // Frick you
+    // Text colour
     ALLEGRO_COLOR text_colour;
+
+    // Background colour
     ALLEGRO_COLOR background_colour;
 
-    // Inactive cannot be clicked/hovered
-    // Invisible cannot be seen
-    // Disabled is both
+    // Fill with transparency
+    bool transparent_cell_fill;
+
+    // Primitive alpha
+    float alpha;
+
+    // Background visibility
+    bool visible_background;
+
+    // Thickness of border
+    int border_thickness;
+
+
+    // Visibility status
     bool visible;
+
+    // Disabled status
     bool disabled;
 
-    bool transparent_cell_fill;
+    // Hover effect enabled
     bool hover_effect;
 
+
+    // Image rotation
+    float bitmap_rotation_angle;
+
+    // Optional image
     ALLEGRO_BITMAP *image;
 
     // Font
     ALLEGRO_FONT *UIElement_font;
 
+
+    // Text of element
     std::string text;
+
+    // Justification of text
+    int justification;
+
+    // Unique id of element
     std::string id;
-
-
-  private:
 
 };
 

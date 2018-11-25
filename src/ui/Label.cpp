@@ -7,7 +7,7 @@ Label::Label()
 }
 
 // Detailed constructor
-Label::Label(int x, int y, std::string text, std::string id, ALLEGRO_FONT *font)
+Label::Label(const int x, const int y, std::string text, std::string id, ALLEGRO_FONT *font)
   : UIElement(x, y, text, id, font) {
 
   if (font != nullptr) {

@@ -30,7 +30,7 @@ UIElement::UIElement() {
   this -> bitmap_rotation_angle = 0;
 }
 
-UIElement::UIElement(int x, int y, std::string text, std::string id, ALLEGRO_FONT *font)
+UIElement::UIElement(const int x, const int y, std::string text, std::string id, ALLEGRO_FONT *font)
   : UIElement() {
 
   setId(id);
@@ -98,24 +98,24 @@ void UIElement::toggleDisabled() {
 }
 
 // Set transparency level
-void UIElement::setTransparency(float alpha) {
+void UIElement::setTransparency(const float alpha) {
   this -> alpha = alpha;
   text_colour.a = alpha;
   background_colour.a = alpha;
 }
 
 // Set image rotation
-void UIElement::setBitmapRotationAngle(float rotation) {
+void UIElement::setBitmapRotationAngle(const float rotation) {
   bitmap_rotation_angle = rotation;
 }
 
 // Set x
-void UIElement::setX(int x) {
+void UIElement::setX(const int x) {
   this -> x = x;
 }
 
 // Set y
-void UIElement::setY(int y) {
+void UIElement::setY(const int y) {
   this -> y = y;
 }
 
@@ -130,12 +130,12 @@ void UIElement::setBackgroundColour(ALLEGRO_COLOR colour) {
 }
 
 // Set cell fill
-void UIElement::setCellFillTransparent(bool n) {
+void UIElement::setCellFillTransparent(const bool n) {
   transparent_cell_fill = n;
 }
 
 // Set text justification
-void UIElement::setTextJustification(int justification) {
+void UIElement::setTextJustification(const int justification) {
   this -> justification = justification;
 }
 
@@ -150,19 +150,19 @@ int UIElement::getHeight() {
 }
 
 // Set padding
-void UIElement::setPadding(int x, int y) {
+void UIElement::setPadding(const int x, const int y) {
   padding_x = x;
   padding_y = y;
 }
 
 // Set position
-void UIElement::setPosition(int x, int y) {
+void UIElement::setPosition(const int x, const int y) {
   setX(x);
   setY(y);
 }
 
 // Set element size
-void UIElement::setSize(int width, int height) {
+void UIElement::setSize(const int width, const int height) {
   setWidth(width);
   setHeight(height);
 }
@@ -196,22 +196,22 @@ void UIElement::setFont(ALLEGRO_FONT *font) {
 }
 
 // Set background visibility
-void UIElement::setVisibleBackground(bool b) {
+void UIElement::setVisibleBackground(const bool b) {
   visible_background = b;
 }
 
 // Set width
-void UIElement::setWidth(int width) {
+void UIElement::setWidth(const int width) {
   this -> width = width;
 }
 
 // Set height
-void UIElement::setHeight(int height) {
+void UIElement::setHeight(const int height) {
   this -> height = height;
 }
 
 // Set border thickness
-void UIElement::setBorderThickness(int thickness) {
+void UIElement::setBorderThickness(const int thickness) {
   border_thickness = thickness;
 }
 

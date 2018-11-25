@@ -16,16 +16,16 @@ class Label : public UIElement {
     Label();
 
     // Detailed constructor
-    Label(int x, int y, std::string text, std::string id, ALLEGRO_FONT *font);
+    Label(const int x, const int y, std::string text, std::string id, ALLEGRO_FONT *font);
 
     // Dtor
-    virtual ~Label() {};
+    inline virtual ~Label() {};
 
     // Draw
-    void draw() override;
+    virtual void draw() override;
 
     // Update
-    void update() override;
+    virtual void update() override;
 };
 
 #endif // LABEL_H
