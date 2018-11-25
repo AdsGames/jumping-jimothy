@@ -9,12 +9,13 @@
 #include "Sensor.h"
 #include "Sound.h"
 
+#define NUM_CHARACTER_IMAGES 20
+
 class b2World;
 class b2Body;
 class b2BodyDef;
 class b2Vec2;
 class keyListener;
-//class Sensor;
 
 class Character : public Box{
   public:
@@ -44,7 +45,7 @@ class Character : public Box{
     Sensor *sensor_box;
 
     ALLEGRO_BITMAP *sprite;
-    ALLEGRO_BITMAP *sprites[20];
+    ALLEGRO_BITMAP *sprites[NUM_CHARACTER_IMAGES];
 
     Sound jump;
     Sound land;

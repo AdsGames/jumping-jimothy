@@ -5,14 +5,12 @@
 
 class CheckBox : public UIElement {
   public:
-    CheckBox() {};
+    CheckBox();
     CheckBox(int, int, std::string, ALLEGRO_FONT*);
     virtual ~CheckBox() {};
     void update() override;
     virtual void draw();
-    bool getChecked(){
-      return checked;
-    }
+    bool getChecked();
 
   private:
     int checkbox_width = 20;

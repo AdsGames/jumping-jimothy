@@ -2,6 +2,10 @@
 
 #include "MouseListener.h"
 
+CheckBox::CheckBox() {
+  setDefaults();
+}
+
 CheckBox::CheckBox(int newX, int newY,std::string newText, ALLEGRO_FONT *newFont){
   this -> alpha = 255;
 
@@ -20,10 +24,6 @@ CheckBox::CheckBox(int newX, int newY,std::string newText, ALLEGRO_FONT *newFont
   this -> visible = true;
   this -> active = true;
 
-  this -> mouse_released=false;
-  this -> old_mouse_down=false;
-  this -> hovering = false;
-
   this -> checked = false;
 
 
@@ -38,30 +38,19 @@ CheckBox::CheckBox(int newX, int newY,std::string newText, ALLEGRO_FONT *newFont
 }
 
 void CheckBox::update(){
-  mouse_released = false;
-  if(active){
-    if( hovering && old_mouse_down && !MouseListener::mouse_button & 1){
-      mouse_released = true;
-      checked=!checked;
-
-    }
-    old_mouse_down = hovering && MouseListener::mouse_button & 1;
-    hovering = MouseListener::mouse_x > x && MouseListener::mouse_x < x + getWidth() &&
-               MouseListener::mouse_y > y && MouseListener::mouse_y < y + getHeight();
-  }
-  else{
-    hovering=false;
+  if(active && clicked()){
+    checked =! checked;
   }
 }
 
-void CheckBox::draw(){
- if(visible){
+void CheckBox::draw() {
+  if(visible) {
     // Backdrop
-    al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering,alpha));
+    al_draw_filled_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 200 + 20 * hover(), 200 + 20 * hover(), 200 + 20 * hover(),alpha));
     al_draw_rectangle( x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba( 0, 0, 0,alpha), 2);
 
     // Checkbox
-    al_draw_filled_rectangle( x+padding_x, y+padding_y, x + padding_x +checkbox_width, y + padding_y + checkbox_width, al_map_rgba( 200 + 20 * hovering, 200 + 20 * hovering, 200 + 20 * hovering,alpha));
+    al_draw_filled_rectangle( x+padding_x, y+padding_y, x + padding_x +checkbox_width, y + padding_y + checkbox_width, al_map_rgba( 200 + 20 * hover(), 200 + 20 * hover(), 200 + 20 * hover(),alpha));
     al_draw_rectangle( x + padding_x, y + padding_y, x + padding_x+checkbox_width, y + padding_y + checkbox_width, al_map_rgba( 0, 0, 0,alpha), 2);
 
     if(checked)
@@ -72,4 +61,8 @@ void CheckBox::draw(){
     if( UIElement_font != nullptr)
       al_draw_text( UIElement_font, al_map_rgba( 0, 0, 0,alpha), x + padding_x+checkbox_width+padding_x, y + padding_y, 0, text.c_str());
   }
+}
+
+bool CheckBox::getChecked() {
+  return checked;
 }

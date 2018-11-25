@@ -11,10 +11,14 @@
 
 #define MAX_MOUSE_BUTTONS 3
 
-class MouseListener{
+#define MOUSE_LEFT 1
+#define MOUSE_RIGHT 2
+#define MOUSE_CENTER 4
+
+class MouseListener {
   public:
-    MouseListener();
-    virtual ~MouseListener();
+    MouseListener() {};
+    virtual ~MouseListener() {};
 
     void update();
 
@@ -26,7 +30,6 @@ class MouseListener{
     static unsigned char mouse_pressed;
     static unsigned char mouse_released;
     static bool mouse_moved;
-  protected:
 
   private:
     static unsigned char mouse_old;

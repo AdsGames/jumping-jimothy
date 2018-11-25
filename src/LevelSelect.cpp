@@ -264,13 +264,13 @@ void LevelSelect::update(){
 
   levelSelectUI.update();
 
-  if(KeyListener::key[ALLEGRO_KEY_ESCAPE] || levelSelectUI.getElementByText("Back to main menu") -> mouseReleased())
+  if(KeyListener::key[ALLEGRO_KEY_ESCAPE] || levelSelectUI.getElementByText("Back to main menu") -> clicked())
     set_next_state(STATE_MENU);
 
-  if(levelSelectUI.getElementByText("Really reset?") -> mouseReleased()){
+  if(levelSelectUI.getElementByText("Really reset?") -> clicked()){
 
   }
-  if(levelSelectUI.getElementByText("Reset Save Game") -> mouseReleased()){
+  if(levelSelectUI.getElementByText("Reset Save Game") -> clicked()){
     reset_game_menu=true;
     levelSelectUI.getElementByText("Cancel") ->setStatus(true);
     levelSelectUI.getElementByText("Really reset?") ->setStatus(true);
@@ -300,7 +300,7 @@ void LevelSelect::update(){
 
 
   if((JoystickListener::buttonReleased[JOY_XBOX_A] && reset_game_menu && highlight_game_reset_y_destination==650)
-   || levelSelectUI.getElementByText("Really reset?") -> mouseReleased()){
+   || levelSelectUI.getElementByText("Really reset?") -> clicked()){
 
     for(int i=0; i<16; i++)
       completed_level_list[i]=false;
@@ -310,7 +310,7 @@ void LevelSelect::update(){
   }
 
   if((JoystickListener::buttonReleased[JOY_XBOX_A] && reset_game_menu && highlight_game_reset_y_destination==695)
-   || levelSelectUI.getElementByText("Cancel") -> mouseReleased()){
+   || levelSelectUI.getElementByText("Cancel") -> clicked()){
     JoystickListener::clearButtons();
     reset_game_menu=false;
 

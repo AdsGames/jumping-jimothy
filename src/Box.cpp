@@ -23,5 +23,7 @@ void Box::init(){}
 // Halp how do I polymorph?
 void Box::update(){}
 void Box::setStatic(){}
-void Box::setDynamic(bool newBool){}
+void Box::setDynamic(bool newBool){
+  static_mode = newBool;
+}
 void Box::draw(){}

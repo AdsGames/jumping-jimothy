@@ -33,6 +33,7 @@ class Menu : public State {
 
     static const int BUTTON_COUNT = 5;
     Button menu_buttons[BUTTON_COUNT];
+
     // Images
     ALLEGRO_BITMAP *title;
     ALLEGRO_BITMAP *title_overlay;
@@ -57,10 +58,10 @@ class Menu : public State {
     ALLEGRO_FONT *credits_font;
     ALLEGRO_FONT *button_font;
 
-    int highlight_y_destination=500;
-    int highlight_y=500;
+    int highlight_y_destination = 500;
+    int highlight_y = 500;
 
-    bool joystick_direction_hit=false;
+    bool joystick_direction_hit = false;
     bool credits_menu;
     int counter_title;
     int counter_play;

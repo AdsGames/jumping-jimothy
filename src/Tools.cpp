@@ -7,6 +7,8 @@
 #include <math.h>
 #include <fstream>
 
+#include "MouseListener.h"
+
 // A function to streamline error reporting in file loading
 void tools::abort_on_error(std::string message, std::string title) {
   al_show_native_message_box(nullptr, "Error", title.c_str(), message.c_str(), nullptr, ALLEGRO_MESSAGEBOX_ERROR);
@@ -136,4 +138,21 @@ void tools::log_message(std::string message, bool debug) {
   else {
     std::cout << message << "\n";
   }
+}
+
+// Mouse over
+bool tools::mouse_over(int x, int y, int width, int height) {
+  return tools::collision(MouseListener::mouse_x, MouseListener::mouse_x,
+                          x, x + width,
+                          MouseListener::mouse_y, MouseListener::mouse_y,
+                          y, y + height);
+}
+
+// Mouse released with reset
+bool tools::mouse_clicked(int button, bool reset) {
+  bool old_released = MouseListener::mouse_released & button;
+  if (reset) {
+    MouseListener::mouse_released &= 0 << button;
+  }
+  return old_released;
 }

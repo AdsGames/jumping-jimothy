@@ -12,6 +12,8 @@
 #define BOX 0
 #define GOAT 2
 
+#define NUM_TILES 4
+
 class b2World;
 class b2Body;
 class b2BodyDef;
@@ -47,7 +49,7 @@ class Box{
     bool static_box;
 
     ALLEGRO_BITMAP *sprite;
-    ALLEGRO_BITMAP *new_tiles[4];
+    ALLEGRO_BITMAP *new_tiles[NUM_TILES];
 
     bool static_mode;
     int type;
