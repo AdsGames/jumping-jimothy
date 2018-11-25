@@ -5,12 +5,20 @@
 
 class Label : public UIElement {
   public:
+    // Constructor
     Label();
-    virtual ~Label();
 
-  protected:
+    // Detailed constructor
+    Label(int x, int y, std::string text, std::string id, ALLEGRO_FONT *font);
 
-  private:
+    // Dtor
+    virtual ~Label() {};
+
+    // Draw
+    void draw() override;
+
+    // Update
+    void update() override;
 };
 
 #endif // LABEL_H

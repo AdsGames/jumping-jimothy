@@ -11,6 +11,7 @@
 #include "rapidxml_print.hpp"
 
 #include "ui/Button.h"
+#include "ui/Label.h"
 
 #include "KeyListener.h"
 #include "MouseListener.h"
@@ -62,9 +63,8 @@ LevelSelect::LevelSelect() {
 
   levelSelectUI = UIHandler();
 
-  levelSelectUI.addElement(new UIElement(375,5,"Select a level","lblSelectLevel", levelselect_font_large));
-  levelSelectUI.getElementByText("Select a level") -> setVisibleBackground(false);
-  levelSelectUI.getElementByText("Select a level") -> setTextColour(al_map_rgb(255,255,255));
+  levelSelectUI.addElement(new Label(375, 5, "Select a level","lblSelectLevel", levelselect_font_large));
+  levelSelectUI.getElementById("lblSelectLevel") -> setTextColour(al_map_rgb(255,255,255));
 
   int x_loc=340;
   int y_spacing=45;

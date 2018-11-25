@@ -9,6 +9,9 @@
 #include "JoystickListener.h"
 #include "MouseListener.h"
 
+#include "ui/Button.h"
+#include "ui/Label.h"
+
 #include "Tools.h"
 
 // Initialize options screen
@@ -22,13 +25,11 @@ Options::Options() {
   highlight = tools::load_bitmap_ex("images/highlight.png");
 
   // Options text
-  OptionsUI.addElement(new UIElement(25, 25, "Options", "options", title_font));
-  OptionsUI.getElementByText("Options") -> setVisibleBackground(false);
+  OptionsUI.addElement(new Label(25, 25, "Options", "options", title_font));
   OptionsUI.getElementByText("Options") -> setTextColour(al_map_rgb(255, 255, 255));
 
   // Joystick data
-  OptionsUI.addElement(new UIElement(400, 25, "Gamepad: " + Config::joystick_data, "joydata", options_font));
-  OptionsUI.getElementById("joydata") -> setVisibleBackground(false);
+  OptionsUI.addElement(new Label(400, 25, "Gamepad: " + Config::joystick_data, "joydata", options_font));
   OptionsUI.getElementById("joydata") -> setTextColour(al_map_rgb(255, 255, 255));
 
   // SFX toggle button
@@ -60,7 +61,7 @@ Options::Options() {
   OptionsUI.getElementByText("Graphics Mode") -> setVisibleBackground(false);
 
   // Graphics label
-  OptionsUI.addElement(new UIElement(300, 200, DisplayMode::getDisplayModeString(), "graphicsdata", options_font));
+  OptionsUI.addElement(new Label(300, 200, DisplayMode::getDisplayModeString(), "graphicsdata", options_font));
   OptionsUI.getElementById("graphicsdata") -> setVisibleBackground(false);
   OptionsUI.getElementById("graphicsdata") -> setTextColour(al_map_rgb(255, 255, 255));
 

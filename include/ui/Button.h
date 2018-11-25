@@ -6,14 +6,11 @@
 class Button : public UIElement {
   public:
     Button();
-    Button(int x, int y, std::string text, std::string id, ALLEGRO_FONT *button_font);
+    Button(int x, int y, std::string text, std::string id, ALLEGRO_FONT *font);
     virtual ~Button() {};
 
-    void setWidth(int newWidth);
-    void setHeight(int newHeight);
-
-    virtual void draw();
-
+    void draw() override;
+    void update() override;
 };
 
 #endif // BUTTON_H

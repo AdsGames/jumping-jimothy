@@ -171,7 +171,7 @@ Editor::~Editor(){
   if( edit_font != nullptr)
     al_destroy_font( edit_font);
 
-  // TODO (Allan#1#): Fix memory leak
+  // FIXME (Allan#1#): Memory leak
 
   // HORRIBLE HACK PLZ DONT LET THIS GO INTO RELEASE
   //  // Tile images
@@ -182,8 +182,8 @@ Editor::~Editor(){
   //
 
   // Parent bitmaps
-  for( int i = 0; i < 4; i++)
-   if( image_box[i] != nullptr)
+  for(int i = 0; i < 4; i++)
+    if(image_box[i] != nullptr)
       al_destroy_bitmap( image_box[i]);
 }
 bool Editor::is_player(){

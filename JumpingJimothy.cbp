@@ -82,7 +82,6 @@
 		<Unit filename="include/ActionBinder.h" />
 		<Unit filename="include/Box.h" />
 		<Unit filename="include/Character.h" />
-		<Unit filename="include/CheckBox.h" />
 		<Unit filename="include/CollisionBox.h" />
 		<Unit filename="include/Config.h" />
 		<Unit filename="include/Controls.h" />
@@ -108,6 +107,7 @@
 		<Unit filename="include/StaticBox.h" />
 		<Unit filename="include/Tools.h" />
 		<Unit filename="include/ui/Button.h" />
+		<Unit filename="include/ui/CheckBox.h" />
 		<Unit filename="include/ui/Label.h" />
 		<Unit filename="include/ui/ToggleBox.h" />
 		<Unit filename="include/ui/UIElement.h" />
@@ -115,7 +115,6 @@
 		<Unit filename="src/ActionBinder.cpp" />
 		<Unit filename="src/Box.cpp" />
 		<Unit filename="src/Character.cpp" />
-		<Unit filename="src/CheckBox.cpp" />
 		<Unit filename="src/CollisionBox.cpp" />
 		<Unit filename="src/Config.cpp" />
 		<Unit filename="src/Controls.cpp" />
@@ -140,6 +139,7 @@
 		<Unit filename="src/Tools.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/ui/Button.cpp" />
+		<Unit filename="src/ui/CheckBox.cpp" />
 		<Unit filename="src/ui/Label.cpp" />
 		<Unit filename="src/ui/ToggleBox.cpp" />
 		<Unit filename="src/ui/UIElement.cpp" />
