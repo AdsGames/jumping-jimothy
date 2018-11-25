@@ -12,21 +12,24 @@
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_ttf.h>
 
-#include "MouseListener.h"
-#include "KeyListener.h"
-#include "JoystickListener.h"
+#include "util/MouseListener.h"
+#include "util/KeyListener.h"
+#include "util/JoystickListener.h"
+#include "util/Config.h"
+#include "util/MusicManager.h"
+#include "util/DisplayMode.h"
+#include "util/Tools.h"
 
-#include "Init.h"
 #include "State.h"
-#include "Game.h"
-#include "Menu.h"
-#include "Editor.h"
-#include "LevelSelect.h"
-#include "Options.h"
-#include "Config.h"
-#include "MusicManager.h"
-#include "DisplayMode.h"
-#include "Tools.h"
+
+#include "game/Game.h"
+
+#include "editor/Editor.h"
+
+#include "menu/Menu.h"
+#include "menu/LevelSelect.h"
+#include "menu/Options.h"
+
 
 // Current state object
 State *currentState = nullptr;
@@ -69,10 +72,6 @@ void change_state(){
 
     //Change the state
     switch( nextState ){
-      case STATE_INIT:
-        currentState = new Init();
-        tools::log_message("Switched state to initialization.");
-        break;
       case STATE_GAME:
         currentState = new Game();
         tools::log_message("Switched state to game.");
@@ -302,8 +301,8 @@ int main(){
   setup();
 
   //Set the current state ID
-  stateID = STATE_INIT;
-  currentState = new Init();
+  stateID = STATE_MENU;
+  currentState = new Menu();
 
   // Run game
   while(!closing) {

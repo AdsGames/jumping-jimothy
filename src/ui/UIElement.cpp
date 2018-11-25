@@ -2,8 +2,8 @@
 
 #include <allegro5/allegro5.h>
 
-#include "MouseListener.h"
-#include "Tools.h"
+#include "util/MouseListener.h"
+#include "util/Tools.h"
 
 // Defaults
 UIElement::UIElement() {

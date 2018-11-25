@@ -3,8 +3,8 @@
 #include "ui/Button.h"
 #include "ui/Label.h"
 
-#include "Globals.h"
-#include "Tools.h"
+#include "util/Globals.h"
+#include "util/Tools.h"
 
 // Add element to handler
 void UIHandler::addElement(UIElement *elem){
