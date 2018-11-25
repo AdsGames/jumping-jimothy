@@ -83,7 +83,7 @@ class Game : public State {
 
     ALLEGRO_BITMAP *new_dynamic_tile[100];
 
-    //TODO: FIX WHEN NOT DEAD INSIDE
+    //TODO (Danny#1#): FIX WHEN NOT DEAD INSIDE
 
     // Samples
     Sound toggle_off;
