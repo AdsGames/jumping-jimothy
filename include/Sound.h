@@ -1,10 +1,10 @@
-/*
+/**
  * Sound
+ * Danny Van Stemp
  * Wrapper for allegro sample
  * Easy interface to interact with samples
- * Danny Van Stemp
  * 23/11/2018
- */
+ **/
 
 #ifndef SOUND_H
 #define SOUND_H

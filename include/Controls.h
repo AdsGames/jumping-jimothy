@@ -1,9 +1,7 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
 
-
-class Controls
-{
+class Controls {
   public:
     Controls();
     virtual ~Controls();

@@ -1,8 +1,10 @@
 /**
- * BOX
+ * Box
  * Danny Van Stemp
+ * A base physics enabled box type
  * 05/05/2017
 **/
+
 #ifndef BOX_H
 #define BOX_H
 

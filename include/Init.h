@@ -1,8 +1,10 @@
 /**
  * INIT
  * Allan Legemaate
+ * Init state
  * 09/05/2017
 **/
+
 #ifndef INIT_H
 #define INIT_H
 

@@ -1,6 +1,6 @@
 /**
- * Key Listener 2 (allegro 5!)
- *   Allan Legemaate
+ * Key Listener
+ * Allan Legemaate
  * Listens for keys JUST pressed or JUST released
  *   since the last tick
  * 18/01/2017

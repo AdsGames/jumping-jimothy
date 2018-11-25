@@ -1,3 +1,10 @@
+/**
+ * Goat
+ * Danny Van Stemp
+ * The game goal
+ * 06/05/2017
+**/
+
 #ifndef GOAT_H
 #define GOAT_H
 

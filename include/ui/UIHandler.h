@@ -1,3 +1,10 @@
+/**
+ * UIHandler
+ * Danny Van Stemp and Allan Legemaate
+ * Manages UI
+ * 24/09/2017
+ **/
+
 #ifndef UIHANDLER_H
 #define UIHANDLER_H
 

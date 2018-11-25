@@ -1,9 +1,10 @@
 /**
  * TOOLS
- * General purpose utilities used throughout
  * Allan Legemaate
+ * General purpose utilities used throughout
  * 05/05/2017
 **/
+
 #ifndef TOOLS_H
 #define TOOLS_H
 

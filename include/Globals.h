@@ -1,8 +1,10 @@
 /**
- * GLOBALS
- * A.D.S. Games
+ * Globals
+ * Allan Legemaate and Danny Van Stemp
+ * Global defines
  * 05/05/2017
 **/
+
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
@@ -20,7 +22,5 @@
 #define PI 3.14159263
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
-
-
 
 #endif // GLOBALS_H

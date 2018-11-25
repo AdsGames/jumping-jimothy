@@ -1,3 +1,10 @@
+/**
+ * Level Select
+ * Danny Van Stemp
+ * Level select state
+ * 04/01/2018
+**/
+
 #ifndef LEVELSELECT_H
 #define LEVELSELECT_H
 

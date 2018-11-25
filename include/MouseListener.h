@@ -1,5 +1,5 @@
 /**
- * Mouse Listener 2 (allegro 5)
+ * Mouse Listener
  * Allan Legemaate
  * Listens for mouse buttons JUST pressed or JUST released
  *   since the last tick

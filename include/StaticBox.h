@@ -1,3 +1,10 @@
+/**
+ * Static Box
+ * Danny Vanstemp
+ * Physics box not effected by gravity
+ * 05/05/2017
+**/
+
 #ifndef STATICBOX_H
 #define STATICBOX_H
 

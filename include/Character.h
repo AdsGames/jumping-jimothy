@@ -1,8 +1,10 @@
 /**
- * CHARACTER
+ * Character
  * Danny Van Stemp
+ * The game character
  * 05/05/2017
 **/
+
 #ifndef CHARACTER_H
 #define CHARACTER_H
 

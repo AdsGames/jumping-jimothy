@@ -1,8 +1,10 @@
 /**
- * MENU
- * A.D.S. Games
+ * Menu
+ * Menu state
+ * Danny Van Stemp
  * 06/05/2017
 **/
+
 #ifndef MENU_H
 #define MENU_H
 

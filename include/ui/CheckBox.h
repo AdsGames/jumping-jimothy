@@ -1,3 +1,10 @@
+/**
+ * Check Box
+ * Danny Van Stemp and Allan Legemaate
+ * Check Box
+ * 16/10/2017
+ **/
+
 #ifndef CHECKBOX_H
 #define CHECKBOX_H
 

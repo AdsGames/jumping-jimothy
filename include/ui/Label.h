@@ -1,3 +1,10 @@
+/**
+ * Label
+ * Danny Van Stemp and Allan Legemaate
+ * UI Button
+ * 25/11/2018
+ **/
+
 #ifndef LABEL_H
 #define LABEL_H
 

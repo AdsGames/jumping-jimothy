@@ -1,3 +1,11 @@
+/**
+ * Dyanmic Box
+ * Danny Van Stemp
+ * Physics based box that is influenced by
+ *   gravity.
+ * 30/07/2017
+**/
+
 #ifndef DYNAMICBOX_H
 #define DYNAMICBOX_H
 
