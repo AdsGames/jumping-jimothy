@@ -2,6 +2,8 @@
 Jumping Jimothy is a gravity modifying platformer made in C++ using Box2D and Allegro 5.
 
 ## Compiling
+Using the C++ 14 standard
+
 You will need to install:
 
 - [Allegro 5](https://liballeg.org/download.html)
