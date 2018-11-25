@@ -4,6 +4,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "util/Tools.h"
+#include "util/Globals.h"
 
 void DynamicBox::init(float newX, float newY, float newWidth, float newHeight,float newVelX, float newVelY, bool newBodyType,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
 

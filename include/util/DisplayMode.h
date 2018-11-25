@@ -11,21 +11,20 @@
 #include <allegro5/display.h>
 #include <string>
 
-#define NUM_GRAPHICS_MODES 4
-
-// Possible screen modes
-enum {
-  FULLSCREEN_WINDOW_STRETCH,
-  FULLSCREEN_WINDOW_LETTERBOX,
-  FULLSCREEN_WINDOW_CENTER,
-  WINDOWED
-};
-
 class DisplayMode {
   public:
     // Ctor and Dtor
     DisplayMode() {};
     virtual ~DisplayMode() {};
+
+    // Possible screen modes
+    enum {
+      FULLSCREEN_WINDOW_STRETCH,
+      FULLSCREEN_WINDOW_LETTERBOX,
+      FULLSCREEN_WINDOW_CENTER,
+      WINDOWED,
+      NUM_GRAPHICS_MODES
+    };
 
     // Setters
     static void setMode(int);
@@ -34,7 +33,7 @@ class DisplayMode {
     // Getters
     static int getDisplayMode();
     static std::string getDisplayModeString();
-    static std::string getDisplayModeString(int mode);
+    static std::string getDisplayModeString(const int mode);
 
     static int getDrawWidth();
     static int getDrawHeight();
@@ -69,9 +68,9 @@ class DisplayMode {
     static ALLEGRO_DISPLAY** display;
 
     // Private setters to reduce copy code
-    static void setWindowSize(int width, int height);
-    static void setScale(float x, float y);
-    static void setTranslation(int x, int y);
+    static void setWindowSize(const int width, const int height);
+    static void setScale(const float x, const float y);
+    static void setTranslation(const int x, const int y);
 
 };
 

@@ -114,7 +114,7 @@ float tools::stringToFloat(std::string newChar) {
 
 
 // Split string
-std::vector<std::string> tools::split_string(const std::string& p_pcstStr, char delim ) {
+std::vector<std::string> tools::split_string(const std::string& p_pcstStr, const char delim) {
   std::vector<std::string> tokens;
   std::stringstream mySstream(p_pcstStr);
   std::string temp;
@@ -124,7 +124,7 @@ std::vector<std::string> tools::split_string(const std::string& p_pcstStr, char 
 }
 
 // Random number
-int tools::random_int(int min, int max){
+int tools::random_int(const int min, const int max){
   return (rand() % (max + 1 - min)) + min;
 }
 
@@ -141,7 +141,7 @@ void tools::log_message(std::string message, bool debug) {
 }
 
 // Mouse over
-bool tools::mouse_over(int x, int y, int width, int height) {
+bool tools::mouse_over(const int x, const int y, const int width, const int height) {
   return tools::collision(MouseListener::mouse_x, MouseListener::mouse_x,
                           x, x + width,
                           MouseListener::mouse_y, MouseListener::mouse_y,
@@ -149,7 +149,7 @@ bool tools::mouse_over(int x, int y, int width, int height) {
 }
 
 // Mouse released with reset
-bool tools::mouse_clicked(int button, bool reset) {
+bool tools::mouse_clicked(const int button, bool reset) {
   bool old_released = MouseListener::mouse_released & button;
   if (reset) {
     MouseListener::mouse_released &= 0 << button;

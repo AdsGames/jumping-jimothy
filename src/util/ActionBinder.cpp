@@ -3,33 +3,31 @@
 #include "util/KeyListener.h"
 #include "util/joystickListener.h"
 
-binding ActionBinder::game_binding[10];
+ActionBinder::binding ActionBinder::game_binding[10];
 
-
-bool ActionBinder::actionPressed(int newAction){
-
+bool ActionBinder::actionPressed(const int action){
   for(int i=0; i<NUM_BINDABLE_BUTTONS; i++){
-    if(KeyListener::keyPressed[game_binding[newAction].key_code[i]])
+    if(KeyListener::keyPressed[game_binding[action].key_code[i]])
       return true;
-    if(JoystickListener::stickDirections[game_binding[newAction].stick[i]])
+    if(JoystickListener::stickDirections[game_binding[action].stick[i]])
       return true;
 
-     if(JoystickListener::buttonPressed[game_binding[newAction].joystick_button[i]])
+     if(JoystickListener::buttonPressed[game_binding[action].joystick_button[i]])
       return true;
     }
   return false;
 
 }
 
-bool ActionBinder::actionHeld(int newAction){
+bool ActionBinder::actionHeld(const int action){
 
   for(int i=0; i<NUM_BINDABLE_BUTTONS; i++){
-    if(KeyListener::key[game_binding[newAction].key_code[i]])
+    if(KeyListener::key[game_binding[action].key_code[i]])
       return true;
-    if(JoystickListener::stickDirections[game_binding[newAction].stick[i]])
+    if(JoystickListener::stickDirections[game_binding[action].stick[i]])
       return true;
 
-    if(JoystickListener::button[game_binding[newAction].joystick_button[i]])
+    if(JoystickListener::button[game_binding[action].joystick_button[i]])
       return true;
     }
   return false;

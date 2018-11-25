@@ -154,7 +154,7 @@ Editor::Editor(){
   set_explosive_ui_status();
 
 
-  DisplayMode::setMode(WINDOWED);
+  DisplayMode::setMode(DisplayMode::WINDOWED);
 
 
   // Is it edit mode?

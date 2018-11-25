@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-	<entry sfx_enabled="1"/>
+	<entry sfx_enabled="0"/>
 	<entry music_enabled="0"/>
 	<entry graphics_mode="3"/>
 	<entry draw_cursor="0"/>
 	<entry joystick_mode="0"/>
 	<entry joystick_data="None detected."/>
+	<entry level_to_start="1"/>
 </data>
 

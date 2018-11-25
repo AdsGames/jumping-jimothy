@@ -1,6 +1,7 @@
 #include "game/Goat.h"
 
 #include "util/Tools.h"
+#include "util/Globals.h"
 
 // We'll use this for the goat
 void Goat::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGameWorld, Character *newCharacter){

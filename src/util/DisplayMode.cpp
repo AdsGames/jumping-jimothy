@@ -30,33 +30,32 @@ std::string DisplayMode::getDisplayModeString() {
 }
 
 
-std::string DisplayMode::getDisplayModeString(int mode) {
+std::string DisplayMode::getDisplayModeString(const int mode) {
 // Window mode
   switch (mode) {
     // Fullscreen windowed stretch
-    case FULLSCREEN_WINDOW_STRETCH:
+    case DisplayMode::FULLSCREEN_WINDOW_STRETCH:
       return "Borderless Fullscreen (Stretched)";
       break;
 
     // Fullscreen window center
-    case FULLSCREEN_WINDOW_CENTER:
+    case DisplayMode::FULLSCREEN_WINDOW_CENTER:
       return "Borderless Fullscreen (Centered)";
       break;
 
     // Fullscreen window center
-    case FULLSCREEN_WINDOW_LETTERBOX:
+    case DisplayMode::FULLSCREEN_WINDOW_LETTERBOX:
       return "Borderless Fullscreen (Letterbox)";
       break;
 
     // Windowed
-    case WINDOWED:
+    case DisplayMode::WINDOWED:
       return "Windowed";
       break;
 
     // Invalid mode
     default:
       return "Invalid Display Mode";
-      break;
   }
 }
 
@@ -107,25 +106,25 @@ float DisplayMode::getScaleY() {
 
 
 // Set window size
-void DisplayMode::setWindowSize(int width, int height) {
+void DisplayMode::setWindowSize(const int width, const int height) {
   window_w = width;
   window_h = height;
 }
 
 // Set scale
-void DisplayMode::setScale(float width, float height) {
+void DisplayMode::setScale(const float width, const float height) {
   scale_x = width;
   scale_y = height;
 }
 
 // Set translation
-void DisplayMode::setTranslation(int x, int y) {
+void DisplayMode::setTranslation(const int x, const int y) {
   translation_x = x;
   translation_y = y;
 }
 
 // Change display mode
-void DisplayMode::setMode(int mode) {
+void DisplayMode::setMode(const int mode) {
   // Display hasnt been set
   if (display == nullptr) {
     tools::log_message("Display not set.", true);
@@ -151,7 +150,7 @@ void DisplayMode::setMode(int mode) {
   // Window mode
   switch (mode) {
     // Fullscreen windowed stretch
-    case FULLSCREEN_WINDOW_STRETCH:
+    case DisplayMode::FULLSCREEN_WINDOW_STRETCH:
       // Set flags
       al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 
@@ -163,7 +162,7 @@ void DisplayMode::setMode(int mode) {
       break;
 
     // Fullscreen window center
-    case FULLSCREEN_WINDOW_CENTER:
+    case DisplayMode::FULLSCREEN_WINDOW_CENTER:
       // Set flags
       al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 
@@ -175,7 +174,7 @@ void DisplayMode::setMode(int mode) {
       break;
 
     // Fullscreen window center
-    case FULLSCREEN_WINDOW_LETTERBOX:
+    case DisplayMode::FULLSCREEN_WINDOW_LETTERBOX:
       // Set flags
       al_set_new_display_flags(ALLEGRO_FULLSCREEN_WINDOW);
 
@@ -190,7 +189,7 @@ void DisplayMode::setMode(int mode) {
       break;
 
     // Windowed
-    case WINDOWED:
+    case DisplayMode::WINDOWED:
       // Set flags
       al_set_new_display_flags(ALLEGRO_WINDOWED);
 
@@ -208,7 +207,6 @@ void DisplayMode::setMode(int mode) {
     default:
       tools::log_message("WARNING: Invalid display mode passed.");
       return;
-      break;
   }
 
   // Create display

@@ -19,7 +19,7 @@ class KeyListener
 
     static bool anyKeyPressed;
 
-    void on_event( ALLEGRO_EVENT_TYPE event_type, int keycode);
+    void on_event( ALLEGRO_EVENT_TYPE event_type, const int keycode);
     void update();
 
     static bool key[ALLEGRO_KEY_MAX];

@@ -9,16 +9,15 @@
 #ifndef MOUSELISTENER_H
 #define MOUSELISTENER_H
 
-#define MAX_MOUSE_BUTTONS 3
-
-#define MOUSE_LEFT 1
-#define MOUSE_RIGHT 2
-#define MOUSE_CENTER 4
-
 class MouseListener {
   public:
     MouseListener() {};
     virtual ~MouseListener() {};
+
+    static const int MAX_MOUSE_BUTTONS = 3;
+    static const int MOUSE_LEFT = 1;
+    static const int MOUSE_RIGHT = 2;
+    static const int MOUSE_CENTER = 4;
 
     void update();
 

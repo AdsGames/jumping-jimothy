@@ -16,13 +16,13 @@ class Sound {
   public:
     Sound();
     virtual ~Sound();
-    void load_wav(std::string);
-    void load_ogg(std::string);
+    void load_wav(std::string path);
+    void load_ogg(std::string path);
     void play();
     void play(float volume);
     void stop();
-    void play_random_frequency(int,int);
-    void play_at_volume(float newVolume);
+    void play_random_frequency(const int min,const int max);
+    void play_at_volume(const float volume);
     ALLEGRO_SAMPLE_ID *getSampleId();
     ALLEGRO_SAMPLE *getSample();
 

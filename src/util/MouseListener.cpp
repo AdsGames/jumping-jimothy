@@ -39,7 +39,7 @@ void MouseListener::update() {
     mouse_released &= ~(1 << i);
 
     // Down or not
-    int check_state = ((state.buttons >> i) & 1);
+    const int check_state = ((state.buttons >> i) & 1);
     mouse_button = (mouse_button & ~(1 << i)) | (check_state << i);
 
     // Pressed since last tick?
