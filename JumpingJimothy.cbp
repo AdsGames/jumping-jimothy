@@ -22,7 +22,6 @@
 					<Add option="-Wmain" />
 					<Add option="-Wextra" />
 					<Add option="-std=c++14" />
-					<Add option="-g" />
 					<Add option="-Wno-strict-aliasing" />
 					<Add option="-Wno-shadow" />
 					<Add option="-Wno-unused-parameter" />
@@ -51,6 +50,7 @@
 				<Option compiler="gcc" />
 				<Option use_console_runner="0" />
 				<Compiler>
+					<Add option="-std=c++14" />
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
 					<Add directory="include" />
@@ -99,7 +99,6 @@
 		<Unit filename="include/ui/UIHandler.h" />
 		<Unit filename="include/util/ActionBinder.h" />
 		<Unit filename="include/util/Config.h" />
-		<Unit filename="include/util/Controls.h" />
 		<Unit filename="include/util/DisplayMode.h" />
 		<Unit filename="include/util/Globals.h" />
 		<Unit filename="include/util/JoystickCodes.h" />
@@ -131,7 +130,6 @@
 		<Unit filename="src/ui/UIHandler.cpp" />
 		<Unit filename="src/util/ActionBinder.cpp" />
 		<Unit filename="src/util/Config.cpp" />
-		<Unit filename="src/util/Controls.cpp" />
 		<Unit filename="src/util/DisplayMode.cpp" />
 		<Unit filename="src/util/Globals.cpp" />
 		<Unit filename="src/util/JoystickListener.cpp" />
