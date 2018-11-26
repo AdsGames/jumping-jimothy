@@ -396,8 +396,8 @@ void Game::update(){
     }
     else{
       tools::log_message("Level " + tools::toString(level-1) + " completed, loading next level.");
-      LevelSelect::setLevelComplete(level-1);
-      LevelSelect::writeLevelData();
+      Config::setValue("level_" + tools::toString(level - 1) + "_completed", true);
+
       if( !testing)
         reset();
       else{

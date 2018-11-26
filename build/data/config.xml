@@ -7,5 +7,21 @@
 	<entry joystick_mode="0"/>
 	<entry joystick_data="None detected."/>
 	<entry level_to_start="1"/>
+	<entry level_1_completed="0"/>
+	<entry level_0_completed="0"/>
+	<entry level_2_completed="0"/>
+	<entry level_3_completed="0"/>
+	<entry level_4_completed="0"/>
+	<entry level_5_completed="0"/>
+	<entry level_6_completed="0"/>
+	<entry level_7_completed="0"/>
+	<entry level_8_completed="0"/>
+	<entry level_9_completed="0"/>
+	<entry level_10_completed="0"/>
+	<entry level_11_completed="0"/>
+	<entry level_12_completed="0"/>
+	<entry level_13_completed="0"/>
+	<entry level_14_completed="0"/>
+	<entry level_15_completed="0"/>
 </data>
 
