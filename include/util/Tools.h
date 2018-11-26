@@ -68,8 +68,8 @@ class tools{
     }
 
     // Convert types to string
-    static int stringToInt(std::string);
-    static float stringToFloat(std::string);
+    static int stringToInt(std::string str);
+    static float stringToFloat(std::string str);
 
     // Split string
     static std::vector<std::string> split_string(const std::string& p_pcstStr, const char delim);

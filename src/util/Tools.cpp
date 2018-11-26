@@ -80,36 +80,40 @@ int tools::get_text_height(ALLEGRO_FONT *newFont, std::string newText){
 }
 
 // Convert string to int
-int tools::stringToInt(std::string newString) {
+int tools::stringToInt(std::string str) {
+  if (str == "")
+    return 0;
   int result;
-  std::stringstream(newString) >> result;
+  std::stringstream(str) >> result;
   return result;
 }
 
 // Convert char to float
-float tools::stringToFloat(std::string newChar) {
+float tools::stringToFloat(std::string str) {
+  if (str == "")
+    return 0.0f;
   float number = 0.0f;
   int sign = 1;
   // Parse string
   // Negative
-  if (newChar[0] == '-'){
+  if (str[0] == '-'){
     sign = -1;
-    newChar = newChar.substr(1, newChar.length());
+    str = str.substr(1, str.length());
   }
   // Location of decimal
-  int decimal_loc = newChar.length();
-  for (unsigned int i = 0; i < newChar.length(); i++){
-    if (newChar[i] == '.'){
+  int decimal_loc = str.length();
+  for (unsigned int i = 0; i < str.length(); i++){
+    if (str[i] == '.'){
       decimal_loc = i;
-      newChar = newChar.substr(0, i) + newChar.substr(i + 1, newChar.length() - i);
+      str = str.substr(0, i) + str.substr(i + 1, str.length() - i);
     }
   }
   // Numbers
-  for (unsigned int i = 0; i < newChar.length(); i++){
-    int tempNumber = int(newChar[i]) - 48;
-    number += tempNumber * pow(10, (newChar.length()) - (i + 1));
+  for (unsigned int i = 0; i < str.length(); i++){
+    int tempNumber = int(str[i]) - 48;
+    number += tempNumber * pow(10, (str.length()) - (i + 1));
   }
-  return (number / float(pow(10, newChar.length() - decimal_loc))) * sign;
+  return (number / float(pow(10, str.length() - decimal_loc))) * sign;
 }
 
 
