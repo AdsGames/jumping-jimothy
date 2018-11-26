@@ -25,8 +25,6 @@
 #include "util/MusicManager.h"
 #include "util/Globals.h"
 
-#include "menu/LevelSelect.h"
-
 bool Game::testing = false;
 const char* Game::testing_file_name = nullptr;
 
