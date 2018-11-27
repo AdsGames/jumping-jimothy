@@ -11,6 +11,7 @@
 #include <allegro5/allegro_image.h>
 
 #include "State.h"
+#include "ui/UIHandler.h"
 #include "ui/Button.h"
 #include "util/Sound.h"
 
@@ -32,18 +33,10 @@ class Menu : public State {
     void draw();
 
   private:
-
-    static const int BUTTON_COUNT = 5;
-    Button menu_buttons[BUTTON_COUNT];
-
     // Images
     ALLEGRO_BITMAP *title;
     ALLEGRO_BITMAP *title_overlay;
     ALLEGRO_BITMAP *title_shine;
-    ALLEGRO_BITMAP *prompt_image;
-    ALLEGRO_BITMAP *highlight;
-
-    ALLEGRO_BITMAP *cursor;
 
     ALLEGRO_BITMAP *logo;
 
@@ -51,14 +44,10 @@ class Menu : public State {
     ALLEGRO_FONT *credits_font;
     ALLEGRO_FONT *button_font;
 
-    int highlight_y_destination = 500;
-    int highlight_y = 500;
+    UIHandler menu_ui;
 
-    bool joystick_direction_hit = false;
     bool credits_menu;
     int counter_title;
-    int counter_play;
-    bool counter_prompt;
 
 };
 

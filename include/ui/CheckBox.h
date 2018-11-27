@@ -36,6 +36,9 @@ class CheckBox : public UIElement {
     // Get toggled
     bool getToggled();
 
+    // Enable focus
+    virtual bool canFocus() override;
+
   private:
     // Width of checkbox
     int checkbox_size;

@@ -13,7 +13,7 @@ extern int stateID;
 extern int nextState;
 
 // Set next state
-extern void set_next_state( int newState );
+extern void set_next_state(int newState);
 
 //Game states
 enum programStates{
@@ -25,7 +25,7 @@ enum programStates{
   STATE_EDIT,
   STATE_EXIT,
   STATE_LEVELSELECT,
-  STATE_OPTIONS,
+  STATE_OPTIONS
 };
 
 // State
@@ -34,7 +34,7 @@ class State{
     // Deconstructor
     virtual ~State() {};
 
-    int getStateID(){
+    int getStateID() {
       return stateID;
     }
 

@@ -1,8 +1,10 @@
 #include "ui/UIElement.h"
 
 #include <allegro5/allegro5.h>
+#include <allegro5/allegro_primitives.h>
 
 #include "util/MouseListener.h"
+#include "util/KeyListener.h"
 #include "util/Tools.h"
 
 // Defaults
@@ -28,6 +30,7 @@ UIElement::UIElement() {
   this -> transparent_cell_fill = false;
   this -> hover_effect = true;
   this -> bitmap_rotation_angle = 0;
+  this -> focused = false;
 }
 
 UIElement::UIElement(const int x, const int y, std::string text, std::string id, ALLEGRO_FONT *font)
@@ -77,6 +80,11 @@ void UIElement::show() {
   this -> visible = true;
 }
 
+// Is visible or not
+bool UIElement::isVisible() {
+  return visible;
+}
+
 // Toggle visiblity
 void UIElement::toggleVisibility() {
   visible =! visible;
@@ -90,6 +98,11 @@ void UIElement::disable() {
 // Enable element
 void UIElement::enable() {
   disabled = false;
+}
+
+// Is enabled or not
+bool UIElement::isEnabled() {
+  return !disabled;
 }
 
 // Togle disabled
@@ -210,6 +223,21 @@ void UIElement::setHeight(const int height) {
   this -> height = height;
 }
 
+// This element can focus
+bool UIElement::canFocus() {
+  return false;
+}
+
+// Focus
+void UIElement::focus() {
+  this -> focused = true;
+}
+
+// Unfocus
+void UIElement::unfocus() {
+  this -> focused = false;
+}
+
 // Set border thickness
 void UIElement::setBorderThickness(const int thickness) {
   border_thickness = thickness;
@@ -232,5 +260,6 @@ bool UIElement::hover() {
 
 // True if clicked
 bool UIElement::clicked() {
-  return !disabled && hover() && tools::mouse_clicked(MouseListener::MOUSE_LEFT);
+  return !disabled && ((hover() && tools::mouse_clicked(MouseListener::MOUSE_LEFT)) ||
+                       (focused && (KeyListener::keyPressed[ALLEGRO_KEY_ENTER])));
 }

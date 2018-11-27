@@ -1,5 +1,7 @@
 #include "ui/Button.h"
 
+#include <allegro5/allegro_primitives.h>
+
 #include "util/Tools.h"
 
 // Default empty button
@@ -19,13 +21,13 @@ void Button::draw() {
     return;
 
   // Red value
-  const int new_r = tools::negative_clamp_thing(0, 255, (int)((background_colour.r * 255) + (40 * hover())));
+  const int new_r = tools::negative_clamp_thing(0, 255, (int)((background_colour.r * 255) + (40 * (hover() || focused))));
 
   // Green value
-  const int new_g = tools::negative_clamp_thing(0, 255, (int)((background_colour.g * 255) + (40 * hover())));
+  const int new_g = tools::negative_clamp_thing(0, 255, (int)((background_colour.g * 255) + (40 * (hover() || focused))));
 
   // Blue value
-  const int new_b = tools::negative_clamp_thing(0, 255, (int)((background_colour.b * 255) + (40 * hover())));
+  const int new_b = tools::negative_clamp_thing(0, 255, (int)((background_colour.b * 255) + (40 * (hover() || focused))));
 
   // Calculated hover colour
   ALLEGRO_COLOR hover_colour = al_map_rgba(new_r, new_g, new_b, alpha);
@@ -62,6 +64,11 @@ void Button::draw() {
     else
       al_draw_bitmap(image, x + padding_x, y + padding_y, 0);
   }
+}
+
+// Buttons can focus
+bool Button::canFocus() {
+  return true;
 }
 
 // Update button

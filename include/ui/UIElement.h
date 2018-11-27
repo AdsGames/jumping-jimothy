@@ -8,7 +8,6 @@
 #ifndef UIELEMENT_H
 #define UIELEMENT_H
 
-#include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 
 #include <string>
@@ -40,6 +39,9 @@ class UIElement {
     // Show element
     void show();
 
+    // Is visible or not
+    bool isVisible();
+
     // Toggle visiblity
     void toggleVisibility();
 
@@ -48,6 +50,9 @@ class UIElement {
 
     // Enable element
     void enable();
+
+    // Is enabled or not
+    bool isEnabled();
 
     // Togle disabled
     void toggleDisabled();
@@ -111,6 +116,15 @@ class UIElement {
 
     // Set height
     void setHeight(const int height);
+
+    // Can focus
+    virtual bool canFocus();
+
+    // Focus
+    void focus();
+
+    // Unfocus
+    void unfocus();
 
     // Set border thickness
     void setBorderThickness(const int thickness);
@@ -191,6 +205,9 @@ class UIElement {
 
     // Unique id of element
     std::string id;
+
+    // Focused
+    bool focused;
 
 };
 

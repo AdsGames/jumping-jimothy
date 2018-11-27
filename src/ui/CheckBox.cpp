@@ -1,5 +1,7 @@
 #include "ui/CheckBox.h"
 
+#include <allegro5/allegro_primitives.h>
+
 // Default constructor
 CheckBox::CheckBox()
   : UIElement()  {
@@ -43,12 +45,12 @@ void CheckBox::draw() {
 
   // Backdrop
   if (visible_background) {
-    al_draw_filled_rectangle(x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba(200 + 20 * hover(), 200 + 20 * hover(), 200 + 20 * hover(),alpha));
+    al_draw_filled_rectangle(x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba(200 + 20 * hover(), 200 + 20 * (hover() || focused), 200 + 20 * (hover() || focused),alpha));
     al_draw_rectangle(x, y, x + width + padding_x * 2, y + height + padding_y * 2, al_map_rgba(0, 0, 0,alpha), 2);
   }
 
   // Checkbox
-  al_draw_filled_rectangle(x + width - checkbox_size, y + padding_y, x + width, y + padding_y + checkbox_size, al_map_rgba(200 + 20 * hover(), 200 + 20 * hover(), 200 + 20 * hover(),alpha));
+  al_draw_filled_rectangle(x + width - checkbox_size, y + padding_y, x + width, y + padding_y + checkbox_size, al_map_rgba(200 + 20 * (hover() || focused), 200 + 20 * (hover() || focused), 200 + 20 * (hover() || focused),alpha));
   al_draw_rectangle(x + width - checkbox_size, y + padding_y, x + width, y + padding_y + checkbox_size, al_map_rgba(0, 0, 0,alpha), 2);
 
   // Fill box
@@ -75,4 +77,9 @@ void CheckBox::setChecked(const bool checked) {
 // Set checked state
 bool CheckBox::getToggled() {
   return toggled;
+}
+
+// Buttons can focus
+bool CheckBox::canFocus() {
+  return true;
 }

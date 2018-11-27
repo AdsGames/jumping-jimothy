@@ -8,239 +8,160 @@
 #include "util/MusicManager.h"
 
 #include "util/KeyListener.h"
-#include "util/JoystickListener.h"
-#include "util/MouseListener.h"
 
 // Init menu
 Menu::Menu(){
-
-  credits_menu=false;
-
-  menu_font = al_load_ttf_font( "fonts/munro.ttf", 18, 0);
-  button_font = al_load_ttf_font( "fonts/munro.ttf", 24, 0);
-
-  credits_font = al_load_ttf_font( "fonts/munro.ttf", 32, 0);
-  cursor = tools::load_bitmap_ex("images/cursor.png");
-
-  highlight = tools::load_bitmap_ex("images/highlight.png");
+  credits_menu = false;
 
   int button_offset_x = 40;
-
-
-  menu_buttons[menu_button_edit] = Button(button_offset_x, 550, "Level Editor", "btnEditor",  button_font);
-  menu_buttons[menu_button_edit].setSize(200, 20);
-  menu_buttons[menu_button_edit].setVisibleBackground(false);
-  menu_buttons[menu_button_edit].setTextColour(al_map_rgb(255,255,255));
-
-
-  menu_buttons[menu_button_exit] = Button(button_offset_x, 700, "Exit", "btnExit", button_font);
-  menu_buttons[menu_button_exit].setSize(200, 20);
-  menu_buttons[menu_button_exit].setVisibleBackground(false);
-  menu_buttons[menu_button_exit].setTextColour(al_map_rgb(255,255,255));
-
-
-
-
-  menu_buttons[menu_button_play] = Button(button_offset_x, 500, "Play", "btnPlay", button_font);
-  menu_buttons[menu_button_play].setSize(200, 20);
-  menu_buttons[menu_button_play].setVisibleBackground(false);
-  menu_buttons[menu_button_play].setTextColour(al_map_rgb(255,255,255));
-
-
-
-  menu_buttons[menu_button_help] = Button(button_offset_x, 650, "Credits", "btnCredits", button_font);
-  menu_buttons[menu_button_help].setSize(200, 20);
-  menu_buttons[menu_button_help].setVisibleBackground(false);
-  menu_buttons[menu_button_help].setTextColour(al_map_rgb(255,255,255));
-
-  menu_buttons[menu_button_options] = Button(button_offset_x, 600, "Settings", "btnSettings", button_font);
-  menu_buttons[menu_button_options].setSize(200, 20);
-  menu_buttons[menu_button_options].setVisibleBackground(false);
-  menu_buttons[menu_button_options].setTextColour(al_map_rgb(255,255,255));
-
-
 
   title = tools::load_bitmap_ex("images/title_static.png");
   title_overlay = tools::load_bitmap_ex("images/title_overlay.png");
   title_shine = tools::load_bitmap_ex("images/title_shine.png");
   logo = tools::load_bitmap_ex("images/logo.png");
 
-  #if defined(RELEASE)
-    if(!MusicManager::menu_music.getIsPlaying())
-      MusicManager::menu_music.play();
-  #endif
+  menu_font = al_load_ttf_font("fonts/munro.ttf", 18, 0);
+  button_font = al_load_ttf_font("fonts/munro.ttf", 24, 0);
+  credits_font = al_load_ttf_font("fonts/munro.ttf", 32, 0);
 
-  // Load prompt
-  prompt_image = tools::load_bitmap_ex("images/prompt.png");
 
-  // Init counters
-  counter_title = 251;
-  counter_play = 0;
+  menu_ui.addElement(new Button(button_offset_x, 500, "Play", "btnPlay", button_font));
+  menu_ui.getElementById("btnPlay") -> setSize(179, 20);
+  //menu_buttons[menu_button_play].setVisibleBackground(false);
+  //menu_buttons[menu_button_play].setTextColour(al_map_rgb(255,255,255));
+
+  menu_ui.addElement(new Button(button_offset_x, 550, "Level Editor", "btnEditor",  button_font));
+  menu_ui.getElementById("btnEditor") -> setSize(179, 20);
+  //menu_buttons[menu_button_edit].setVisibleBackground(false);
+  //menu_buttons[menu_button_edit].setTextColour(al_map_rgb(255,255,255));
+
+  menu_ui.addElement(new Button(button_offset_x, 600, "Settings", "btnSettings", button_font));
+  menu_ui.getElementById("btnSettings") -> setSize(179, 20);
+  //menu_buttons[menu_button_options].setVisibleBackground(false);
+  //menu_buttons[menu_button_options].setTextColour(al_map_rgb(255,255,255));
+
+  menu_ui.addElement(new Button(button_offset_x, 650, "Credits", "btnCredits", button_font));
+  menu_ui.getElementById("btnCredits") -> setSize(179, 20);
+  //menu_buttons[menu_button_help].setVisibleBackground(false);
+  //menu_buttons[menu_button_help].setTextColour(al_map_rgb(255,255,255));
+
+  menu_ui.addElement(new Button(button_offset_x, 700, "Exit", "btnExit", button_font));
+  menu_ui.getElementById("btnExit") -> setSize(179, 20);
+  //menu_buttons[menu_button_exit].setVisibleBackground(false);
+  //menu_buttons[menu_button_exit].setTextColour(al_map_rgb(255,255,255));
+
+  if (!MusicManager::menu_music.getIsPlaying())
+    MusicManager::menu_music.play();
+
+  counter_title = 0;
 }
 
 // Destory menu
 Menu::~Menu(){
-  // Delete images
+  // Destroy images
   al_destroy_bitmap(title);
+  al_destroy_bitmap(title_overlay);
+  al_destroy_bitmap(title_shine);
+  al_destroy_bitmap(logo);
+
+  // Destroy fonts
+  al_destroy_font(menu_font);
+  al_destroy_font(button_font);
+  al_destroy_font(credits_font);
 }
 
 // Update animation and wait for input
 void Menu::update(){
-  if(!credits_menu){
-     // Update buttons
-    for( int i = 0; i < BUTTON_COUNT; i++){
-      menu_buttons[i].update();
-    }
+  // Update UI
+  menu_ui.update();
 
-    if(menu_buttons[menu_button_play].clicked() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==500))){
+  // Main menu
+  if(!credits_menu){
+    // Click play
+    if (menu_ui.getElementById("btnPlay") -> clicked()) {
       set_next_state(STATE_LEVELSELECT);
     }
 
-    if(menu_buttons[menu_button_edit].clicked() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==550))){
+    // Click editor
+    if (menu_ui.getElementById("btnEditor") -> clicked()) {
       set_next_state(STATE_EDIT);
     }
 
-    if(menu_buttons[menu_button_exit].clicked() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==700))){
+    // Click editor
+    if (menu_ui.getElementById("btnExit") -> clicked()) {
       set_next_state(STATE_EXIT);
     }
 
-    if(menu_buttons[menu_button_options].clicked() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==600))){
+    // Click settings
+    if (menu_ui.getElementById("btnSettings") -> clicked()) {
       set_next_state(STATE_OPTIONS);
     }
 
-    if(menu_buttons[menu_button_help].clicked() || (JoystickListener::buttonReleased[JOY_XBOX_A] && (highlight_y_destination==650))){
-      JoystickListener::anyButtonReleased=false;
-      credits_menu=true;
+    // Click credits
+    if (menu_ui.getElementById("btnCredits") -> clicked()) {
+      credits_menu = true;
     }
   }
-  if(KeyListener::anyKeyPressed || JoystickListener::anyButtonReleased){
+
+  // Exit credits
+  // TODO replace with less hacked version
+  if (KeyListener::anyKeyPressed) {
     credits_menu = false;
-    JoystickListener::anyButtonReleased=false;
   }
 
-  if((JoystickListener::stickDirections[LEFT_STICK_UP] || JoystickListener::stickDirections[DPAD_UP2]) && !joystick_direction_hit){
-    if(highlight_y_destination<700)
-      highlight_y_destination+=50;
-  }
-
-  if((JoystickListener::stickDirections[LEFT_STICK_DOWN] || JoystickListener::stickDirections[DPAD_DOWN])  && !joystick_direction_hit){
-    if(highlight_y_destination>500)
-      highlight_y_destination-=50;
-  }
-
-  if(JoystickListener::stickDirections[LEFT_STICK_DOWN] || JoystickListener::stickDirections[LEFT_STICK_UP] || JoystickListener::stickDirections[DPAD_DOWN] || JoystickListener::stickDirections[DPAD_UP2]){
-    joystick_direction_hit=true;
-    Config::setValue("joystick_mode", true);
-  }
-  else{
-    Config::setValue("joystick_mode", false);
-  }
-
-  if(MouseListener::mouse_moved) {
-    Config::setValue("joystick_mode", false);
-  }
-
-
-  if(highlight_y>highlight_y_destination)highlight_y-=10;
-  if(highlight_y<highlight_y_destination)highlight_y+=10;
-
-
-  // Add to counters
-  counter_title ++;
-  counter_play ++;
-
-  // Animation roll arounds
-  counter_title = (counter_title >= 400) ? 0 : counter_title;
-  counter_prompt = (counter_play >= 50) ? !counter_prompt : counter_prompt;
-  counter_play = (counter_play >= 50) ? 0 : counter_play;
-
-  if(!Config::getBooleanValue("joystick_mode")){
-    if(menu_buttons[menu_button_play].hover())highlight_y_destination=500;
-    if(menu_buttons[menu_button_edit].hover())highlight_y_destination=550;
-    if(menu_buttons[menu_button_options].hover())highlight_y_destination=600;
-    if(menu_buttons[menu_button_help].hover())highlight_y_destination=650;
-    if(menu_buttons[menu_button_exit].hover())highlight_y_destination=700;
-  }
-
-  // Click anywhere
-  //if( KeyListener::anyKeyPressed || JoystickListener::anyButtonPressed)
-  //   set_next_state(STATE_GAME);
+  // Counter for title animation
+  counter_title = (counter_title + 1) % 300;
 }
 
 // Draw images to screen
 void Menu::draw(){
-
   // Background
-  al_clear_to_color( al_map_rgb(50,50,50));
+  al_clear_to_color(al_map_rgb(50, 50, 50));
 
-  if(!credits_menu){
+  // Menu updates
+  if (!credits_menu) {
+    // Offsets for title
+    const int title_offset_x = 150;
+    const int title_offset_y = 50;
 
-
-    int title_offset_x = 150;
-    int title_offset_y = 50;
     // Title
-    al_draw_scaled_bitmap( title, 0,0, 175, 160, 150+title_offset_x, 50+title_offset_y, 612,560, 0);
-    if(counter_title<50)al_draw_scaled_bitmap( title_shine, 0,0, 60, 150, 150+title_offset_x+counter_title*10, 50+title_offset_y, 210,525, 0);
+    al_draw_scaled_bitmap(title, 0, 0, 175, 160, 150 + title_offset_x, 50 + title_offset_y, 612, 560, 0);
 
-    al_draw_scaled_bitmap( title_overlay, 0,0, 200, 160, 150+title_offset_x, 50+title_offset_y, 700,560, 0);
+    // Title shine
+    if (counter_title < 50)
+      al_draw_scaled_bitmap(title_shine, 0, 0, 60, 150, 150 + title_offset_x + counter_title * 10, 50 + title_offset_y, 210, 525, 0);
 
-    //al_draw_bitmap(title,300,300,0);
-    //al_draw_bitmap(playbutton_frame,297,562,0);
+    // Title top layer
+    al_draw_scaled_bitmap(title_overlay, 0, 0, 200, 160, 150 + title_offset_x, 50 + title_offset_y, 700, 560, 0);
 
-    //int playbutton_x = 50;
-    //int playbutton_y = 605;
+    // Top right info text
+    al_draw_textf(menu_font, al_map_rgb(255, 255, 255), 1010, 15, 2, "TOJam 12, 2017");
+    al_draw_textf(menu_font, al_map_rgb(255, 255, 255), 1010, 35, 2, "Danny Van Stemp");
+    al_draw_textf(menu_font, al_map_rgb(255, 255, 255), 1010, 55, 2, "Allan Legemaate");
+    al_draw_textf(menu_font, al_map_rgb(255, 255, 255), 1010, 75, 2, "Sullivan Stobo");
+    al_draw_textf(menu_font, al_map_rgb(255, 255, 255), 1010, 95, 2, "Max Keleher");
 
-
-    //if(menu_buttons[menu_button_play].hover())
-    //  al_draw_scaled_bitmap( playbutton_frame_hover, 0, 0, 70, 38,playbutton_x-12, playbutton_y-12, 280, 152, 0);
-   // else
-  //    al_draw_scaled_bitmap( playbutton_frame, 0, 0, 70, 38,playbutton_x-12, playbutton_y-12, 280, 152, 0);
-//
-  //  al_draw_scaled_bitmap( play_images[counter_play], 0, 0, 64, 32,playbutton_x, playbutton_y, 256, 128, 0);
-
-      al_draw_textf( menu_font, al_map_rgb( 255, 255, 255), 1010, 15, 2, "TOJam 12, 2017");
-    al_draw_textf( menu_font, al_map_rgb( 255, 255, 255), 1010, 35, 2, "Danny Van Stemp");
-    al_draw_textf( menu_font, al_map_rgb( 255, 255, 255), 1010, 55, 2, "Allan Legemaate");
-    al_draw_textf( menu_font, al_map_rgb( 255, 255, 255), 1010, 75, 2, "Sullivan Stobo");
-    al_draw_textf( menu_font, al_map_rgb( 255, 255, 255), 1010, 95, 2, "Max Keleher");
-
-     // Update buttons
-    for( int i = 0; i < BUTTON_COUNT; i++){
-      menu_buttons[i].draw();
-    }
-
-
-
-  al_draw_bitmap(highlight,40,highlight_y,0);
+    // Draw buttons
+    menu_ui.draw();
   }
 
-  if(credits_menu){
-
-    int padding=50;
-    int x_location=395;
-    al_draw_bitmap(logo, 730,50,0);
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 40+padding, 1,"Written in C++ using Code::Blocks");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 80+padding, 1,"Allegro 5 for graphics");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 120+padding, 1,"Box2D for physics");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 160+padding, 1,"RapidXml for level loading/saving");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 240+padding, 1,"Music/code by Allan Legemaate");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 280+padding, 1,"Art/game design by Sullivan Stobo");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 320+padding, 1,"Level/game design by Max Keleher");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 360+padding, 1,"Lead code by Danny Van Stemp");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 400+padding, 1, "Art made in Paint.net and Asperite");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), x_location, 440+padding, 1,"Music made in FL Studio");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 835, 320, 1,"Made for TOJam 12");
-    al_draw_textf( credits_font, al_map_rgb( 255, 255, 255), 835, 280, 1,"ADS Games, 2017");
-
-    al_draw_textf( credits_font, al_map_rgb( 255, 100, 100), 40, 720, 0,"Press any key to return.");
+  // Credits menu
+  else {
+    const int padding = 50;
+    const int x_location = 395;
+    al_draw_bitmap(logo, 730, 50, 0);
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location, 40 + padding, 1, "Written in C++ using Code::Blocks");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location, 80 + padding, 1, "Allegro 5 for graphics");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location, 120 + padding, 1, "Box2D for physics");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location, 160 + padding, 1, "RapidXml for level loading/saving");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location, 240 + padding, 1, "Music/code by Allan Legemaate");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location, 280 + padding, 1, "Art/game design by Sullivan Stobo");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location, 320 + padding, 1, "Level/game design by Max Keleher");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location, 360 + padding, 1, "Lead code by Danny Van Stemp");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location, 400 + padding, 1, "Art made in Paint.net and Asperite");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location, 440 + padding, 1, "Music made in FL Studio");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), 835, 320, 1, "Made for TOJam 12");
+    al_draw_textf(credits_font, al_map_rgb(255, 255, 255), 835, 280, 1, "ADS Games, 2017");
+    al_draw_textf(credits_font, al_map_rgb(255, 100, 100), 40, 720, 0, "Press any key to return.");
   }
-
-
-
-  if(Config::getBooleanValue("draw_cursor"))
-    al_draw_bitmap(cursor,MouseListener::mouse_x,MouseListener::mouse_y,0);
-
-
-
-
 }

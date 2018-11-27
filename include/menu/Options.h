@@ -8,7 +8,6 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#include <string>
 #include <allegro5/allegro_font.h>
 
 #include "ui/UIHandler.h"
@@ -32,12 +31,6 @@ class Options : public State {
 
     UIHandler OptionsUI;
 
-    ALLEGRO_BITMAP *cursor;
-    ALLEGRO_BITMAP *highlight = nullptr;
-
-    int highlight_y = 100;
-    int highlight_y_destination = 100;
-    bool joystick_direction_hit = false;
     int temp_graphics_mode = 0;
 
 };
