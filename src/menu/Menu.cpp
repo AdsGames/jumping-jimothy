@@ -22,12 +22,6 @@ Menu::Menu(){
   credits_font = al_load_ttf_font( "fonts/munro.ttf", 32, 0);
   cursor = tools::load_bitmap_ex("images/cursor.png");
 
-
-    // Title image
-  button_edit = tools::load_bitmap_ex("images/button_edit.png");
-  button_help = tools::load_bitmap_ex("images/button_help.png");
-  button_exit = tools::load_bitmap_ex("images/button_exit.png");
-  button_options = tools::load_bitmap_ex("images/gear.png");
   highlight = tools::load_bitmap_ex("images/highlight.png");
 
   int button_offset_x = 40;
@@ -71,20 +65,10 @@ Menu::Menu(){
   title_shine = tools::load_bitmap_ex("images/title_shine.png");
   logo = tools::load_bitmap_ex("images/logo.png");
 
-  playbutton_frame = tools::load_bitmap_ex("images/playbutton_frame.png");
-  playbutton_frame_hover = tools::load_bitmap_ex("images/playbutton_frame_hover.png");
-
   #if defined(RELEASE)
     if(!MusicManager::menu_music.getIsPlaying())
       MusicManager::menu_music.play();
   #endif
-
-  // Load play button
-  play = tools::load_bitmap_ex("images/playbutton.png");
-
-  // Slice up play image
-  for( int i = 0; i < 50; i++)
-    play_images[i] = al_create_sub_bitmap( play, i * 64, 0, 64, 32);
 
   // Load prompt
   prompt_image = tools::load_bitmap_ex("images/prompt.png");
@@ -97,11 +81,7 @@ Menu::Menu(){
 // Destory menu
 Menu::~Menu(){
   // Delete images
-  for( int i = 0; i < 50; i++)
-    al_destroy_bitmap( play_images[i]);
-
-  al_destroy_bitmap( play);
-  al_destroy_bitmap( title);
+  al_destroy_bitmap(title);
 }
 
 // Update animation and wait for input

@@ -50,7 +50,7 @@ Editor::Editor(){
 
   // Load box image
   image_box[0] = tools::load_bitmap_ex( "images/box_green.png");
-  image_box[1] = tools::load_bitmap_ex( "images/StaticBlock2.png");
+  image_box[1] = tools::load_bitmap_ex( "images/StaticBlock.png");
   image_box[2] = tools::load_bitmap_ex( "images/character.png");
   image_box[3] = tools::load_bitmap_ex( "images/DisgoatSpriteMap.png");
   image_box[4] = tools::load_bitmap_ex( "images/box_repel.png");
@@ -588,7 +588,7 @@ void Editor::update(){
       newBox.x_str = tools::toString( float(newBox.x + 16) / 20.0f);
       newBox.y_str = tools::toString( -1 * float(newBox.y + 16) / 20.0f);
       newBox.type = tile_type;
-      newBox.affect_character = dynamic_cast<CheckBox*>(editorUI.getElementById("getElementById")) -> getChecked();
+      newBox.affect_character = dynamic_cast<CheckBox*>(editorUI.getElementById("chkBlockAffectsChar")) -> getChecked();
 
       for( int i = 0; i < 4; i++)
         newBox.orientation[i] = 0;
