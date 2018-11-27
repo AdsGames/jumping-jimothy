@@ -72,12 +72,8 @@ Game::~Game(){
     al_destroy_bitmap( goat_sprite);
   if( goat_map != nullptr)
     al_destroy_bitmap( goat_map);
-  if( help != nullptr)
-    al_destroy_bitmap( help);
   if( character != nullptr)
     al_destroy_bitmap( character);
-  if( static_tileset != nullptr)
-    al_destroy_bitmap( static_tileset);
   if( play != nullptr)
     al_destroy_bitmap( play);
   if( pause != nullptr)
@@ -352,21 +348,15 @@ void Game::load_sprites(){
   box_repel_direction = tools::load_bitmap_ex( "images/box_repel_direction.png");
   goat_sprite = tools::load_bitmap_ex( "images/goat.png");
   goat_map = tools::load_bitmap_ex( "images/goat_map.png");
-  help = tools::load_bitmap_ex( "images/help.png");
   character = tools::load_bitmap_ex( "images/character.png");
-  static_tileset = tools::load_bitmap_ex( "images/StaticBlock.png");
   play = tools::load_bitmap_ex( "images/play.png");
   pause = tools::load_bitmap_ex( "images/pause.png");
 
-  ALLEGRO_BITMAP *image_box = tools::load_bitmap_ex( "images/StaticBlock2.png");
+  ALLEGRO_BITMAP *image_box = tools::load_bitmap_ex( "images/StaticBlock.png");
 
   for( int i = 0; i < 3; i++)
     for( int t = 0; t < 5; t++)
       new_dynamic_tile[i + t*3] = al_create_sub_bitmap( image_box, i * 16, t * 16, 16, 16);
-
-  for( int i = 0; i < 4; i++)
-    for( int t = 0; t < 12; t++)
-      tiles[1][i + t*4] = al_create_sub_bitmap( static_tileset, i * 32, t * 32, 32, 32);
 }
 
 // Update game logic

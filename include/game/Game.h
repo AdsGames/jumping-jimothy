@@ -77,11 +77,8 @@ class Game : public State {
     ALLEGRO_BITMAP *character;
     ALLEGRO_BITMAP *goat_sprite;
     ALLEGRO_BITMAP *goat_map;
-    ALLEGRO_BITMAP *static_tileset;
-    ALLEGRO_BITMAP *tiles[4][48];
     ALLEGRO_BITMAP *play;
     ALLEGRO_BITMAP *pause;
-    ALLEGRO_BITMAP *help;
 
     ALLEGRO_BITMAP *new_dynamic_tile[100];
 

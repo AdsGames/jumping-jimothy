@@ -40,18 +40,9 @@ class Menu : public State {
     ALLEGRO_BITMAP *title;
     ALLEGRO_BITMAP *title_overlay;
     ALLEGRO_BITMAP *title_shine;
-    ALLEGRO_BITMAP *playbutton_frame;
-    ALLEGRO_BITMAP *playbutton_frame_hover;
-    ALLEGRO_BITMAP *play;
     ALLEGRO_BITMAP *prompt_image;
-    ALLEGRO_BITMAP *play_images[50];
-    ALLEGRO_BITMAP *title_images[170];
     ALLEGRO_BITMAP *highlight;
 
-    ALLEGRO_BITMAP *button_edit;
-    ALLEGRO_BITMAP *button_exit;
-    ALLEGRO_BITMAP *button_help;
-    ALLEGRO_BITMAP *button_options;
     ALLEGRO_BITMAP *cursor;
 
     ALLEGRO_BITMAP *logo;
