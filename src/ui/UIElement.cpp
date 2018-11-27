@@ -45,9 +45,7 @@ UIElement::UIElement(const int x, const int y, std::string text, std::string id,
 
 // Destruct
 UIElement::~UIElement() {
-  if(image != nullptr) {
-    al_destroy_bitmap(image);
-  }
+  al_destroy_bitmap(image);
 }
 
 // Get X
