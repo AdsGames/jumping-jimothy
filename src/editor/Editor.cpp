@@ -52,7 +52,7 @@ Editor::Editor(){
   image_box[0] = tools::load_bitmap_ex( "images/box_green.png");
   image_box[1] = tools::load_bitmap_ex( "images/StaticBlock.png");
   image_box[2] = tools::load_bitmap_ex( "images/character.png");
-  image_box[3] = tools::load_bitmap_ex( "images/DisgoatSpriteMap.png");
+  image_box[3] = tools::load_bitmap_ex( "images/goat.png");
   image_box[4] = tools::load_bitmap_ex( "images/box_repel.png");
   image_box[5] = tools::load_bitmap_ex( "images/box_repel_direction.png");
 
