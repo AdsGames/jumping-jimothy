@@ -63,7 +63,7 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
   sensor_box = new Sensor();
   sensor_box -> init(newX,newY-0.55,width*0.4,0.6,al_map_rgb(255,255,0),gameWorld,body);
 
-  sprite = tools::load_bitmap_ex("images/anim.png");
+  sprite = tools::load_bitmap_ex("images/character.png");
 
   jump.load_wav("sfx/jump.wav");
   land.load_wav("sfx/land.wav");

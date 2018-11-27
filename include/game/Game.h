@@ -75,7 +75,6 @@ class Game : public State {
     ALLEGRO_BITMAP *box_repel;
     ALLEGRO_BITMAP *box_repel_direction;
     ALLEGRO_BITMAP *character;
-    ALLEGRO_BITMAP *goat_sprite;
     ALLEGRO_BITMAP *goat_map;
     ALLEGRO_BITMAP *play;
     ALLEGRO_BITMAP *pause;

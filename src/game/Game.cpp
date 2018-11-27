@@ -68,8 +68,6 @@ Game::~Game(){
   // Destory bitmaps
   //if( box != nullptr)
   //  al_destroy_bitmap( box);
-  if( goat_sprite != nullptr)
-    al_destroy_bitmap( goat_sprite);
   if( goat_map != nullptr)
     al_destroy_bitmap( goat_map);
   if( character != nullptr)
@@ -346,8 +344,7 @@ void Game::load_sprites(){
   box = tools::load_bitmap_ex( "images/box.png");
   box_repel = tools::load_bitmap_ex( "images/box_repel.png");
   box_repel_direction = tools::load_bitmap_ex( "images/box_repel_direction.png");
-  goat_sprite = tools::load_bitmap_ex( "images/goat.png");
-  goat_map = tools::load_bitmap_ex( "images/goat_map.png");
+  goat_map = tools::load_bitmap_ex( "images/goat.png");
   character = tools::load_bitmap_ex( "images/character.png");
   play = tools::load_bitmap_ex( "images/play.png");
   pause = tools::load_bitmap_ex( "images/pause.png");
