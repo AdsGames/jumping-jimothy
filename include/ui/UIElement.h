@@ -164,6 +164,7 @@ class UIElement {
     // Background colour
     ALLEGRO_COLOR background_colour;
 
+
     // Fill with transparency
     bool transparent_cell_fill;
 

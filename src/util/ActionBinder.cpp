@@ -1,75 +1,96 @@
 #include "util/ActionBinder.h"
 
 #include "util/KeyListener.h"
-#include "util/joystickListener.h"
+#include "util/JoystickListener.h"
+#include "util/Tools.h"
 
-ActionBinder::binding ActionBinder::game_binding[10];
+std::vector<Binding*> ActionBinder::bindings;
 
-bool ActionBinder::actionPressed(const int action){
-  for(int i=0; i<NUM_BINDABLE_BUTTONS; i++){
-    if(KeyListener::keyPressed[game_binding[action].key_code[i]])
-      return true;
-    if(JoystickListener::stickDirections[game_binding[action].stick[i]])
-      return true;
+bool ActionBinder::actionBegun(const int action) {
+  std::vector<Binding*> foundBindings = findBindings(action);
 
-     if(JoystickListener::buttonPressed[game_binding[action].joystick_button[i]])
-      return true;
+  for (unsigned int i = 0; i < foundBindings.size(); i++) {
+    if (foundBindings.at(i) -> getCode() != BINDING_NONE) {
+      switch (foundBindings.at(i) -> getType()) {
+        case TYPE_KEY:
+          if (KeyListener::keyPressed[foundBindings.at(i) -> getCode()]) {
+            return true;
+          }
+          break;
+        case TYPE_JOY_BUTTON:
+          if (JoystickListener::buttonPressed[foundBindings.at(i) -> getCode()]) {
+            return true;
+          }
+          break;
+        case TYPE_JOY_STICK:
+          if (JoystickListener::stickDirections[foundBindings.at(i) -> getCode()]) {
+            return true;
+          }
+          break;
+      }
     }
-  return false;
+  }
 
+  return false;
 }
 
-bool ActionBinder::actionHeld(const int action){
-
-  for(int i=0; i<NUM_BINDABLE_BUTTONS; i++){
-    if(KeyListener::key[game_binding[action].key_code[i]])
-      return true;
-    if(JoystickListener::stickDirections[game_binding[action].stick[i]])
-      return true;
-
-    if(JoystickListener::button[game_binding[action].joystick_button[i]])
-      return true;
-    }
+bool ActionBinder::actionHeld(const int action) {
   return false;
+}
 
+std::vector<Binding*> ActionBinder::findBindings(const int action) {
+  // Empty binding vector
+  std::vector<Binding*> foundBindings;
+
+  // Find
+  for (unsigned int i = 0; i < ActionBinder::bindings.size(); i++) {
+    if (ActionBinder::bindings.at(i) -> getAction() == action) {
+      foundBindings.push_back(ActionBinder::bindings.at(i));
+    }
+  }
+
+  // Return vector
+  return foundBindings;
+}
+
+// Add binding
+void ActionBinder::addBinding(int action, int type, int code) {
+  ActionBinder::bindings.push_back(new Binding(action, type, code));
 }
 
 void ActionBinder::setDefaults(){
-  game_binding[jump].key_code[0] = ALLEGRO_KEY_W;
-  game_binding[jump].joystick_button[0] = JOY_XBOX_A;
-  game_binding[jump].stick[0] = DPAD_UP;
+  // Left
+  addBinding(ACTION_LEFT, TYPE_KEY, ALLEGRO_KEY_A);
+  addBinding(ACTION_LEFT, TYPE_KEY, ALLEGRO_KEY_LEFT);
+  addBinding(ACTION_LEFT, TYPE_JOY_STICK, LEFT_STICK_LEFT);
+  addBinding(ACTION_LEFT, TYPE_JOY_STICK, DPAD_LEFT);
 
+  // Right
+  addBinding(ACTION_RIGHT, TYPE_KEY, ALLEGRO_KEY_D);
+  addBinding(ACTION_RIGHT, TYPE_KEY, ALLEGRO_KEY_RIGHT);
+  addBinding(ACTION_RIGHT, TYPE_JOY_STICK, LEFT_STICK_RIGHT);
+  addBinding(ACTION_RIGHT, TYPE_JOY_STICK, DPAD_RIGHT);
 
-  game_binding[move_left].key_code[0]=ALLEGRO_KEY_A;
-  game_binding[move_left].stick[0] = LEFT_STICK_LEFT;
-  game_binding[move_left].stick[1] = DPAD_LEFT;
+  // Up
+  addBinding(ACTION_UP, TYPE_KEY, ALLEGRO_KEY_UP);
+  addBinding(ACTION_UP, TYPE_KEY, ALLEGRO_KEY_W);
+  addBinding(ACTION_UP, TYPE_JOY_STICK, LEFT_STICK_UP);
+  addBinding(ACTION_UP, TYPE_JOY_STICK, DPAD_UP);
 
+  // Down
+  addBinding(ACTION_DOWN, TYPE_KEY, ALLEGRO_KEY_DOWN);
+  addBinding(ACTION_DOWN, TYPE_KEY, ALLEGRO_KEY_S);
+  addBinding(ACTION_DOWN, TYPE_JOY_STICK, LEFT_STICK_DOWN);
+  addBinding(ACTION_DOWN, TYPE_JOY_STICK, DPAD_DOWN);
 
-  game_binding[move_right].key_code[0]=ALLEGRO_KEY_D;
-  game_binding[move_right].stick[0] = LEFT_STICK_RIGHT;
-  game_binding[move_right].stick[1] = DPAD_RIGHT;
+  // Action A
+  addBinding(ACTION_A, TYPE_KEY, ALLEGRO_KEY_W);
+  addBinding(ACTION_A, TYPE_JOY_STICK, DPAD_UP);
+  addBinding(ACTION_A, TYPE_JOY_BUTTON, DPAD_DOWN);
 
-
-  game_binding[freeze].key_code[0]=ALLEGRO_KEY_SPACE;
-  game_binding[freeze].joystick_button[0]=JOY_XBOX_X;
-  game_binding[freeze].joystick_button[1]=JOY_XBOX_BUMPER_LEFT;
-  game_binding[freeze].joystick_button[2]=JOY_XBOX_BUMPER_RIGHT;
-
-  game_binding[restart].key_code[0] = ALLEGRO_KEY_R;
-  game_binding[restart].joystick_button[0] = JOY_XBOX_B;
-
-  game_binding[confirm].key_code[0]=ALLEGRO_KEY_ENTER;
-  game_binding[confirm].joystick_button[0]=JOY_XBOX_A;
-
-
-}
-
-ActionBinder::ActionBinder()
-{
-  //ctor
-}
-
-ActionBinder::~ActionBinder()
-{
-  //dtor
+  // Action B
+  addBinding(ACTION_B, TYPE_KEY, ALLEGRO_KEY_SPACE);
+  addBinding(ACTION_B, TYPE_JOY_BUTTON, JOY_XBOX_X);
+  addBinding(ACTION_B, TYPE_JOY_BUTTON, JOY_XBOX_BUMPER_LEFT);
+  addBinding(ACTION_B, TYPE_JOY_BUTTON, JOY_XBOX_BUMPER_RIGHT);
 }

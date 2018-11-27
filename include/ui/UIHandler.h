@@ -37,7 +37,7 @@ class UIHandler {
     std::vector<UIElement*> ui_elements;
 
     // Cursor image
-    ALLEGRO_BITMAP *cursor;
+    ALLEGRO_BITMAP *ui_cursor;
 
     // Element in focus
     int focusedElement;

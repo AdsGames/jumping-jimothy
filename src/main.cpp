@@ -19,6 +19,7 @@
 #include "util/MusicManager.h"
 #include "util/DisplayMode.h"
 #include "util/Tools.h"
+#include "util/ActionBinder.h"
 
 #include "State.h"
 
@@ -113,8 +114,8 @@ void setup(){
   tools::log_message("Initializing Allegro.");
 
   // Init allegro
-  if( !al_init())
-    tools::abort_on_error( "Allegro could not initilize", "Error");
+  if (!al_init())
+    tools::abort_on_error("Allegro could not initilize", "Error");
 
   // Window title
   al_set_window_title(display, "Loading...");
@@ -134,7 +135,7 @@ void setup(){
   // Audio
   al_install_audio();
   al_init_acodec_addon();
-  al_reserve_samples( 20);
+  al_reserve_samples(20);
 
   // Load config
   Config::readFile("data/config.xml");
@@ -161,11 +162,9 @@ void setup(){
   al_start_timer(timer);
 
   // Window title
-  al_set_window_title(display,"Jumping Jimothy");
+  al_set_window_title(display, "Jumping Jimothy");
 
-  tools::log_message(" Sucesss.");
-
-
+  // Build target
   #if defined(DEBUG)
     tools::log_message("Build target: Debug");
   #endif
@@ -200,6 +199,9 @@ void setup(){
 
   // Load music files
   MusicManager::load();
+
+  // Init action binder
+  ActionBinder::setDefaults();
 }
 
 // Handle events

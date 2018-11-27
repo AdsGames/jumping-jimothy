@@ -1,6 +1,6 @@
 /**
  * Action Binder
- * Danny Van Stemp
+ * Danny Van Stemp and Allan Legemaate
  * Abstraction layer on top of key/joy
  *   codes for keybindings
  * 05/05/2017
@@ -12,36 +12,63 @@
 #include "allegro5/keycodes.h"
 #include "JoystickCodes.h"
 
+#include <vector>
+
+#define BINDING_NONE -1
+
+enum actions {
+  ACTION_NONE,
+  ACTION_LEFT,
+  ACTION_RIGHT,
+  ACTION_UP,
+  ACTION_DOWN,
+  ACTION_A,
+  ACTION_B
+};
+
+enum types {
+  TYPE_KEY,
+  TYPE_JOY_STICK,
+  TYPE_JOY_BUTTON
+};
+
+class Binding {
+  public:
+    Binding(int action, int type, int code) {
+      this -> action = action;
+      this -> type = type;
+      this -> code = code;
+    }
+
+    Binding() : Binding(BINDING_NONE, BINDING_NONE, BINDING_NONE) {}
+    virtual ~Binding() {}
+
+    int getType() { return type; }
+    int getCode() { return code; }
+    int getAction() { return action; }
+
+  private:
+    int type;
+    int code;
+    int action;
+};
+
 class ActionBinder {
   public:
-    ActionBinder();
-    virtual ~ActionBinder();
+    ActionBinder() {};
+    virtual ~ActionBinder() {};
 
-    static const int ALLEGRO_KEY_NONE = ALLEGRO_KEY_KANJI;
-    static const int NUM_BINDABLE_BUTTONS = 3;
-    static const int NUM_BINDABLE_ACTIONS = 10;
-
-    struct binding {
-      int key_code[NUM_BINDABLE_BUTTONS] = {ALLEGRO_KEY_NONE,ALLEGRO_KEY_NONE,ALLEGRO_KEY_NONE};
-      int joystick_button[NUM_BINDABLE_BUTTONS] = {JOY_NONE,JOY_NONE,JOY_NONE};
-      int stick[NUM_BINDABLE_BUTTONS] = {NONE,NONE,NONE};
-    };
-
-    static binding game_binding[NUM_BINDABLE_ACTIONS];
-
-    enum actions {
-      jump,
-      move_left,
-      move_right,
-      freeze,
-      restart,
-      confirm,
-      back
-    };
-
-    static bool actionPressed(const int action);
+    static bool actionBegun(const int action);
+    static bool actionEnded(const int action) { return false; };
     static bool actionHeld(const int action);
+
+    static void addBinding(int action, int type, int code);
+
     static void setDefaults();
+
+  private:
+    static std::vector<Binding*> bindings;
+    static std::vector<Binding*> findBindings(const int action);
 };
 
 #endif // ACTIONBINDER_H

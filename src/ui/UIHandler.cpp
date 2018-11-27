@@ -8,13 +8,13 @@
 #include "util/Globals.h"
 #include "util/Tools.h"
 
-#include "util/KeyListener.h"
 #include "util/MouseListener.h"
+#include "util/ActionBinder.h"
 
 // Create UI handler
 UIHandler::UIHandler() {
   // Load cursor image
-  cursor = tools::load_bitmap_ex("images/cursor.png");
+  ui_cursor = tools::load_bitmap_ex("images/cursor.png");
 
   // Focused element
   focusedElement = -1;
@@ -23,7 +23,13 @@ UIHandler::UIHandler() {
 // Destroy UI handler
 UIHandler::~UIHandler() {
   // Destory cursor
-  //al_destroy_bitmap(cursor);
+  //al_destroy_bitmap(ui_cursor);
+
+  // Destroy elements of UI
+  for (unsigned int i = 0; i < ui_elements.size(); i++) {
+    delete ui_elements.at(i);
+  }
+  ui_elements.clear();
 }
 
 // Add element to handler
@@ -93,8 +99,8 @@ void UIHandler::draw(){
   }
 
   // Draw cursor if required
-  if(Config::getBooleanValue("draw_cursor")) {
-    al_draw_bitmap(cursor, MouseListener::mouse_x, MouseListener::mouse_y, 0);
+  if(Config::getBooleanValue("draw_cursor") && ui_cursor) {
+    al_draw_bitmap(ui_cursor, MouseListener::mouse_x, MouseListener::mouse_y, 0);
   }
 }
 
@@ -108,9 +114,8 @@ void UIHandler::update(){
   // Move between elements
   if (ui_elements.size() > 0) {
     // Key pressed
-    // TODO replace with keybindings
-    if (KeyListener::keyPressed[ALLEGRO_KEY_UP] ||
-        KeyListener::keyPressed[ALLEGRO_KEY_DOWN]) {
+    if (ActionBinder::actionBegun(ACTION_UP) ||
+        ActionBinder::actionBegun(ACTION_DOWN)) {
       // Unfocus current
       if (focusedElement >= 0 && focusedElement < (signed)ui_elements.size())
         ui_elements.at((focusedElement)) -> unfocus();
@@ -119,10 +124,10 @@ void UIHandler::update(){
       int focusDirection = 0;
 
       // Choose direction
-      if (KeyListener::keyPressed[ALLEGRO_KEY_UP]) {
+      if (ActionBinder::actionBegun(ACTION_UP)) {
         focusDirection = -1;
       }
-      else if (KeyListener::keyPressed[ALLEGRO_KEY_DOWN]) {
+      else if (ActionBinder::actionBegun(ACTION_DOWN)) {
         focusDirection = 1;
       }
 
