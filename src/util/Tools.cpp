@@ -34,7 +34,7 @@ ALLEGRO_SAMPLE *tools::load_sample_ex(std::string file) {
 }
 
 // Load bitmap if exits, or throw error
-ALLEGRO_BITMAP * tools::load_bitmap_ex(std::string file) {
+ALLEGRO_BITMAP *tools::load_bitmap_ex(std::string file) {
   // Log file
   log_message("Loading bitmap " + file, true);
 

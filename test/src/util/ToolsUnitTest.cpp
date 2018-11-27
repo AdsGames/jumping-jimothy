@@ -1,17 +1,18 @@
 #include "util/ToolsUnitTest.h"
+#include "util/Tools.h"
 
-void ToolsUnitTest::first_test() {
-  // Will succeed since the expression evaluates to true
-  TEST_ASSERT(1 + 1 == 2)
-
-  // Will fail since the expression evaluates to false
-  TEST_ASSERT(0 == 1);
+void ToolsUnitTest::stringToInt_ut() {
+  TEST_ASSERT(tools::stringToInt("0") == 0)
+  TEST_ASSERT(tools::stringToInt("10") == 10)
+  TEST_ASSERT(tools::stringToInt("100") == 100)
+  TEST_ASSERT(tools::stringToInt("-1") == -1)
+  TEST_ASSERT(tools::stringToInt("-100") == -100)
+  TEST_ASSERT(tools::stringToInt("asdf") == 0)
+  TEST_ASSERT(tools::stringToInt("0asdf0") == 0)
+  TEST_ASSERT(tools::stringToInt("") == 0)
 }
 
-void ToolsUnitTest::second_test() {
-  // Will succeed since the expression evaluates to true
-  TEST_ASSERT_DELTA(0.5, 0.7, 0.3);
-
-  // Will fail since the expression evaluates to false
-  TEST_ASSERT_DELTA(0.5, 0.7, 0.1);
+void ToolsUnitTest::stringToFloat_ut() {
+  TEST_ASSERT(tools::stringToFloat("1.0") == 1.0f)
+  TEST_ASSERT(tools::stringToFloat("10.0") == 10.0f)
 }

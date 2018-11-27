@@ -12,11 +12,11 @@
 class ToolsUnitTest : public Test::Suite {
   public:
     ToolsUnitTest() {
-      TEST_ADD(ToolsUnitTest::first_test)
-      TEST_ADD(ToolsUnitTest::second_test)
+      TEST_ADD(ToolsUnitTest::stringToInt_ut)
+      TEST_ADD(ToolsUnitTest::stringToFloat_ut)
     }
 
   private:
-    void first_test();
-    void second_test();
+    void stringToInt_ut();
+    void stringToFloat_ut();
 };
