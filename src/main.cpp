@@ -57,21 +57,21 @@ KeyListener k_listener;
 JoystickListener j_listener;
 
 // Delete game state and free state resources
-void clean_up(){
+void clean_up() {
   delete currentState;
 }
 
 // Change game screen
-void change_state(){
+void change_state() {
   //If the state needs to be changed
-  if( nextState != STATE_NULL ){
+  if (nextState != STATE_NULL) {
     //Delete the current state
-    if( nextState != STATE_EXIT ){
+    if (nextState != STATE_EXIT) {
       delete currentState;
     }
 
     //Change the state
-    switch( nextState ){
+    switch(nextState) {
       case STATE_GAME:
         currentState = new Game();
         tools::log_message("Switched state to game.");
@@ -96,7 +96,6 @@ void change_state(){
         currentState = new Options();
         tools::log_message("Switched state to options.");
         break;
-
       default:
         currentState = new Game();
     }
@@ -300,8 +299,8 @@ int main(){
   setup();
 
   //Set the current state ID
-  stateID = STATE_MENU;
-  currentState = new Menu();
+  set_next_state(STATE_MENU);
+  change_state();
 
   // Run game
   while(!closing) {

@@ -18,6 +18,8 @@ class Button : public UIElement {
 
     virtual void draw() override;
     virtual void update() override;
+
+    virtual bool canFocus() override;
 };
 
 #endif // BUTTON_H

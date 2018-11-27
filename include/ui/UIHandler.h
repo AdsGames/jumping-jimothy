@@ -15,8 +15,8 @@
 
 class UIHandler {
   public:
-    UIHandler() {};
-    inline virtual ~UIHandler() {};
+    UIHandler();
+    virtual ~UIHandler();
     void addElement(UIElement *newUIElement);
     void draw();
     void update();
@@ -35,6 +35,12 @@ class UIHandler {
   private:
     // Container for UI Elements
     std::vector<UIElement*> ui_elements;
+
+    // Cursor image
+    ALLEGRO_BITMAP *cursor;
+
+    // Element in focus
+    int focusedElement;
 };
 
 #endif // UIHANDLER_H
