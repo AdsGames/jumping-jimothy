@@ -1,118 +1,79 @@
 #include "util/JoystickListener.h"
 
-bool JoystickListener::button[JOY_MAX_BUTTONS] = { false };
-bool JoystickListener::buttonPressed[JOY_MAX_BUTTONS] = { false};
-bool JoystickListener::buttonReleased[JOY_MAX_BUTTONS] = { false};
-bool JoystickListener::lastTicksButton[JOY_MAX_BUTTONS] = { false};
-int JoystickListener::lastButtonPressed = -1;
-int JoystickListener::lastButtonReleased = -1;
-bool JoystickListener::anyButtonPressed=false;
-bool JoystickListener::anyButtonReleased=false;
+bool JoystickListener::button[JOY_MAX_BUTTONS] = {false};
+bool JoystickListener::buttonPressed[JOY_MAX_BUTTONS] = {false};
+bool JoystickListener::buttonReleased[JOY_MAX_BUTTONS] = {false};
+bool JoystickListener::lastTicksButton[JOY_MAX_BUTTONS] = {false};
 
-bool JoystickListener::stickDirections[20];
-ALLEGRO_JOYSTICK_STATE JoystickListener::joyState;
+bool JoystickListener::anyButtonPressed = false;
+
+bool JoystickListener::stick[JOY_MAX_STICK_BOOLEANS] = {false};
+bool JoystickListener::stickMoved[JOY_MAX_STICK_BOOLEANS] = {false};
+bool JoystickListener::stickReleased[JOY_MAX_STICK_BOOLEANS] = {false};
+bool JoystickListener::lastTicksStick[JOY_MAX_STICK_BOOLEANS] = {false};
 
 // For allegro 5, we use events
 void JoystickListener::on_event(ALLEGRO_EVENT_TYPE event_type, const int buttoncode){
   // Button down
-  if( event_type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN){
+  if (event_type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) {
     button[buttoncode] = true;
   }
+
   // Button up
-  else if( event_type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP){
+  else if (event_type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP) {
     button[buttoncode] = false;
   }
 }
 
-void JoystickListener::clearButtons(){
+// For allegro 5, we use events
+void JoystickListener::on_event(ALLEGRO_EVENT_TYPE event_type, const int stick, const int axis, const float position){
+  // Axis moved
+  if (event_type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
+    const float tolerance = 0.6f;
 
- for( int i = 0; i < JOY_MAX_BUTTONS; i++){
+    // Translated axis
+    int trans_axis = (stick * JOY_MAX_AXES + axis) * 2;
 
-    buttonPressed[i] = false;
-    buttonReleased[i] = false;
+    // Check if moved enough
+    if (position > tolerance) {
+      this -> stick[trans_axis] = true;
+    }
+    else if (position < -tolerance) {
+      this -> stick[trans_axis + 1] = true;
+    }
+    else {
+      this -> stick[trans_axis]     = false;
+      this -> stick[trans_axis + 1] = false;
+    }
   }
-
 }
 
 // Check those button!
 void JoystickListener::update(){
+  // Check stick just moved
+  for (int i = 0; i < JOY_MAX_STICK_BOOLEANS; i++){
+    // Clear old values
+    stickMoved[i] = false;
+    stickReleased[i] = false;
 
-  stickDirections[LEFT_STICK_LEFT]=false;
-  stickDirections[LEFT_STICK_RIGHT]=false;
-  stickDirections[LEFT_STICK_UP]=false;
-  stickDirections[LEFT_STICK_DOWN]=false;
-  stickDirections[LEFT_TRIGGER_DOWN]=false;
-  stickDirections[RIGHT_TRIGGER_DOWN]=false;
-  stickDirections[RIGHT_STICK_LEFT]=false;
-  stickDirections[RIGHT_STICK_RIGHT]=false;
-  stickDirections[RIGHT_STICK_UP]=false;
-  stickDirections[RIGHT_STICK_DOWN]=false;
-  stickDirections[DPAD_UP2]=false;
-  stickDirections[DPAD_DOWN]=false;
-  stickDirections[DPAD_LEFT]=false;
-  stickDirections[DPAD_RIGHT]=false;
+    // Pressed since last tick?
+    if (stick[i] == true && lastTicksStick[i] == false)
+      stickMoved[i] = true;
 
-   if(al_get_num_joysticks() > 0){
-    al_get_joystick_state(al_get_joystick(0),&joyState);
+    // Released since last tick?
+    if (stick[i] == false && lastTicksStick[i] == true)
+      stickReleased[i] = true;
 
-    float tolerance=0.4f;
-
-    if(joyState.stick[0].axis[0]>tolerance)
-      stickDirections[LEFT_STICK_RIGHT]=true;
-
-    if(joyState.stick[0].axis[0]<-tolerance)
-      stickDirections[LEFT_STICK_LEFT]=true;
-
-    if(joyState.stick[0].axis[1]>tolerance)
-      stickDirections[LEFT_STICK_UP]=true;
-
-    if(joyState.stick[0].axis[1]<-tolerance)
-      stickDirections[LEFT_STICK_DOWN]=true;
-
-    if(joyState.stick[1].axis[0]>(-1+tolerance))
-      stickDirections[LEFT_TRIGGER_DOWN]=true;
-
-    if(joyState.stick[2].axis[1]>(-1+tolerance))
-      stickDirections[RIGHT_TRIGGER_DOWN]=true;
-
-    if(joyState.stick[1].axis[1]>tolerance)
-      stickDirections[RIGHT_STICK_RIGHT]=true;
-
-    if(joyState.stick[1].axis[1]<-tolerance)
-      stickDirections[RIGHT_STICK_LEFT]=true;
-
-    if(joyState.stick[1].axis[2]>tolerance)
-      stickDirections[RIGHT_STICK_UP]=true;
-
-    if(joyState.stick[1].axis[2]<-tolerance)
-      stickDirections[RIGHT_STICK_DOWN]=true;
-
-    if(joyState.stick[3].axis[0]==-1)
-      stickDirections[DPAD_LEFT]=true;
-
-    if(joyState.stick[3].axis[0]==1)
-      stickDirections[DPAD_RIGHT]=true;
-
-    if(joyState.stick[3].axis[1]==1)
-      stickDirections[DPAD_UP2]=true;
-
-    if(joyState.stick[3].axis[1]==-1)
-      stickDirections[DPAD_DOWN]=true;
+    // Stick changed
+    if (lastTicksStick[i] != stick[i])
+      lastTicksStick[i] = stick[i];
   }
 
-  // Reset last button
-  lastButtonPressed = -1;
-  lastButtonReleased = -1;
-
+  // Reset button pressed
   anyButtonPressed = false;
-  anyButtonReleased=false;
 
   // Check button just pressed
   for( int i = 0; i < JOY_MAX_BUTTONS; i++){
-    // Global button pressed
-    if(button[i])
-      anyButtonPressed = true;
-
     // Clear old values
     buttonPressed[i] = false;
     buttonReleased[i] = false;
@@ -120,26 +81,15 @@ void JoystickListener::update(){
     // Pressed since last tick?
     if (button[i] == true && lastTicksButton[i] == false) {
       buttonPressed[i] = true;
-      lastButtonPressed = i;
-      //std::cout << "Button: " << i << " pressed. \n";
+      anyButtonPressed = true;
     }
 
     // Released since last tick?
-    if (button[i] == false && lastTicksButton[i] == true) {
+    if (button[i] == false && lastTicksButton[i] == true)
       buttonReleased[i] = true;
-      lastButtonReleased = i;
-      anyButtonReleased=true;
-      //std::cout << "Button: " << i << " released. \n";
-    }
-  }
 
-
-  // Get new values
-  for (int i = 0; i < JOY_MAX_BUTTONS; i++) {
     // Button changed
-    if (lastTicksButton[i] != button[i]) {
-        lastTicksButton[i] = button[i];
-    }
+    if (lastTicksButton[i] != button[i])
+      lastTicksButton[i] = button[i];
   }
 }
-

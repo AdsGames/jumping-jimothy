@@ -228,12 +228,16 @@ void update(){
     closing = true;
   }
   // Keyboard
-  else if( ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP){
+  else if (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP){
     k_listener.on_event( ev.type, ev.keyboard.keycode);
   }
-  // Joystick
-  else if( ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP){
-    j_listener.on_event( ev.type, ev.joystick.button);
+  // Joystick Button
+  else if (ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN || ev.type == ALLEGRO_EVENT_JOYSTICK_BUTTON_UP){
+    j_listener.on_event(ev.type, ev.joystick.button);
+  }
+  // Joystick Axis
+  else if (ev.type == ALLEGRO_EVENT_JOYSTICK_AXIS){
+    j_listener.on_event(ev.type, ev.joystick.stick, ev.joystick.axis, ev.joystick.pos);
   }
 
   // Joystick plugged or unplugged

@@ -18,27 +18,28 @@ class JoystickListener {
     virtual ~JoystickListener() {};
 
     void on_event(ALLEGRO_EVENT_TYPE event_type, const int keycode);
+    void on_event(ALLEGRO_EVENT_TYPE event_type, const int stick, const int axis, const float position);
     void update();
 
-    static const int JOY_MAX_STICKS = 8;
-    static const int JOY_MAX_AXES = 3;
-    static const int JOY_MAX_BUTTONS = 14;
+    static const int JOY_MAX_STICKS = _AL_MAX_JOYSTICK_STICKS;
+    static const int JOY_MAX_AXES = _AL_MAX_JOYSTICK_AXES;
+    static const int JOY_MAX_STICK_BOOLEANS = _AL_MAX_JOYSTICK_STICKS * _AL_MAX_JOYSTICK_AXES * 2;
+    static const int JOY_MAX_BUTTONS = _AL_MAX_JOYSTICK_BUTTONS;
 
     static bool button[JOY_MAX_BUTTONS];
     static bool buttonPressed[JOY_MAX_BUTTONS];
     static bool buttonReleased[JOY_MAX_BUTTONS];
     static bool anyButtonPressed;
-    static bool anyButtonReleased;
 
-    static int lastButtonPressed;
-    static int lastButtonReleased;
-    static bool stickDirections[20];
-    static void clearButtons();
+    static bool stick[JOY_MAX_STICK_BOOLEANS];
+    static bool stickMoved[JOY_MAX_STICK_BOOLEANS];
+    static bool stickReleased[JOY_MAX_STICK_BOOLEANS];
 
   protected:
   private:
     static bool lastTicksButton[JOY_MAX_BUTTONS];
-    static ALLEGRO_JOYSTICK_STATE joyState;
+
+    static bool lastTicksStick[JOY_MAX_STICK_BOOLEANS];
 };
 
 #endif // JOYSTICKLISTENER_H

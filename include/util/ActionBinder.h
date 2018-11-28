@@ -9,9 +9,6 @@
 #ifndef ACTIONBINDER_H
 #define ACTIONBINDER_H
 
-#include "allegro5/keycodes.h"
-#include "JoystickCodes.h"
-
 #include <vector>
 
 #define BINDING_NONE -1
@@ -23,7 +20,8 @@ enum actions {
   ACTION_UP,
   ACTION_DOWN,
   ACTION_A,
-  ACTION_B
+  ACTION_B,
+  ACTION_SELECT
 };
 
 enum types {
