@@ -7,6 +7,8 @@
 #include "util/KeyListener.h"
 #include "util/Tools.h"
 
+#include "util/ActionBinder.h"
+
 // Defaults
 UIElement::UIElement() {
   this -> alpha = 255;
@@ -259,5 +261,5 @@ bool UIElement::hover() {
 // True if clicked
 bool UIElement::clicked() {
   return !disabled && ((hover() && tools::mouse_clicked(MouseListener::MOUSE_LEFT)) ||
-                       (focused && (KeyListener::keyPressed[ALLEGRO_KEY_ENTER])));
+                       (focused && (ActionBinder::actionBegun(ACTION_SELECT))));
 }

@@ -10,7 +10,7 @@
 
 #include "util/MouseListener.h"
 #include "util/KeyListener.h"
-#include "util/JoystickListener.h"
+#include "util/ActionBinder.h"
 
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_print.hpp"
@@ -396,35 +396,35 @@ void Game::update(){
   gameWorld -> Step( timeStep, velocityIterations, positionIterations);
 
   // Update character
-  for( unsigned int i = 0; i < gameBoxes.size(); i++)
+  for (unsigned int i = 0; i < gameBoxes.size(); i++)
     gameBoxes[i] -> update();
 
   // Die
-  if( KeyListener::keyPressed[ALLEGRO_KEY_Z] || JoystickListener::buttonPressed[JOY_XBOX_B] ||  KeyListener::keyPressed[ALLEGRO_KEY_R] ){
+  if (KeyListener::keyPressed[ALLEGRO_KEY_R]) {
     death.play();
     reset();
   }
 
-  if(KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]){
+  if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]) {
     set_next_state(STATE_MENU);
     MusicManager::game_music.stop();
   }
 
   // Next level
-  if( KeyListener::keyPressed[ALLEGRO_KEY_C]){
-    if( !testing){
+  if (KeyListener::keyPressed[ALLEGRO_KEY_C]){
+    if (!testing){
       tools::log_message("Level " + tools::toString(level) + " skipped.");
       level++;
       reset();
     }
-    else{
+    else {
       al_show_native_message_box( nullptr, "Level complete!", "Opening editor",nullptr, nullptr, 0);
       set_next_state( STATE_EDIT);
     }
   }
 
   // Previous level
-  if( KeyListener::keyPressed[ALLEGRO_KEY_X]){
+  if (KeyListener::keyPressed[ALLEGRO_KEY_X]) {
     tools::log_message("Level " + tools::toString(level) + " skipped back.");
     if( level > 1)
       level--;
@@ -432,11 +432,7 @@ void Game::update(){
   }
 
   // Pause/Play time
-  if( KeyListener::keyPressed[ALLEGRO_KEY_SPACE]  ||
-      JoystickListener::buttonPressed[JOY_XBOX_X] ||
-      JoystickListener::buttonPressed[JOY_XBOX_Y] ||
-      JoystickListener::buttonPressed[JOY_XBOX_BUMPER_LEFT] ||
-      JoystickListener::buttonPressed[JOY_XBOX_BUMPER_RIGHT]  ){
+  if (ActionBinder::actionBegun(ACTION_B)) {
     static_mode =! static_mode;
 
     if(static_mode){

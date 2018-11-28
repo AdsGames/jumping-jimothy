@@ -11,7 +11,6 @@
 #include <allegro5/allegro_font.h>
 
 #include "State.h"
-#include "ui/UIElement.h"
 #include "ui/UIHandler.h"
 
 class LevelSelect : public State {

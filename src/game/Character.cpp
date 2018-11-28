@@ -7,14 +7,10 @@
 #include "game/Box.h"
 
 #include "util/Globals.h"
-#include "util/KeyListener.h"
-#include "util/JoystickListener.h"
 #include "util/Tools.h"
+#include "util/ActionBinder.h"
 
 void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
-
-  initial_key_release=false;
-
   timer_sound_delay=0;
   tick = 0;
   frame = 0;
@@ -73,10 +69,6 @@ void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World 
 }
 
 void Character::update(){
-
-  if(!KeyListener::anyKeyPressed && !JoystickListener::anyButtonPressed)
-    initial_key_release=true;
-
   if(sensor_box -> isColliding())
     counter_sensor_contact++;
   else
@@ -128,7 +120,7 @@ void Character::update(){
   float x_velocity_air_max=4;
 
 
-  if((KeyListener::key[ALLEGRO_KEY_A] || JoystickListener::stickDirections[LEFT_STICK_LEFT]) && initial_key_release){
+  if (ActionBinder::actionHeld(ACTION_LEFT)) {
     direction=false;
     if(sensor_box -> isColliding())
       body -> SetLinearVelocity(b2Vec2(-x_velocity_ground, yVel));
@@ -136,7 +128,7 @@ void Character::update(){
       if(getBody() -> GetLinearVelocity().x > -x_velocity_air_max)
         body -> ApplyLinearImpulse(b2Vec2(-x_velocity_air, 0),position,true);
   }
-  else if((KeyListener::key[ALLEGRO_KEY_D] || JoystickListener::stickDirections[LEFT_STICK_RIGHT])&& initial_key_release){
+  else if (ActionBinder::actionHeld(ACTION_RIGHT)) {
     direction=true;
     if(sensor_box -> isColliding())
           body -> SetLinearVelocity(b2Vec2(x_velocity_ground, yVel));
@@ -144,32 +136,30 @@ void Character::update(){
       if(getBody() -> GetLinearVelocity().x < x_velocity_air_max)
         body -> ApplyLinearImpulse(b2Vec2(x_velocity_air, 0),position,true);
   }
-  else if(sensor_box -> isColliding()){
+  else if (sensor_box -> isColliding()) {
      body -> SetLinearVelocity(b2Vec2(0,body ->GetLinearVelocity().y));
   }
 
   // Jumping Jimothy
   timer_jump_delay++;
-  if((KeyListener::key[ALLEGRO_KEY_W] || JoystickListener::button[JOY_XBOX_A]) && sensor_box -> isColliding() && body -> GetLinearVelocity().y<0.1f && landed && initial_key_release){
-
-    if(timer_jump_delay>20){
-        timer_jump_delay=0;
-      body -> ApplyLinearImpulse(b2Vec2(0,17),position,true);
-      landed=false;
-      if(timer_sound_delay>10){
-        jump.play_random_frequency(90,110);
-        timer_sound_delay=0;
+  if (ActionBinder::actionBegun(ACTION_A) && sensor_box -> isColliding() && body -> GetLinearVelocity().y < 0.1f && landed) {
+    if (timer_jump_delay > 20) {
+        timer_jump_delay = 0;
+      body -> ApplyLinearImpulse(b2Vec2(0, 17),position,true);
+      landed = false;
+      if(timer_sound_delay > 10) {
+        jump.play_random_frequency(90, 110);
+        timer_sound_delay = 0;
       }
     }
   }
   timer_sound_delay++;
 
   // Fixed Danny's poop code by getting rid if it =)
-
-  if(sensor_box -> isColliding())
-    color = al_map_rgb(50,100,255);
+  if (sensor_box -> isColliding())
+    color = al_map_rgb(50, 100, 255);
   else
-    color = al_map_rgb(0,0,255);
+    color = al_map_rgb(0, 0, 255);
 }
 
 

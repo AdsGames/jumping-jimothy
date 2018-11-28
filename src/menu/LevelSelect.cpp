@@ -8,10 +8,9 @@
 #include "ui/Button.h"
 #include "ui/Label.h"
 
-#include "util/KeyListener.h"
 #include "util/Config.h"
-
 #include "util/Tools.h"
+#include "util/ActionBinder.h"
 
 LevelSelect::LevelSelect() {
 
@@ -51,13 +50,6 @@ LevelSelect::LevelSelect() {
   levelSelectUI.getElementById("btnResetSave") -> setTextJustification(1);
   //levelSelectUI.getElementById("btnResetSave") -> setTextColour(al_map_rgb(255,255,255));
 
-  levelSelectUI.addElement(new Button(x_loc, y_init, "Back to main menu", "btnBack", levelselect_font));
-  levelSelectUI.getElementById("btnBack") -> setSize(300,18);
-  //levelSelectUI.getElementById("btnBack") -> disableHoverEffect();
-  //levelSelectUI.getElementById("btnBack") -> setCellFillTransparent(true);
-  levelSelectUI.getElementById("btnBack") -> setTextJustification(1);
-  //levelSelectUI.getElementById("btnBack") -> setTextColour(al_map_rgb(255,255,255));
-
   levelSelectUI.addElement(new Button(700, 651, "Really reset?", "btnReallyReset", levelselect_font));
   levelSelectUI.getElementById("btnReallyReset") -> setSize(180,18);
   levelSelectUI.getElementById("btnReallyReset") -> disable();
@@ -70,6 +62,13 @@ LevelSelect::LevelSelect() {
   levelSelectUI.getElementById("btnCancel") -> disable();
   levelSelectUI.getElementById("btnCancel") -> hide();
   //levelSelectUI.getElementById("btnCancel") -> disableHoverEffect();
+
+  levelSelectUI.addElement(new Button(x_loc, y_init, "Back to main menu", "btnBack", levelselect_font));
+  levelSelectUI.getElementById("btnBack") -> setSize(300,18);
+  //levelSelectUI.getElementById("btnBack") -> disableHoverEffect();
+  //levelSelectUI.getElementById("btnBack") -> setCellFillTransparent(true);
+  levelSelectUI.getElementById("btnBack") -> setTextJustification(1);
+  //levelSelectUI.getElementById("btnBack") -> setTextColour(al_map_rgb(255,255,255));
 }
 
 void LevelSelect::createLevelButton(int newX, int newY, int newLevelNumber){
@@ -98,9 +97,8 @@ void LevelSelect::draw(){
 void LevelSelect::update(){
   levelSelectUI.update();
 
-  if (KeyListener::key[ALLEGRO_KEY_ESCAPE] || levelSelectUI.getElementById("btnBack") -> clicked()) {
+  if (ActionBinder::actionBegun(ACTION_B) || levelSelectUI.getElementById("btnBack") -> clicked()) {
     set_next_state(STATE_MENU);
-    //tools::log_message("Changing State to MENUU");
   }
 
   if (levelSelectUI.getElementById("btnResetSave") -> clicked()) {
