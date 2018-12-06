@@ -10,8 +10,8 @@
 #include "util/Tools.h"
 #include "util/ActionBinder.h"
 
-Character::Character(float x, float y) :
-  Box(x, y, 0.8, 2.5) {
+Character::Character(float x, float y, b2World *world) :
+  Box(x, y, 0.8, 2.5, world) {
 
   timer_sound_delay=0;
   tick = 0;
@@ -20,19 +20,13 @@ Character::Character(float x, float y) :
 
   direction = false;
   color = al_map_rgb(0,0,255);
-}
 
-void Character::init(b2World *world){
-  // Set world
-  gameWorld = world;
+  // Modify body
+  body -> SetType(b2_dynamicBody);
+  body -> SetTransform(b2Vec2(x, y + 0.25f), getAngle());
+  body -> SetFixedRotation(true);
 
-  // Create body
-  createBody(BODY_DYNAMIC, true);
-
-	body -> SetTransform(b2Vec2(x, y + 0.25f), angle);
-
-  sensor_box = new Sensor(x, y - 0.55, width * 0.4, 0.6);
-  sensor_box -> init(gameWorld,getBody());
+  sensor_box = new Sensor(x, y - 0.55, getWidth() * 0.4, 0.6, getBody(), gameWorld);
 
   sprite = tools::load_bitmap_ex("images/character.png");
 
@@ -41,6 +35,7 @@ void Character::init(b2World *world){
 
   for( int i = 0; i < 15; i++)
     sprites[i] = al_create_sub_bitmap( sprite, i * 32, 0, 32, 64);
+
 }
 
 void Character::update(){
@@ -84,9 +79,6 @@ void Character::update(){
     frame = 0;
 
   b2Vec2 position = body -> GetPosition();
-  x = position.x;
-  y = position.y;
-  angle = body -> GetAngle();
   double yVel = getBody() -> GetLinearVelocity().y;
 
   // TODO (Danny#1#): Movement too slow
@@ -150,8 +142,8 @@ void Character::draw(){
   // scale using the new transform
   al_identity_transform(&trans);
 
-  al_rotate_transform(&trans, -angle);
-  al_translate_transform(&trans, (x)*20, -(y)*20);
+  al_rotate_transform(&trans, -getAngle());
+  al_translate_transform(&trans, getX()*20, -getY()*20);
 
   al_use_transform(&trans);
 
@@ -163,15 +155,15 @@ void Character::draw(){
 
   if(direction){
     if(body -> GetLinearVelocity().Length()>0.1f)
-      al_draw_bitmap(sprites[frame],-(width/2)*20+x_offset,(-(height/2)*20)+y_offset,0);
+      al_draw_bitmap(sprites[frame],-(getWidth()/2)*20+x_offset,(-(getHeight()/2)*20)+y_offset,0);
     else
-      al_draw_bitmap(sprites[14],-(width/2)*20+x_offset,(-(height/2)*20)+y_offset,0);
+      al_draw_bitmap(sprites[14],-(getWidth()/2)*20+x_offset,(-(getHeight()/2)*20)+y_offset,0);
   }
   else{
     if(body -> GetLinearVelocity().Length()>0.1f)
-      al_draw_bitmap(sprites[frame],-(width/2)*20+x_offset,(-(height/2)*20)+y_offset,ALLEGRO_FLIP_HORIZONTAL);
+      al_draw_bitmap(sprites[frame],-(getWidth()/2)*20+x_offset,(-(getHeight()/2)*20)+y_offset,ALLEGRO_FLIP_HORIZONTAL);
     else
-      al_draw_bitmap(sprites[14],-(width/2)*20+x_offset,(-(height/2)*20)+y_offset,ALLEGRO_FLIP_HORIZONTAL);
+      al_draw_bitmap(sprites[14],-(getWidth()/2)*20+x_offset,(-(getHeight()/2)*20)+y_offset,ALLEGRO_FLIP_HORIZONTAL);
 
   }
 

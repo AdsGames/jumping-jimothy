@@ -5,13 +5,19 @@
 #include "util/Globals.h"
 
 // Constructor
-Explosive::Explosive(float x, float y) :
-  Box(x, y, 1.55f, 1.55f) {
+Explosive::Explosive(float x, float y, bool affectCharacter, Character *character, b2World *world) :
+  Box(x, y, 1.55f, 1.55f, world) {
 
   blastRadius = 10;
   blastPower = 1000;
 
+  gameCharacter = character;
+  affect_character = affectCharacter;
+
   color = al_map_rgb(255,0,0);
+
+  // Modify body
+  body -> SetType(b2_kinematicBody);
 }
 
 //subclass b2QueryCallback for proximity query callback
@@ -24,20 +30,6 @@ class MyQueryCallback : public b2QueryCallback {
       return true;//keep going to find all fixtures in the query area
     }
 };
-
-void Explosive::init(bool affectCharacter, b2World *world, Character *character){
-
-  gameCharacter = character;
-  affect_character = affectCharacter;
-
-  // Set world
-  gameWorld = world;
-
-  // Create body
-  createBody(BODY_KINEMATIC, false);
-}
-
-
 
 void Explosive::update(){
 
@@ -55,16 +47,16 @@ void Explosive::update(){
   gameWorld->QueryAABB( &queryCallback, aabb );
 
   is_exploding=false;
-  //check which of these have their center of mass within the blast radius
+
+  // Check which of these have their center of mass within the blast radius
   for (unsigned int i = 0; i < queryCallback.foundBodies.size(); i++) {
-    b2Body* newBody = queryCallback.foundBodies[i];
+    b2Body* newBody = queryCallback.foundBodies.at(i);
     b2Vec2 bodyCom = newBody->GetWorldCenter();
-    //ignore bodies outside the blast range
-    if ( (bodyCom - center).Length() >= blastRadius )
+    // Ignore bodies outside the blast range
+    if ((bodyCom - center).Length() >= blastRadius)
       continue;
     else{
       applyBlastImpulse(newBody, center, bodyCom, blastPower * 0.05f );//scale blast power to roughly match results of other methods at 32 rays
-
     }
   }
 }
@@ -74,8 +66,8 @@ void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 ap
 
   //ignore the grenade itself, and any non-dynamic bodies
   // Fricking feet, how do they work?
-  if ( newBody == body || newBody->GetType() != b2_dynamicBody || ((newBody == gameCharacter->getBody()
-    || newBody == gameCharacter -> getSensorBody() ) && !affect_character))
+  if ( newBody == body || newBody -> GetType() != b2_dynamicBody || ((newBody == gameCharacter -> getBody()
+    || newBody == gameCharacter -> getSensorBody()) && !affect_character))
     return;
   b2Vec2 blastDir = applyPoint - blastCenter;
   float distance = blastDir.Normalize();
@@ -105,20 +97,10 @@ void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 ap
       new_direction=b2Vec2(-magnitude,0);
 
     newBody->ApplyLinearImpulse( impulseMag*new_direction, applyPoint,true );
-
-
   }
 }
 
 void Explosive::draw(){
-
-  // Dynamic boxes have no update loop, so we must get the location
-  // from the Box2D world in the update loop
-  b2Vec2 position = body -> GetPosition();
-  x = position.x;
-  y = position.y;
-  angle = body -> GetAngle();
-
   ALLEGRO_TRANSFORM trans, prevTrans;
 
   // back up the current transform
@@ -127,8 +109,8 @@ void Explosive::draw(){
   // scale using the new transform
   al_identity_transform(&trans);
 
-  al_rotate_transform(&trans, -angle);
-  al_translate_transform(&trans, x * 20, y * -20);
+  al_rotate_transform(&trans, -getAngle());
+  al_translate_transform(&trans, getX() * 20, getY() * -20);
 
   al_use_transform(&trans);
 
@@ -140,22 +122,18 @@ void Explosive::draw(){
   }
 
   if(affect_character)
-    al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(255,0,0));
+    al_draw_filled_rectangle( -(getWidth()/2) * 20 + 1, -(getHeight()/2)*20 + 1, (getWidth()/2) * 20 - 1, (getHeight()/2) * 20 - 1,al_map_rgb(255,0,0));
   else
-    al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(0,255,0));
+    al_draw_filled_rectangle( -(getWidth()/2) * 20 + 1, -(getHeight()/2)*20 + 1, (getWidth()/2) * 20 - 1, (getHeight()/2) * 20 - 1,al_map_rgb(0,255,0));
 
 
   // PI/2 is a quarter turn. Editor boxes orientation is a range from 1-4.
   // So we have a quarter turn * 1-4, creating a quarter turn, half turn, ect.
   // - PI/2 is because we start rotated right a quarter turn.
-  float new_angle=(PI/2)*orientation - PI/2;
-
-  al_draw_rotated_bitmap(sprite,16,16,0,0,new_angle,0);
-
- // al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);
+  const float new_angle = (PI / 2) * orientation - PI / 2;
+  al_draw_rotated_bitmap(sprite, 16, 16, 0, 0, new_angle, 0);
 
   // restore the old transform
-
   al_use_transform(&prevTrans);
 }
 

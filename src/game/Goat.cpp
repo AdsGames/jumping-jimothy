@@ -4,44 +4,31 @@
 #include "util/Globals.h"
 
 // We'll use this for the goat
-Goat::Goat(float x, float y) :
-  Box(x, y, 1.6, 3.2) {
+Goat::Goat(const float x, const float y, Character *character, b2World *world) :
+  Box(x, y, 1.6, 3.2, world) {
 
   goat_frame = 0;
   goat_tick = 0;
 
-  for (int i = 0; i < 16; i++)
-    goat_images[i] =  nullptr;
-}
+  // Modify body
+  body -> SetType(b2_dynamicBody);
 
-void Goat::init(b2World *world, Character *character) {
   gameCharacter = character;
 
   // Image
+  sprite = tools::load_bitmap_ex("images/goat.png");
   if (sprite) {
     for(int i = 0; i < 16; i++) {
       goat_images[i] = al_create_sub_bitmap(sprite, i * 32,0, 32, 64);
     }
   }
 
-  // Set world
-  gameWorld = world;
-
-  // Create body
-  createBody(BODY_DYNAMIC, false);
-
   // Sensor
-  sensor_box = new Sensor(x,y,width,height);
-  sensor_box -> init(gameWorld, getBody());
+  sensor_box = new Sensor(x, y, getWidth(), getHeight(), getBody(), gameWorld);
 }
 
 // Draw box to screen
 void Goat::draw(){
-
-  b2Vec2 position = body -> GetPosition();
-  x = position.x;
-  y = position.y;
-  angle = body -> GetAngle();
   goat_tick++;
   if(goat_tick>10){
     goat_frame++;
@@ -59,12 +46,12 @@ void Goat::draw(){
   // scale using the new transform
   al_identity_transform(&trans);
 
-  al_rotate_transform(&trans, -angle);
-  al_translate_transform(&trans, x * 20, y * -20);
+  al_rotate_transform(&trans, -getAngle());
+  al_translate_transform(&trans, getX() * 20, getY() * -20);
 
   al_use_transform(&trans);
 
-  al_draw_bitmap(goat_images[goat_frame],-(width/2)*20,-(height/2)*20,0);
+  al_draw_bitmap(goat_images[goat_frame],-(getWidth()/2)*20,-(getHeight()/2)*20,0);
 
   al_use_transform(&prevTrans);
 }
@@ -75,7 +62,6 @@ bool Goat::getWinCondition(){
   }
   return false;
 }
-
 
 // Get box type
 int Goat::getType(){

@@ -13,10 +13,10 @@
 
 // Construct
 Box::Box() {
+  // Nullify sprite
   sprite = nullptr;
 
   orientation = 0;
-  angle = 0.0f;
 
   isPaused = true;
 
@@ -28,15 +28,18 @@ Box::Box() {
   gameWorld = nullptr;
   body = nullptr;
 
-  setPosition(0, 0);
-  setSize(1, 1);
+  initial_angle = 0.0f;
+  initial_position = b2Vec2(0, 0);
+  initial_size = b2Vec2(0, 0);
 }
 
 // Detailed constructor
-Box::Box(float x, float y, float width, float height) :
+Box::Box(const float x, const float y, const float width, const float height, b2World *world) :
   Box() {
-  setPosition(x, y);
-  setSize(width, height);
+  initial_position = b2Vec2(x, y);
+  initial_size = b2Vec2(width, height);
+  gameWorld = world;
+  createBody();
 }
 
 // Set images
@@ -45,38 +48,22 @@ void Box::setImage(ALLEGRO_BITMAP* image) {
 }
 
 // Create body
-void Box::createBody(int bodyType, bool fixedRotation) {
+void Box::createBody() {
   // World must be set
   if (!gameWorld)
     return;
 
-  // Body
+  // Body definition
   b2BodyDef bodyDef;
 
-  // Body types
-  switch (bodyType) {
-    case BODY_DYNAMIC:
-      bodyDef.type = b2_dynamicBody;
-      break;
-    case BODY_KINEMATIC:
-      bodyDef.type = b2_kinematicBody;
-      break;
-    default:
-      bodyDef.type = b2_dynamicBody;
-      break;
-  }
+  // Body position
+	bodyDef.position.Set(getX(), getY());
 
-	bodyDef.position.Set(x, y);
-	body = gameWorld -> CreateBody(&bodyDef);
-
-	if (fixedRotation)
-    body -> SetFixedRotation(true);
-
-	// Define another box shape for our dynamic body.
+	// Shape definition
 	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(width/2, height/2);
+	dynamicBox.SetAsBox(getWidth() / 2, getHeight() / 2);
 
-	// Define the dynamic body fixture.
+	// Fixture definition
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &dynamicBox;
 
@@ -86,12 +73,13 @@ void Box::createBody(int bodyType, bool fixedRotation) {
 	// Override the default friction.
 	fixtureDef.friction = 0.3f;
 
-	// Add the shape to the body.
+	// Create body and create fixture
+	body = gameWorld -> CreateBody(&bodyDef);
 	body -> CreateFixture(&fixtureDef);
 }
 
 // Set static mode
-void Box::setPaused(bool pause) {
+void Box::setPaused(const bool pause) {
   // Must be pausable
   if (!isPausable())
     return;
@@ -100,60 +88,74 @@ void Box::setPaused(bool pause) {
   isPaused = pause;
 
   // Body must be defined
-  if (body) {
-    if (isPaused) {
-      static_velocity = body -> GetLinearVelocity();
-      static_angular_velocity = body -> GetAngularVelocity();
-      body -> SetType( b2_staticBody);
+  if (!body)
+    return;
+
+  if (isPaused) {
+    static_velocity = body -> GetLinearVelocity();
+    static_angular_velocity = body -> GetAngularVelocity();
+    body -> SetType( b2_staticBody);
+  }
+  else {
+    isPaused = false;
+    body -> SetType( b2_dynamicBody);
+    if(isPausable() && (static_velocity.y<=0.01f && static_velocity.y>=-0.01f && static_velocity.x<=0.1f && static_velocity.x>=-0.1f && static_angular_velocity<=0.1f && static_angular_velocity>=-0.1f )){
+      body -> SetAwake(false);
+      body -> SetLinearVelocity(b2Vec2(0,0));
     }
-    else {
-      isPaused = false;
-      body -> SetType( b2_dynamicBody);
-      if(isPausable() && (static_velocity.y<=0.01f && static_velocity.y>=-0.01f && static_velocity.x<=0.1f && static_velocity.x>=-0.1f && static_angular_velocity<=0.1f && static_angular_velocity>=-0.1f )){
-        body -> SetAwake(false);
-        body -> SetLinearVelocity(b2Vec2(0,0));
-      }
-      else{
-        body -> SetLinearVelocity( static_velocity);
-        body -> SetAngularVelocity( static_angular_velocity);
-      }
+    else{
+      body -> SetLinearVelocity( static_velocity);
+      body -> SetAngularVelocity( static_angular_velocity);
     }
   }
 }
 
 // Get x position
-float Box::getX(){
-  return x;
+float Box::getX() {
+  if (body)
+    return body -> GetPosition().x;
+  return initial_position.x;
 };
 
 // Get y position
-float Box::getY(){
-  return y;
+float Box::getY() {
+  if (body)
+    return body -> GetPosition().y;
+  return initial_position.y;
 };
 
+// Get width
+float Box::getWidth() {
+  //if (body)
+  //  return body -> GetPosition().y;
+  return initial_size.x;
+}
+
+// Get height
+float Box::getHeight() {
+  //if (body)
+  //  return body -> GetPosition().y;
+  return initial_size.y;
+}
+
+// Get angle
+float Box::getAngle() {
+  if (body)
+    return body -> GetAngle();
+  return 0.0f;
+}
+
 // Get physics body
-b2Body* Box::getBody(){
+b2Body* Box::getBody() {
   return body;
 };
 
 // Get physics body
-bool Box::isPausable(){
+bool Box::isPausable() {
   return false;
 };
 
 // Set orientation
-void Box::setOrientation(int orientation) {
+void Box::setOrientation(const int orientation) {
   this -> orientation = orientation;
-}
-
-// Set position
-void Box::setPosition(float x, float y) {
-  this -> x = x;
-  this -> y = y;
-}
-
-// Set size
-void Box::setSize(float width, float height) {
-  this -> width = width;
-  this -> height = height;
 }

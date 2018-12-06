@@ -7,17 +7,11 @@
 #include "util/Globals.h"
 #include "util/KeyListener.h"
 
-Sensor::Sensor(float x, float y,float width,float height) :
-  Box(x, y, width, height) {
+Sensor::Sensor(float x, float y, float width, float height, b2Body *parentBody, b2World *world) :
+  Box(x, y, width, height, world) {
 
-}
-
-void Sensor::init(b2World *world, b2Body *parentBody){
-  // Set world
-  gameWorld = world;
-
-  // Create body
-  createBody(BODY_DYNAMIC, true);
+  // Modify body
+  body -> SetType(b2_dynamicBody);
 
   // Override defaults
   b2Fixture *fixPointer = body -> GetFixtureList();
@@ -33,7 +27,6 @@ void Sensor::init(b2World *world, b2Body *parentBody){
   jointDef  -> referenceAngle = 0;
   gameWorld -> CreateJoint(jointDef);
 }
-
 
 bool Sensor::isColliding(){
   for(b2ContactEdge *contact = body -> GetContactList(); contact; contact = contact ->next)
@@ -63,15 +56,6 @@ bool Sensor::isCollidingWithBody(b2Body *newBody){
 
 // Draw box to screen
 void Sensor::draw(){
-  // If the object is a character, the position is updated in the
-  // update loop rather than in draw
-
-    b2Vec2 position = body -> GetPosition();
-    x = position.x;
-    y = position.y;
-    angle = body -> GetAngle();
-
-
   ALLEGRO_TRANSFORM trans, prevTrans;
 
   // back up the current transform
@@ -80,13 +64,13 @@ void Sensor::draw(){
   // scale using the new transform
   al_identity_transform(&trans);
 
-  al_rotate_transform(&trans, -angle);
-  al_translate_transform(&trans, x * 20, y * -20);
+  al_rotate_transform(&trans, -getAngle());
+  al_translate_transform(&trans, getX() * 20, getY() * -20);
 
   al_use_transform(&trans);
 
 
-    al_draw_filled_rectangle(-(width/2)*20 , -(height/2)*20 , (width/2)*20 , (height/2)*20 ,
+    al_draw_filled_rectangle(-(getWidth()/2)*20 , -(getHeight()/2)*20 , (getWidth()/2)*20 , (getHeight()/2)*20 ,
                 al_map_rgb(255,255,0));
 
  // al_draw_bitmap(sprite,-(width/2)*20,-(height/2)*20,0);

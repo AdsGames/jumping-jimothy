@@ -13,10 +13,9 @@
 
 class DynamicBox : public Box {
   public:
-    DynamicBox(float x, float y);
+    // Constructor
+    DynamicBox(const float x, const float y, const float velX, const float velY, b2World *world);
     virtual ~DynamicBox() {};
-
-    void init(float vel_x, float vel_y, b2World *world);
 
     // Updates
     virtual void draw() override;

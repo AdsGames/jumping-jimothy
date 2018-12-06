@@ -6,28 +6,16 @@
 #include "util/KeyListener.h"
 #include "util/Globals.h"
 
-CollisionBox::CollisionBox(float x, float y, float width, float height) :
-  Box(x, y, width, height) {
-}
+CollisionBox::CollisionBox(const float x, const float y, const float width, const float height, b2World *world) :
+  Box(x, y, width, height, world) {
 
-void CollisionBox::init(b2World *world){
-  // Set world
-  gameWorld = world;
-
-  // Create body
-  createBody(BODY_KINEMATIC, false);
+  // Modify body
+  body -> SetType(b2_kinematicBody);
 }
 
 void CollisionBox::draw(){
 
   if( KeyListener::key[ALLEGRO_KEY_G]){
-
-    // Collision boxes don't have an update loop, we have to get
-    // the location from the Box2D world ourselves in the draw loop
-    b2Vec2 position = body -> GetPosition();
-    x = position.x;
-    y = position.y;
-
     ALLEGRO_TRANSFORM trans, prevTrans;
 
     // back up the current transform
@@ -36,11 +24,11 @@ void CollisionBox::draw(){
     // scale using the new transform
     al_identity_transform(&trans);
 
-    al_translate_transform(&trans, x * 20, y * -20);
+    al_translate_transform(&trans, getX() * 20, getY() * -20);
 
     al_use_transform(&trans);
 
-    al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(255,0,0));
+    al_draw_filled_rectangle( -(getWidth()/2) * 20 + 1, -(getHeight()/2)*20 + 1, (getWidth()/2) * 20 - 1, (getHeight()/2) * 20 - 1,al_map_rgb(255,0,0));
 
     al_use_transform(&prevTrans);
   }

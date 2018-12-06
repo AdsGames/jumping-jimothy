@@ -16,10 +16,9 @@
 
 class Goat : public Box {
   public:
-    Goat(float x, float y);
+    Goat(const float x, const float y, Character *character, b2World *world);
     virtual ~Goat() {};
 
-    void init(b2World *world, Character *character);
     virtual void draw() override;
     bool getWinCondition();
 
