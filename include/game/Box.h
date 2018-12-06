@@ -28,13 +28,13 @@ class Box {
     virtual ~Box() {};
 
     // Create body
-    void createBody();
+    void createBody(b2World *world);
 
     // Draw
     virtual void draw() = 0;
 
     // Update logic
-    virtual void update() = 0;
+    virtual void update(b2World *world) = 0;
 
     // Get type
     virtual int getType() = 0;
@@ -78,9 +78,6 @@ class Box {
 
     // Sprite for box
     ALLEGRO_BITMAP *sprite;
-
-    // Pointer to game world
-    b2World *gameWorld;
 
     // Pointer to physics body
     b2Body *body;

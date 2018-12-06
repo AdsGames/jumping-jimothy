@@ -396,7 +396,7 @@ void Game::update(){
       if( !testing)
         reset();
       else{
-        al_show_native_message_box( nullptr, "Level complete!", "Opening editor","", "Okily dokily.", 0);
+        al_show_native_message_box(nullptr, "Level complete!", "Opening editor","", "Okily dokily.", 0);
         set_next_state( STATE_EDIT);
       }
     }
@@ -407,7 +407,7 @@ void Game::update(){
 
   // Update character
   for (unsigned int i = 0; i < gameBoxes.size(); i++)
-    gameBoxes[i] -> update();
+    gameBoxes[i] -> update(gameWorld);
 
   // Die
   if (KeyListener::keyPressed[ALLEGRO_KEY_R]) {

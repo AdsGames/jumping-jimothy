@@ -19,7 +19,7 @@ class DynamicBox : public Box {
 
     // Updates
     virtual void draw() override;
-    virtual void update() override {};
+    virtual void update(b2World *world) override {};
 
     // Get type
     virtual int getType() override;

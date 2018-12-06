@@ -16,7 +16,7 @@ class Explosive : public Box {
     Explosive(const float x, const float y, const bool affectCharacter, Character *character, b2World *world);
     virtual ~Explosive() {};
     virtual void draw() override;
-    virtual void update() override;
+    virtual void update(b2World *world) override;
 
     void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, const float blastPower);
 

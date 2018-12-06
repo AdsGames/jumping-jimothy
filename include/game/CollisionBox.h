@@ -17,7 +17,7 @@ class CollisionBox : public Box {
 
     virtual ~CollisionBox() {};
     void draw();
-    void update() {};
+    void update(b2World *world) {};
 
     // Get type
     virtual int getType() override;

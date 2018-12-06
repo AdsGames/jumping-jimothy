@@ -25,7 +25,7 @@ class Sensor : public Box{
 
     bool isColliding();
 
-    virtual void update() override {};
+    virtual void update(b2World *world) override {};
     virtual void draw() override;
 
     bool isCollidingWithDynamicBody();

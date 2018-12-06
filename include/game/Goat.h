@@ -23,7 +23,7 @@ class Goat : public Box {
     bool getWinCondition();
 
     // Update logic
-    virtual void update() override {};
+    virtual void update(b2World *world) override {};
 
     // Get type
     virtual int getType() override;

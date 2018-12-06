@@ -24,7 +24,7 @@ Goat::Goat(const float x, const float y, Character *character, b2World *world) :
   }
 
   // Sensor
-  sensor_box = new Sensor(x, y, getWidth(), getHeight(), getBody(), gameWorld);
+  sensor_box = new Sensor(x, y, getWidth(), getHeight(), getBody(), world);
 }
 
 // Draw box to screen

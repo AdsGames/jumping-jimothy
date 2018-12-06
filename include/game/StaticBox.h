@@ -22,7 +22,7 @@ class StaticBox : public Box {
     virtual void draw() override;
 
     // Update
-    virtual void update() override {};
+    virtual void update(b2World *world) override {};
 
     // Get type
     virtual int getType() override;
