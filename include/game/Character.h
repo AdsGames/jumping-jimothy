@@ -23,10 +23,10 @@ const int NUM_CHARACTER_IMAGES = 20;
 class Character : public Box{
   public:
     // Constructor
-    Character(const float x, const float y, b2World *world);
+    Character(const float x, const float y, ALLEGRO_BITMAP *image, b2World *world);
 
     // Destructor
-    virtual ~Character() {};
+    virtual ~Character();
 
     // Draw
     virtual void draw() override;

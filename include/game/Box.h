@@ -25,7 +25,7 @@ class Box {
     Box(const float x, const float y, const float width, const float height, b2World *world);
 
     // Destructor
-    virtual ~Box() {};
+    virtual ~Box();
 
     // Create body
     void createBody(b2World *world);

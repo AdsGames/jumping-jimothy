@@ -52,6 +52,9 @@ Game::Game() {
     testing_back_button = Button(966,728,"Back","btnBack",edit_font);
   }
 
+  // Load images
+  load_sprites();
+
   // Reset fresh
   reset();
 
@@ -66,22 +69,21 @@ Game::Game() {
 // Destructor
 Game::~Game(){
   // Destory bitmaps
-  //if( box != nullptr)
+  //if (box != nullptr)
   //  al_destroy_bitmap( box);
-  if( goat_map != nullptr)
+  if (goat_map != nullptr)
     al_destroy_bitmap( goat_map);
-  if( character != nullptr)
+  if (character != nullptr)
     al_destroy_bitmap( character);
-  if( play != nullptr)
+  if (play != nullptr)
     al_destroy_bitmap( play);
-  if( pause != nullptr)
+  if (pause != nullptr)
     al_destroy_bitmap( pause);
 }
 
 // Creates box in world
 Goat* Game::create_goat(float x, float y){
-  Goat *newGoat = new Goat(x, y, gameCharacter, gameWorld);
-  newGoat -> setImage(goat_map);
+  Goat *newGoat = new Goat(x, y, gameCharacter, goat_map, gameWorld);
   if(gameCharacter == nullptr)
     tools::log_message("WARNING: gameCharacter is nullptr when creating a goat.");
   gameBoxes.push_back(newGoat);
@@ -131,8 +133,7 @@ Box* Game::create_explosive_box(float x, float y, int orientation, bool affectsC
 
 // Add character to world
 Character *Game::create_character(float x, float y){
-  Character *newCharacter = new Character(x, y, gameWorld);
-  newCharacter -> setImage(character);
+  Character *newCharacter = new Character(x, y, character, gameWorld);
   gameBoxes.push_back( newCharacter);
   return newCharacter;
 }
@@ -325,27 +326,32 @@ void Game::load_world(int newLevel){
 }
 
 // Reset game
-void Game::reset(){
-  // Reset variables
+void Game::reset() {
+  // Remove boxes, including character and goatr
+  for (unsigned int i = 0; i < gameBoxes.size(); i++) {
+    delete gameBoxes.at(i);
+  }
   gameBoxes.clear();
+
   gameGoat = nullptr;
   gameCharacter = nullptr;
+
   b2_setup();
-  load_sprites();
   load_world(level);
+
   static_mode = true;
   first_play = true;
 
   // Pause boxes
-  for( unsigned int i = 0; i < gameBoxes.size(); i++){
-    if( gameBoxes[i] -> getType() == BOX){
+  for (unsigned int i = 0; i < gameBoxes.size(); i++) {
+    if (gameBoxes[i] -> getType() == BOX) {
       gameBoxes[i] -> setPaused(true);
     }
   }
-  if( gameGoat == nullptr)
+  if (gameGoat == nullptr)
     tools::log_message("WARNING: Goat is undeclared in game");
 
-  if( gameCharacter == nullptr)
+  if (gameCharacter == nullptr)
     tools::log_message("WARNING: gameCharacter is undeclared in game");
 }
 
@@ -409,12 +415,6 @@ void Game::update(){
   for (unsigned int i = 0; i < gameBoxes.size(); i++)
     gameBoxes[i] -> update(gameWorld);
 
-  // Die
-  if (KeyListener::keyPressed[ALLEGRO_KEY_R]) {
-    death.play();
-    reset();
-  }
-
   if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]) {
     set_next_state(STATE_MENU);
     MusicManager::game_music.stop();
@@ -468,6 +468,12 @@ void Game::update(){
       reset();
       tools::log_message("===========" + tools::toString(gameCharacter -> getX()));
     }
+  }
+
+  // Die
+  if (KeyListener::keyPressed[ALLEGRO_KEY_R]) {
+    death.play();
+    reset();
   }
 }
 

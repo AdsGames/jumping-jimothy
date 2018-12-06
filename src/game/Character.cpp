@@ -10,7 +10,7 @@
 #include "util/Tools.h"
 #include "util/ActionBinder.h"
 
-Character::Character(const float x, const float y, b2World *world) :
+Character::Character(const float x, const float y, ALLEGRO_BITMAP *image, b2World *world) :
   Box(x, y, 0.8, 2.5, world) {
 
   timer_sound_delay=0;
@@ -23,13 +23,14 @@ Character::Character(const float x, const float y, b2World *world) :
 
   // Modify body
   body -> SetType(b2_dynamicBody);
-  body -> SetTransform(b2Vec2(x, y + 0.25f), getAngle());
+  body -> SetTransform(b2Vec2(x, y + 0.40f), getAngle());
   body -> SetFixedRotation(true);
 
   // Create sensor
-  sensor_box = new Sensor(x, y - 0.55, getWidth() * 0.4, 0.6, getBody(), world);
+  sensor_box = new Sensor(x, y - 0.55f, getWidth() * 0.4f, 0.6f, getBody(), world);
 
-  sprite = tools::load_bitmap_ex("images/character.png");
+  // Image
+  setImage(image);
 
   jump.load_wav("sfx/jump.wav");
   land.load_wav("sfx/land.wav");
@@ -38,6 +39,17 @@ Character::Character(const float x, const float y, b2World *world) :
   for (int i = 0; i < 15; i++)
     sprites[i] = al_create_sub_bitmap(sprite, i * 32, 0, 32, 64);
 
+}
+
+// Destructor
+Character::~Character() {
+  // Remove body
+  delete sensor_box;
+
+  // Remove sprite as it was created here
+  //if (sprite) {
+   // al_destroy_bitmap(sprite);
+  //}
 }
 
 // Get sensor body
