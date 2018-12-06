@@ -81,7 +81,8 @@ Game::~Game(){
 // Creates box in world
 Goat* Game::create_goat(float x, float y){
   Goat *newGoat = new Goat(x, y);
-  newGoat -> init(goat_map, gameWorld, gameCharacter);
+  newGoat -> setImage(goat_map);
+  newGoat -> init(gameWorld, gameCharacter);
   if(gameCharacter == nullptr)
     tools::log_message("WARNING: gameCharacter is nullptr when creating a goat.");
   gameBoxes.push_back(newGoat);
@@ -91,15 +92,16 @@ Goat* Game::create_goat(float x, float y){
 // Creates box in world
 Box* Game::create_dynamic_box(float x, float y, float velX, float velY, ALLEGRO_BITMAP *image, bool newBodyType){
   DynamicBox *newDynamicBox = new DynamicBox(x, y);
-  newDynamicBox -> init(velX, velY, image, gameWorld);
+  newDynamicBox -> setImage(image);
+  newDynamicBox -> init(velX, velY, gameWorld);
   gameBoxes.push_back(newDynamicBox);
   return newDynamicBox;
 }
 
 // Creates box in world
-Box* Game::create_static_box(float x, float y, ALLEGRO_BITMAP *sp_1, ALLEGRO_BITMAP *sp_2, ALLEGRO_BITMAP *sp_3, ALLEGRO_BITMAP *sp_4){
+Box* Game::create_static_box(float x, float y, ALLEGRO_BITMAP *image){
   StaticBox *newStaticBox = new StaticBox(x, y);
-  newStaticBox -> setImages(sp_1,sp_2,sp_3,sp_4);
+  newStaticBox -> setImage(image);
   gameBoxes.push_back(newStaticBox);
   return newStaticBox;
 }
@@ -120,7 +122,9 @@ Box* Game::create_explosive_box(float x, float y, int orientation, bool affectsC
   else
     newBoxImage = box_repel_direction;
 
-  newExplosive -> init(orientation, newBoxImage, affectsCharacter, gameWorld, gameCharacter);
+  newExplosive -> setImage(newBoxImage);
+  newExplosive -> init(affectsCharacter, gameWorld, gameCharacter);
+  newExplosive -> setOrientation(orientation);
 
   if(gameCharacter == nullptr)
     tools::log_message("WARNING: gameCharacter is nullptr when creating an explosive box.");
@@ -132,7 +136,8 @@ Box* Game::create_explosive_box(float x, float y, int orientation, bool affectsC
 // Add character to world
 Character *Game::create_character(float x, float y){
   Character *newCharacter = new Character(x, y);
-  newCharacter -> init(character, gameWorld);
+  newCharacter -> setImage(character);
+  newCharacter -> init(gameWorld);
   gameBoxes.push_back( newCharacter);
   return newCharacter;
 }
@@ -237,12 +242,22 @@ void Game::load_world(int newLevel){
           }
         }
 
-        newBox = create_static_box( tools::stringToFloat(x),
-                                    tools::stringToFloat(y),
-                                    new_dynamic_tile[orientation_array[0]],
-                                    new_dynamic_tile[orientation_array[1]],
-                                    new_dynamic_tile[orientation_array[2]],
-                                    new_dynamic_tile[orientation_array[3]]);
+        // Combine images
+        const int tmp_width = al_get_bitmap_width(new_dynamic_tile[0]) * 2;
+        const int tmp_height = al_get_bitmap_height(new_dynamic_tile[0]) * 2;
+
+        ALLEGRO_BITMAP *combined_image = al_create_bitmap(tmp_width, tmp_height);
+        al_set_target_bitmap(combined_image);
+
+        // Offsets from subtile
+        for(int t = 0; t < 4; t++){
+          const int off_x = (t == 1 || t == 3) ? 16: 0;
+          const int off_y = (t >= 2) ? 16: 0;
+
+          al_draw_bitmap(new_dynamic_tile[orientation_array[t]], off_x, off_y, 0);
+        }
+
+        newBox = create_static_box(tools::stringToFloat(x), tools::stringToFloat(y), combined_image);
 
         static_count++;
       }
@@ -329,7 +344,7 @@ void Game::reset(){
   // Pause boxes
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
     if( gameBoxes[i] -> getType() == BOX){
-      gameBoxes[i] -> setStatic(true);
+      gameBoxes[i] -> setPaused(true);
     }
   }
   if( gameGoat == nullptr)
@@ -437,7 +452,7 @@ void Game::update(){
 
     for(unsigned int i = 0; i < gameBoxes.size(); i++){
       if(gameBoxes[i] -> isPausable()){
-        gameBoxes[i] -> setStatic(static_mode);
+        gameBoxes[i] -> setPaused(static_mode);
       }
     }
 

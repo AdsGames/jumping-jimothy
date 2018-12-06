@@ -12,39 +12,12 @@ DynamicBox::DynamicBox(float x, float y) :
   color = al_map_rgb(255, 0, 0);
 }
 
-void DynamicBox::init(float vel_x, float vel_y, ALLEGRO_BITMAP *image, b2World *world){
-
-  sprite = image;
-
+void DynamicBox::init(float vel_x, float vel_y, b2World *world){
   // Set world
   gameWorld = world;
 
   // Create body
   createBody(BODY_KINEMATIC, false);
-}
-
-
-// Set state
-void DynamicBox::setStatic(bool stat) {
-  Box::setStatic(stat);
-
-  if (static_mode) {
-    static_velocity = body -> GetLinearVelocity();
-    static_angular_velocity = body -> GetAngularVelocity();
-    body -> SetType( b2_staticBody);
-  }
-  else {
-    static_mode = false;
-    body -> SetType( b2_dynamicBody);
-    if(isPausable() && (static_velocity.y<=0.01f && static_velocity.y>=-0.01f && static_velocity.x<=0.1f && static_velocity.x>=-0.1f && static_angular_velocity<=0.1f && static_angular_velocity>=-0.1f )){
-      body -> SetAwake(false);
-      body -> SetLinearVelocity(b2Vec2(0,0));
-    }
-    else{
-      body -> SetLinearVelocity( static_velocity);
-      body -> SetAngularVelocity( static_angular_velocity);
-    }
-  }
 }
 
 // Draw box to screen
@@ -73,7 +46,7 @@ void DynamicBox::draw() {
 
   // Danny... why was this removed?
   // Lolwutnow
-  if( static_mode)
+  if(isPaused)
     draw_velocity = b2Vec2( static_velocity.x, static_velocity.y);
   else
     draw_velocity = b2Vec2( body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);

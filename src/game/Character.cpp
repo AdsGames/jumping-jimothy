@@ -22,9 +22,7 @@ Character::Character(float x, float y) :
   color = al_map_rgb(0,0,255);
 }
 
-void Character::init(ALLEGRO_BITMAP *newSprite, b2World *world){
-  sprite = newSprite;
-
+void Character::init(b2World *world){
   // Set world
   gameWorld = world;
 

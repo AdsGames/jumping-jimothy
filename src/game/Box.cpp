@@ -18,7 +18,7 @@ Box::Box() {
   orientation = 0;
   angle = 0.0f;
 
-  static_mode = true;
+  isPaused = true;
 
   static_velocity = b2Vec2(0, 0);
   static_angular_velocity = 0.0f;
@@ -40,11 +40,8 @@ Box::Box(float x, float y, float width, float height) :
 }
 
 // Set images
-void Box::setImages(ALLEGRO_BITMAP* img_1, ALLEGRO_BITMAP* img_2, ALLEGRO_BITMAP* img_3, ALLEGRO_BITMAP* img_4) {
-  new_tiles[0] = img_1;
-  new_tiles[1] = img_2;
-  new_tiles[2] = img_3;
-  new_tiles[3] = img_4;
+void Box::setImage(ALLEGRO_BITMAP* image) {
+  sprite = image;
 }
 
 // Create body
@@ -94,8 +91,34 @@ void Box::createBody(int bodyType, bool fixedRotation) {
 }
 
 // Set static mode
-void Box::setStatic(bool stat) {
-  static_mode = stat;
+void Box::setPaused(bool pause) {
+  // Must be pausable
+  if (!isPausable())
+    return;
+
+  // Set paused state
+  isPaused = pause;
+
+  // Body must be defined
+  if (body) {
+    if (isPaused) {
+      static_velocity = body -> GetLinearVelocity();
+      static_angular_velocity = body -> GetAngularVelocity();
+      body -> SetType( b2_staticBody);
+    }
+    else {
+      isPaused = false;
+      body -> SetType( b2_dynamicBody);
+      if(isPausable() && (static_velocity.y<=0.01f && static_velocity.y>=-0.01f && static_velocity.x<=0.1f && static_velocity.x>=-0.1f && static_angular_velocity<=0.1f && static_angular_velocity>=-0.1f )){
+        body -> SetAwake(false);
+        body -> SetLinearVelocity(b2Vec2(0,0));
+      }
+      else{
+        body -> SetLinearVelocity( static_velocity);
+        body -> SetAngularVelocity( static_angular_velocity);
+      }
+    }
+  }
 }
 
 // Get x position
@@ -117,6 +140,11 @@ b2Body* Box::getBody(){
 bool Box::isPausable(){
   return false;
 };
+
+// Set orientation
+void Box::setOrientation(int orientation) {
+  this -> orientation = orientation;
+}
 
 // Set position
 void Box::setPosition(float x, float y) {

@@ -257,9 +257,6 @@ void update(){
 
   // Drawing
   if( al_is_event_queue_empty(event_queue)) {
-    // Clear buffer
-    al_clear_to_color( al_map_rgb(0,0,0));
-
     // Render a frame
     al_set_target_bitmap(buffer);
     al_clear_to_color(al_map_rgb(0, 0, 0));
