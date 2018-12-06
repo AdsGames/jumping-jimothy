@@ -11,17 +11,18 @@
 #include "Sensor.h"
 #include "util/Sound.h"
 
-#define NUM_CHARACTER_IMAGES 20
-
 class b2World;
 class b2Body;
 class b2BodyDef;
 class b2Vec2;
 class keyListener;
 
+// Number of character images
+const int NUM_CHARACTER_IMAGES = 20;
+
 class Character : public Box{
   public:
-    Character(float x, float y, b2World *world);
+    Character(const float x, const float y, b2World *world);
     virtual ~Character() {};
 
     virtual void draw() override;
@@ -32,24 +33,40 @@ class Character : public Box{
     virtual int getType() override;
 
   private:
+    // Animation tick
     int tick;
+
+    // Animation frame
     int frame;
+
+    // Sound delay for jump sound
     int timer_sound_delay;
+
+    // Jump delay
     int timer_jump_delay;
+
+    // Sensing counter
     int counter_sensor_contact;
 
+    // Landed on ground
     bool landed;
 
+    // Previous velocity
     float velocity_old;
 
+    // Direciton
     bool direction;
 
+    // Sensor for collisions
     Sensor *sensor_box;
 
-    ALLEGRO_BITMAP *sprite;
+    // Character images
     ALLEGRO_BITMAP *sprites[NUM_CHARACTER_IMAGES];
 
+    // Sample for jump
     Sound jump;
+
+    // Sample for landing
     Sound land;
 };
 

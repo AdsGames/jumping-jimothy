@@ -5,7 +5,7 @@
 #include "util/Globals.h"
 
 // Constructor
-Explosive::Explosive(float x, float y, bool affectCharacter, Character *character, b2World *world) :
+Explosive::Explosive(const float x, const float y, const bool affectCharacter, Character *character, b2World *world) :
   Box(x, y, 1.55f, 1.55f, world) {
 
   blastRadius = 10;
@@ -23,6 +23,7 @@ Explosive::Explosive(float x, float y, bool affectCharacter, Character *characte
 //subclass b2QueryCallback for proximity query callback
 class MyQueryCallback : public b2QueryCallback {
   public:
+    // All bodies found by query
     std::vector<b2Body*> foundBodies;
 
     bool ReportFixture(b2Fixture* fixture) {
@@ -32,26 +33,28 @@ class MyQueryCallback : public b2QueryCallback {
 };
 
 void Explosive::update(){
+  // Center of blast
+  b2Vec2 center = body -> GetPosition();
 
-  b2Vec2 center = body->GetPosition();
-
-  // Totally not copypasta'd code
-  // Should do something about it
-  // Ehhhhhhh
-
-  //find all fixtures within blast radius AABB
+  // Find all fixtures within blast radius AABB
   MyQueryCallback queryCallback;
-  b2AABB aabb;
-  aabb.lowerBound = center - b2Vec2( blastRadius, blastRadius );
-  aabb.upperBound = center + b2Vec2( blastRadius, blastRadius );
-  gameWorld->QueryAABB( &queryCallback, aabb );
 
-  is_exploding=false;
+  // AABB
+  b2AABB aabb;
+  aabb.lowerBound = center - b2Vec2(blastRadius, blastRadius);
+  aabb.upperBound = center + b2Vec2(blastRadius, blastRadius);
+  gameWorld -> QueryAABB(&queryCallback, aabb);
+
+  is_exploding = false;
 
   // Check which of these have their center of mass within the blast radius
   for (unsigned int i = 0; i < queryCallback.foundBodies.size(); i++) {
+    // Temp body
     b2Body* newBody = queryCallback.foundBodies.at(i);
-    b2Vec2 bodyCom = newBody->GetWorldCenter();
+
+    // Center of world
+    b2Vec2 bodyCom = newBody -> GetWorldCenter();
+
     // Ignore bodies outside the blast range
     if ((bodyCom - center).Length() >= blastRadius)
       continue;
@@ -62,45 +65,59 @@ void Explosive::update(){
 }
 
  //this is the same for proximity and raycast methods so we can put it in a common function
-void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower){
+void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 applyPoint, const float blastPower){
 
   //ignore the grenade itself, and any non-dynamic bodies
   // Fricking feet, how do they work?
   if ( newBody == body || newBody -> GetType() != b2_dynamicBody || ((newBody == gameCharacter -> getBody()
     || newBody == gameCharacter -> getSensorBody()) && !affect_character))
     return;
+
+  // Blast direction
   b2Vec2 blastDir = applyPoint - blastCenter;
-  float distance = blastDir.Normalize();
-        //ignore bodies exactly at the blast point - blast direction is undefined
-  if ( distance == 0 )
+
+  // Distance
+  const float distance = blastDir.Normalize();
+
+  // Ignore bodies exactly at the blast point - blast direction is undefined
+  if (distance < 0.01f)
     return;
-  float invDistance = 1 / distance;
+
+  // Distance
+  const float invDistance = 1 / distance;
+
+  // Magnitude
   float impulseMag = blastPower * invDistance * invDistance;
+
   impulseMag = b2Min( impulseMag, 500.0f );
 
-   is_exploding=true;
+  is_exploding=true;
 
-  if(orientation == 0)
-    newBody->ApplyLinearImpulse( impulseMag * blastDir, applyPoint,true );
-  else{
-    float magnitude=0.2;
+  if(orientation == 0) {
+    newBody->ApplyLinearImpulse(impulseMag * blastDir, applyPoint, true);
+  }
+  else {
+    // Magnitude
+    const float magnitude=0.2;
+
+    // Direction of impulse
     b2Vec2 new_direction;
+
     if(orientation==1)
-      new_direction=b2Vec2(0,magnitude);
-    if(orientation==3)
-      new_direction=b2Vec2(0,-magnitude);
+      new_direction = b2Vec2(0,magnitude);
+    else if(orientation==3)
+      new_direction = b2Vec2(0,-magnitude);
+    else if(orientation==2)
+      new_direction = b2Vec2(magnitude,0);
+    else
+      new_direction = b2Vec2(-magnitude,0);
 
-    if(orientation==2)
-      new_direction=b2Vec2(magnitude,0);
-
-    if(orientation==4)
-      new_direction=b2Vec2(-magnitude,0);
-
-    newBody->ApplyLinearImpulse( impulseMag*new_direction, applyPoint,true );
+    newBody->ApplyLinearImpulse(impulseMag * new_direction, applyPoint, true);
   }
 }
 
 void Explosive::draw(){
+  // Transform for drawing
   ALLEGRO_TRANSFORM trans, prevTrans;
 
   // back up the current transform

@@ -34,9 +34,9 @@ void DynamicBox::draw() {
   b2Vec2 draw_velocity = b2Vec2(0,0);
 
   if(isPaused)
-    draw_velocity = b2Vec2(static_velocity.x, static_velocity.y);
+    paused_velocity = b2Vec2(paused_velocity.x, paused_velocity.y);
   else
-    draw_velocity = b2Vec2(body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
+    paused_velocity = b2Vec2(body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
 
 
   // Draw colour
