@@ -17,10 +17,10 @@
 class Goat : public Box {
   public:
     // Constructor
-    Goat(const float x, const float y, Character *character, b2World *world);
+    Goat(const float x, const float y, Character *character, ALLEGRO_BITMAP *image, b2World *world);
 
     // Destructor
-    virtual ~Goat() {};
+    virtual ~Goat();
 
     // Draw
     virtual void draw() override;

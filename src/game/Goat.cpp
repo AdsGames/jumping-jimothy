@@ -4,7 +4,7 @@
 #include "util/Globals.h"
 
 // We'll use this for the goat
-Goat::Goat(const float x, const float y, Character *character, b2World *world) :
+Goat::Goat(const float x, const float y, Character *character, ALLEGRO_BITMAP *image, b2World *world) :
   Box(x, y, 1.6, 3.2, world) {
 
   goat_frame = 0;
@@ -16,7 +16,7 @@ Goat::Goat(const float x, const float y, Character *character, b2World *world) :
   gameCharacter = character;
 
   // Image
-  sprite = tools::load_bitmap_ex("images/goat.png");
+  setImage(image);
 
   // Cut it up
   for(int i = 0; i < 16; i++) {
@@ -25,6 +25,11 @@ Goat::Goat(const float x, const float y, Character *character, b2World *world) :
 
   // Sensor
   sensor_box = new Sensor(x, y, getWidth(), getHeight(), getBody(), world);
+}
+
+// Destructor
+Goat::~Goat() {
+  delete sensor_box;
 }
 
 // Draw box to screen

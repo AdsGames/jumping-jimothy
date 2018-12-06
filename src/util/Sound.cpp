@@ -13,8 +13,7 @@ Sound::Sound() {
 
 // Dtor
 Sound::~Sound() {
-  // FIXME (Allan#1#): Memory Leak
-  //al_destroy_sample( sample);
+  al_destroy_sample(sample);
 }
 
 // Get sample ID

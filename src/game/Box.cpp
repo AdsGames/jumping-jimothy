@@ -40,6 +40,14 @@ Box::Box(const float x, const float y, const float width, const float height, b2
   createBody(world);
 }
 
+// Destructor
+Box::~Box() {
+  // Remove body
+  if (body) {
+    body -> GetWorld() -> DestroyBody(body);
+  }
+}
+
 // Set images
 void Box::setImage(ALLEGRO_BITMAP* image) {
   sprite = image;
