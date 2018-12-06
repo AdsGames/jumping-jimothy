@@ -20,7 +20,7 @@ class b2WeldJointDef;
 
 class Sensor : public Box{
   public:
-    Sensor(float x, float y,float width,float height);
+    Sensor(float x, float y, float width, float height, b2Body *parentBody, b2World *world);
     virtual ~Sensor() {};
 
     bool isColliding();
@@ -30,7 +30,6 @@ class Sensor : public Box{
 
     bool isCollidingWithDynamicBody();
     bool isCollidingWithBody(b2Body*);
-    void init(b2World *, b2Body *);
 
     // Get type
     virtual int getType() override;

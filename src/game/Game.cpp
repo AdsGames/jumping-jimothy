@@ -31,7 +31,7 @@ const char* Game::testing_file_name = nullptr;
 // Constructor
 Game::Game() {
   // Create character
-  gameCharacter = new Character(0, 0);
+  gameCharacter = nullptr;
 
   // Init first time
   newBox = nullptr;
@@ -80,9 +80,8 @@ Game::~Game(){
 
 // Creates box in world
 Goat* Game::create_goat(float x, float y){
-  Goat *newGoat = new Goat(x, y);
+  Goat *newGoat = new Goat(x, y, gameCharacter, gameWorld);
   newGoat -> setImage(goat_map);
-  newGoat -> init(gameWorld, gameCharacter);
   if(gameCharacter == nullptr)
     tools::log_message("WARNING: gameCharacter is nullptr when creating a goat.");
   gameBoxes.push_back(newGoat);
@@ -91,9 +90,8 @@ Goat* Game::create_goat(float x, float y){
 
 // Creates box in world
 Box* Game::create_dynamic_box(float x, float y, float velX, float velY, ALLEGRO_BITMAP *image, bool newBodyType){
-  DynamicBox *newDynamicBox = new DynamicBox(x, y);
+  DynamicBox *newDynamicBox = new DynamicBox(x, y, velX, velY, gameWorld);
   newDynamicBox -> setImage(image);
-  newDynamicBox -> init(velX, velY, gameWorld);
   gameBoxes.push_back(newDynamicBox);
   return newDynamicBox;
 }
@@ -107,14 +105,13 @@ Box* Game::create_static_box(float x, float y, ALLEGRO_BITMAP *image){
 }
 
 Box* Game::create_collision_box(float x, float y, float width, float height){
-  CollisionBox *newCollisionBox = new CollisionBox(x, y, width, height);
-  newCollisionBox -> init(gameWorld);
+  CollisionBox *newCollisionBox = new CollisionBox(x, y, width, height, gameWorld);
   gameBoxes.push_back(newCollisionBox);
   return newCollisionBox;
 }
 
 Box* Game::create_explosive_box(float x, float y, int orientation, bool affectsCharacter){
-  Explosive *newExplosive = new Explosive(x, y);
+  Explosive *newExplosive = new Explosive(x, y, affectsCharacter, gameCharacter, gameWorld);
   ALLEGRO_BITMAP *newBoxImage;
 
   if(orientation == 0)
@@ -123,7 +120,6 @@ Box* Game::create_explosive_box(float x, float y, int orientation, bool affectsC
     newBoxImage = box_repel_direction;
 
   newExplosive -> setImage(newBoxImage);
-  newExplosive -> init(affectsCharacter, gameWorld, gameCharacter);
   newExplosive -> setOrientation(orientation);
 
   if(gameCharacter == nullptr)
@@ -135,9 +131,8 @@ Box* Game::create_explosive_box(float x, float y, int orientation, bool affectsC
 
 // Add character to world
 Character *Game::create_character(float x, float y){
-  Character *newCharacter = new Character(x, y);
+  Character *newCharacter = new Character(x, y, gameWorld);
   newCharacter -> setImage(character);
-  newCharacter -> init(gameWorld);
   gameBoxes.push_back( newCharacter);
   return newCharacter;
 }

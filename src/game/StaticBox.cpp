@@ -12,7 +12,7 @@
 
 // Static Box Constructors
 StaticBox::StaticBox(float x, float y) :
-  Box(x, y, 1.5f, 1.5f) {
+  Box(x, y, 1.5f, 1.5f, nullptr) {
 
 }
 
@@ -28,11 +28,11 @@ void StaticBox::draw(){
   al_identity_transform(&trans);
 
   //al_rotate_transform(&trans, -angle);
-  al_translate_transform(&trans, x * 20, y * -20);
+  al_translate_transform(&trans, getX() * 20, getY() * -20);
 
   al_use_transform(&trans);
 
-  al_draw_bitmap(sprite, -(width/2)*20,-(height/2)*20, 0);
+  al_draw_bitmap(sprite, -(getWidth()/2)*20,-(getHeight()/2)*20, 0);
 
   al_use_transform(&prevTrans);
 

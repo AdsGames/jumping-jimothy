@@ -11,8 +11,6 @@
 #include <allegro5/allegro.h>
 #include <Box2D/Box2D.h>
 
-#define NUM_TILES 4
-
 class b2World;
 class b2Body;
 class b2BodyDef;
@@ -24,13 +22,13 @@ class Box {
   public:
     // Constructor
     Box();
-    Box(float x, float y, float width, float height);
+    Box(const float x, const float y, const float width, const float height, b2World *world);
 
     // Destructor
     virtual ~Box() {};
 
     // Create body
-    void createBody(int bodyType, bool fixedRotation);
+    void createBody();
 
     // Draw
     virtual void draw() = 0;
@@ -50,51 +48,62 @@ class Box {
     // Get Y
     float getY();
 
+    // Get width
+    float getWidth();
+
+    // Get height
+    float getHeight();
+
+    // Get angle
+    float getAngle();
+
     // Get physics body
     b2Body *getBody();
 
     // Set paused
-    void setPaused(bool pause);
+    void setPaused(const bool pause);
 
     // Is pausable
     virtual bool isPausable();
 
     // Set orientation
-    void setOrientation(int orientation);
+    void setOrientation(const int orientation);
 
   protected:
-    // Position
-    float x, y;
-
-    // Angle
-    float angle;
-
     // Orientation
     int orientation;
-
-    // Dimensions
-    float width, height;
 
     // Colour
     ALLEGRO_COLOR color;
 
+    // Sprite for box
     ALLEGRO_BITMAP *sprite;
-    ALLEGRO_BITMAP *new_tiles[NUM_TILES];
 
+    // Paused state
     bool isPaused;
 
+    // Snapshot of velocity
     b2Vec2 static_velocity;
+
+    // Snapshot of angular velocity
     float static_angular_velocity;
 
+    // Pointer to game world
     b2World *gameWorld;
+
+    // Pointer to physics body
     b2Body *body;
 
   private:
-    // Set position
-    void setPosition(float x, float y);
+    // Position
+    b2Vec2 initial_position;
 
-    // Set size
-    void setSize(float width, float height);
+    // Size
+    b2Vec2 initial_size;
+
+    // Angle
+    float initial_angle;
+
 };
 
 

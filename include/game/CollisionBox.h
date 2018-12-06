@@ -13,8 +13,8 @@
 
 class CollisionBox : public Box {
   public:
-    CollisionBox(float x, float y, float width, float height);
-    void init(b2World *);
+    CollisionBox(const float x, const float y, const float width, const float height, b2World *world);
+
     virtual ~CollisionBox() {};
     void draw();
     void update() {};

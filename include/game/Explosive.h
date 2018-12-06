@@ -13,12 +13,10 @@
 
 class Explosive : public Box {
   public:
-    Explosive(float x, float y);
+    Explosive(float x, float y, bool affectCharacter, Character *character, b2World *world);
     virtual ~Explosive() {};
     virtual void draw() override;
     virtual void update() override;
-
-    void init(bool affectCharacter, b2World *world, Character *character);
 
     void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 

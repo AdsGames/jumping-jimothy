@@ -21,10 +21,9 @@ class keyListener;
 
 class Character : public Box{
   public:
-    Character(float x, float y);
+    Character(float x, float y, b2World *world);
     virtual ~Character() {};
 
-    void init(b2World *newGameWorld);
     virtual void draw() override;
     virtual void update() override;
     b2Body *getSensorBody(){return sensor_box->getBody();}
