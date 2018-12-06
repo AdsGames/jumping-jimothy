@@ -41,33 +41,47 @@ class Box {
     // Get type
     virtual int getType() = 0;
 
-    // Setters
-    virtual void setStatic(bool stat);
-    void setImages(ALLEGRO_BITMAP* img_1, ALLEGRO_BITMAP* img_2, ALLEGRO_BITMAP* img_3, ALLEGRO_BITMAP* img_4);
+    // Set images
+    void setImage(ALLEGRO_BITMAP* image);
 
-    // Getters
+    // Get X
     float getX();
+
+    // Get Y
     float getY();
+
+    // Get physics body
     b2Body *getBody();
+
+    // Set paused
+    void setPaused(bool pause);
 
     // Is pausable
     virtual bool isPausable();
+
+    // Set orientation
+    void setOrientation(int orientation);
+
   protected:
-    float x;
-    float y;
+    // Position
+    float x, y;
+
+    // Angle
     float angle;
+
+    // Orientation
     int orientation;
 
+    // Dimensions
+    float width, height;
+
+    // Colour
     ALLEGRO_COLOR color;
-
-    float width;
-    float height;
-
 
     ALLEGRO_BITMAP *sprite;
     ALLEGRO_BITMAP *new_tiles[NUM_TILES];
 
-    bool static_mode;
+    bool isPaused;
 
     b2Vec2 static_velocity;
     float static_angular_velocity;
@@ -76,7 +90,10 @@ class Box {
     b2Body *body;
 
   private:
+    // Set position
     void setPosition(float x, float y);
+
+    // Set size
     void setSize(float width, float height);
 };
 

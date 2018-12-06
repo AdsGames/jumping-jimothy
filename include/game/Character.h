@@ -24,7 +24,7 @@ class Character : public Box{
     Character(float x, float y);
     virtual ~Character() {};
 
-    void init(ALLEGRO_BITMAP *newSprite, b2World *newGameWorld);
+    void init(b2World *newGameWorld);
     virtual void draw() override;
     virtual void update() override;
     b2Body *getSensorBody(){return sensor_box->getBody();}

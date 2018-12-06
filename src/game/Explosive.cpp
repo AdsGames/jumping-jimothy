@@ -8,7 +8,6 @@
 Explosive::Explosive(float x, float y) :
   Box(x, y, 1.55f, 1.55f) {
 
-  numRays=32;
   blastRadius = 10;
   blastPower = 1000;
 
@@ -26,15 +25,13 @@ class MyQueryCallback : public b2QueryCallback {
     }
 };
 
-void Explosive::init(int newOrientation,ALLEGRO_BITMAP *newSprite,bool newAffectCharacter, b2World *newGameWorld, Character *newGameCharacter){
+void Explosive::init(bool affectCharacter, b2World *world, Character *character){
 
-  sprite = newSprite;
-  gameCharacter = newGameCharacter;
-  orientation = newOrientation;
-  affect_character = newAffectCharacter;
+  gameCharacter = character;
+  affect_character = affectCharacter;
 
   // Set world
-  gameWorld = newGameWorld;
+  gameWorld = world;
 
   // Create body
   createBody(BODY_KINEMATIC, false);

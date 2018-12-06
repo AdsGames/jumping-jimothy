@@ -16,15 +16,11 @@ class DynamicBox : public Box {
     DynamicBox(float x, float y);
     virtual ~DynamicBox() {};
 
-    void init(float vel_x, float vel_y, ALLEGRO_BITMAP *image, b2World *world);
+    void init(float vel_x, float vel_y, b2World *world);
 
     // Updates
     virtual void draw() override;
     virtual void update() override {};
-
-    // Setters
-    virtual void setStatic(bool stat) override;
-    void setOrientation(int);
 
     // Get type
     virtual int getType() override;

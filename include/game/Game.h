@@ -44,7 +44,7 @@ class Game : public State {
     // Creation code
     Box *create_dynamic_box(float x, float y, float velX, float velY, ALLEGRO_BITMAP*, bool bodyType);
     Box *create_explosive_box(float,float,int,bool);
-    Box *create_static_box(float x, float y, ALLEGRO_BITMAP*, ALLEGRO_BITMAP*, ALLEGRO_BITMAP*, ALLEGRO_BITMAP*);
+    Box *create_static_box(float x, float y, ALLEGRO_BITMAP*);
     Box *create_collision_box(float x, float y, float, float);
 
     Goat *create_goat(float,float);

@@ -19,7 +19,7 @@ class Goat : public Box {
     Goat(float x, float y);
     virtual ~Goat() {};
 
-    void init(ALLEGRO_BITMAP *image, b2World *world, Character *character);
+    void init(b2World *world, Character *character);
     virtual void draw() override;
     bool getWinCondition();
 

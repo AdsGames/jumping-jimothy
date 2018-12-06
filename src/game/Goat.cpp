@@ -14,14 +14,15 @@ Goat::Goat(float x, float y) :
     goat_images[i] =  nullptr;
 }
 
-void Goat::init(ALLEGRO_BITMAP *image, b2World *world, Character *character) {
-
-  sprite = image;
+void Goat::init(b2World *world, Character *character) {
   gameCharacter = character;
 
   // Image
-  for (int i = 0; i < 16; i++)
-    goat_images[i] = al_create_sub_bitmap( image, i * 32,0, 32, 64);
+  if (sprite) {
+    for(int i = 0; i < 16; i++) {
+      goat_images[i] = al_create_sub_bitmap(sprite, i * 32,0, 32, 64);
+    }
+  }
 
   // Set world
   gameWorld = world;

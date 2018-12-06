@@ -32,13 +32,7 @@ void StaticBox::draw(){
 
   al_use_transform(&trans);
 
-  for(int t = 0; t < 4; t++){
-    // Offsets from subtile
-    int off_x = (t == 1 || t == 3) ? 16: 0;
-    int off_y = (t >= 2) ? 16: 0;
-
-    al_draw_bitmap( new_tiles[t],-(width/2)*20+off_x, -(height/2)*20+off_y, 0);
-  }
+  al_draw_bitmap(sprite, -(width/2)*20,-(height/2)*20, 0);
 
   al_use_transform(&prevTrans);
 

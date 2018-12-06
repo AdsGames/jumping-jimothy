@@ -18,7 +18,8 @@ class Explosive : public Box {
     virtual void draw() override;
     virtual void update() override;
 
-    void init(int,ALLEGRO_BITMAP*, bool,b2World *, Character *);
+    void init(bool affectCharacter, b2World *world, Character *character);
+
     void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 
     // Get type
@@ -26,7 +27,6 @@ class Explosive : public Box {
   protected:
 
     Character *gameCharacter;
-    int numRays;
     int blastRadius;
     int blastPower;
     bool affect_character;
