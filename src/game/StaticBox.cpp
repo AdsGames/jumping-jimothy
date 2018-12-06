@@ -11,7 +11,7 @@
 // the location and the image
 
 // Static Box Constructors
-StaticBox::StaticBox(float x, float y) :
+StaticBox::StaticBox(const float x, const float y) :
   Box(x, y, 1.5f, 1.5f, nullptr) {
 
 }

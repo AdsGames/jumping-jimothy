@@ -20,8 +20,8 @@ Box::Box() {
 
   isPaused = true;
 
-  static_velocity = b2Vec2(0, 0);
-  static_angular_velocity = 0.0f;
+  paused_velocity = b2Vec2(0, 0);
+  paused_angular_velocity = 0.0f;
 
   color = al_map_rgb(0, 0, 0);
 
@@ -92,20 +92,20 @@ void Box::setPaused(const bool pause) {
     return;
 
   if (isPaused) {
-    static_velocity = body -> GetLinearVelocity();
-    static_angular_velocity = body -> GetAngularVelocity();
+    paused_velocity = body -> GetLinearVelocity();
+    paused_angular_velocity = body -> GetAngularVelocity();
     body -> SetType( b2_staticBody);
   }
   else {
     isPaused = false;
     body -> SetType( b2_dynamicBody);
-    if(isPausable() && (static_velocity.y<=0.01f && static_velocity.y>=-0.01f && static_velocity.x<=0.1f && static_velocity.x>=-0.1f && static_angular_velocity<=0.1f && static_angular_velocity>=-0.1f )){
+    if(isPausable() && (paused_velocity.y<=0.01f && paused_velocity.y>=-0.01f && paused_velocity.x<=0.1f && paused_velocity.x>=-0.1f && paused_angular_velocity<=0.1f && paused_angular_velocity>=-0.1f )){
       body -> SetAwake(false);
       body -> SetLinearVelocity(b2Vec2(0,0));
     }
     else{
-      body -> SetLinearVelocity( static_velocity);
-      body -> SetAngularVelocity( static_angular_velocity);
+      body -> SetLinearVelocity(paused_velocity);
+      body -> SetAngularVelocity(paused_angular_velocity);
     }
   }
 }
@@ -126,15 +126,11 @@ float Box::getY() {
 
 // Get width
 float Box::getWidth() {
-  //if (body)
-  //  return body -> GetPosition().y;
   return initial_size.x;
 }
 
 // Get height
 float Box::getHeight() {
-  //if (body)
-  //  return body -> GetPosition().y;
   return initial_size.y;
 }
 

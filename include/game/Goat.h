@@ -28,11 +28,19 @@ class Goat : public Box {
     // Get type
     virtual int getType() override;
   private:
-    Sensor *sensor_box = nullptr;
-    Character *gameCharacter = nullptr;
+    // Sensor box pointer
+    Sensor *sensor_box;
 
+    // Character pointer
+    Character *gameCharacter;
+
+    // Frame of animation
     int goat_frame;
+
+    // Counter for incrementing frame
     int goat_tick;
+
+    // Images of goat
     ALLEGRO_BITMAP *goat_images[17];
 };
 

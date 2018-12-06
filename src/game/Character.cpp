@@ -10,7 +10,7 @@
 #include "util/Tools.h"
 #include "util/ActionBinder.h"
 
-Character::Character(float x, float y, b2World *world) :
+Character::Character(const float x, const float y, b2World *world) :
   Box(x, y, 0.8, 2.5, world) {
 
   timer_sound_delay=0;
@@ -26,6 +26,7 @@ Character::Character(float x, float y, b2World *world) :
   body -> SetTransform(b2Vec2(x, y + 0.25f), getAngle());
   body -> SetFixedRotation(true);
 
+  // Create sensor
   sensor_box = new Sensor(x, y - 0.55, getWidth() * 0.4, 0.6, getBody(), gameWorld);
 
   sprite = tools::load_bitmap_ex("images/character.png");
@@ -33,58 +34,68 @@ Character::Character(float x, float y, b2World *world) :
   jump.load_wav("sfx/jump.wav");
   land.load_wav("sfx/land.wav");
 
-  for( int i = 0; i < 15; i++)
-    sprites[i] = al_create_sub_bitmap( sprite, i * 32, 0, 32, 64);
+  // Slice character images up
+  for (int i = 0; i < 15; i++)
+    sprites[i] = al_create_sub_bitmap(sprite, i * 32, 0, 32, 64);
 
 }
 
 void Character::update(){
-  if(sensor_box -> isColliding())
+  if (sensor_box -> isColliding())
     counter_sensor_contact++;
   else
-    counter_sensor_contact=0;
+    counter_sensor_contact = 0;
 
-  if(counter_sensor_contact>25)
+  if (counter_sensor_contact > 25)
     landed=true;
 
-  if((body ->GetLinearVelocity().y>=-0.01f && body ->GetLinearVelocity().y<=0.01f) && sensor_box -> isColliding() && velocity_old<-0.01f){
+  if ((body ->GetLinearVelocity().y>=-0.01f && body ->GetLinearVelocity().y<=0.01f) && sensor_box -> isColliding() && velocity_old<-0.01f){
+    // Volume of land sound
     float land_volume = velocity_old/20;
-    if(land_volume>1)
-      land_volume=1;
+    if(land_volume > 1)
+      land_volume = 1;
     land.play(land_volume);
-    landed=true;
-
+    landed = true;
   }
+
   velocity_old = body ->GetLinearVelocity().y;
-  if(sensor_box -> isCollidingWithDynamicBody())
-    landed=true;
+
+  if (sensor_box -> isCollidingWithDynamicBody())
+    landed = true;
 
 
-
+  // Animation speed
   int ticks_per_frame = 5;
-  if( !sensor_box -> isColliding()){
+  if (!sensor_box -> isColliding()) {
     ticks_per_frame = 2;
-  }else
-    // One liner to fix Andy's exploits
-    // This makes the character have no friction when he is airborne.
-    // No more wall climbing!
-    body ->GetFixtureList() ->SetFriction(0.0f);
+  }
+  else {
+    body -> GetFixtureList() -> SetFriction(0.0f);
+  }
 
   tick++;
-  if( tick >= ticks_per_frame){
+  if (tick >= ticks_per_frame) {
     frame++;
     tick = 0;
   }
-  if(frame==14)
+  if (frame == 14)
     frame = 0;
 
+  // Position of body
   b2Vec2 position = body -> GetPosition();
-  double yVel = getBody() -> GetLinearVelocity().y;
+
+  // Y velocity of body
+  const double yVel = getBody() -> GetLinearVelocity().y;
 
   // TODO (Danny#1#): Movement too slow
-  float x_velocity_ground = 4;
-  float x_velocity_air = 0.8;
-  float x_velocity_air_max=4;
+  // Velocity on ground
+  const float x_velocity_ground = 6.0f;
+
+  // Velocity impulse while in air
+  const float x_velocity_air = 3.1f;
+
+  // Max air velocity
+  const float x_velocity_air_max= 4.0f ;
 
 
   if (ActionBinder::actionHeld(ACTION_LEFT)) {
@@ -131,9 +142,7 @@ void Character::update(){
 
 
 void Character::draw(){
-  // If the object is a character, the position is updated in the
-  // update loop rather than in draw
-
+  // Transform for draw
   ALLEGRO_TRANSFORM trans, prevTrans;
 
   // back up the current transform
@@ -150,8 +159,11 @@ void Character::draw(){
   // Nice debug draw for player hitbox
   // al_draw_filled_rectangle( -(width/2) * 20 + 1, -(height/2)*20 + 1, (width/2) * 20 - 1, (height/2) * 20 - 1,al_map_rgb(255,25,64));
 
-  int x_offset=-8;
-  int y_offset=-13;
+  // Draw offset x
+  const int x_offset=-8;
+
+  // Draw offset y
+  const int y_offset=-13;
 
   if(direction){
     if(body -> GetLinearVelocity().Length()>0.1f)

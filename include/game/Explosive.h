@@ -13,24 +13,31 @@
 
 class Explosive : public Box {
   public:
-    Explosive(float x, float y, bool affectCharacter, Character *character, b2World *world);
+    Explosive(const float x, const float y, const bool affectCharacter, Character *character, b2World *world);
     virtual ~Explosive() {};
     virtual void draw() override;
     virtual void update() override;
 
-    void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
+    void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, const float blastPower);
 
     // Get type
     virtual int getType() override;
-  protected:
-
-    Character *gameCharacter;
-    int blastRadius;
-    int blastPower;
-    bool affect_character;
-    bool is_exploding;
 
   private:
+    // Pointer to character
+    Character *gameCharacter;
+
+    // Blast radius
+    int blastRadius;
+
+    // Power of explosive
+    int blastPower;
+
+    // Can affect character or not
+    bool affect_character;
+
+    // Is currently exploding
+    bool is_exploding;
 };
 
 #endif // EXPLOSIVE_H

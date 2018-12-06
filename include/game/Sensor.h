@@ -20,7 +20,7 @@ class b2WeldJointDef;
 
 class Sensor : public Box{
   public:
-    Sensor(float x, float y, float width, float height, b2Body *parentBody, b2World *world);
+    Sensor(const float x, const float y, const float width, const float height, b2Body *parentBody, b2World *world);
     virtual ~Sensor() {};
 
     bool isColliding();

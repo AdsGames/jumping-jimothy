@@ -79,20 +79,20 @@ class Box {
     // Sprite for box
     ALLEGRO_BITMAP *sprite;
 
-    // Paused state
-    bool isPaused;
-
-    // Snapshot of velocity
-    b2Vec2 static_velocity;
-
-    // Snapshot of angular velocity
-    float static_angular_velocity;
-
     // Pointer to game world
     b2World *gameWorld;
 
     // Pointer to physics body
     b2Body *body;
+
+    // Paused state
+    bool isPaused;
+
+    // Snapshot of velocity
+    b2Vec2 paused_velocity;
+
+    // Snapshot of angular velocity
+    float paused_angular_velocity;
 
   private:
     // Position

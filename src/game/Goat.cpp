@@ -17,10 +17,10 @@ Goat::Goat(const float x, const float y, Character *character, b2World *world) :
 
   // Image
   sprite = tools::load_bitmap_ex("images/goat.png");
-  if (sprite) {
-    for(int i = 0; i < 16; i++) {
-      goat_images[i] = al_create_sub_bitmap(sprite, i * 32,0, 32, 64);
-    }
+
+  // Cut it up
+  for(int i = 0; i < 16; i++) {
+    goat_images[i] = al_create_sub_bitmap(sprite, i * 32,0, 32, 64);
   }
 
   // Sensor
@@ -37,7 +37,7 @@ void Goat::draw(){
   if(goat_frame>14)
     goat_frame=0;
 
-
+  // Draw transform
   ALLEGRO_TRANSFORM trans, prevTrans;
 
   // back up the current transform

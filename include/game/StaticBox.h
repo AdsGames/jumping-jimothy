@@ -13,7 +13,7 @@
 class StaticBox : public Box {
   public:
     // Constructor
-    StaticBox(float x, float y);
+    StaticBox(const float x, const float y);
 
     // Destructor
     virtual ~StaticBox() {};
