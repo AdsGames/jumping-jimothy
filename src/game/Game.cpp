@@ -31,7 +31,7 @@ const char* Game::testing_file_name = nullptr;
 // Constructor
 Game::Game() {
   // Create character
-  gameCharacter = new Character();
+  gameCharacter = new Character(0, 0);
 
   // Init first time
   newBox = nullptr;
@@ -79,60 +79,60 @@ Game::~Game(){
 }
 
 // Creates box in world
-Goat* Game::create_goat( float newX, float newY){
-  Goat *newGoat = new Goat();
-  newGoat -> init( newX, newY,goat_map, gameWorld,gameCharacter);
-  if(gameCharacter==nullptr)
-    tools::log_message("WARNING: gameCharacter is nullptr when creating an explosive box.");
-  gameBoxes.push_back( newGoat);
+Goat* Game::create_goat(float x, float y){
+  Goat *newGoat = new Goat(x, y);
+  newGoat -> init(goat_map, gameWorld, gameCharacter);
+  if(gameCharacter == nullptr)
+    tools::log_message("WARNING: gameCharacter is nullptr when creating a goat.");
+  gameBoxes.push_back(newGoat);
   return newGoat;
 }
 
 // Creates box in world
-Box* Game::create_dynamic_box( float newX, float newY, float newWidth, float newHeight, float newVelX,float newVelY, ALLEGRO_BITMAP *newSprite, bool newBodyType, bool newIsSensor){
-  DynamicBox *newDynamicBox = new DynamicBox();
-  newDynamicBox -> init( newX, newY, newWidth, newHeight, newVelX,newVelY,newBodyType, newSprite, gameWorld);
-  gameBoxes.push_back( newDynamicBox);
+Box* Game::create_dynamic_box(float x, float y, float velX, float velY, ALLEGRO_BITMAP *image, bool newBodyType){
+  DynamicBox *newDynamicBox = new DynamicBox(x, y);
+  newDynamicBox -> init(velX, velY, image, gameWorld);
+  gameBoxes.push_back(newDynamicBox);
   return newDynamicBox;
 }
 
 // Creates box in world
-Box* Game::create_static_box( float newX, float newY,  ALLEGRO_BITMAP *sp_1,ALLEGRO_BITMAP *sp_2,ALLEGRO_BITMAP *sp_3,ALLEGRO_BITMAP *sp_4){
-  StaticBox *newStaticBox = new StaticBox();
-  newStaticBox -> init( newX, newY, sp_1,sp_2,sp_3,sp_4);
-  gameBoxes.push_back( newStaticBox);
+Box* Game::create_static_box(float x, float y, ALLEGRO_BITMAP *sp_1, ALLEGRO_BITMAP *sp_2, ALLEGRO_BITMAP *sp_3, ALLEGRO_BITMAP *sp_4){
+  StaticBox *newStaticBox = new StaticBox(x, y);
+  newStaticBox -> setImages(sp_1,sp_2,sp_3,sp_4);
+  gameBoxes.push_back(newStaticBox);
   return newStaticBox;
 }
 
-Box* Game::create_collision_box( float newX, float newY,float newWidth,float newHeight){
-  CollisionBox *newCollisionBox = new CollisionBox();
-  newCollisionBox -> init( newX, newY, newWidth,newHeight,gameWorld);
-  gameBoxes.push_back( newCollisionBox);
+Box* Game::create_collision_box(float x, float y, float width, float height){
+  CollisionBox *newCollisionBox = new CollisionBox(x, y, width, height);
+  newCollisionBox -> init(gameWorld);
+  gameBoxes.push_back(newCollisionBox);
   return newCollisionBox;
 }
 
-Box* Game::create_explosive_box(float newX, float newY,int newOrientation, bool newAffectCharacter){
-  Explosive *newExplosive = new Explosive();
+Box* Game::create_explosive_box(float x, float y, int orientation, bool affectsCharacter){
+  Explosive *newExplosive = new Explosive(x, y);
   ALLEGRO_BITMAP *newBoxImage;
 
-  if(newOrientation==0)
+  if(orientation == 0)
     newBoxImage = box_repel;
   else
     newBoxImage = box_repel_direction;
 
-  newExplosive -> init( newX, newY,newOrientation, newBoxImage,newAffectCharacter, gameWorld,gameCharacter);
-  if(gameCharacter==nullptr)
+  newExplosive -> init(orientation, newBoxImage, affectsCharacter, gameWorld, gameCharacter);
+
+  if(gameCharacter == nullptr)
     tools::log_message("WARNING: gameCharacter is nullptr when creating an explosive box.");
 
-  gameBoxes.push_back( newExplosive);
+  gameBoxes.push_back(newExplosive);
   return newExplosive;
-
 }
 
 // Add character to world
-Character *Game::create_character( float newX, float newY){
-  Character *newCharacter = new Character();
-  newCharacter -> init( newX, newY,character, gameWorld);
+Character *Game::create_character(float x, float y){
+  Character *newCharacter = new Character(x, y);
+  newCharacter -> init(character, gameWorld);
   gameBoxes.push_back( newCharacter);
   return newCharacter;
 }
@@ -247,18 +247,18 @@ void Game::load_world(int newLevel){
         static_count++;
       }
       else if(type=="Dynamic"){
-        newBox = create_dynamic_box( tools::stringToFloat(x), tools::stringToFloat(y), 1.6, 1.6, tools::stringToFloat(width), tools::stringToFloat(height), box,true, false);
+        newBox = create_dynamic_box(tools::stringToFloat(x), tools::stringToFloat(y), tools::stringToFloat(width), tools::stringToFloat(height), box, true);
         dynamic_count++;
       }
       else if(type=="Collision"){
-        newBox = create_collision_box( tools::stringToFloat(x), tools::stringToFloat(y), tools::stringToFloat(width), tools::stringToFloat(height) );
+        newBox = create_collision_box(tools::stringToFloat(x), tools::stringToFloat(y), tools::stringToFloat(width), tools::stringToFloat(height) );
       }
       else if( type == "Character"){
-        gameCharacter = create_character( tools::stringToFloat(x), tools::stringToFloat(y)-1.6);
+        gameCharacter = create_character(tools::stringToFloat(x), tools::stringToFloat(y)-1.6);
         character_count++;
       }
       else if( type == "Finish"){
-        gameGoat = create_goat( tools::stringToFloat(x), tools::stringToFloat(y)-1);
+        gameGoat = create_goat(tools::stringToFloat(x), tools::stringToFloat(y)-1);
         if(gameCharacter==nullptr)
           tools::log_message("WARNING: Game: goat is passed nullptr gameCharacter");
         goat_count++;
@@ -329,7 +329,7 @@ void Game::reset(){
   // Pause boxes
   for( unsigned int i = 0; i < gameBoxes.size(); i++){
     if( gameBoxes[i] -> getType() == BOX){
-      gameBoxes[i] -> setStatic();
+      gameBoxes[i] -> setStatic(true);
     }
   }
   if( gameGoat == nullptr)
@@ -435,22 +435,17 @@ void Game::update(){
   if (ActionBinder::actionBegun(ACTION_B)) {
     static_mode =! static_mode;
 
+    for(unsigned int i = 0; i < gameBoxes.size(); i++){
+      if(gameBoxes[i] -> isPausable()){
+        gameBoxes[i] -> setStatic(static_mode);
+      }
+    }
+
     if(static_mode){
       toggle_off.play();
-      for( unsigned int i = 0; i < gameBoxes.size(); i++){
-        if( gameBoxes[i] -> getType() == BOX){
-          gameBoxes[i] -> setStatic();
-        }
-      }
     }
     else{
       toggle_on.play();
-      for( unsigned int i = 0; i < gameBoxes.size(); i++){
-        if( gameBoxes[i] -> getType()==BOX){
-          gameBoxes[i] -> setDynamic(!first_play);
-
-        }
-      }
       first_play = false;
     }
   }

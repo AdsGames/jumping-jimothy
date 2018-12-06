@@ -15,9 +15,14 @@ extern const int BOX;
 extern const int CHARACTER;
 extern const int GOAT;
 extern const int STATIC;
+extern const int COLLISION;
+extern const int EXPLOSIVE;
 
-extern const bool DYNAMIC;
-extern const bool KINEMATIC;
+enum BODY_TYPES {
+  BODY_STATIC,
+  BODY_DYNAMIC,
+  BODY_KINEMATIC
+};
 
 extern const float PI;
 extern const float DEGTORAD;

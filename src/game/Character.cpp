@@ -10,54 +10,31 @@
 #include "util/Tools.h"
 #include "util/ActionBinder.h"
 
-void Character::init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld){
+Character::Character(float x, float y) :
+  Box(x, y, 0.8, 2.5) {
+
   timer_sound_delay=0;
   tick = 0;
   frame = 0;
-  landed=true;
-
-  static_box = false;
-  static_mode = false;
-  orientation = 0;
-  static_velocity = b2Vec2( 0, 0);
-  static_angular_velocity = 0;
-  angle = 0;
+  landed = true;
 
   direction = false;
-  sprite = newSprite;
-  type = CHARACTER;
-  width = 0.8;
-  height = 2.5;
   color = al_map_rgb(0,0,255);
+}
 
-  gameWorld = newGameWorld;
-  b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(newX, newY+0.25f);
-	body = gameWorld -> CreateBody(&bodyDef);
+void Character::init(ALLEGRO_BITMAP *newSprite, b2World *world){
+  sprite = newSprite;
 
-	// Define another box shape for our dynamic body.
-	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(width/2, height/2);
+  // Set world
+  gameWorld = world;
 
-	// Define the dynamic body fixture.
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-	//body -> SetLinearDamping(1);
+  // Create body
+  createBody(BODY_DYNAMIC, true);
 
-	// Set the box density to be non-zero, so it will be dynamic.
-	fixtureDef.density = 1.0f;
+	body -> SetTransform(b2Vec2(x, y + 0.25f), angle);
 
-	// Override the default friction.
-	fixtureDef.friction = 0.3f;
-
-	// Add the shape to the body.
-	body -> CreateFixture(&fixtureDef);
-
-  body ->SetFixedRotation(true);
-
-  sensor_box = new Sensor();
-  sensor_box -> init(newX,newY-0.55,width*0.4,0.6,al_map_rgb(255,255,0),gameWorld,body);
+  sensor_box = new Sensor(x, y - 0.55, width * 0.4, 0.6);
+  sensor_box -> init(gameWorld,getBody());
 
   sprite = tools::load_bitmap_ex("images/character.png");
 
@@ -200,17 +177,14 @@ void Character::draw(){
 
   }
 
-
-
   // restore the old transform
   al_use_transform(&prevTrans);
-
-
 
   // Nice debug draw for sensor box
   //sensor_box -> draw();
 }
 
-Character::~Character(){
-
+// Get type
+int Character::getType() {
+  return CHARACTER;
 }

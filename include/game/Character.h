@@ -21,13 +21,16 @@ class keyListener;
 
 class Character : public Box{
   public:
-    Character() {};
-    virtual ~Character();
+    Character(float x, float y);
+    virtual ~Character() {};
 
-    void init( float newX, float newY,ALLEGRO_BITMAP *newSprite, b2World *newGameWorld);
-    void draw();
-    void update();
+    void init(ALLEGRO_BITMAP *newSprite, b2World *newGameWorld);
+    virtual void draw() override;
+    virtual void update() override;
     b2Body *getSensorBody(){return sensor_box->getBody();}
+
+    // Get type
+    virtual int getType() override;
 
   private:
     int tick;

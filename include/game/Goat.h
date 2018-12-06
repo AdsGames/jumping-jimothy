@@ -16,11 +16,18 @@
 
 class Goat : public Box {
   public:
-    void init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGameWorld, Character *newCharacter);
-    virtual ~Goat();
-    void draw();
+    Goat(float x, float y);
+    virtual ~Goat() {};
+
+    void init(ALLEGRO_BITMAP *image, b2World *world, Character *character);
+    virtual void draw() override;
     bool getWinCondition();
 
+    // Update logic
+    virtual void update() override {};
+
+    // Get type
+    virtual int getType() override;
   private:
     Sensor *sensor_box = nullptr;
     Character *gameCharacter = nullptr;

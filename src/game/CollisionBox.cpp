@@ -4,39 +4,18 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "util/KeyListener.h"
+#include "util/Globals.h"
 
-void CollisionBox::init(float newX, float newY, float newWidth, float newHeight, b2World *newGameWorld){
+CollisionBox::CollisionBox(float x, float y, float width, float height) :
+  Box(x, y, width, height) {
+}
 
-  width = newWidth;
-  height = newHeight;
-  gameWorld = newGameWorld;
-  b2BodyDef bodyDef;
-  type = 4;
+void CollisionBox::init(b2World *world){
+  // Set world
+  gameWorld = world;
 
-  bodyDef.type = b2_kinematicBody;
-
-	bodyDef.position.Set(newX, newY);
-	body = gameWorld -> CreateBody(&bodyDef);
-	//body ->SetLinearDamping(1);
-	//body ->SetAngularDamping(1);
-
-	// Define another box shape for our dynamic body.
-	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(newWidth/2, newHeight/2);
-
-	// Define the dynamic body fixture.
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-
-	// Set the box density to be non-zero, so it will be dynamic.
-	fixtureDef.density = 1.0f;
-
-	// Override the default friction.
-	fixtureDef.friction = 0.3f;
-
-	// Add the shape to the body.
-	body -> CreateFixture(&fixtureDef);
-
+  // Create body
+  createBody(BODY_KINEMATIC, false);
 }
 
 void CollisionBox::draw(){
@@ -67,7 +46,7 @@ void CollisionBox::draw(){
   }
 }
 
-void CollisionBox::update(){
-
+// Get box type
+int CollisionBox::getType(){
+  return COLLISION;
 }
-

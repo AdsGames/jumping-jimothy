@@ -20,53 +20,64 @@ class b2Vec2;
 class Sensor;
 class Character;
 
-class Box{
+class Box {
   public:
-    // Constructors / Destructors
+    // Constructor
     Box();
-    virtual ~Box();
+    Box(float x, float y, float width, float height);
 
-    virtual void init();
+    // Destructor
+    virtual ~Box() {};
 
-    // Updates
-    virtual void draw();
-    virtual void update();
+    // Create body
+    void createBody(int bodyType, bool fixedRotation);
+
+    // Draw
+    virtual void draw() = 0;
+
+    // Update logic
+    virtual void update() = 0;
+
+    // Get type
+    virtual int getType() = 0;
 
     // Setters
-    virtual void setStatic();
-    virtual void setDynamic(bool);
-    void setOrientation();
+    virtual void setStatic(bool stat);
+    void setImages(ALLEGRO_BITMAP* img_1, ALLEGRO_BITMAP* img_2, ALLEGRO_BITMAP* img_3, ALLEGRO_BITMAP* img_4);
 
     // Getters
-    virtual int getType(){ return type; };
-    float getX(){ return x; };
-    float getY(){ return y; };
-    b2Body *getBody(){ return body; };
+    float getX();
+    float getY();
+    b2Body *getBody();
 
+    // Is pausable
+    virtual bool isPausable();
   protected:
-
-    bool static_box;
-
-    ALLEGRO_BITMAP *sprite;
-    ALLEGRO_BITMAP *new_tiles[NUM_TILES];
-
-    bool static_mode;
-    int type;
-    int orientation;
-
-    b2Vec2 static_velocity;
-    float static_angular_velocity;
-
     float x;
     float y;
     float angle;
+    int orientation;
+
     ALLEGRO_COLOR color;
 
     float width;
     float height;
 
+
+    ALLEGRO_BITMAP *sprite;
+    ALLEGRO_BITMAP *new_tiles[NUM_TILES];
+
+    bool static_mode;
+
+    b2Vec2 static_velocity;
+    float static_angular_velocity;
+
     b2World *gameWorld;
     b2Body *body;
+
+  private:
+    void setPosition(float x, float y);
+    void setSize(float width, float height);
 };
 
 

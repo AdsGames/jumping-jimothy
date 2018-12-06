@@ -13,19 +13,27 @@
 
 class DynamicBox : public Box {
   public:
-    DynamicBox() {};
+    DynamicBox(float x, float y);
     virtual ~DynamicBox() {};
 
-    void init(float, float, float, float,float,float,bool,ALLEGRO_BITMAP*, b2World *);
+    void init(float vel_x, float vel_y, ALLEGRO_BITMAP *image, b2World *world);
 
     // Updates
-    void draw();
-    void update();
+    virtual void draw() override;
+    virtual void update() override {};
 
     // Setters
-    void setStatic();
-    void setDynamic(bool);
+    virtual void setStatic(bool stat) override;
     void setOrientation(int);
+
+    // Get type
+    virtual int getType() override;
+
+    // Is dynamic
+    virtual bool isPausable() override;
+
+  private:
+
 };
 
 #endif // DYNAMICBOX_H
