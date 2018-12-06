@@ -13,10 +13,16 @@
 
 class CollisionBox : public Box {
   public:
+    // Constructor
     CollisionBox(const float x, const float y, const float width, const float height, b2World *world);
 
+    // Destructor
     virtual ~CollisionBox() {};
+
+    // Draw
     void draw();
+
+    // Update
     void update(b2World *world) {};
 
     // Get type

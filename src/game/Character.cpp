@@ -40,6 +40,11 @@ Character::Character(const float x, const float y, b2World *world) :
 
 }
 
+// Get sensor body
+b2Body* Character::getSensorBody(){
+  return sensor_box -> getBody();
+}
+
 void Character::update(b2World *world){
   if (sensor_box -> isColliding())
     counter_sensor_contact++;
@@ -47,7 +52,7 @@ void Character::update(b2World *world){
     counter_sensor_contact = 0;
 
   if (counter_sensor_contact > 25)
-    landed=true;
+    landed = true;
 
   if ((body ->GetLinearVelocity().y>=-0.01f && body ->GetLinearVelocity().y<=0.01f) && sensor_box -> isColliding() && velocity_old<-0.01f){
     // Volume of land sound

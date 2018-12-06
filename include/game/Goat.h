@@ -16,10 +16,16 @@
 
 class Goat : public Box {
   public:
+    // Constructor
     Goat(const float x, const float y, Character *character, b2World *world);
+
+    // Destructor
     virtual ~Goat() {};
 
+    // Draw
     virtual void draw() override;
+
+    // Can win
     bool getWinCondition();
 
     // Update logic

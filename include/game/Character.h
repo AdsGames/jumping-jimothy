@@ -22,12 +22,20 @@ const int NUM_CHARACTER_IMAGES = 20;
 
 class Character : public Box{
   public:
+    // Constructor
     Character(const float x, const float y, b2World *world);
+
+    // Destructor
     virtual ~Character() {};
 
+    // Draw
     virtual void draw() override;
+
+    // Update
     virtual void update(b2World *world) override;
-    b2Body *getSensorBody(){return sensor_box->getBody();}
+
+    // Get sensor body
+    b2Body *getSensorBody();
 
     // Get type
     virtual int getType() override;

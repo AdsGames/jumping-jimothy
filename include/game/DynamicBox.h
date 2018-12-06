@@ -15,16 +15,20 @@ class DynamicBox : public Box {
   public:
     // Constructor
     DynamicBox(const float x, const float y, const float velX, const float velY, b2World *world);
+
+    // Destructor
     virtual ~DynamicBox() {};
 
-    // Updates
+    // Draw
     virtual void draw() override;
+
+    // Update
     virtual void update(b2World *world) override {};
 
     // Get type
     virtual int getType() override;
 
-    // Is dynamic
+    // Is pausable
     virtual bool isPausable() override;
 
   private:
