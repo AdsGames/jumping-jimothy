@@ -25,7 +25,6 @@ Box::Box() {
 
   color = al_map_rgb(0, 0, 0);
 
-  gameWorld = nullptr;
   body = nullptr;
 
   initial_angle = 0.0f;
@@ -38,8 +37,7 @@ Box::Box(const float x, const float y, const float width, const float height, b2
   Box() {
   initial_position = b2Vec2(x, y);
   initial_size = b2Vec2(width, height);
-  gameWorld = world;
-  createBody();
+  createBody(world);
 }
 
 // Set images
@@ -48,9 +46,9 @@ void Box::setImage(ALLEGRO_BITMAP* image) {
 }
 
 // Create body
-void Box::createBody() {
+void Box::createBody(b2World *world) {
   // World must be set
-  if (!gameWorld)
+  if (!world)
     return;
 
   // Body definition
@@ -74,7 +72,7 @@ void Box::createBody() {
 	fixtureDef.friction = 0.3f;
 
 	// Create body and create fixture
-	body = gameWorld -> CreateBody(&bodyDef);
+	body = world -> CreateBody(&bodyDef);
 	body -> CreateFixture(&fixtureDef);
 }
 

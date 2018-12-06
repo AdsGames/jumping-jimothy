@@ -26,7 +26,7 @@ class Character : public Box{
     virtual ~Character() {};
 
     virtual void draw() override;
-    virtual void update() override;
+    virtual void update(b2World *world) override;
     b2Body *getSensorBody(){return sensor_box->getBody();}
 
     // Get type

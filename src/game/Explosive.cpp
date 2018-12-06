@@ -32,7 +32,7 @@ class MyQueryCallback : public b2QueryCallback {
     }
 };
 
-void Explosive::update(){
+void Explosive::update(b2World *world){
   // Center of blast
   b2Vec2 center = body -> GetPosition();
 
@@ -43,7 +43,7 @@ void Explosive::update(){
   b2AABB aabb;
   aabb.lowerBound = center - b2Vec2(blastRadius, blastRadius);
   aabb.upperBound = center + b2Vec2(blastRadius, blastRadius);
-  gameWorld -> QueryAABB(&queryCallback, aabb);
+  world -> QueryAABB(&queryCallback, aabb);
 
   is_exploding = false;
 

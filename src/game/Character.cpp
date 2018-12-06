@@ -27,7 +27,7 @@ Character::Character(const float x, const float y, b2World *world) :
   body -> SetFixedRotation(true);
 
   // Create sensor
-  sensor_box = new Sensor(x, y - 0.55, getWidth() * 0.4, 0.6, getBody(), gameWorld);
+  sensor_box = new Sensor(x, y - 0.55, getWidth() * 0.4, 0.6, getBody(), world);
 
   sprite = tools::load_bitmap_ex("images/character.png");
 
@@ -40,7 +40,7 @@ Character::Character(const float x, const float y, b2World *world) :
 
 }
 
-void Character::update(){
+void Character::update(b2World *world){
   if (sensor_box -> isColliding())
     counter_sensor_contact++;
   else

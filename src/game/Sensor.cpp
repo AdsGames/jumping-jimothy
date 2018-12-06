@@ -27,7 +27,7 @@ Sensor::Sensor(const float x, const float y, const float width, const float heig
   jointDef -> Initialize(getBody(), parentBody, FeetAnchor);
   jointDef -> collideConnected = false;
   jointDef  -> referenceAngle = 0;
-  gameWorld -> CreateJoint(jointDef);
+  world -> CreateJoint(jointDef);
 }
 
 bool Sensor::isColliding(){
