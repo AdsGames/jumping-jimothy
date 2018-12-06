@@ -13,11 +13,19 @@
 
 class Explosive : public Box {
   public:
+    // Constructor
     Explosive(const float x, const float y, const bool affectCharacter, Character *character, b2World *world);
+
+    // Destructor
     virtual ~Explosive() {};
+
+    // Draw
     virtual void draw() override;
+
+    // Update
     virtual void update(b2World *world) override;
 
+    // Apply impulse
     void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, const float blastPower);
 
     // Get type

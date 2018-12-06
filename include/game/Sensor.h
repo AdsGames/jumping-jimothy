@@ -20,16 +20,26 @@ class b2WeldJointDef;
 
 class Sensor : public Box{
   public:
+    // Constructor
     Sensor(const float x, const float y, const float width, const float height, b2Body *parentBody, b2World *world);
+
+    // Destructor
     virtual ~Sensor() {};
 
+    // Colliding with something
     bool isColliding();
 
-    virtual void update(b2World *world) override {};
-    virtual void draw() override;
-
+    // Colliding with dynamic body
     bool isCollidingWithDynamicBody();
+
+    // Colliding with any body
     bool isCollidingWithBody(b2Body*);
+
+    // Update sensor
+    virtual void update(b2World *world) override {};
+
+    // Draw sensor
+    virtual void draw() override;
 
     // Get type
     virtual int getType() override;
