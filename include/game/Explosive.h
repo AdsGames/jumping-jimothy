@@ -13,14 +13,16 @@
 
 class Explosive : public Box {
   public:
-    Explosive() {};
+    Explosive(float x, float y);
     virtual ~Explosive() {};
-    void draw();
-    void update();
+    virtual void draw() override;
+    virtual void update() override;
 
-    void init(float, float,int,ALLEGRO_BITMAP*, bool,b2World *, Character *);
+    void init(int,ALLEGRO_BITMAP*, bool,b2World *, Character *);
     void applyBlastImpulse(b2Body* body, b2Vec2 blastCenter, b2Vec2 applyPoint, float blastPower);
 
+    // Get type
+    virtual int getType() override;
   protected:
 
     Character *gameCharacter;

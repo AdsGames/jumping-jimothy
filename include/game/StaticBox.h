@@ -12,14 +12,20 @@
 
 class StaticBox : public Box {
   public:
-    StaticBox() {};
+    // Constructor
+    StaticBox(float x, float y);
+
+    // Destructor
     virtual ~StaticBox() {};
 
-    void init(float,float,ALLEGRO_BITMAP*, ALLEGRO_BITMAP*, ALLEGRO_BITMAP*, ALLEGRO_BITMAP*);
-    void draw();
-    void update();
+    // Draw
+    virtual void draw() override;
 
-    int getType();;
+    // Update
+    virtual void update() override {};
+
+    // Get type
+    virtual int getType() override;
 };
 
 #endif // STATICBOX_H

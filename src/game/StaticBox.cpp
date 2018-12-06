@@ -10,29 +10,15 @@
 // will inherit for Box.cpp but will (should) only hold
 // the location and the image
 
-// Update box
-void StaticBox::update(){
+// Static Box Constructors
+StaticBox::StaticBox(float x, float y) :
+  Box(x, y, 1.5f, 1.5f) {
 
-}
-
-void StaticBox::init(float newX, float newY,  ALLEGRO_BITMAP *sp_1,ALLEGRO_BITMAP *sp_2,ALLEGRO_BITMAP *sp_3,ALLEGRO_BITMAP *sp_4) {
-
-  x=newX;
-  y=newY;
-  type = STATIC;
-  angle=0;
-  width=1.5f;
-  height=1.5f;
-
-  new_tiles[0] = sp_1;
-  new_tiles[1] = sp_2;
-  new_tiles[2] = sp_3;
-  new_tiles[3] = sp_4;
 }
 
 // Draw box to screen
 void StaticBox::draw(){
-
+  // Transform
   ALLEGRO_TRANSFORM trans, prevTrans;
 
   // back up the current transform
@@ -46,8 +32,8 @@ void StaticBox::draw(){
 
   al_use_transform(&trans);
 
-  for( int t = 0; t < 4; t++){
-        // Offsets from subtile
+  for(int t = 0; t < 4; t++){
+    // Offsets from subtile
     int off_x = (t == 1 || t == 3) ? 16: 0;
     int off_y = (t >= 2) ? 16: 0;
 
@@ -58,10 +44,9 @@ void StaticBox::draw(){
 
   // I suck at programming
   // - Danny Van Stemp, July 30, 2017
-
 }
 
-// Get type
-int StaticBox::getType() {
+// Get box type
+int StaticBox::getType(){
   return STATIC;
 }

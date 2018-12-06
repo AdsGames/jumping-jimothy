@@ -20,13 +20,20 @@ class b2WeldJointDef;
 
 class Sensor : public Box{
   public:
-    void draw();
-    Sensor();
-    virtual ~Sensor();
+    Sensor(float x, float y,float width,float height);
+    virtual ~Sensor() {};
+
     bool isColliding();
-	bool isCollidingWithDynamicBody();
+
+    virtual void update() override {};
+    virtual void draw() override;
+
+    bool isCollidingWithDynamicBody();
     bool isCollidingWithBody(b2Body*);
-    void init(float, float,float,float,ALLEGRO_COLOR, b2World *, b2Body *);
+    void init(b2World *, b2Body *);
+
+    // Get type
+    virtual int getType() override;
 };
 
 #endif // SENSOR_H

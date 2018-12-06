@@ -7,9 +7,8 @@ const int BOX = 0;
 const int CHARACTER = 1;
 const int GOAT = 2;
 const int STATIC = 3;
-
-const bool DYNAMIC = true;
-const bool KINEMATIC = false;
+const int COLLISION = 4;
+const int EXPLOSIVE = 5;
 
 const float PI = 3.14159263f;
 const float DEGTORAD = 0.0174532925199432957f;

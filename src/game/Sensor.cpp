@@ -7,53 +7,28 @@
 #include "util/Globals.h"
 #include "util/KeyListener.h"
 
-Sensor::Sensor(){
+Sensor::Sensor(float x, float y,float width,float height) :
+  Box(x, y, width, height) {
 
 }
 
-void Sensor::init(float newX, float newY, float newWidth, float newHeight, ALLEGRO_COLOR newColor, b2World *newGameWorld, b2Body *parentBody){
+void Sensor::init(b2World *world, b2Body *parentBody){
+  // Set world
+  gameWorld = world;
 
+  // Create body
+  createBody(BODY_DYNAMIC, true);
 
-  type = BOX;
-  width = newWidth;
-  height = newHeight;
-  color = newColor;
+  // Override defaults
+  b2Fixture *fixPointer = body -> GetFixtureList();
+  fixPointer -> SetDensity(0.0001f);
+  fixPointer -> SetFriction(0.0f);
+  fixPointer -> SetSensor(true);
 
-  gameWorld = newGameWorld;
-  b2BodyDef bodyDef;
-
-  bodyDef.type = b2_dynamicBody;
-
-
-	bodyDef.position.Set(newX, newY);
-	body = gameWorld -> CreateBody(&bodyDef);
-
-
-	// Define another box shape for our dynamic body.
-	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(width/2, height/2);
-
-	// Define the dynamic body fixture.
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-
-
-	// Set the box density to be non-zero, so it will be dynamic.
-	fixtureDef.density = 0.0001f;
-
-	// Override the default friction.
-	fixtureDef.friction = 0.0f;
-
-  fixtureDef.isSensor = true;
-	// Add the shape to the body.
-	body -> CreateFixture(&fixtureDef);
-	body -> SetFixedRotation(true);
-
+  // Feet anchor
   b2Vec2 FeetAnchor(0,0);
-
-
 	b2WeldJointDef *jointDef = new b2WeldJointDef();
-  jointDef -> Initialize(body, parentBody, FeetAnchor);
+  jointDef -> Initialize(getBody(), parentBody, FeetAnchor);
   jointDef -> collideConnected = false;
   jointDef  -> referenceAngle = 0;
   gameWorld -> CreateJoint(jointDef);
@@ -121,8 +96,7 @@ void Sensor::draw(){
 
 }
 
-
-Sensor::~Sensor(){
-
-
+// Get box type
+int Sensor::getType(){
+  return BOX;
 }

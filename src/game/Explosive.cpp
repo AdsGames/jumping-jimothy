@@ -4,70 +4,40 @@
 
 #include "util/Globals.h"
 
-//subclass b2QueryCallback for proximity query callback
-class MyQueryCallback : public b2QueryCallback {
-public:
-    std::vector<b2Body*> foundBodies;
+// Constructor
+Explosive::Explosive(float x, float y) :
+  Box(x, y, 1.55f, 1.55f) {
 
-    bool ReportFixture(b2Fixture* fixture) {
-        foundBodies.push_back( fixture->GetBody() );
-        return true;//keep going to find all fixtures in the query area
-    }
-};
-
-void Explosive::init(float newX, float newY, int newOrientation,ALLEGRO_BITMAP *newSprite,bool newAffectCharacter, b2World *newGameWorld, Character *newGameCharacter){
-
-  sprite = newSprite;
-  gameCharacter = newGameCharacter;
-  orientation = newOrientation;
-
-  affect_character=newAffectCharacter;
   numRays=32;
   blastRadius = 10;
   blastPower = 1000;
 
-  type = 5;
-  width = 1.55f;
-  height = 1.55f;
   color = al_map_rgb(255,0,0);
-  static_mode = false;
-  static_box = false;
-  angle = 0;
-  x = 0;
-  y = 0;
+}
 
-  static_velocity = b2Vec2( 0, 0);
-  static_angular_velocity = 0;
+//subclass b2QueryCallback for proximity query callback
+class MyQueryCallback : public b2QueryCallback {
+  public:
+    std::vector<b2Body*> foundBodies;
 
+    bool ReportFixture(b2Fixture* fixture) {
+      foundBodies.push_back( fixture->GetBody() );
+      return true;//keep going to find all fixtures in the query area
+    }
+};
+
+void Explosive::init(int newOrientation,ALLEGRO_BITMAP *newSprite,bool newAffectCharacter, b2World *newGameWorld, Character *newGameCharacter){
+
+  sprite = newSprite;
+  gameCharacter = newGameCharacter;
+  orientation = newOrientation;
+  affect_character = newAffectCharacter;
+
+  // Set world
   gameWorld = newGameWorld;
-  b2BodyDef bodyDef;
 
-  bodyDef.type = b2_kinematicBody;
-
-	bodyDef.position.Set(newX, newY);
-	body = gameWorld -> CreateBody(&bodyDef);
-	//body -> SetLinearVelocity(b2Vec2(newVelX,newVelY));
-
-	//body ->SetLinearDamping(1);
-	//body ->SetAngularDamping(1);
-
-	// Define another box shape for o0ur dynamic body.
-	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(width/2, height/2);
-
-	// Define the dynamic body fixture.
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-
-	// Set the box density to be non-zero, so it will be dynamic.
-	fixtureDef.density = 1.0f;
-
-	// Override the default friction.
-	fixtureDef.friction = 0.3f;
-
-
-	// Add the shape to the body.
-	body -> CreateFixture(&fixtureDef);
+  // Create body
+  createBody(BODY_KINEMATIC, false);
 }
 
 
@@ -190,4 +160,10 @@ void Explosive::draw(){
   // restore the old transform
 
   al_use_transform(&prevTrans);
+}
+
+
+// Get box type
+int Explosive::getType(){
+  return EXPLOSIVE;
 }

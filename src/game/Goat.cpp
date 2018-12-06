@@ -4,69 +4,34 @@
 #include "util/Globals.h"
 
 // We'll use this for the goat
-void Goat::init(float newX, float newY, ALLEGRO_BITMAP *newSprite, b2World *newGameWorld, Character *newCharacter){
+Goat::Goat(float x, float y) :
+  Box(x, y, 1.6, 3.2) {
 
   goat_frame = 0;
   goat_tick = 0;
-  sprite = newSprite;
-  gameCharacter = newCharacter;
 
-  if( gameCharacter == nullptr)
-    tools::log_message("WARNING: Box: gameCharacter is undeclared");
+  for (int i = 0; i < 16; i++)
+    goat_images[i] =  nullptr;
+}
+
+void Goat::init(ALLEGRO_BITMAP *image, b2World *world, Character *character) {
+
+  sprite = image;
+  gameCharacter = character;
 
   // Image
-  for( int i = 0; i < 16; i++)
-    goat_images[i] = al_create_sub_bitmap( newSprite, i * 32,0, 32, 64);
+  for (int i = 0; i < 16; i++)
+    goat_images[i] = al_create_sub_bitmap( image, i * 32,0, 32, 64);
 
-  type = GOAT;
-  width = 1.6;
-  height = 3.2;
-  orientation = 0;
-  static_mode = false;
-  static_box = false;
-  angle = 0;
-  x = 0;
-  y = 0;
+  // Set world
+  gameWorld = world;
 
-  gameWorld = newGameWorld;
-  static_box = false;
-
-  // Body
-  b2BodyDef bodyDef;
-  bodyDef.type = b2_dynamicBody;
-
-  // Position
-  bodyDef.position.Set(newX, newY);
-  body = gameWorld -> CreateBody(&bodyDef);
-
-  // Velocity
-  static_velocity = b2Vec2( 0, 0);
-  static_angular_velocity = 0;
-
-  //body -> SetLinearVelocity(b2Vec2(newVelX,newVelY));
-  //body ->SetLinearDamping(1);
-  //body ->SetAngularDamping(1);
-
-  // Define another box shape for o0ur dynamic body.
-  b2PolygonShape dynamicBox;
-  dynamicBox.SetAsBox(width/2, height/2);
-
-  // Define the dynamic body fixture.
-  b2FixtureDef fixtureDef;
-  fixtureDef.shape = &dynamicBox;
-
-  // Set the box density to be non-zero, so it will be dynamic.
-  fixtureDef.density = 1.0f;
-
-  // Override the default friction.
-  fixtureDef.friction = 0.3f;
-
-  // Add the shape to the body.
-  body -> CreateFixture(&fixtureDef);
+  // Create body
+  createBody(BODY_DYNAMIC, false);
 
   // Sensor
-  sensor_box = new Sensor();
-  sensor_box -> init(newX,newY,width,height,al_map_rgb(255,255,0),gameWorld,body);
+  sensor_box = new Sensor(x,y,width,height);
+  sensor_box -> init(gameWorld, getBody());
 }
 
 // Draw box to screen
@@ -104,18 +69,14 @@ void Goat::draw(){
 }
 
 bool Goat::getWinCondition(){
-
-  if(gameCharacter==nullptr)
-    tools::log_message("WARNING: Box: gameCharacter is undeclared");
-
-
-  if(sensor_box -> isCollidingWithBody(gameCharacter -> getBody())){
+  if(gameCharacter && sensor_box -> isCollidingWithBody(gameCharacter -> getBody())){
     return true;
   }
   return false;
 }
 
-Goat::~Goat()
-{
-  //dtor
+
+// Get box type
+int Goat::getType(){
+  return GOAT;
 }
