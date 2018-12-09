@@ -90,32 +90,31 @@ Editor::Editor(){
 
   // buttons
   editorUI.addElement(new Button(0, 728, "Dynamic", "btnDynamic", edit_font));
-  editorUI.createAnchoredButton("Static",edit_font,"btnDynamic","btnStatic", RIGHT);
-  editorUI.createAnchoredButton("Player",edit_font,"btnStatic","btnPlayer", RIGHT);
-  editorUI.createAnchoredButton("Goat",edit_font,"btnPlayer","btnGoat", RIGHT);
-  editorUI.createAnchoredButton("Collision",edit_font,"btnGoat","btnCollision", RIGHT);
-  editorUI.createAnchoredButton("Explosive",edit_font,"btnCollision","btnExplosive", RIGHT);
-  editorUI.createAnchoredButton("<",edit_font,"btnExplosive","left_bottom_toggle",RIGHT);
+  editorUI.createAnchoredButton("Static", edit_font, "btnDynamic", "btnStatic",  RIGHT);
+  editorUI.createAnchoredButton("Player", edit_font, "btnStatic", "btnPlayer",  RIGHT);
+  editorUI.createAnchoredButton("Goat", edit_font, "btnPlayer", "btnGoat",  RIGHT);
+  editorUI.createAnchoredButton("Collision", edit_font, "btnGoat", "btnCollision",  RIGHT);
+  editorUI.createAnchoredButton("Explosive", edit_font, "btnCollision", "btnExplosive",  RIGHT);
+  editorUI.createAnchoredButton("<", edit_font, "btnExplosive", "left_bottom_toggle", RIGHT);
 
-  editorUI.addElement(new Button(566,728,">","right_bottom_toggle", edit_font));
-  editorUI.createAnchoredButton("Undo",edit_font,"right_bottom_toggle","btnUndo",LEFT);
-  editorUI.createAnchoredButton("Clear",edit_font,"btnUndo","btnClear",LEFT);
-  editorUI.createAnchoredButton("Save",edit_font,"btnClear","btnSave",LEFT);
-  editorUI.createAnchoredButton("Save as",edit_font,"btnSave","btnSaveAs",LEFT);
-  editorUI.createAnchoredButton("Load",edit_font,"btnSaveAs","btnLoad",LEFT);
-  editorUI.createAnchoredButton("Grid",edit_font,"btnLoad","btnGrid",LEFT);
-  editorUI.createAnchoredButton("Play",edit_font,"btnGrid","btnPlay",LEFT);
+  editorUI.addElement(new Button(566, 728, ">", "right_bottom_toggle",  edit_font));
+  editorUI.createAnchoredButton("Undo", edit_font, "right_bottom_toggle", "btnUndo", LEFT);
+  editorUI.createAnchoredButton("Clear", edit_font, "btnUndo", "btnClear", LEFT);
+  editorUI.createAnchoredButton("Save", edit_font, "btnClear", "btnSave", LEFT);
+  editorUI.createAnchoredButton("Save as", edit_font, "btnSave", "btnSaveAs", LEFT);
+  editorUI.createAnchoredButton("Load", edit_font, "btnSaveAs", "btnLoad", LEFT);
+  editorUI.createAnchoredButton("Grid", edit_font, "btnLoad", "btnGrid", LEFT);
+  editorUI.createAnchoredButton("Play", edit_font, "btnGrid", "btnPlay", LEFT);
 
-  editorUI.addElement(new Button(882,0,">","right_top_toggle",edit_font));
-  editorUI.addElement(new Button(898+13,0,"Help","btnHelp",edit_font));
-  editorUI.createAnchoredButton("Back",edit_font,"btnHelp","btnBack",LEFT);
+  editorUI.addElement(new Button(882, 0, ">", "right_top_toggle", edit_font));
+  editorUI.addElement(new Button(898+13, 0, "Help", "btnHelp", edit_font));
+  editorUI.createAnchoredButton("Back", edit_font, "btnHelp", "btnBack", LEFT);
 
-  editorUI.addElement(new CheckBox(0,60,"Block affects character","chkBlockAffectsChar",edit_font));
-  editorUI.createAnchoredButton("<",edit_font,"chkBlockAffectsChar","left_top_toggle",RIGHT);
+  editorUI.addElement(new CheckBox(0, 60, "Block affects character", "chkBlockAffectsChar", edit_font));
+  editorUI.createAnchoredButton("<", edit_font, "chkBlockAffectsChar", "left_top_toggle", RIGHT);
 
   editorUI.addElement(new Button(0,100,"","explosive_up", nullptr));
   editorUI.getElementById("explosive_up") -> setImage(image_box[5]);
-  editorUI.getElementById("explosive_up") -> setBitmapRotationAngle(0);
   editorUI.getElementById("explosive_up") -> setPadding(2,2);
 
   editorUI.addElement(new Button(38,100,"", "explosive_right", nullptr));
@@ -134,8 +133,7 @@ Editor::Editor(){
   editorUI.getElementById("explosive_left") -> setPadding(2,2);
 
   editorUI.addElement(new Button(152,100,"", "explosive_circle", nullptr));
-  editorUI.getElementById("explosive_circle") -> setImage(image_box[5]);
-  editorUI.getElementById("explosive_circle") -> setBitmapRotationAngle(PI*3/2);
+  editorUI.getElementById("explosive_circle") -> setImage(image_box[4]);
   editorUI.getElementById("explosive_circle") -> setPadding(2,2);
 
   explosive_orientation = 1;
@@ -176,7 +174,7 @@ Editor::~Editor(){
   }
 }
 
-bool Editor::is_player(){
+bool Editor::is_player() {
   for (unsigned int i = 0; i < editorBoxes.size(); i++) {
     if (editorBoxes.at(i).type == 2)
       return true;
@@ -185,87 +183,59 @@ bool Editor::is_player(){
 }
 
 void Editor::set_explosive_ui_status() {
-  // Learned a few things from you
-  if (tile_type == 5) {
-    editorUI.getElementById("chkBlockAffectsChar") -> enable();
-    editorUI.getElementById("explosive_up") -> enable();
-    editorUI.getElementById("explosive_left") -> enable();
-    editorUI.getElementById("explosive_right") -> enable();
-    editorUI.getElementById("explosive_down") -> enable();
-    editorUI.getElementById("explosive_circle") -> enable();
-    editorUI.getElementById("left_top_toggle") -> enable();
-
-    editorUI.getElementById("chkBlockAffectsChar") -> show();
-    editorUI.getElementById("explosive_up") -> show();
-    editorUI.getElementById("explosive_left") -> show();
-    editorUI.getElementById("explosive_right") -> show();
-    editorUI.getElementById("explosive_down") -> show();
-    editorUI.getElementById("explosive_circle") -> show();
-    editorUI.getElementById("left_top_toggle") -> show();
-  }
-  else {
-    editorUI.getElementById("chkBlockAffectsChar") -> disable();
-    editorUI.getElementById("explosive_up") -> disable();
-    editorUI.getElementById("explosive_left") -> disable();
-    editorUI.getElementById("explosive_right") -> disable();
-    editorUI.getElementById("explosive_down") -> disable();
-    editorUI.getElementById("explosive_circle") -> disable();
-    editorUI.getElementById("left_top_toggle") -> disable();
-
-    editorUI.getElementById("chkBlockAffectsChar") -> hide();
-    editorUI.getElementById("explosive_up") -> hide();
-    editorUI.getElementById("explosive_left") -> hide();
-    editorUI.getElementById("explosive_right") -> hide();
-    editorUI.getElementById("explosive_down") -> hide();
-    editorUI.getElementById("explosive_circle") -> hide();
-    editorUI.getElementById("left_top_toggle") -> hide();
-  }
+  editorUI.getElementById("chkBlockAffectsChar") -> setVisibility(tile_type == 5);
+  editorUI.getElementById("explosive_up") -> setVisibility(tile_type == 5);
+  editorUI.getElementById("explosive_left") -> setVisibility(tile_type == 5);
+  editorUI.getElementById("explosive_right") -> setVisibility(tile_type == 5);
+  editorUI.getElementById("explosive_down") -> setVisibility(tile_type == 5);
+  editorUI.getElementById("explosive_circle") -> setVisibility(tile_type == 5);
+  editorUI.getElementById("left_top_toggle") -> setVisibility(tile_type == 5);
 }
 
 // Update editor
-void Editor::update(){
+void Editor::update() {
   // Update buttons
   editorUI.update();
 
-  if( editorUI.getElementById("explosive_circle") -> clicked())
+  if (editorUI.getElementById("explosive_circle") -> clicked())
     explosive_orientation = 0;
 
-  if( editorUI.getElementById("explosive_up") -> clicked())
+  if (editorUI.getElementById("explosive_up") -> clicked())
     explosive_orientation = 1;
 
-  if( editorUI.getElementById("explosive_right") -> clicked())
+  if (editorUI.getElementById("explosive_right") -> clicked())
     explosive_orientation = 2;
 
-  if( editorUI.getElementById("explosive_down") -> clicked())
+  if (editorUI.getElementById("explosive_down") -> clicked())
     explosive_orientation = 3;
 
-  if( editorUI.getElementById("explosive_left") -> clicked())
+  if (editorUI.getElementById("explosive_left") -> clicked())
     explosive_orientation = 4;
 
 
   ALLEGRO_COLOR selected_colour = al_map_rgba(0,150,0,255);
 
-  if(explosive_orientation == 0)
+  if (explosive_orientation == 0)
     editorUI.getElementById("explosive_circle") -> setBackgroundColour(selected_colour);
   else
     editorUI.getElementById("explosive_circle") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
-  if(explosive_orientation == 1)
+  if (explosive_orientation == 1)
     editorUI.getElementById("explosive_up") -> setBackgroundColour(selected_colour);
   else
     editorUI.getElementById("explosive_up") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
-  if(explosive_orientation == 2)
+  if (explosive_orientation == 2)
     editorUI.getElementById("explosive_right") -> setBackgroundColour(selected_colour);
   else
     editorUI.getElementById("explosive_right") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
-  if(explosive_orientation == 3)
+  if (explosive_orientation == 3)
     editorUI.getElementById("explosive_down") -> setBackgroundColour(selected_colour);
   else
     editorUI.getElementById("explosive_down") -> setBackgroundColour(al_map_rgba(200,200,200,255));
 
-  if(explosive_orientation == 4)
+  if (explosive_orientation == 4)
     editorUI.getElementById("explosive_left") -> setBackgroundColour(selected_colour);
   else
     editorUI.getElementById("explosive_left") -> setBackgroundColour(al_map_rgba(200,200,200,255));
@@ -431,9 +401,9 @@ void Editor::update(){
   }
 
   // Play
-  if(editorUI.getElementById("btnPlay") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_F]){
-    if(editorBoxes.size() > 0){
-      if(is_player()){
+  if (editorUI.getElementById("btnPlay") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_F]) {
+    if (editorBoxes.size() > 0) {
+      if (is_player()) {
         save_map(file_name);
         Config::setValue("EditingLevel", true);
         Config::setValue("EditingLevelFile", file_name);
@@ -453,114 +423,100 @@ void Editor::update(){
 
   // Gosh darn toggle hide buttons take so much freakin' room
   if (editorUI.getElementById("left_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_LEFT]) {
-    editorUI.getElementById("btnCollision") -> toggleVisibility();
-    editorUI.getElementById("btnStatic") -> toggleVisibility();
-    editorUI.getElementById("btnDynamic") -> toggleVisibility();
-    editorUI.getElementById("btnPlayer") -> toggleVisibility();
-    editorUI.getElementById("btnGoat") -> toggleVisibility();
-    editorUI.getElementById("btnExplosive") -> toggleVisibility();
-
-    editorUI.getElementById("btnCollision") -> toggleDisabled();
-    editorUI.getElementById("btnStatic") -> toggleDisabled();
-    editorUI.getElementById("btnDynamic") -> toggleDisabled();
-    editorUI.getElementById("btnPlayer") -> toggleDisabled();
-    editorUI.getElementById("btnGoat") -> toggleDisabled();
-    editorUI.getElementById("btnExplosive") -> toggleDisabled();
-
-    if (editorUI.getElementById("left_bottom_toggle") -> getText()=="<") {
+    bool hide_buttons = false;
+    if (editorUI.getElementById("left_bottom_toggle") -> getText() == "<") {
       editorUI.getElementById("left_bottom_toggle") -> setPosition( 0, 728);
       editorUI.getElementById("left_bottom_toggle") -> setText(">");
       editorUI.getElementById("left_bottom_toggle") -> setTransparency(150);
     }
     else {
+      hide_buttons = true;
       editorUI.getElementById("left_bottom_toggle") -> setPosition(489, 728);
       editorUI.getElementById("left_bottom_toggle") -> setText("<");
       editorUI.getElementById("left_bottom_toggle") -> setTransparency(255);
     }
+
+    editorUI.getElementById("btnCollision") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnStatic") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnDynamic") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnPlayer") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnGoat") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnExplosive") -> setVisibility(hide_buttons);
   }
 
   if (editorUI.getElementById("right_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_RIGHT]) {
-    editorUI.getElementById("btnUndo") -> toggleVisibility();
-    editorUI.getElementById("btnClear") -> toggleVisibility();
-    editorUI.getElementById("btnSave") -> toggleVisibility();
-    editorUI.getElementById("btnSaveAs") -> toggleVisibility();
-    editorUI.getElementById("btnLoad") -> toggleVisibility();
-    editorUI.getElementById("btnPlay") -> toggleVisibility();
-    editorUI.getElementById("btnGrid") -> toggleVisibility();
-
-    editorUI.getElementById("btnUndo") -> toggleDisabled();
-    editorUI.getElementById("btnClear") -> toggleDisabled();
-    editorUI.getElementById("btnSave") -> toggleDisabled();
-    editorUI.getElementById("btnSaveAs") -> toggleDisabled();
-    editorUI.getElementById("btnLoad") -> toggleDisabled();
-    editorUI.getElementById("btnPlay") -> toggleDisabled();
-    editorUI.getElementById("btnGrid") -> toggleDisabled();
-
-    if (editorUI.getElementById("right_bottom_toggle") -> getText()==">") {
-      editorUI.getElementById("right_bottom_toggle") -> setPosition( 994, 728);
-      editorUI.getElementById("right_bottom_toggle") -> setText("<");
-      editorUI.getElementById("right_bottom_toggle") -> setTransparency(150);
-    }
-    else {
+    bool hide_buttons = false;
+    if (editorUI.getElementById("right_bottom_toggle") -> getText() == "<") {
+      hide_buttons = true;
       editorUI.getElementById("right_bottom_toggle") -> setPosition(556+8+2, 728);
       editorUI.getElementById("right_bottom_toggle") -> setText(">");
       editorUI.getElementById("right_bottom_toggle") -> setTransparency(255);
     }
-  }
-  if(editorUI.getElementById("right_top_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_UP]){
-    editorUI.getElementById("btnBack") -> toggleVisibility();
-    editorUI.getElementById("btnHelp") -> toggleVisibility();
-
-    editorUI.getElementById("btnBack") -> toggleDisabled();
-    editorUI.getElementById("btnHelp") -> toggleDisabled();
-    if(editorUI.getElementById("right_top_toggle") -> getText()==">"){
-      editorUI.getElementById("right_top_toggle") -> setPosition( 994, 0);
-      editorUI.getElementById("right_top_toggle") -> setText("<");
-      editorUI.getElementById("right_top_toggle") -> setTransparency(150);
+    else {
+      editorUI.getElementById("right_bottom_toggle") -> setPosition(994, 728);
+      editorUI.getElementById("right_bottom_toggle") -> setText("<");
+      editorUI.getElementById("right_bottom_toggle") -> setTransparency(150);
     }
-    else{
+
+    editorUI.getElementById("btnUndo") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnClear") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnSave") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnSaveAs") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnLoad") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnPlay") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnGrid") -> setVisibility(hide_buttons);
+  }
+
+  if (editorUI.getElementById("right_top_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_UP]) {
+    bool hide_buttons = false;
+    if (editorUI.getElementById("right_top_toggle") -> getText() == "<") {
+      hide_buttons = true;
       editorUI.getElementById("right_top_toggle") -> setPosition(882, 0);
       editorUI.getElementById("right_top_toggle") -> setText(">");
       editorUI.getElementById("right_top_toggle") -> setTransparency(255);
     }
+    else {
+      editorUI.getElementById("right_top_toggle") -> setPosition( 994, 0);
+      editorUI.getElementById("right_top_toggle") -> setText("<");
+      editorUI.getElementById("right_top_toggle") -> setTransparency(150);
+    }
+
+    editorUI.getElementById("btnBack") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnHelp") -> setVisibility(hide_buttons);
   }
 
-  if(editorUI.getElementById("left_top_toggle") -> clicked()){
-    editorUI.getElementById("explosive_up") -> toggleVisibility();
-    editorUI.getElementById("explosive_down") -> toggleVisibility();
-    editorUI.getElementById("explosive_left") -> toggleVisibility();
-    editorUI.getElementById("explosive_right") -> toggleVisibility();
-    editorUI.getElementById("explosive_circle") -> toggleVisibility();
-    editorUI.getElementById("chkBlockAffectsChar") -> toggleVisibility();
-
-    editorUI.getElementById("explosive_up") -> toggleDisabled();
-    editorUI.getElementById("explosive_down") -> toggleDisabled();
-    editorUI.getElementById("explosive_left") -> toggleDisabled();
-    editorUI.getElementById("explosive_right") -> toggleDisabled();
-    editorUI.getElementById("explosive_circle") -> toggleDisabled();
-    editorUI.getElementById("chkBlockAffectsChar") -> toggleDisabled();
-
-    if(editorUI.getElementById("left_top_toggle") -> getText()==">"){
-      editorUI.getElementById("left_top_toggle") -> setPosition( 257, 60);
-      editorUI.getElementById("left_top_toggle") -> setText("<");
-      editorUI.getElementById("left_top_toggle") -> setTransparency(255);
-    }
-    else{
+  if (editorUI.getElementById("left_top_toggle") -> clicked()) {
+    bool hide_buttons = false;
+    if(editorUI.getElementById("left_top_toggle") -> getText() == "<"){
       editorUI.getElementById("left_top_toggle") -> setPosition(0, 60);
       editorUI.getElementById("left_top_toggle") -> setText(">");
       editorUI.getElementById("left_top_toggle") -> setTransparency(150);
     }
+    else {
+      hide_buttons = true;
+      editorUI.getElementById("left_top_toggle") -> setPosition( 257, 60);
+      editorUI.getElementById("left_top_toggle") -> setText("<");
+      editorUI.getElementById("left_top_toggle") -> setTransparency(255);
+    }
+
+    editorUI.getElementById("explosive_up") -> setVisibility(hide_buttons);
+    editorUI.getElementById("explosive_down") -> setVisibility(hide_buttons);
+    editorUI.getElementById("explosive_left") -> setVisibility(hide_buttons);
+    editorUI.getElementById("explosive_right") -> setVisibility(hide_buttons);
+    editorUI.getElementById("explosive_circle") -> setVisibility(hide_buttons);
+    editorUI.getElementById("chkBlockAffectsChar") -> setVisibility(hide_buttons);
   }
+
   // Add tile
-  if(tile_type != 4){
-    if( MouseListener::mouse_button & 1
+  if (tile_type != 4) {
+    if (MouseListener::mouse_button & 1
       && !box_at_with_type(0,MouseListener::mouse_x, MouseListener::mouse_y)
       && !box_at_with_type(1,MouseListener::mouse_x, MouseListener::mouse_y)
       && !box_at_with_type(2,MouseListener::mouse_x, MouseListener::mouse_y)
       && !box_at_with_type(3,MouseListener::mouse_x, MouseListener::mouse_y)
       && !box_at_with_type(5,MouseListener::mouse_x, MouseListener::mouse_y)
 
-      && ((!over_Button && gui_mode) || !gui_mode)){
+      && ((!over_Button && gui_mode) || !gui_mode)) {
       editor_box newBox;
       newBox.x = MouseListener::mouse_x - MouseListener::mouse_x % 32;
       newBox.y = MouseListener::mouse_y - MouseListener::mouse_y % 32;
@@ -569,10 +525,10 @@ void Editor::update(){
       newBox.type = tile_type;
       newBox.affect_character = dynamic_cast<CheckBox*>(editorUI.getElementById("chkBlockAffectsChar")) -> getChecked();
 
-      for( int i = 0; i < 4; i++)
+      for (int i = 0; i < 4; i++)
         newBox.orientation[i] = 0;
 
-      if( tile_type == 0)
+      if (tile_type == 0)
         newBox.type_str = "Dynamic";
       else if( tile_type == 1)
         newBox.type_str = "Static";
@@ -592,23 +548,23 @@ void Editor::update(){
     }
   }
   //Drag n drop madness
-  if( tile_type == 4 && !dialog_open){
-    if( MouseListener::mouse_pressed & 1 && !box_at_with_type(0,MouseListener::mouse_x, MouseListener::mouse_y) && ((!over_Button && gui_mode) || !gui_mode)){
+  if (tile_type == 4 && !dialog_open) {
+    if (MouseListener::mouse_pressed & 1 && !box_at_with_type(0,MouseListener::mouse_x, MouseListener::mouse_y) && ((!over_Button && gui_mode) || !gui_mode)) {
       is_dragging_box = true;
       box_1_x = MouseListener::mouse_x - MouseListener::mouse_x % 32;
       box_1_y = MouseListener::mouse_y - MouseListener::mouse_y % 32;
     }
-    if(MouseListener::mouse_released & 1){
+    if (MouseListener::mouse_released & 1){
       is_dragging_box = false;
 
-      if(!over_Button && gui_mode && (box_2_x - box_1_x) != 0 && (box_2_x - box_1_x) != 0){
+      if (!over_Button && gui_mode && (box_2_x - box_1_x) != 0 && (box_2_x - box_1_x) != 0) {
         // Backwards dragged box correction, Box2D chokes on negative widths/heights
-        if(box_2_x<box_1_x){
+        if (box_2_x<box_1_x) {
           int holder_value = box_2_x;
           box_2_x=box_1_x;
           box_1_x=holder_value;
         }
-        if(box_2_y<box_1_y){
+        if (box_2_y<box_1_y) {
           int holder_value = box_2_y;
           box_2_y=box_1_y;
           box_1_y=holder_value;
@@ -654,13 +610,8 @@ void Editor::update(){
 void Editor::calculate_orientation_global(){
   // Calc boxes
   for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-
-    // Want to bring back the marching tiles back for dynamic blocks?
-    //if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
-
     //If not...
     if (editorBoxes.at(i).type == 1) {
-
       // Scroll through all 4 parts
       for (int t = 0; t < 4; t++) {
         // Offsets from subtile
@@ -675,7 +626,7 @@ void Editor::calculate_orientation_global(){
         int box_type = editorBoxes.at(i).type;
 
         // NORTH
-        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x     , editorBoxes.at(i).y + off_y - 16)) {
+        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y - 16)) {
           options.erase(std::remove(options.begin(), options.end(), 0), options.end());
           options.erase(std::remove(options.begin(), options.end(), 1), options.end());
           options.erase(std::remove(options.begin(), options.end(), 2), options.end());
@@ -769,11 +720,11 @@ void Editor::draw() {
 
   // Grid
   if (grid_on) {
-    for (int i = 0; i < 1024; i += 32){
+    for (int i = 0; i < 1024; i += 32) {
       al_draw_line( i, 0, i, 768, al_map_rgb( 0, 0, 0), 1);
     }
 
-    for (int i = 0; i < 768; i += 32){
+    for (int i = 0; i < 768; i += 32) {
       al_draw_line( 0, i, 1024, i, al_map_rgb( 0, 0, 0), 1);
     }
   }
@@ -792,26 +743,26 @@ void Editor::draw() {
         int off_y = (t >= 2) ? 16: 0;
 
         if (editorBoxes.at(i).orientation[t] >= 0 && editorBoxes.at(i).orientation[t] < 16)
-          al_draw_bitmap( tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation[t]], editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y, 0);
+          al_draw_bitmap(tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation[t]], editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y, 0);
       }
     }
     else if (editorBoxes.at(i).type == 0)
-      al_draw_bitmap( tiles[0][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+      al_draw_bitmap(tiles[0][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
 
     else if (editorBoxes.at(i).type == 2)
-      al_draw_bitmap( tiles[2][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+      al_draw_bitmap(tiles[2][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     else if (editorBoxes.at(i).type == 3)
-      al_draw_bitmap( tiles[3][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
+      al_draw_bitmap(tiles[3][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
     else if (editorBoxes.at(i).type == 5) {
       if(editorBoxes.at(i).affect_character)
-        al_draw_filled_rectangle( editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4, editorBoxes.at(i).x +28, editorBoxes.at(i).y + 28, al_map_rgb(255, 0, 0));
+        al_draw_filled_rectangle(editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4, editorBoxes.at(i).x +28, editorBoxes.at(i).y + 28, al_map_rgb(255, 0, 0));
       else
-        al_draw_filled_rectangle( editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4, editorBoxes.at(i).x +28, editorBoxes.at(i).y + 28, al_map_rgb(0, 255, 0));
+        al_draw_filled_rectangle(editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4, editorBoxes.at(i).x +28, editorBoxes.at(i).y + 28, al_map_rgb(0, 255, 0));
 
-      if (editorBoxes.at(i).orientation[0]==0)
+      if (editorBoxes.at(i).orientation[0] == 0)
         al_draw_bitmap( tiles[4][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
 
-      if (editorBoxes.at(i).orientation[0]>0) {
+      if (editorBoxes.at(i).orientation[0] > 0) {
         // PI/2 is a quarter turn. Editor boxes orientation is a range from 1-4.
         // So we have a quarter turn * 1-4, creating a quarter turn, half turn, ect.
         // - PI/2 is because we start rotated right a quarter turn.
@@ -830,54 +781,55 @@ void Editor::draw() {
 
 
 
-  if (is_dragging_box){
+  if (is_dragging_box) {
     al_draw_filled_rectangle( box_1_x,box_1_y,box_2_x,box_2_y, al_map_rgba(0, 255, 0,50));
   }
 
   // Tile type
-  if( tile_type == 0)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Dynamic");
-  if( tile_type == 1)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Static");
-  if( tile_type == 2)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Character spawn");
-  if( tile_type == 3)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Endgame goat");
-  if( tile_type == 4)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Collision Box");
-  if( tile_type == 5)
-    al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Explosive Box");
+  if (tile_type == 0)
+    al_draw_textf(edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Dynamic");
+  if (tile_type == 1)
+    al_draw_textf(edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Static");
+  if (tile_type == 2)
+    al_draw_textf(edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Character spawn");
+  if (tile_type == 3)
+    al_draw_textf(edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Endgame goat");
+  if (tile_type == 4)
+    al_draw_textf(edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Collision Box");
+  if (tile_type == 5)
+    al_draw_textf(edit_font, al_map_rgb( 0, 0, 0), 10, 30, 0, "Type: Explosive Box");
 
   std::string modified_character="";
-  if(modified)
+  if (modified)
     modified_character="*";
 
   // Current map opened
-  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s %s", file_name.c_str(),modified_character.c_str());
+  al_draw_textf(edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s %s", file_name.c_str(),modified_character.c_str());
 
-  if(display_help)
+  if (display_help)
     al_draw_bitmap(help_menu,110,75,0);
+
   // Draw buttons
   editorUI.draw();
 
-  if(Config::getBooleanValue("draw_cursor"))
+  if (Config::getBooleanValue("draw_cursor"))
     al_draw_bitmap(cursor,MouseListener::mouse_x,MouseListener::mouse_y,0);
 
 }
 
 
 // Check if box is at location
-bool Editor::box_at_with_type( int newType, int x, int y){
-  for( unsigned int i = 0; i < editorBoxes.size(); i ++)
-    if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)x, (float)x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)y, (float)y + 1) && editorBoxes.at(i).type == newType)
+bool Editor::box_at_with_type(int newType, int x, int y) {
+  for (unsigned int i = 0; i < editorBoxes.size(); i ++)
+    if (tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)x, (float)x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)y, (float)y + 1) && editorBoxes.at(i).type == newType)
       return true;
   return false;
 }
 
 // Check if box is at location
-bool Editor::box_at(int x, int y){
-  for( unsigned int i = 0; i < editorBoxes.size(); i ++)
-    if( tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)x, (float)x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)y, (float)y + 1))
+bool Editor::box_at(int x, int y) {
+  for (unsigned int i = 0; i < editorBoxes.size(); i ++)
+    if (tools::collision( editorBoxes.at(i).x, editorBoxes.at(i).x + 32, (float)x, (float)x + 1, editorBoxes.at(i).y, editorBoxes.at(i).y + 32, (float)y, (float)y + 1))
       return true;
   return false;
 }
@@ -915,21 +867,21 @@ bool Editor::load_map(std::string mapName) {
     std::string affect_character = "false";
 
     // Load data
-    if( object_node -> first_attribute("type") != nullptr)
+    if (object_node -> first_attribute("type") != nullptr)
       type_str = object_node -> first_attribute("type") -> value();
-    if( object_node -> first_node("x") != nullptr)
+    if (object_node -> first_node("x") != nullptr)
       x = object_node -> first_node("x") -> value();
-    if( object_node -> first_node("y") != nullptr)
+    if(object_node -> first_node("y") != nullptr)
       y = object_node -> first_node("y") -> value();
-    if( object_node -> first_node("width") != nullptr)
+    if (object_node -> first_node("width") != nullptr)
       width = object_node -> first_node("width") -> value();
-    if( object_node -> first_node("height") != nullptr)
+    if (object_node -> first_node("height") != nullptr)
       height = object_node -> first_node("height") -> value();
    // if( object_node -> first_node("type_str") != nullptr)
    //   type_str = object_node -> first_node("type_str") -> value();
-    if( object_node -> first_node("orientation") != nullptr)
+    if (object_node -> first_node("orientation") != nullptr)
       orientation = object_node -> first_node("orientation") -> value();
-    if( object_node -> first_node("affect_character") != nullptr)
+    if (object_node -> first_node("affect_character") != nullptr)
       affect_character = object_node -> first_node("affect_character") -> value();
 
 
@@ -941,16 +893,15 @@ bool Editor::load_map(std::string mapName) {
     newBox.affect_character = (affect_character=="true");
 
     // Idek dude but it works
-    if(newBox.type_str == "Collision"){
-
+    if (newBox.type_str == "Collision") {
       newBox.width = (tools::stringToFloat(width) * 20.0f);
       newBox.height = (tools::stringToFloat(height) * 20.0f);
       newBox.x = (tools::stringToFloat(x) - tools::stringToFloat(width)/2)*20.0f;
       // This guy is positive because we make it negative later
       newBox.y = (tools::stringToFloat(y) + tools::stringToFloat(height)/2)*-20.0f;
-
     }
-    if(newBox.type_str != "Collision"){
+
+    if (newBox.type_str != "Collision") {
       newBox.width = (tools::stringToFloat(width) * 20.0f) - 16.0f;
       newBox.height = (tools::stringToFloat(height) * 20.0f) - 16.0f;
       newBox.x = (tools::stringToFloat(x) * 20.0f) - 16.0f;
@@ -963,12 +914,12 @@ bool Editor::load_map(std::string mapName) {
 
     // Correct orientation format
     std::vector<std::string> splits = tools::split_string( orientation, ' ');
-    if( splits.size() == 4){
+    if( splits.size() == 4) {
       for( int k = 0; k < 4; k++)
         newBox.orientation[k] = (tools::stringToInt(splits.at(k)));
     }
     // Maybe we can salvage it?
-    else if( splits.size() > 0){
+    else if( splits.size() > 0) {
       for( int k = 0; k < 4; k++)
         newBox.orientation[k] = (tools::stringToInt(splits.at(0)));
     }
@@ -980,17 +931,17 @@ bool Editor::load_map(std::string mapName) {
     tools::log_message(type_str + " is type_str");
 
     // Body
-    if( newBox.type_str == "Dynamic")
+    if(newBox.type_str == "Dynamic")
       newBox.type = 0;
-    else if( newBox.type_str == "Static")
+    else if(newBox.type_str == "Static")
       newBox.type = 1;
-    else if( newBox.type_str == "Character")
+    else if(newBox.type_str == "Character")
       newBox.type = 2;
-    else if( newBox.type_str == "Finish")
+    else if(newBox.type_str == "Finish")
       newBox.type = 3;
-    else if( newBox.type_str == "Collision")
+    else if(newBox.type_str == "Collision")
       newBox.type = 4;
-    else if( newBox.type_str == "Explosive")
+    else if(newBox.type_str == "Explosive")
       newBox.type = 5;
     else{
       newBox.type = 0;
@@ -998,7 +949,7 @@ bool Editor::load_map(std::string mapName) {
 
     }
     // Add box
-    editorBoxes.push_back( newBox);
+    editorBoxes.push_back(newBox);
   }
 
   // Success
@@ -1006,24 +957,23 @@ bool Editor::load_map(std::string mapName) {
 }
 
 // Save map to xml
-bool Editor::save_map( std::string mapName){
+bool Editor::save_map(std::string mapName) {
 
   //NSFW haxx to prevent goat loading before player
-  for( unsigned int i=0;i<editorBoxes.size();i++){
-    if(editorBoxes[i].type==GOAT){
-    editor_box newBox = editorBoxes[i];
-    editorBoxes.erase(editorBoxes.begin()+i);
-    editorBoxes.insert(editorBoxes.begin(),newBox);
+  for (unsigned int i = 0; i < editorBoxes.size(); i++) {
+    if (editorBoxes[i].type == GOAT) {
+      editor_box newBox = editorBoxes[i];
+      editorBoxes.erase(editorBoxes.begin()+i);
+      editorBoxes.insert(editorBoxes.begin(),newBox);
     }
   }
-   for( unsigned int i=0;i<editorBoxes.size();i++){
-    if(editorBoxes[i].type==5){
-    editor_box newBox = editorBoxes[i];
-    editorBoxes.erase(editorBoxes.begin()+i);
-    editorBoxes.push_back(newBox);
+   for (unsigned int i = 0; i < editorBoxes.size(); i++) {
+    if (editorBoxes[i].type == 5) {
+      editor_box newBox = editorBoxes[i];
+      editorBoxes.erase(editorBoxes.begin()+i);
+      editorBoxes.push_back(newBox);
     }
   }
-
 
   // Write xml file
   rapidxml::xml_document<> doc;
@@ -1032,11 +982,11 @@ bool Editor::save_map( std::string mapName){
   decl -> append_attribute( doc.allocate_attribute("encoding", "utf-8"));
   doc.append_node(decl);
 
-  rapidxml::xml_node<>* root_node = doc.allocate_node( rapidxml::node_element, "data");
+  rapidxml::xml_node<>* root_node = doc.allocate_node(rapidxml::node_element, "data");
   doc.append_node(root_node);
 
   // Tiles
-  for( unsigned int i = 0; i < editorBoxes.size(); i++){
+  for (unsigned int i = 0; i < editorBoxes.size(); i++) {
 
     //editorBoxes.at(i).type_str=editorBoxes.at(i).bodyType;
     // Object
@@ -1046,47 +996,47 @@ bool Editor::save_map( std::string mapName){
     std::string xml_type = "Tile";
     std::string output_orientation = "";
 
-    if(editorBoxes.at(i).type != 5){
+    if (editorBoxes.at(i).type != 5) {
      output_orientation = tools::toString(editorBoxes.at(i).orientation[0]) + " " + tools::toString(editorBoxes.at(i).orientation[1]) + " " +
                                       tools::toString(editorBoxes.at(i).orientation[2]) + " " + tools::toString(editorBoxes.at(i).orientation[3]);
     }
-    else{
+    else {
       output_orientation = tools::toString(editorBoxes.at(i).orientation[0]);
     }
     char *output_orientation_char = doc.allocate_string(output_orientation.c_str());
 
 
 
-    if( editorBoxes.at(i).type == 2)
+    if (editorBoxes.at(i).type == 2)
       xml_type = "Character";
-    else if( editorBoxes.at(i).type == 3)
+    else if (editorBoxes.at(i).type == 3)
       xml_type = "Finish";
-    else if( editorBoxes.at(i).type == 5){
+    else if (editorBoxes.at(i).type == 5){
       xml_type = "Explosive";
     }
 
-    object_node -> append_attribute( doc.allocate_attribute("type", doc.allocate_string(editorBoxes.at(i).type_str.c_str())));
-    root_node -> append_node( object_node);
+    object_node -> append_attribute(doc.allocate_attribute("type", doc.allocate_string(editorBoxes.at(i).type_str.c_str())));
+    root_node -> append_node(object_node);
 
     // Save data
-    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "x", editorBoxes.at(i).x_str.c_str()));
-    object_node -> append_node( doc.allocate_node( rapidxml::node_element, "y", editorBoxes.at(i).y_str.c_str()));
+    object_node -> append_node(doc.allocate_node( rapidxml::node_element, "x", editorBoxes.at(i).x_str.c_str()));
+    object_node -> append_node(doc.allocate_node( rapidxml::node_element, "y", editorBoxes.at(i).y_str.c_str()));
 
-    if(editorBoxes.at(i).type_str=="Static")
-      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
+    if (editorBoxes.at(i).type_str == "Static")
+      object_node -> append_node(doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
 
-    if(editorBoxes.at(i).type_str=="Collision"){
-      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "width",editorBoxes.at(i).width_str.c_str()));
-      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "height",editorBoxes.at(i).height_str.c_str()));
+    if (editorBoxes.at(i).type_str == "Collision") {
+      object_node -> append_node(doc.allocate_node( rapidxml::node_element, "width",editorBoxes.at(i).width_str.c_str()));
+      object_node -> append_node(doc.allocate_node( rapidxml::node_element, "height",editorBoxes.at(i).height_str.c_str()));
 
     }
-    if(editorBoxes.at(i).type_str=="Explosive"){
+    if (editorBoxes.at(i).type_str == "Explosive") {
       if(editorBoxes.at(i).affect_character)
-        object_node -> append_node( doc.allocate_node( rapidxml::node_element, "affect_character","true"));
+        object_node -> append_node(doc.allocate_node( rapidxml::node_element, "affect_character","true"));
       else
-        object_node -> append_node( doc.allocate_node( rapidxml::node_element, "affect_character","false"));
+        object_node -> append_node(doc.allocate_node( rapidxml::node_element, "affect_character","false"));
 
-      object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
+      object_node -> append_node(doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
     }
 
     // Write this last for consistency of placement in the xml (hint: always last element)
