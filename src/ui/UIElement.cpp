@@ -73,11 +73,13 @@ std::string UIElement::getId() {
 // Hide
 void UIElement::hide() {
   this -> visible = false;
+  this -> disabled = true;
 }
 
 // Show
 void UIElement::show() {
   this -> visible = true;
+  this -> disabled = false;
 }
 
 // Is visible or not
@@ -85,9 +87,10 @@ bool UIElement::isVisible() {
   return visible;
 }
 
-// Toggle visiblity
-void UIElement::toggleVisibility() {
-  visible =! visible;
+// Set visiblity
+void UIElement::setVisibility(bool visible) {
+  this -> visible = visible;
+  this -> disabled = !visible;
 }
 
 // Disable element
@@ -105,15 +108,10 @@ bool UIElement::isEnabled() {
   return !disabled;
 }
 
-// Togle disabled
-void UIElement::toggleDisabled() {
-  disabled =! disabled;
-}
-
 // Set transparency level
 void UIElement::setTransparency(const float alpha) {
   this -> alpha = alpha;
-  text_colour.a = alpha;
+  text_colour = al_map_rgba(text_colour.r, text_colour.g, text_colour.b, alpha);
   background_colour.a = alpha;
 }
 

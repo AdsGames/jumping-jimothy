@@ -453,104 +453,90 @@ void Editor::update(){
 
   // Gosh darn toggle hide buttons take so much freakin' room
   if (editorUI.getElementById("left_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_LEFT]) {
-    editorUI.getElementById("btnCollision") -> toggleVisibility();
-    editorUI.getElementById("btnStatic") -> toggleVisibility();
-    editorUI.getElementById("btnDynamic") -> toggleVisibility();
-    editorUI.getElementById("btnPlayer") -> toggleVisibility();
-    editorUI.getElementById("btnGoat") -> toggleVisibility();
-    editorUI.getElementById("btnExplosive") -> toggleVisibility();
-
-    editorUI.getElementById("btnCollision") -> toggleDisabled();
-    editorUI.getElementById("btnStatic") -> toggleDisabled();
-    editorUI.getElementById("btnDynamic") -> toggleDisabled();
-    editorUI.getElementById("btnPlayer") -> toggleDisabled();
-    editorUI.getElementById("btnGoat") -> toggleDisabled();
-    editorUI.getElementById("btnExplosive") -> toggleDisabled();
-
-    if (editorUI.getElementById("left_bottom_toggle") -> getText()=="<") {
+    bool hide_buttons = false;
+    if (editorUI.getElementById("left_bottom_toggle") -> getText() == "<") {
       editorUI.getElementById("left_bottom_toggle") -> setPosition( 0, 728);
       editorUI.getElementById("left_bottom_toggle") -> setText(">");
       editorUI.getElementById("left_bottom_toggle") -> setTransparency(150);
     }
     else {
+      hide_buttons = true;
       editorUI.getElementById("left_bottom_toggle") -> setPosition(489, 728);
       editorUI.getElementById("left_bottom_toggle") -> setText("<");
       editorUI.getElementById("left_bottom_toggle") -> setTransparency(255);
     }
+
+    editorUI.getElementById("btnCollision") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnStatic") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnDynamic") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnPlayer") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnGoat") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnExplosive") -> setVisibility(hide_buttons);
   }
 
   if (editorUI.getElementById("right_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_RIGHT]) {
-    editorUI.getElementById("btnUndo") -> toggleVisibility();
-    editorUI.getElementById("btnClear") -> toggleVisibility();
-    editorUI.getElementById("btnSave") -> toggleVisibility();
-    editorUI.getElementById("btnSaveAs") -> toggleVisibility();
-    editorUI.getElementById("btnLoad") -> toggleVisibility();
-    editorUI.getElementById("btnPlay") -> toggleVisibility();
-    editorUI.getElementById("btnGrid") -> toggleVisibility();
-
-    editorUI.getElementById("btnUndo") -> toggleDisabled();
-    editorUI.getElementById("btnClear") -> toggleDisabled();
-    editorUI.getElementById("btnSave") -> toggleDisabled();
-    editorUI.getElementById("btnSaveAs") -> toggleDisabled();
-    editorUI.getElementById("btnLoad") -> toggleDisabled();
-    editorUI.getElementById("btnPlay") -> toggleDisabled();
-    editorUI.getElementById("btnGrid") -> toggleDisabled();
-
-    if (editorUI.getElementById("right_bottom_toggle") -> getText()==">") {
-      editorUI.getElementById("right_bottom_toggle") -> setPosition( 994, 728);
-      editorUI.getElementById("right_bottom_toggle") -> setText("<");
-      editorUI.getElementById("right_bottom_toggle") -> setTransparency(150);
-    }
-    else {
+    bool hide_buttons = false;
+    if (editorUI.getElementById("right_bottom_toggle") -> getText() == "<") {
+      hide_buttons = true;
       editorUI.getElementById("right_bottom_toggle") -> setPosition(556+8+2, 728);
       editorUI.getElementById("right_bottom_toggle") -> setText(">");
       editorUI.getElementById("right_bottom_toggle") -> setTransparency(255);
     }
-  }
-  if(editorUI.getElementById("right_top_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_UP]){
-    editorUI.getElementById("btnBack") -> toggleVisibility();
-    editorUI.getElementById("btnHelp") -> toggleVisibility();
-
-    editorUI.getElementById("btnBack") -> toggleDisabled();
-    editorUI.getElementById("btnHelp") -> toggleDisabled();
-    if(editorUI.getElementById("right_top_toggle") -> getText()==">"){
-      editorUI.getElementById("right_top_toggle") -> setPosition( 994, 0);
-      editorUI.getElementById("right_top_toggle") -> setText("<");
-      editorUI.getElementById("right_top_toggle") -> setTransparency(150);
+    else {
+      editorUI.getElementById("right_bottom_toggle") -> setPosition(994, 728);
+      editorUI.getElementById("right_bottom_toggle") -> setText("<");
+      editorUI.getElementById("right_bottom_toggle") -> setTransparency(150);
     }
-    else{
+
+    editorUI.getElementById("btnUndo") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnClear") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnSave") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnSaveAs") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnLoad") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnPlay") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnGrid") -> setVisibility(hide_buttons);
+  }
+
+  if (editorUI.getElementById("right_top_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_UP]) {
+    bool hide_buttons = false;
+    if (editorUI.getElementById("right_top_toggle") -> getText() == "<") {
+      hide_buttons = true;
       editorUI.getElementById("right_top_toggle") -> setPosition(882, 0);
       editorUI.getElementById("right_top_toggle") -> setText(">");
       editorUI.getElementById("right_top_toggle") -> setTransparency(255);
     }
+    else {
+      editorUI.getElementById("right_top_toggle") -> setPosition( 994, 0);
+      editorUI.getElementById("right_top_toggle") -> setText("<");
+      editorUI.getElementById("right_top_toggle") -> setTransparency(150);
+    }
+
+    editorUI.getElementById("btnBack") -> setVisibility(hide_buttons);
+    editorUI.getElementById("btnHelp") -> setVisibility(hide_buttons);
   }
 
-  if(editorUI.getElementById("left_top_toggle") -> clicked()){
-    editorUI.getElementById("explosive_up") -> toggleVisibility();
-    editorUI.getElementById("explosive_down") -> toggleVisibility();
-    editorUI.getElementById("explosive_left") -> toggleVisibility();
-    editorUI.getElementById("explosive_right") -> toggleVisibility();
-    editorUI.getElementById("explosive_circle") -> toggleVisibility();
-    editorUI.getElementById("chkBlockAffectsChar") -> toggleVisibility();
-
-    editorUI.getElementById("explosive_up") -> toggleDisabled();
-    editorUI.getElementById("explosive_down") -> toggleDisabled();
-    editorUI.getElementById("explosive_left") -> toggleDisabled();
-    editorUI.getElementById("explosive_right") -> toggleDisabled();
-    editorUI.getElementById("explosive_circle") -> toggleDisabled();
-    editorUI.getElementById("chkBlockAffectsChar") -> toggleDisabled();
-
-    if(editorUI.getElementById("left_top_toggle") -> getText()==">"){
-      editorUI.getElementById("left_top_toggle") -> setPosition( 257, 60);
-      editorUI.getElementById("left_top_toggle") -> setText("<");
-      editorUI.getElementById("left_top_toggle") -> setTransparency(255);
-    }
-    else{
+  if (editorUI.getElementById("left_top_toggle") -> clicked()) {
+    bool hide_buttons = false;
+    if(editorUI.getElementById("left_top_toggle") -> getText() == "<"){
       editorUI.getElementById("left_top_toggle") -> setPosition(0, 60);
       editorUI.getElementById("left_top_toggle") -> setText(">");
       editorUI.getElementById("left_top_toggle") -> setTransparency(150);
     }
+    else {
+      hide_buttons = true;
+      editorUI.getElementById("left_top_toggle") -> setPosition( 257, 60);
+      editorUI.getElementById("left_top_toggle") -> setText("<");
+      editorUI.getElementById("left_top_toggle") -> setTransparency(255);
+    }
+
+    editorUI.getElementById("explosive_up") -> setVisibility(hide_buttons);
+    editorUI.getElementById("explosive_down") -> setVisibility(hide_buttons);
+    editorUI.getElementById("explosive_left") -> setVisibility(hide_buttons);
+    editorUI.getElementById("explosive_right") -> setVisibility(hide_buttons);
+    editorUI.getElementById("explosive_circle") -> setVisibility(hide_buttons);
+    editorUI.getElementById("chkBlockAffectsChar") -> setVisibility(hide_buttons);
   }
+
   // Add tile
   if(tile_type != 4){
     if( MouseListener::mouse_button & 1

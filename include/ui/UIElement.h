@@ -42,8 +42,8 @@ class UIElement {
     // Is visible or not
     bool isVisible();
 
-    // Toggle visiblity
-    void toggleVisibility();
+    // Set visibility
+    void setVisibility(bool visible);
 
     // Disable element
     void disable();
@@ -53,9 +53,6 @@ class UIElement {
 
     // Is enabled or not
     bool isEnabled();
-
-    // Togle disabled
-    void toggleDisabled();
 
     // Set transparency level
     void setTransparency(const float alpha);
