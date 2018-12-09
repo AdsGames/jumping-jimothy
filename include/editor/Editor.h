@@ -70,8 +70,7 @@ class Editor : public State{
     std::vector<editor_box> editorBoxes;
 
     // Map name
-    const char *file_name;
-    static const char *testing_file_name;
+    std::string file_name;
 
     bool gui_mode;
     float box_1_x;
@@ -80,12 +79,12 @@ class Editor : public State{
     float box_2_x;
     float box_2_y;
 
-    bool is_dragging_box = false;
-    bool dialog_open = false;
+    bool is_dragging_box;
+    bool dialog_open;
 
     // Remember saves
-    bool is_saved = false;
-    bool display_help=false;
+    bool is_saved;
+    bool display_help;
 
     // Vars
     bool grid_on;
@@ -93,9 +92,7 @@ class Editor : public State{
     int explosive_orientation;
 
     int tile_type;
-    int level_number;
-    bool test_mode = false;
-    static bool modified;
+    bool modified;
 
     // The font
     ALLEGRO_FONT *edit_font;
