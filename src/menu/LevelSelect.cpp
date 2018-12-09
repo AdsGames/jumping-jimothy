@@ -90,7 +90,7 @@ void LevelSelect::createLevelButton(int newX, int newY, int newLevelNumber){
 }
 
 void LevelSelect::draw(){
-  al_clear_to_color( al_map_rgb(75,75,100));
+  al_clear_to_color(al_map_rgb(75,75,100));
   levelSelectUI.draw();
 }
 
@@ -102,7 +102,7 @@ void LevelSelect::update(){
   }
 
   if (levelSelectUI.getElementById("btnResetSave") -> clicked()) {
-    reset_game_menu=true;
+    reset_game_menu = true;
     levelSelectUI.getElementById("btnCancel") -> show();
     levelSelectUI.getElementById("btnCancel") -> enable();
     levelSelectUI.getElementById("btnReallyReset") -> show();
