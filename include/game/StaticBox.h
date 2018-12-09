@@ -16,7 +16,7 @@ class StaticBox : public Box {
     StaticBox(const float x, const float y);
 
     // Destructor
-    virtual ~StaticBox() {};
+    virtual ~StaticBox();
 
     // Draw
     virtual void draw() override;

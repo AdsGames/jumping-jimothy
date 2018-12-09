@@ -16,6 +16,13 @@ StaticBox::StaticBox(const float x, const float y) :
 
 }
 
+// Destroy 'custom' image
+StaticBox::~StaticBox() {
+  // Destroy custom image
+  if (sprite != nullptr)
+    al_destroy_bitmap(sprite);
+}
+
 // Draw box to screen
 void StaticBox::draw(){
   // Transform

@@ -51,14 +51,13 @@ class Game : public State {
     Character *create_character(float x, float y);
 
     // Our character and goat
-    Goat *gameGoat = nullptr;
-    Character *gameCharacter = nullptr;
+    Goat *gameGoat;
+    Character *gameCharacter;
 
     // Game variables
     std::vector<Box*> gameBoxes;
     Box *newBox;
     Box *rootBox;
-    b2Body* groundBody;
 
     int level;
     bool first_play;
