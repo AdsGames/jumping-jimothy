@@ -5,9 +5,6 @@
 
 #include <Box2D/Box2D.h>
 
-#include "game/Sensor.h"
-#include "game/Character.h"
-
 #include "util/Tools.h"
 #include "util/Globals.h"
 
