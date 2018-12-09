@@ -24,61 +24,54 @@
 #include "ui/Button.h"
 #include "ui/CheckBox.h"
 
-const char* Editor::testing_file_name = "Untitled";
-bool Editor::modified=false;
-
-
 // Init editor
 Editor::Editor(){
+
+  is_dragging_box = false;
+  dialog_open = false;
+
+  // Remember saves
+  is_saved = false;
+  display_help = false;
 
   MusicManager::menu_music.stop();
 
   editorUI = UIHandler();
 
-  // Level to edit
-  level_number = 1;
-
-  if (std::string(testing_file_name) != "Untitled" || testing_file_name != nullptr)
-    is_saved = true;
-
-  // Filename
-  file_name = testing_file_name;
-  testing_file_name = "Untitled";
+  modified = false;
 
   gui_mode = true;
-  help_menu = tools::load_bitmap_ex( "images/help_menu.png");
+  help_menu = tools::load_bitmap_ex("images/help_menu.png");
+
+  for (int i = 0; i < 6; i++)
+    image_box[i] = nullptr;
 
   // Load box image
-  image_box[0] = tools::load_bitmap_ex( "images/box_green.png");
-  image_box[1] = tools::load_bitmap_ex( "images/StaticBlock.png");
-  image_box[2] = tools::load_bitmap_ex( "images/character.png");
-  image_box[3] = tools::load_bitmap_ex( "images/goat.png");
-  image_box[4] = tools::load_bitmap_ex( "images/box_repel.png");
-  image_box[5] = tools::load_bitmap_ex( "images/box_repel_direction.png");
+  image_box[0] = tools::load_bitmap_ex("images/box_green.png");
+  image_box[1] = tools::load_bitmap_ex("images/StaticBlock.png");
+  image_box[2] = tools::load_bitmap_ex("images/character.png");
+  image_box[3] = tools::load_bitmap_ex("images/goat.png");
+  image_box[4] = tools::load_bitmap_ex("images/box_repel.png");
+  image_box[5] = tools::load_bitmap_ex("images/box_repel_direction.png");
 
   cursor = tools::load_bitmap_ex("images/cursor.png");
 
-  for( int i = 0; i < 4; i++)
-    for( int t = 0; t < 15; t++)
+  for (int i = 0; i < 5; i++)
+    for (int t = 0; t < 15; t++)
       tiles[i][t] = nullptr;
 
-  // Dynamic
-  //for( int i = 0; i < 3; i++)
-   // for( int t = 0; t < 5; t++)
-   //   tiles[0][i + t*3] = al_create_sub_bitmap( image_box[0], i * 16, t * 16, 16, 16);
-
   // Static
-  for( int i = 0; i < 3; i++)
-    for( int t = 0; t < 5; t++)
-      tiles[1][i + t*3] = al_create_sub_bitmap( image_box[1], i * 16, t * 16, 16, 16);
+  for (int i = 0; i < 3; i++)
+    for (int t = 0; t < 5; t++)
+      tiles[1][i + t*3] = al_create_sub_bitmap(image_box[1], i * 16, t * 16, 16, 16);
 
   // Player
-  tiles[2][0] = al_create_sub_bitmap( image_box[2], 0, 0, 32, 64);
+  tiles[2][0] = al_create_sub_bitmap(image_box[2], 0, 0, 32, 64);
 
   // Goat
-  tiles[3][0] = al_create_sub_bitmap( image_box[3], 0, 0, 32, 64);
-
+  tiles[3][0] = al_create_sub_bitmap(image_box[3], 0, 0, 32, 64);
   tiles[0][0]  = image_box[0];
+
   // Explode/repel
   tiles[4][0] = image_box[4];
   tiles[4][1] = image_box[5];
@@ -87,14 +80,13 @@ Editor::Editor(){
 
   srand(time(NULL));
 
-  edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
+  edit_font = al_load_ttf_font("fonts/fantasque.ttf", 18, 0);
 
   if (!edit_font)
-    tools::abort_on_error( "Could not load 'fantasque.ttf'.\n", "Font Error");
+    tools::abort_on_error("Could not load 'fantasque.ttf'.\n", "Font Error");
 
   grid_on = false;
   editorBoxes.clear();
-
 
   // buttons
   editorUI.addElement(new Button(0, 728, "Dynamic", "btnDynamic", edit_font));
@@ -103,9 +95,7 @@ Editor::Editor(){
   editorUI.createAnchoredButton("Goat",edit_font,"btnPlayer","btnGoat", RIGHT);
   editorUI.createAnchoredButton("Collision",edit_font,"btnGoat","btnCollision", RIGHT);
   editorUI.createAnchoredButton("Explosive",edit_font,"btnCollision","btnExplosive", RIGHT);
-
   editorUI.createAnchoredButton("<",edit_font,"btnExplosive","left_bottom_toggle",RIGHT);
-
 
   editorUI.addElement(new Button(566,728,">","right_bottom_toggle", edit_font));
   editorUI.createAnchoredButton("Undo",edit_font,"right_bottom_toggle","btnUndo",LEFT);
@@ -122,7 +112,6 @@ Editor::Editor(){
 
   editorUI.addElement(new CheckBox(0,60,"Block affects character","chkBlockAffectsChar",edit_font));
   editorUI.createAnchoredButton("<",edit_font,"chkBlockAffectsChar","left_top_toggle",RIGHT);
-
 
   editorUI.addElement(new Button(0,100,"","explosive_up", nullptr));
   editorUI.getElementById("explosive_up") -> setImage(image_box[5]);
@@ -153,52 +142,51 @@ Editor::Editor(){
 
   set_explosive_ui_status();
 
+  if (Config::getIntValue("graphics_mode") != DisplayMode::WINDOWED)
+    DisplayMode::setMode(DisplayMode::WINDOWED);
 
-  DisplayMode::setMode(DisplayMode::WINDOWED);
+  // Filename
+  if (Config::getBooleanValue("EditingLevel")) {
+    file_name = Config::getValue("EditingLevelFile");
+    is_saved = true;
+    if (!load_map(file_name)) {
+      file_name = "untitled.xml";
+      is_saved = false;
+    }
+  }
+  else {
+    file_name = "untitled.xml";
+    is_saved = false;
+  }
 
-
-  // Is it edit mode?
-  /*if( Game::testing){
-    load_map( "data/level_0.xml");
-    Game::testing = false;
-  }*/
+  Config::setValue("EditingLevel", false);
+  Config::setValue("EditingLevelFile", "");
 }
 
 // Destruct
 Editor::~Editor(){
- // Destroy resources if loaded
-  if( edit_font != nullptr)
-    al_destroy_font( edit_font);
-
-  // FIXME (Allan#1#): Memory leak
-
-  // HORRIBLE HACK PLZ DONT LET THIS GO INTO RELEASE
-  //  // Tile images
-  //  for( int i = 0; i < 4; i++)
-  //    for( int t = 0; t < 15; t++)
-  //      if( tiles[i][t] != nullptr)
-  //        al_destroy_bitmap( tiles[i][t]);
-  //
+  // Destroy resources if loaded
+  if (edit_font != nullptr) {
+    al_destroy_font(edit_font);
+  }
 
   // Parent bitmaps
-  for(int i = 0; i < 4; i++)
-    if(image_box[i] != nullptr)
-      al_destroy_bitmap( image_box[i]);
+  for (int i = 0; i < 4; i++) {
+    al_destroy_bitmap(image_box[i]);
+  }
 }
-bool Editor::is_player(){
 
-  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-    if(editorBoxes.at(i).type==2)
-     return true;
+bool Editor::is_player(){
+  for (unsigned int i = 0; i < editorBoxes.size(); i++) {
+    if (editorBoxes.at(i).type == 2)
+      return true;
   }
   return false;
-
-
 }
 
-void Editor::set_explosive_ui_status(){
+void Editor::set_explosive_ui_status() {
   // Learned a few things from you
-  if (tile_type==5) {
+  if (tile_type == 5) {
     editorUI.getElementById("chkBlockAffectsChar") -> enable();
     editorUI.getElementById("explosive_up") -> enable();
     editorUI.getElementById("explosive_left") -> enable();
@@ -320,10 +308,7 @@ void Editor::update(){
     editorUI.getElementById("left_top_toggle") -> setText("<");
     editorUI.getElementById("left_top_toggle") -> setTransparency(255);
     editorUI.getElementById("left_top_toggle") -> setPosition( 257, 60);
-
-   set_explosive_ui_status();
-
-
+    set_explosive_ui_status();
   }
 
   // Rockin' three liner undo Button
@@ -334,58 +319,50 @@ void Editor::update(){
 
   // Clear world Button
   if(KeyListener::keyPressed[ALLEGRO_KEY_C] || editorUI.getElementById("btnClear") -> clicked()){
-    if(al_show_native_message_box( nullptr, "Clear?", "Clear the map?", "There is no recovering this masterpiece.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1)
+    if(al_show_native_message_box( nullptr, "Clear?", "Clear the map?", "There is no recovering this masterpiece.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO) == 1)
       editorBoxes.clear();
   }
 
-  if(KeyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementById("btnBack") -> clicked() || KeyListener::keyReleased[ALLEGRO_KEY_ESCAPE]){
-    if(modified){
-      if(al_show_native_message_box( nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO)==1){
-        modified=false;
+  if(KeyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementById("btnBack") -> clicked() || KeyListener::keyReleased[ALLEGRO_KEY_ESCAPE]) {
+    if(modified) {
+      if(al_show_native_message_box(nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO) == 1){
         set_next_state(STATE_MENU);
       }
     }
-    else{
+    else {
       set_next_state(STATE_MENU);
     }
-
   }
 
 
   // Activate advanced mode
   // Don't tell Allan, but I really don't like his buttons
-  if(KeyListener::keyPressed[ALLEGRO_KEY_X])
+  if (KeyListener::keyPressed[ALLEGRO_KEY_X])
     gui_mode =! gui_mode;
 
   // Save
-  if( editorUI.getElementById("btnSave") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_S]){
-    if( editorBoxes.size() > 0){
+  if (editorUI.getElementById("btnSave") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_S]) {
+    if (editorBoxes.size() > 0){
       ALLEGRO_FILECHOOSER *myChooser;
 
       // Has it been saved already?
-      if( !is_saved){
+      if (!is_saved) {
         myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
 
         // Display open dialog
-        if( al_show_native_file_dialog( nullptr, myChooser))
-          file_name = al_get_native_file_dialog_path( myChooser, 0);
+        if (al_show_native_file_dialog(nullptr, myChooser)) {
+          file_name = al_get_native_file_dialog_path(myChooser, 0);
+        }
       }
-      // Make sure file name is proper
-      if(file_name != nullptr){
-        // Make sure saves correctly
-        if( save_map( file_name)){
 
-          // Up to debate but I think the dialog box for the save button is uneeded and annoying.
-          // I opted for a modified indicator with a star beside the filename
-          // al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
-          is_saved = true;
-          modified=false;
-        }
-        else{
-          al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, ALLEGRO_MESSAGEBOX_ERROR);
-        }
-      }else
-        file_name="Untitled";
+      // Make sure saves correctly
+      if (save_map(file_name)) {
+        is_saved = true;
+        modified = false;
+      }
+      else {
+        al_show_native_message_box(nullptr, "Error!", "Error saving map to: ", file_name.c_str(), nullptr, ALLEGRO_MESSAGEBOX_ERROR);
+      }
     }
     else
       al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!", "", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
@@ -393,90 +370,89 @@ void Editor::update(){
 
 
   // Save as
-  if(editorUI.getElementById("btnSaveAs") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_D]){
-    if( editorBoxes.size() > 0){
+  if (editorUI.getElementById("btnSaveAs") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_D]) {
+    if (editorBoxes.size() > 0) {
       ALLEGRO_FILECHOOSER *myChooser;
 
-      myChooser = al_create_native_file_dialog( "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
+      myChooser = al_create_native_file_dialog("data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
 
       // Display open dialog
       const char *temp_name = nullptr;
-      if( al_show_native_file_dialog( nullptr, myChooser))
+
+      if (al_show_native_file_dialog(nullptr, myChooser))
         temp_name = al_get_native_file_dialog_path( myChooser, 0);
 
-      if(temp_name != nullptr){
+      if (temp_name != nullptr) {
         file_name = temp_name;
-          // Make sure saves correctly
-        if( save_map( file_name)){
-          al_show_native_message_box( nullptr, "Saved map", "We've saved a map to: ", file_name, nullptr, 0);
+
+        // Make sure saves correctly
+        if (save_map(file_name)) {
+          al_show_native_message_box(nullptr, "Saved map", "We've saved a map to: ", file_name.c_str(), nullptr, 0);
           is_saved = true;
-          modified=false;
-        }else{
-          al_show_native_message_box( nullptr, "Error!", "Error saving map to: ", file_name, nullptr, ALLEGRO_MESSAGEBOX_ERROR);
+          modified = false;
+        }
+        else {
+          al_show_native_message_box(nullptr, "Error!", "Error saving map to: ", file_name.c_str(), nullptr, ALLEGRO_MESSAGEBOX_ERROR);
         }
       }
 
-    }else{
-        al_show_native_message_box( nullptr, "Empty Map", "You can't save an empty map!","", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
+    }
+    else{
+      al_show_native_message_box(nullptr, "Empty Map", "You can't save an empty map!","", nullptr, ALLEGRO_MESSAGEBOX_ERROR);
     }
   }
 
 
   // Load map
-  if(editorUI.getElementById("btnLoad") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_A]){
-    ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog( "data/", "Load Level", "*.xml;*.*", 0);
-
+  if (editorUI.getElementById("btnLoad") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_A]) {
+    ALLEGRO_FILECHOOSER *myChooser = al_create_native_file_dialog("data/", "Load Level", "*.xml;*.*", 0);
 
     const char* temp_name;
-      // Display open di alog
-    if( al_show_native_file_dialog( nullptr, myChooser)){
+
+    // Display open di alog
+    if (al_show_native_file_dialog(nullptr, myChooser)) {
       temp_name = al_get_native_file_dialog_path(myChooser, 0);
 
-
       // You also need to check for cancel Button here too
-      if( temp_name != nullptr){
-        file_name=temp_name;
+      if (temp_name != nullptr) {
+        file_name = temp_name;
         editorBoxes.clear();
 
         // Make sure loads correctly
-        if( load_map( file_name)){
-          al_show_native_message_box( nullptr, "Loaded map", "We've loaded a map from: ", file_name, nullptr, 0);
-          is_saved=true;
-          modified=false;
-
-
-        }else
-          al_show_native_message_box( nullptr, "Error!", "Error loading map from: ", file_name, nullptr, 0);
+        if (load_map(file_name)) {
+          al_show_native_message_box(nullptr, "Loaded map", "We've loaded a map from: ", file_name.c_str(), nullptr, 0);
+          is_saved = true;
+          modified = false;
+        }
+        else
+          al_show_native_message_box(nullptr, "Error!", "Error loading map from: ", file_name.c_str(), nullptr, 0);
       }
     }
   }
 
   // Play
   if(editorUI.getElementById("btnPlay") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_F]){
-     if(editorBoxes.size()>0){
+    if(editorBoxes.size() > 0){
       if(is_player()){
-        save_map( "data/level_0.xml");
-        set_next_state( STATE_GAME);
-        //Game::testing = true;
-        testing_file_name = file_name;
+        save_map(file_name);
+        Config::setValue("EditingLevel", true);
+        Config::setValue("EditingLevelFile", file_name);
+        set_next_state(STATE_GAME);
       }
       else {
         al_show_native_message_box( nullptr, "Missing player", "You must place a player spawn to test the level.","", "Whoopsie!", 0);
       }
-
-     }
-     else
+    }
+    else
       al_show_native_message_box( nullptr, "Attemping to play an empty level", "That wouldn't be very fun would it?","", "No it wouldn't.", 0);
-
-
   }
 
   // Grid toggle
-  if(editorUI.getElementById("btnGrid") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_G])
+  if (editorUI.getElementById("btnGrid") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_G])
     grid_on = !grid_on;
 
   // Gosh darn toggle hide buttons take so much freakin' room
-  if(editorUI.getElementById("left_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_LEFT]){
+  if (editorUI.getElementById("left_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_LEFT]) {
     editorUI.getElementById("btnCollision") -> toggleVisibility();
     editorUI.getElementById("btnStatic") -> toggleVisibility();
     editorUI.getElementById("btnDynamic") -> toggleVisibility();
@@ -491,19 +467,19 @@ void Editor::update(){
     editorUI.getElementById("btnGoat") -> toggleDisabled();
     editorUI.getElementById("btnExplosive") -> toggleDisabled();
 
-    if(editorUI.getElementById("left_bottom_toggle") -> getText()=="<"){
+    if (editorUI.getElementById("left_bottom_toggle") -> getText()=="<") {
       editorUI.getElementById("left_bottom_toggle") -> setPosition( 0, 728);
       editorUI.getElementById("left_bottom_toggle") -> setText(">");
       editorUI.getElementById("left_bottom_toggle") -> setTransparency(150);
     }
-    else{
+    else {
       editorUI.getElementById("left_bottom_toggle") -> setPosition(489, 728);
       editorUI.getElementById("left_bottom_toggle") -> setText("<");
       editorUI.getElementById("left_bottom_toggle") -> setTransparency(255);
     }
   }
 
-  if(editorUI.getElementById("right_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_RIGHT]){
+  if (editorUI.getElementById("right_bottom_toggle") -> clicked() || KeyListener::keyPressed[ALLEGRO_KEY_RIGHT]) {
     editorUI.getElementById("btnUndo") -> toggleVisibility();
     editorUI.getElementById("btnClear") -> toggleVisibility();
     editorUI.getElementById("btnSave") -> toggleVisibility();
@@ -520,11 +496,12 @@ void Editor::update(){
     editorUI.getElementById("btnPlay") -> toggleDisabled();
     editorUI.getElementById("btnGrid") -> toggleDisabled();
 
-    if(editorUI.getElementById("right_bottom_toggle") -> getText()==">"){
+    if (editorUI.getElementById("right_bottom_toggle") -> getText()==">") {
       editorUI.getElementById("right_bottom_toggle") -> setPosition( 994, 728);
       editorUI.getElementById("right_bottom_toggle") -> setText("<");
       editorUI.getElementById("right_bottom_toggle") -> setTransparency(150);
-    }else{
+    }
+    else {
       editorUI.getElementById("right_bottom_toggle") -> setPosition(556+8+2, 728);
       editorUI.getElementById("right_bottom_toggle") -> setText(">");
       editorUI.getElementById("right_bottom_toggle") -> setTransparency(255);
@@ -540,7 +517,8 @@ void Editor::update(){
       editorUI.getElementById("right_top_toggle") -> setPosition( 994, 0);
       editorUI.getElementById("right_top_toggle") -> setText("<");
       editorUI.getElementById("right_top_toggle") -> setTransparency(150);
-    }else{
+    }
+    else{
       editorUI.getElementById("right_top_toggle") -> setPosition(882, 0);
       editorUI.getElementById("right_top_toggle") -> setText(">");
       editorUI.getElementById("right_top_toggle") -> setTransparency(255);
@@ -566,7 +544,8 @@ void Editor::update(){
       editorUI.getElementById("left_top_toggle") -> setPosition( 257, 60);
       editorUI.getElementById("left_top_toggle") -> setText("<");
       editorUI.getElementById("left_top_toggle") -> setTransparency(255);
-    }else{
+    }
+    else{
       editorUI.getElementById("left_top_toggle") -> setPosition(0, 60);
       editorUI.getElementById("left_top_toggle") -> setText(">");
       editorUI.getElementById("left_top_toggle") -> setTransparency(150);
@@ -592,7 +571,6 @@ void Editor::update(){
 
       for( int i = 0; i < 4; i++)
         newBox.orientation[i] = 0;
-
 
       if( tile_type == 0)
         newBox.type_str = "Dynamic";
@@ -681,95 +659,101 @@ void Editor::calculate_orientation_global(){
     //if( editorBoxes.at(i).type == 0 || editorBoxes.at(i).type == 1){
 
     //If not...
-    if(editorBoxes.at(i).type == 1){
+    if (editorBoxes.at(i).type == 1) {
 
       // Scroll through all 4 parts
-      for( int t = 0; t < 4; t++){
+      for (int t = 0; t < 4; t++) {
         // Offsets from subtile
         int off_x = (t == 1 || t == 3) ? 16: 0;
         int off_y = (t >= 2) ? 16: 0;
 
         // Options
         std::vector<int> options;
-        for( int k = 0; k < 13; k++)
+        for (int k = 0; k < 13; k++)
           options.push_back(k);
 
         int box_type = editorBoxes.at(i).type;
 
         // NORTH
-        if( box_at_with_type(box_type, editorBoxes.at(i).x + off_x     , editorBoxes.at(i).y + off_y - 16)){
+        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x     , editorBoxes.at(i).y + off_y - 16)) {
           options.erase(std::remove(options.begin(), options.end(), 0), options.end());
           options.erase(std::remove(options.begin(), options.end(), 1), options.end());
           options.erase(std::remove(options.begin(), options.end(), 2), options.end());
         }
-        else{
+        else {
           options.erase(std::remove(options.begin(), options.end(), 3), options.end());
           options.erase(std::remove(options.begin(), options.end(), 4), options.end());
           options.erase(std::remove(options.begin(), options.end(), 5), options.end());
         }
+
         // NORTH EAST
-        if( box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y - 16)){
+        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y - 16)) {
           options.erase(std::remove(options.begin(), options.end(), 11), options.end());
         }
-        else{
+        else {
           options.erase(std::remove(options.begin(), options.end(), 4), options.end());
         }
+
         // EAST
-        if( box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y     )){
+        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y)) {
           options.erase(std::remove(options.begin(), options.end(), 2), options.end());
           options.erase(std::remove(options.begin(), options.end(), 5), options.end());
           options.erase(std::remove(options.begin(), options.end(), 8), options.end());
         }
-        else{
+        else {
           options.erase(std::remove(options.begin(), options.end(), 1), options.end());
           options.erase(std::remove(options.begin(), options.end(), 4), options.end());
           options.erase(std::remove(options.begin(), options.end(), 7), options.end());
         }
+
         // SOUTH EAST
-        if( box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y + 16)){
+        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y + 16)) {
           options.erase(std::remove(options.begin(), options.end(), 9), options.end());
         }
-        else{
+        else {
           options.erase(std::remove(options.begin(), options.end(), 4), options.end());
         }
+
         // SOUTH
-        if( box_at_with_type(box_type, editorBoxes.at(i).x + off_x     , editorBoxes.at(i).y + off_y + 16)){
+        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x     , editorBoxes.at(i).y + off_y + 16)) {
           options.erase(std::remove(options.begin(), options.end(), 6), options.end());
           options.erase(std::remove(options.begin(), options.end(), 7), options.end());
           options.erase(std::remove(options.begin(), options.end(), 8), options.end());
         }
-        else{
+        else {
           options.erase(std::remove(options.begin(), options.end(), 3), options.end());
           options.erase(std::remove(options.begin(), options.end(), 4), options.end());
           options.erase(std::remove(options.begin(), options.end(), 5), options.end());
         }
         // SOUTH WEST
-        if( box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y + 16)){
+        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y + 16)) {
           options.erase(std::remove(options.begin(), options.end(), 10), options.end());
         }
-        else{
+        else {
           options.erase(std::remove(options.begin(), options.end(), 4), options.end());
         }
+
         // WEST
-        if( box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y     )){
+        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y)) {
           options.erase(std::remove(options.begin(), options.end(), 0), options.end());
           options.erase(std::remove(options.begin(), options.end(), 3), options.end());
           options.erase(std::remove(options.begin(), options.end(), 6), options.end());
         }
-        else{
+        else {
           options.erase(std::remove(options.begin(), options.end(), 1), options.end());
           options.erase(std::remove(options.begin(), options.end(), 4), options.end());
           options.erase(std::remove(options.begin(), options.end(), 7), options.end());
         }
+
         // NORTH WEST
-        if( box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y - 16)){
+        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y - 16)) {
           options.erase(std::remove(options.begin(), options.end(), 12), options.end());
         }
-        else{
+        else {
           options.erase(std::remove(options.begin(), options.end(), 4), options.end());
         }
 
-        if( options.size() > 0)
+        if (options.size() > 0)
           editorBoxes.at(i).orientation[t] = options.at(0);
         else
           editorBoxes.at(i).orientation[t] = 0;
@@ -779,55 +763,55 @@ void Editor::calculate_orientation_global(){
 }
 
 // Draw to screen
-void Editor::draw(){
+void Editor::draw() {
   // Background
-  al_clear_to_color( al_map_rgb(200,200,255));
+  al_clear_to_color(al_map_rgb(200,200,255));
 
   // Grid
-  if( grid_on){
-    for( int i = 0; i < 1024; i += 32){
+  if (grid_on) {
+    for (int i = 0; i < 1024; i += 32){
       al_draw_line( i, 0, i, 768, al_map_rgb( 0, 0, 0), 1);
     }
 
-    for( int i = 0; i < 768; i += 32){
+    for (int i = 0; i < 768; i += 32){
       al_draw_line( 0, i, 1024, i, al_map_rgb( 0, 0, 0), 1);
     }
   }
 
   // Draw tiles
-  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
+  for (unsigned int i = 0; i < editorBoxes.size(); i ++){
 
-    if(editorBoxes.at(i).type == 1){
-      if( editorBoxes.at(i).type == 0)
+    if (editorBoxes.at(i).type == 1) {
+      if (editorBoxes.at(i).type == 0)
         al_draw_filled_rectangle( editorBoxes.at(i).x + 0, editorBoxes.at(i).y + 0, editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32, al_map_rgb(0, 255, 0));
 
       // Scroll through all 4 parts
-      for( int t = 0; t < 4; t++){
+      for (int t = 0; t < 4; t++) {
         // Offsets from subtile
         int off_x = (t == 1 || t == 3) ? 16: 0;
         int off_y = (t >= 2) ? 16: 0;
 
-        if( editorBoxes.at(i).orientation[t] >= 0 && editorBoxes.at(i).orientation[t] < 16)
+        if (editorBoxes.at(i).orientation[t] >= 0 && editorBoxes.at(i).orientation[t] < 16)
           al_draw_bitmap( tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation[t]], editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y, 0);
       }
     }
-    else if(editorBoxes.at(i).type == 0)
+    else if (editorBoxes.at(i).type == 0)
       al_draw_bitmap( tiles[0][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
 
-    else if( editorBoxes.at(i).type == 2)
+    else if (editorBoxes.at(i).type == 2)
       al_draw_bitmap( tiles[2][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
-    else if( editorBoxes.at(i).type == 3)
+    else if (editorBoxes.at(i).type == 3)
       al_draw_bitmap( tiles[3][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
-    else if( editorBoxes.at(i).type == 5){
+    else if (editorBoxes.at(i).type == 5) {
       if(editorBoxes.at(i).affect_character)
         al_draw_filled_rectangle( editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4, editorBoxes.at(i).x +28, editorBoxes.at(i).y + 28, al_map_rgb(255, 0, 0));
       else
         al_draw_filled_rectangle( editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4, editorBoxes.at(i).x +28, editorBoxes.at(i).y + 28, al_map_rgb(0, 255, 0));
 
-      if(editorBoxes.at(i).orientation[0]==0)
+      if (editorBoxes.at(i).orientation[0]==0)
         al_draw_bitmap( tiles[4][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
-      if(editorBoxes.at(i).orientation[0]>0){
 
+      if (editorBoxes.at(i).orientation[0]>0) {
         // PI/2 is a quarter turn. Editor boxes orientation is a range from 1-4.
         // So we have a quarter turn * 1-4, creating a quarter turn, half turn, ect.
         // - PI/2 is because we start rotated right a quarter turn.
@@ -838,17 +822,16 @@ void Editor::draw(){
   }
 
   //Gotta draw the tranparent boxes in front
-  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
-      if( editorBoxes.at(i).type == 4)
-        al_draw_filled_rectangle( editorBoxes.at(i).x,editorBoxes.at(i).y,editorBoxes.at(i).x+editorBoxes.at(i).width,editorBoxes.at(i).y+editorBoxes.at(i).height, al_map_rgba(0, 255, 0,50));
-
+  for (unsigned int i = 0; i < editorBoxes.size(); i ++) {
+    if (editorBoxes.at(i).type == 4) {
+      al_draw_filled_rectangle( editorBoxes.at(i).x,editorBoxes.at(i).y,editorBoxes.at(i).x+editorBoxes.at(i).width,editorBoxes.at(i).y+editorBoxes.at(i).height, al_map_rgba(0, 255, 0,50));
+    }
   }
 
 
 
-  if(is_dragging_box){
+  if (is_dragging_box){
     al_draw_filled_rectangle( box_1_x,box_1_y,box_2_x,box_2_y, al_map_rgba(0, 255, 0,50));
-
   }
 
   // Tile type
@@ -870,7 +853,7 @@ void Editor::draw(){
     modified_character="*";
 
   // Current map opened
-  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s %s", file_name,modified_character.c_str());
+  al_draw_textf( edit_font, al_map_rgb( 0, 0, 0), 10, 10, 0, "File: %s %s", file_name.c_str(),modified_character.c_str());
 
   if(display_help)
     al_draw_bitmap(help_menu,110,75,0);
@@ -900,12 +883,17 @@ bool Editor::box_at(int x, int y){
 }
 
 // Load map from xml-
-bool Editor::load_map( std::string mapName){
+bool Editor::load_map(std::string mapName) {
   // Doc
   rapidxml::xml_document<> doc;
 
   // Make an xml object
-  std::ifstream theFile( mapName);
+  std::ifstream theFile(mapName);
+
+  if (!theFile)
+    return false;
+
+  // Dump into buffer
   std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
   xml_buffer.push_back('\0');
 
@@ -917,7 +905,7 @@ bool Editor::load_map( std::string mapName){
   root_node = doc.first_node("data");
 
   // Iterate over the nodes
-  for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()){
+  for (rapidxml::xml_node<> * object_node = root_node -> first_node("Object"); object_node; object_node = object_node -> next_sibling()) {
     std::string type_str = "";
     std::string x = "";
     std::string y = "";
@@ -1061,7 +1049,8 @@ bool Editor::save_map( std::string mapName){
     if(editorBoxes.at(i).type != 5){
      output_orientation = tools::toString(editorBoxes.at(i).orientation[0]) + " " + tools::toString(editorBoxes.at(i).orientation[1]) + " " +
                                       tools::toString(editorBoxes.at(i).orientation[2]) + " " + tools::toString(editorBoxes.at(i).orientation[3]);
-    }else{
+    }
+    else{
       output_orientation = tools::toString(editorBoxes.at(i).orientation[0]);
     }
     char *output_orientation_char = doc.allocate_string(output_orientation.c_str());
@@ -1098,16 +1087,10 @@ bool Editor::save_map( std::string mapName){
         object_node -> append_node( doc.allocate_node( rapidxml::node_element, "affect_character","false"));
 
       object_node -> append_node( doc.allocate_node( rapidxml::node_element, "orientation", output_orientation_char));
-
-
-
     }
 
-
     // Write this last for consistency of placement in the xml (hint: always last element)
-
-   // object_node -> append_node( doc.allocate_node( rapidxml::node_element, "type_str", editorBoxes.at(i).type_str.c_str()));
-
+    // object_node -> append_node( doc.allocate_node( rapidxml::node_element, "type_str", editorBoxes.at(i).type_str.c_str()));
   }
 
   // Save to file

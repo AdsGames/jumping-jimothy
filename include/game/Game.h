@@ -30,13 +30,9 @@ class Game : public State {
     void draw();
     bool level_complete();
 
-    // Test mode
-    static bool testing;
-    static const char *testing_file_name;
-
   private:
     // Functions
-    void load_world(int);
+    void load_world(std::string file);
     void b2_setup();
     void load_sprites();
     void reset();
@@ -86,7 +82,7 @@ class Game : public State {
     Sound toggle_off;
     Sound toggle_on;
     Sound death;
-    Button testing_back_button;
+    Button* testing_back_button;
 
     // Box2D world parameters
     b2Vec2 gravity;

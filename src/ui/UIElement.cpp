@@ -194,7 +194,9 @@ void UIElement::setId(std::string id) {
 void UIElement::setImage(ALLEGRO_BITMAP *image) {
   if (image == nullptr)
     return;
-  this -> image = image;
+
+  // Clone image
+  this -> image = al_clone_bitmap(image);
   this -> width = al_get_bitmap_width(this -> image);
   this -> height = al_get_bitmap_height(this -> image);
 }

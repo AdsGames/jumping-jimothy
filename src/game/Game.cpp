@@ -25,9 +25,6 @@
 #include "util/MusicManager.h"
 #include "util/Globals.h"
 
-bool Game::testing = false;
-const char* Game::testing_file_name = nullptr;
-
 // Constructor
 Game::Game() {
   // Create character
@@ -41,8 +38,6 @@ Game::Game() {
 
   gameWorld = nullptr;
 
-  level = Config::getIntValue("level_to_start");
-
   game_font = al_load_ttf_font( "fonts/munro.ttf", 30, 0);
   help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);
   edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
@@ -51,9 +46,14 @@ Game::Game() {
   toggle_off.load_wav("sfx/toggle_off.wav");
   death.load_wav("sfx/death.wav");
 
-  if (testing) {
+  testing_back_button = nullptr;
+
+  if (Config::getBooleanValue("EditingLevel")) {
     level = 0;
-    testing_back_button = Button(966,728,"Back","btnBack",edit_font);
+    testing_back_button = new Button(966, 728, "Back", "btnBack", edit_font);
+  }
+  else {
+    level = Config::getIntValue("level_to_start");
   }
 
   // Load images
@@ -163,9 +163,9 @@ void Game::b2_setup(){
 }
 
 // Load world from xml
-void Game::load_world(int newLevel) {
+void Game::load_world(std::string file) {
   // Load level message
-  tools::log_message("Attempting to load level_" + tools::toString(newLevel) + ".xml into game");
+  tools::log_message("Attempting to load " + file + " into game");
 
   int goat_count = 0;
   int character_count = 0;
@@ -177,7 +177,7 @@ void Game::load_world(int newLevel) {
   rapidxml::xml_node<> * root_node;
 
   // Make an xml object
-  std::ifstream theFile("data/level_"+tools::toString(newLevel) + ".xml");
+  std::ifstream theFile(file);
   std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
   xml_buffer.push_back('\0');
 
@@ -310,7 +310,14 @@ void Game::reset() {
   gameCharacter = nullptr;
 
   b2_setup();
-  load_world(level);
+
+  if (Config::getBooleanValue("EditingLevel")) {
+    load_world(Config::getValue("EditingLevelFile"));
+  }
+  else {
+    load_world("data/level_" + tools::toString(level) + ".xml");
+  }
+
 
   static_mode = true;
   first_play = true;
@@ -347,10 +354,11 @@ void Game::load_sprites() {
 
 // Update game logic
 void Game::update() {
-  if (testing) {
-    testing_back_button.update();
+  // Back button
+  if (testing_back_button) {
+    testing_back_button -> update();
 
-    if (testing_back_button.clicked())
+    if (testing_back_button -> clicked())
       set_next_state( STATE_EDIT);
   }
 
@@ -372,8 +380,9 @@ void Game::update() {
       tools::log_message("Level " + tools::toString(level-1) + " completed, loading next level.");
       Config::setValue("level_" + tools::toString(level - 1) + "_completed", true);
 
-      if (!testing)
+      if (!Config::getBooleanValue("EditingLevel")) {
         reset();
+      }
       else {
         al_show_native_message_box(nullptr, "Level complete!", "Opening editor","", "Okily dokily.", 0);
         set_next_state( STATE_EDIT);
@@ -395,14 +404,14 @@ void Game::update() {
 
   // Next level
   if (KeyListener::keyPressed[ALLEGRO_KEY_C]) {
-    if (!testing){
+    if (!Config::getBooleanValue("EditingLevel")){
       tools::log_message("Level " + tools::toString(level) + " skipped.");
       level++;
       reset();
     }
     else {
-      al_show_native_message_box( nullptr, "Level complete!", "Opening editor",nullptr, nullptr, 0);
-      set_next_state( STATE_EDIT);
+      al_show_native_message_box(nullptr, "Level complete!", "Opening editor",nullptr, nullptr, 0);
+      set_next_state(STATE_EDIT);
     }
   }
 
@@ -466,8 +475,8 @@ void Game::draw() {
   }
 
   // Pause/play buttons
-  if (testing)
-    testing_back_button.draw();
+  if (testing_back_button)
+    testing_back_button -> draw();
 
   if (static_mode)
     al_draw_bitmap(pause,10,10,0);

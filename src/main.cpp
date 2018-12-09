@@ -59,7 +59,8 @@ JoystickListener j_listener;
 
 // Delete game state and free state resources
 void clean_up() {
-  delete currentState;
+  if (currentState)
+    delete currentState;
 }
 
 // Change game screen
@@ -67,7 +68,7 @@ void change_state() {
   //If the state needs to be changed
   if (nextState != STATE_NULL) {
     //Delete the current state
-    if (nextState != STATE_EXIT) {
+    if (nextState != STATE_EXIT && currentState != nullptr) {
       delete currentState;
     }
 

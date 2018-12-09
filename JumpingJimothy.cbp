@@ -40,13 +40,14 @@
 				<Option object_output="bin/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option use_console_runner="0" />
 				<Compiler>
+					<Add option="-pg" />
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
 					<Add directory="include" />
 				</Compiler>
 				<Linker>
+					<Add option="-pg -lgmon" />
 					<Add option="-lallegro" />
 					<Add option="-lallegro_primitives" />
 					<Add option="-lallegro_image" />
