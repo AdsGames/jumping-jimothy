@@ -16,7 +16,7 @@
 class LevelSelect : public State {
   public:
     LevelSelect();
-    virtual ~LevelSelect() {};
+    virtual ~LevelSelect();
 
     void draw();
     void update();
