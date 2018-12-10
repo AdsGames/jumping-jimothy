@@ -15,6 +15,9 @@ extern int nextState;
 // Set next state
 extern void set_next_state(int newState);
 
+// Clean up
+extern void clean_up();
+
 //Game states
 enum programStates{
   STATE_NULL,

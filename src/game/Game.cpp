@@ -63,10 +63,10 @@ Game::Game() {
   reset();
 
   // Load and play music
-  MusicManager::menu_music.stop();
+  MusicManager::menu_music -> stop();
 
   #if defined(RELEASE)
-    MusicManager::game_music.play();
+    MusicManager::game_music -> play();
   #endif
 }
 
@@ -399,7 +399,7 @@ void Game::update() {
 
   if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]) {
     set_next_state(STATE_MENU);
-    MusicManager::game_music.stop();
+    MusicManager::game_music -> stop();
   }
 
   // Next level

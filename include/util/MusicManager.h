@@ -8,8 +8,8 @@ class MusicManager {
     MusicManager() {};
     virtual ~MusicManager() {};
 
-    static Sound menu_music;
-    static Sound game_music;
+    static Sound *menu_music;
+    static Sound *game_music;
 
     static void load();
 

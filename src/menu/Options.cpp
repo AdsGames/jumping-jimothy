@@ -102,10 +102,10 @@ void Options::update(){
   // Toggle Music pressed
   if (dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkMusic")) -> getToggled()) {
     if (Config::getBooleanValue("music_enabled")) {
-      MusicManager::menu_music.play();
+      MusicManager::menu_music -> play();
     }
     else {
-      MusicManager::menu_music.stop();
+      MusicManager::menu_music -> stop();
     }
   }
 

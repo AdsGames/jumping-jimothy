@@ -34,7 +34,7 @@ Editor::Editor(){
   is_saved = false;
   display_help = false;
 
-  MusicManager::menu_music.stop();
+  MusicManager::menu_music -> stop();
 
   editorUI = UIHandler();
 
