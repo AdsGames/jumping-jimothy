@@ -68,7 +68,8 @@ Options::Options() {
 
 // Destructor
 Options::~Options() {
-
+  al_destroy_font(options_font);
+  al_destroy_font(title_font);
 }
 
 // Draw options menu

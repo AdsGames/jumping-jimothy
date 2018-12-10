@@ -71,6 +71,11 @@ LevelSelect::LevelSelect() {
   //levelSelectUI.getElementById("btnBack") -> setTextColour(al_map_rgb(255,255,255));
 }
 
+LevelSelect::~LevelSelect() {
+  al_destroy_font(levelselect_font);
+  al_destroy_font(levelselect_font_large);
+}
+
 void LevelSelect::createLevelButton(int newX, int newY, int newLevelNumber){
 
   levelSelectUI.addElement(new Button(newX, newY, "Level " + tools::toString(newLevelNumber), "btnLevel" + tools::toString(newLevelNumber) ,levelselect_font));
