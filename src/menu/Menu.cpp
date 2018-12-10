@@ -50,8 +50,8 @@ Menu::Menu(){
   //menu_buttons[menu_button_exit].setVisibleBackground(false);
   //menu_buttons[menu_button_exit].setTextColour(al_map_rgb(255,255,255));
 
-  if (!MusicManager::menu_music.getIsPlaying())
-    MusicManager::menu_music.play();
+  if (!MusicManager::menu_music -> getIsPlaying())
+    MusicManager::menu_music -> play();
 
   counter_title = 0;
 }
