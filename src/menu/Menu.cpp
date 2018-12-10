@@ -71,7 +71,7 @@ Menu::~Menu(){
 }
 
 // Update animation and wait for input
-void Menu::update(){
+void Menu::update(StateEngine* engine){
   // Update UI
   menu_ui.update();
 
@@ -79,22 +79,22 @@ void Menu::update(){
   if(!credits_menu){
     // Click play
     if (menu_ui.getElementById("btnPlay") -> clicked()) {
-      set_next_state(STATE_LEVELSELECT);
+      setNextState(engine, StateEngine::STATE_LEVELSELECT);
     }
 
     // Click editor
     if (menu_ui.getElementById("btnEditor") -> clicked()) {
-      set_next_state(STATE_EDIT);
+      setNextState(engine, StateEngine::STATE_EDIT);
     }
 
     // Click editor
     if (menu_ui.getElementById("btnExit") -> clicked()) {
-      set_next_state(STATE_EXIT);
+      setNextState(engine, StateEngine::STATE_EXIT);
     }
 
     // Click settings
     if (menu_ui.getElementById("btnSettings") -> clicked()) {
-      set_next_state(STATE_OPTIONS);
+      setNextState(engine, StateEngine::STATE_OPTIONS);
     }
 
     // Click credits

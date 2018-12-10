@@ -1,51 +1,76 @@
 /**
- * State for machine
+ * State for machine and State Engine
  * Allan Legemaate
  * 30/12/2016
- * Compartmentalize program
+ * Compartmentalize program into states
+ *   which can handle only their own logic,
+ *   drawing and transitions
  */
 
 #ifndef STATE_H
 #define STATE_H
 
-//State variables
-extern int stateID;
-extern int nextState;
+// Class
+class State;
 
-// Set next state
-extern void set_next_state(int newState);
+/*****************
+ * STATE ENGINE
+ *****************/
+class StateEngine {
+  public:
+    // Update
+    void update();
 
-// Clean up
-extern void clean_up();
+    // Draw
+    void draw();
 
-//Game states
-enum programStates{
-  STATE_NULL,
-  STATE_INIT,
-  STATE_INTRO,
-  STATE_MENU,
-  STATE_GAME,
-  STATE_EDIT,
-  STATE_EXIT,
-  STATE_LEVELSELECT,
-  STATE_OPTIONS
+    // Set next state
+    void setNextState(int newState);
+
+    // Get state id
+    int getStateId();
+
+    // Game states
+    enum programStates {
+      STATE_NULL,
+      STATE_EXIT,
+      STATE_MENU,
+      STATE_GAME,
+      STATE_EDIT,
+      STATE_LEVELSELECT,
+      STATE_OPTIONS
+    };
+  private:
+    // Change state
+    void changeState();
+
+    // Current state object
+    State *currentState = nullptr;
+
+    // Next state
+    int nextState = STATE_NULL;
+
+    // State id
+    int stateId = STATE_NULL;
+
 };
 
-// State
-class State{
+/*********
+ * STATE
+ *********/
+class State {
   public:
-    // Deconstructor
+    // Virtual destructor
     virtual ~State() {};
-
-    int getStateID() {
-      return stateID;
-    }
 
     // Draw to screen
     virtual void draw() = 0;
 
     // Update logic
-    virtual void update() = 0;
+    virtual void update(StateEngine* engine) = 0;
+
+    // Change state
+    void setNextState(StateEngine* engine, int state);
 };
 
 #endif // STATE_H

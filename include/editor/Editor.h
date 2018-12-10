@@ -40,10 +40,10 @@ class Editor : public State{
     virtual ~Editor();
 
     // Override parent
-    void update();
+    void update(StateEngine* engine);
     void draw();
-  private:
 
+  private:
     UIHandler editorUI;
     // Images
     ALLEGRO_BITMAP *image_box[6];
