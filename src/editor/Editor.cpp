@@ -609,7 +609,7 @@ void Editor::update() {
 // Calculate all the orientations of blocks
 void Editor::calculate_orientation_global(){
   // Calc boxes
-  for( unsigned int i = 0; i < editorBoxes.size(); i ++){
+  for (unsigned int i = 0; i < editorBoxes.size(); i++){
     //If not...
     if (editorBoxes.at(i).type == 1) {
       // Scroll through all 4 parts
@@ -625,8 +625,18 @@ void Editor::calculate_orientation_global(){
 
         int box_type = editorBoxes.at(i).type;
 
+        bool north      = box_at_with_type(box_type, editorBoxes.at(i).x + off_x     , editorBoxes.at(i).y + off_y - 16);
+        bool north_east = box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y - 16);
+        bool east       = box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y     );
+        bool south_east = box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y + 16);
+        bool south      = box_at_with_type(box_type, editorBoxes.at(i).x + off_x     , editorBoxes.at(i).y + off_y + 16);
+        bool south_west = box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y + 16);
+        bool west       = box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y     );
+        bool north_west = box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y - 16);
+
+
         // NORTH
-        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y - 16)) {
+        if (north) {
           options.erase(std::remove(options.begin(), options.end(), 0), options.end());
           options.erase(std::remove(options.begin(), options.end(), 1), options.end());
           options.erase(std::remove(options.begin(), options.end(), 2), options.end());
@@ -638,7 +648,7 @@ void Editor::calculate_orientation_global(){
         }
 
         // NORTH EAST
-        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y - 16)) {
+        if (north_east) {
           options.erase(std::remove(options.begin(), options.end(), 11), options.end());
         }
         else {
@@ -646,7 +656,7 @@ void Editor::calculate_orientation_global(){
         }
 
         // EAST
-        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y)) {
+        if (east) {
           options.erase(std::remove(options.begin(), options.end(), 2), options.end());
           options.erase(std::remove(options.begin(), options.end(), 5), options.end());
           options.erase(std::remove(options.begin(), options.end(), 8), options.end());
@@ -658,7 +668,7 @@ void Editor::calculate_orientation_global(){
         }
 
         // SOUTH EAST
-        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16, editorBoxes.at(i).y + off_y + 16)) {
+        if (south_east) {
           options.erase(std::remove(options.begin(), options.end(), 9), options.end());
         }
         else {
@@ -666,7 +676,7 @@ void Editor::calculate_orientation_global(){
         }
 
         // SOUTH
-        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x     , editorBoxes.at(i).y + off_y + 16)) {
+        if (south) {
           options.erase(std::remove(options.begin(), options.end(), 6), options.end());
           options.erase(std::remove(options.begin(), options.end(), 7), options.end());
           options.erase(std::remove(options.begin(), options.end(), 8), options.end());
@@ -677,7 +687,7 @@ void Editor::calculate_orientation_global(){
           options.erase(std::remove(options.begin(), options.end(), 5), options.end());
         }
         // SOUTH WEST
-        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y + 16)) {
+        if (south_west) {
           options.erase(std::remove(options.begin(), options.end(), 10), options.end());
         }
         else {
@@ -685,7 +695,7 @@ void Editor::calculate_orientation_global(){
         }
 
         // WEST
-        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y)) {
+        if (west) {
           options.erase(std::remove(options.begin(), options.end(), 0), options.end());
           options.erase(std::remove(options.begin(), options.end(), 3), options.end());
           options.erase(std::remove(options.begin(), options.end(), 6), options.end());
@@ -697,7 +707,7 @@ void Editor::calculate_orientation_global(){
         }
 
         // NORTH WEST
-        if (box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16, editorBoxes.at(i).y + off_y - 16)) {
+        if (north_west) {
           options.erase(std::remove(options.begin(), options.end(), 12), options.end());
         }
         else {
