@@ -317,10 +317,5 @@ int main(){
   // Destory display
   MusicManager::destroy();
 
-  al_uninstall_joystick();
-  al_uninstall_keyboard();
-  al_uninstall_mouse();
-  al_uninstall_audio();
-
   return 0;
 }
