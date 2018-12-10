@@ -19,7 +19,7 @@ class LevelSelect : public State {
     virtual ~LevelSelect();
 
     void draw();
-    void update();
+    void update(StateEngine* engine);
 
   private:
     void createLevelButton(int,int,int);

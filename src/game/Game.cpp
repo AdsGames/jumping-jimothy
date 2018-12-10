@@ -353,28 +353,28 @@ void Game::load_sprites() {
 }
 
 // Update game logic
-void Game::update() {
+void Game::update(StateEngine* engine) {
   // Back button
   if (testing_back_button) {
     testing_back_button -> update();
 
     if (testing_back_button -> clicked())
-      set_next_state( STATE_EDIT);
+      setNextState(engine, StateEngine::STATE_EDIT);
   }
 
   // Game mode
   if (KeyListener::keyPressed[ALLEGRO_KEY_P])
-    set_next_state( STATE_EDIT);
+    setNextState(engine, StateEngine::STATE_EDIT);
 
   // Change state?
   if (KeyListener::key[ALLEGRO_KEY_I])
-    set_next_state( STATE_MENU);
+    setNextState(engine, StateEngine::STATE_MENU);
 
   // Touching goat
   if (gameGoat != nullptr && gameGoat -> getWinCondition()) {
     level ++;
     if (level > 14) {
-      set_next_state(STATE_MENU);
+      setNextState(engine, StateEngine::STATE_MENU);
     }
     else {
       tools::log_message("Level " + tools::toString(level-1) + " completed, loading next level.");
@@ -385,7 +385,7 @@ void Game::update() {
       }
       else {
         al_show_native_message_box(nullptr, "Level complete!", "Opening editor","", "Okily dokily.", 0);
-        set_next_state( STATE_EDIT);
+        setNextState(engine, StateEngine::STATE_EDIT);
       }
     }
   }
@@ -398,7 +398,7 @@ void Game::update() {
     gameBoxes[i] -> update(gameWorld);
 
   if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]) {
-    set_next_state(STATE_MENU);
+    setNextState(engine, StateEngine::STATE_MENU);
     MusicManager::game_music -> stop();
   }
 
@@ -411,7 +411,7 @@ void Game::update() {
     }
     else {
       al_show_native_message_box(nullptr, "Level complete!", "Opening editor",nullptr, nullptr, 0);
-      set_next_state(STATE_EDIT);
+      setNextState(engine, StateEngine::STATE_EDIT);
     }
   }
 

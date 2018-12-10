@@ -26,7 +26,7 @@ class Game : public State {
     ~Game();
 
     // Override parent
-    void update();
+    void update(StateEngine* engine);
     void draw();
     bool level_complete();
 

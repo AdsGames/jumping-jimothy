@@ -82,13 +82,13 @@ void Options::draw(){
 }
 
 // Update options UI
-void Options::update(){
+void Options::update(StateEngine* engine){
   // Update UI
   OptionsUI.update();
 
   // Back button pressed
   if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE] || OptionsUI.getElementById("btnBack") -> clicked()) {
-    set_next_state(STATE_MENU);
+    setNextState(engine, StateEngine::STATE_MENU);
 
     // Save settings
     Config::writeFile("data/config.xml");

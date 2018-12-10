@@ -193,7 +193,7 @@ void Editor::set_explosive_ui_status() {
 }
 
 // Update editor
-void Editor::update() {
+void Editor::update(StateEngine* engine) {
   // Update buttons
   editorUI.update();
 
@@ -296,11 +296,11 @@ void Editor::update() {
   if(KeyListener::keyPressed[ALLEGRO_KEY_V] ||  editorUI.getElementById("btnBack") -> clicked() || KeyListener::keyReleased[ALLEGRO_KEY_ESCAPE]) {
     if(modified) {
       if(al_show_native_message_box(nullptr, "Main menu?", "Return to main menu?", "All unsaved changes will be lost.", nullptr, ALLEGRO_MESSAGEBOX_YES_NO) == 1){
-        set_next_state(STATE_MENU);
+        setNextState(engine, StateEngine::STATE_MENU);
       }
     }
     else {
-      set_next_state(STATE_MENU);
+      setNextState(engine, StateEngine::STATE_MENU);
     }
   }
 
@@ -407,7 +407,7 @@ void Editor::update() {
         save_map(file_name);
         Config::setValue("EditingLevel", true);
         Config::setValue("EditingLevelFile", file_name);
-        set_next_state(STATE_GAME);
+        setNextState(engine, StateEngine::STATE_GAME);
       }
       else {
         al_show_native_message_box( nullptr, "Missing player", "You must place a player spawn to test the level.","", "Whoopsie!", 0);

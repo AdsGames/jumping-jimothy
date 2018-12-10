@@ -94,16 +94,16 @@ void LevelSelect::createLevelButton(int newX, int newY, int newLevelNumber){
   }
 }
 
-void LevelSelect::draw(){
+void LevelSelect::draw() {
   al_clear_to_color(al_map_rgb(75,75,100));
   levelSelectUI.draw();
 }
 
-void LevelSelect::update(){
+void LevelSelect::update(StateEngine* engine) {
   levelSelectUI.update();
 
   if (ActionBinder::actionBegun(ACTION_B) || levelSelectUI.getElementById("btnBack") -> clicked()) {
-    set_next_state(STATE_MENU);
+    setNextState(engine, StateEngine::STATE_MENU);
   }
 
   if (levelSelectUI.getElementById("btnResetSave") -> clicked()) {
@@ -117,7 +117,7 @@ void LevelSelect::update(){
   if (levelSelectUI.getElementById("btnReallyReset") -> clicked()) {
     for(int i = 0; i < 16; i++)
       Config::setValue("level_" + tools::toString(i) + "_completed", false);
-    set_next_state(STATE_LEVELSELECT);
+    setNextState(engine, StateEngine::STATE_LEVELSELECT);
   }
 
   if (levelSelectUI.getElementById("btnCancel") -> clicked()) {
@@ -131,7 +131,7 @@ void LevelSelect::update(){
   for(int i=1; i<14; i++){
     if(levelSelectUI.getUIElements().at(i) -> clicked()){
       Config::setValue("level_to_start", i);
-      set_next_state(STATE_GAME);
+      setNextState(engine, StateEngine::STATE_GAME);
     }
   }
 }

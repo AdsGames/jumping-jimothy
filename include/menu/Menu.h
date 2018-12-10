@@ -29,7 +29,7 @@ class Menu : public State {
     Menu();
     virtual ~Menu();
 
-    void update();
+    void update(StateEngine* engine);
     void draw();
 
   private:

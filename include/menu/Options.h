@@ -20,7 +20,7 @@ class Options : public State {
     virtual ~Options();
 
     void draw();
-    void update();
+    void update(StateEngine* engine);
     void updateUI();
 
   protected:
