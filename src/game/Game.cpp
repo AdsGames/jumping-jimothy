@@ -27,27 +27,25 @@
 
 // Constructor
 Game::Game() {
-  // Create character
+  // Set to null
+  world = nullptr;
   gameCharacter = nullptr;
-
   gameGoat = nullptr;
 
-  // Init first time
-  newBox = nullptr;
-  rootBox = nullptr;
-
-  gameWorld = nullptr;
-
+  // Load fonts
   game_font = al_load_ttf_font( "fonts/munro.ttf", 30, 0);
   help_font = al_load_ttf_font( "fonts/munro.ttf", 50, 0);
   edit_font = al_load_ttf_font( "fonts/fantasque.ttf", 18, 0);
 
+  // Load sounds
   toggle_on.load_wav("sfx/toggle_on.wav");
   toggle_off.load_wav("sfx/toggle_off.wav");
   death.load_wav("sfx/death.wav");
 
+  // Back button
   testing_back_button = nullptr;
 
+  // Create back button if needed
   if (Config::getBooleanValue("EditingLevel")) {
     level = 0;
     testing_back_button = new Button(966, 728, "Back", "btnBack", edit_font);
@@ -64,10 +62,7 @@ Game::Game() {
 
   // Load and play music
   MusicManager::menu_music -> stop();
-
-  #if defined(RELEASE)
-    MusicManager::game_music -> play();
-  #endif
+  MusicManager::game_music -> play();
 }
 
 // Destructor
@@ -76,19 +71,19 @@ Game::~Game(){
   //if (box != nullptr)
   //  al_destroy_bitmap( box);
   if (goat_map != nullptr)
-    al_destroy_bitmap( goat_map);
+    al_destroy_bitmap(goat_map);
   if (character != nullptr)
-    al_destroy_bitmap( character);
+    al_destroy_bitmap(character);
   if (play != nullptr)
-    al_destroy_bitmap( play);
+    al_destroy_bitmap(play);
   if (pause != nullptr)
-    al_destroy_bitmap( pause);
+    al_destroy_bitmap(pause);
 }
 
 // Creates box in world
 Goat* Game::create_goat(float x, float y){
-  Goat *newGoat = new Goat(x, y, gameCharacter, goat_map, gameWorld);
-  if(gameCharacter == nullptr)
+  Goat *newGoat = new Goat(x, y, gameCharacter, goat_map, world -> getB2World());
+  if (gameCharacter == nullptr)
     tools::log_message("WARNING: gameCharacter is nullptr when creating a goat.");
   gameBoxes.push_back(newGoat);
   return newGoat;
@@ -96,7 +91,7 @@ Goat* Game::create_goat(float x, float y){
 
 // Creates box in world
 Box* Game::create_dynamic_box(float x, float y, float velX, float velY, ALLEGRO_BITMAP *image, bool newBodyType){
-  DynamicBox *newDynamicBox = new DynamicBox(x, y, velX, velY, gameWorld);
+  DynamicBox *newDynamicBox = new DynamicBox(x, y, velX, velY, world -> getB2World());
   newDynamicBox -> setImage(image);
   gameBoxes.push_back(newDynamicBox);
   return newDynamicBox;
@@ -111,13 +106,13 @@ Box* Game::create_static_box(float x, float y, ALLEGRO_BITMAP *image){
 }
 
 Box* Game::create_collision_box(float x, float y, float width, float height){
-  CollisionBox *newCollisionBox = new CollisionBox(x, y, width, height, gameWorld);
+  CollisionBox *newCollisionBox = new CollisionBox(x, y, width, height, world -> getB2World());
   gameBoxes.push_back(newCollisionBox);
   return newCollisionBox;
 }
 
 Box* Game::create_explosive_box(float x, float y, int orientation, bool affectsCharacter){
-  Explosive *newExplosive = new Explosive(x, y, affectsCharacter, gameCharacter, gameWorld);
+  Explosive *newExplosive = new Explosive(x, y, affectsCharacter, gameCharacter, world -> getB2World());
   ALLEGRO_BITMAP *newBoxImage;
 
   if(orientation == 0)
@@ -137,29 +132,9 @@ Box* Game::create_explosive_box(float x, float y, int orientation, bool affectsC
 
 // Add character to world
 Character *Game::create_character(float x, float y){
-  Character *newCharacter = new Character(x, y, character, gameWorld);
+  Character *newCharacter = new Character(x, y, character, world -> getB2World());
   gameBoxes.push_back( newCharacter);
   return newCharacter;
-}
-
-// Sets up Box2D world
-void Game::b2_setup(){
-  // Box2D world parameters
-  gravity = b2Vec2(0.0f, -10.0f);
-  timeStep = 1.0f / 60.0f;
-  velocityIterations = 6;
-  positionIterations = 2;
-  doSleep = true;
-
-  // Box2D game world
-  if (gameWorld != nullptr) {
-    delete gameWorld;
-  }
-
-  gameWorld = new b2World( gravity);
-
-	// Define the ground box shape.
-	b2PolygonShape groundBox;
 }
 
 // Load world from xml
@@ -201,6 +176,7 @@ void Game::load_world(std::string file) {
       std::string height = "0";
       std::string affect_character = "false";
       int orientation_array[4];
+      Box *newBox = nullptr;
 
       // Load data
       if (object_node -> first_attribute("type") != 0)
@@ -309,8 +285,15 @@ void Game::reset() {
   gameGoat = nullptr;
   gameCharacter = nullptr;
 
-  b2_setup();
+  // Box2D game world
+  if (world != nullptr) {
+    delete world;
+  }
 
+  // Create world
+  world = new World(b2Vec2(0.0f, -10.0f), 1.0f / 60.0f, 6, 2, true);
+
+  // Load file
   if (Config::getBooleanValue("EditingLevel")) {
     load_world(Config::getValue("EditingLevelFile"));
   }
@@ -391,11 +374,11 @@ void Game::update(StateEngine* engine) {
   }
 
   // Update the Box2D game world
-  gameWorld -> Step( timeStep, velocityIterations, positionIterations);
+  world -> step();
 
   // Update character
   for (unsigned int i = 0; i < gameBoxes.size(); i++)
-    gameBoxes[i] -> update(gameWorld);
+    gameBoxes[i] -> update(world -> getB2World());
 
   if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]) {
     setNextState(engine, StateEngine::STATE_MENU);
@@ -470,7 +453,7 @@ void Game::draw() {
   }
 
   // Draw boxes
-  for( unsigned int i = 0; i < gameBoxes.size(); i++){
+  for (unsigned int i = 0; i < gameBoxes.size(); i++) {
     gameBoxes[i] -> draw();
   }
 

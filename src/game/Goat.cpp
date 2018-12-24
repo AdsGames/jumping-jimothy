@@ -33,14 +33,15 @@ Goat::~Goat() {
 }
 
 // Draw box to screen
-void Goat::draw(){
+void Goat::draw() {
   goat_tick++;
-  if(goat_tick>10){
+
+  if (goat_tick > 10) {
     goat_frame++;
-    goat_tick=0;
+    goat_tick = 0;
   }
-  if(goat_frame>14)
-    goat_frame=0;
+  if (goat_frame > 14)
+    goat_frame = 0;
 
   // Draw transform
   ALLEGRO_TRANSFORM trans, prevTrans;
@@ -56,12 +57,12 @@ void Goat::draw(){
 
   al_use_transform(&trans);
 
-  al_draw_bitmap(goat_images[goat_frame],-(getWidth()/2)*20,-(getHeight()/2)*20,0);
+  al_draw_bitmap(goat_images[goat_frame], -(getWidth() / 2) * 20, -(getHeight() / 2) * 20, 0);
 
   al_use_transform(&prevTrans);
 }
 
-bool Goat::getWinCondition(){
+bool Goat::getWinCondition() {
   if(gameCharacter && sensor_box -> isCollidingWithBody(gameCharacter -> getBody())){
     return true;
   }
