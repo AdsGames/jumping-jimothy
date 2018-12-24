@@ -19,6 +19,8 @@
 #include "util/Sound.h"
 #include "ui/Button.h"
 
+#include "game/World.h"
+
 class Game : public State {
   public:
     // Construct / destruct
@@ -33,7 +35,6 @@ class Game : public State {
   private:
     // Functions
     void load_world(std::string file);
-    void b2_setup();
     void load_sprites();
     void reset();
 
@@ -52,8 +53,6 @@ class Game : public State {
 
     // Game variables
     std::vector<Box*> gameBoxes;
-    Box *newBox;
-    Box *rootBox;
 
     int level;
     bool first_play;
@@ -84,13 +83,8 @@ class Game : public State {
     Sound death;
     Button* testing_back_button;
 
-    // Box2D world parameters
-    b2Vec2 gravity;
-    float32 timeStep;
-    int32 velocityIterations;
-    int32 positionIterations;
-    b2World *gameWorld;
-    bool doSleep;
+    // Box 2d game world
+    World *world;
 };
 
 #endif // GAME_H
