@@ -144,6 +144,11 @@ class UIElement {
     // Draw element
     virtual void draw() = 0;
 
+    // Set callbacks
+    void setOnClick(void *func);
+    void setOnHover(void *func);
+    void setOnFocus(void *func);
+
   protected:
     // Position
     int x, y;
@@ -206,6 +211,16 @@ class UIElement {
 
     // Focused
     bool focused;
+
+    // Function pointers
+    // On hover
+    void (*onHover);
+
+    // On focus
+    void (*onFocus);
+
+    // On click
+    void (*onClick);
 
 };
 

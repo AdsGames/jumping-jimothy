@@ -19,6 +19,7 @@
 					<Add option="-Wno-unused-parameter" />
 					<Add option="-DRELEASE" />
 					<Add directory="include" />
+					<Add directory="include/game" />
 				</Compiler>
 				<Linker>
 					<Add option="-lallegro" />
@@ -45,6 +46,7 @@
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
 					<Add directory="include" />
+					<Add directory="include/game" />
 				</Compiler>
 				<Linker>
 					<Add option="-pg -lgmon" />
@@ -87,6 +89,7 @@
 		<Unit filename="include/game/Goat.h" />
 		<Unit filename="include/game/Sensor.h" />
 		<Unit filename="include/game/StaticBox.h" />
+		<Unit filename="include/game/World.h" />
 		<Unit filename="include/menu/LevelSelect.h" />
 		<Unit filename="include/menu/Menu.h" />
 		<Unit filename="include/menu/Options.h" />
@@ -117,6 +120,7 @@
 		<Unit filename="src/game/Goat.cpp" />
 		<Unit filename="src/game/Sensor.cpp" />
 		<Unit filename="src/game/StaticBox.cpp" />
+		<Unit filename="src/game/World.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/menu/LevelSelect.cpp" />
 		<Unit filename="src/menu/Menu.cpp" />

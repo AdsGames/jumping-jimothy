@@ -33,6 +33,10 @@ UIElement::UIElement() {
   this -> hover_effect = true;
   this -> bitmap_rotation_angle = 0;
   this -> focused = false;
+
+  this -> onClick = nullptr;
+  this -> onHover = nullptr;
+  this -> onFocus = nullptr;
 }
 
 UIElement::UIElement(const int x, const int y, std::string text, std::string id, ALLEGRO_FONT *font)
@@ -262,4 +266,17 @@ bool UIElement::hover() {
 bool UIElement::clicked() {
   return !disabled && ((hover() && tools::mouse_clicked(MouseListener::MOUSE_LEFT)) ||
                        (focused && (ActionBinder::actionBegun(ACTION_SELECT))));
+}
+
+// Set callbacks
+void UIElement::setOnClick(void *func) {
+  onClick = func;
+}
+
+void UIElement::setOnHover(void *func) {
+  onHover = func;
+}
+
+void UIElement::setOnFocus(void *func) {
+  onFocus = func;
 }
