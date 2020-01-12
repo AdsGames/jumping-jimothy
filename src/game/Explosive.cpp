@@ -1,6 +1,7 @@
 #include "game/Explosive.h"
 
 #include <allegro5/allegro_primitives.h>
+#include <vector>
 
 #include "util/Globals.h"
 
