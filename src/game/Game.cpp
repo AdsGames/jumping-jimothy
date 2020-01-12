@@ -12,8 +12,12 @@
 #include "util/KeyListener.h"
 #include "util/ActionBinder.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#pragma GCC diagnostic ignored "-Wswitch-default"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_print.hpp"
+#pragma GCC diagnostic pop
 
 #include "game/StaticBox.h"
 #include "game/CollisionBox.h"
