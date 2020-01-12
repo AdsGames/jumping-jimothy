@@ -9,8 +9,12 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_ttf.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#pragma GCC diagnostic ignored "-Wswitch-default"
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_print.hpp"
+#pragma GCC diagnostic pop
 
 #include "util/MouseListener.h"
 #include "util/KeyListener.h"
@@ -78,7 +82,7 @@ Editor::Editor(){
 
   tile_type = 0;
 
-  srand(time(NULL));
+  srand(time(nullptr));
 
   edit_font = al_load_ttf_font("fonts/fantasque.ttf", 18, 0);
 
