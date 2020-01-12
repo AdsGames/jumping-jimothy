@@ -38,7 +38,6 @@ Character::Character(const float x, const float y, ALLEGRO_BITMAP *image, b2Worl
   // Slice character images up
   for (int i = 0; i < 15; i++)
     sprites[i] = al_create_sub_bitmap(sprite, i * 32, 0, 32, 64);
-
 }
 
 // Destructor

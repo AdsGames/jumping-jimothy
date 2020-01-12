@@ -50,7 +50,7 @@ void Sound::play(const float volume) {
 
   if(is_wav && Config::getBooleanValue("sfx_enabled")) {
     is_playing = true;
-    al_play_sample(sample, volume, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+    al_play_sample(sample, volume, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, nullptr);
   }
   else if(!is_wav && Config::getBooleanValue("music_enabled")) {
     is_playing = true;
@@ -64,7 +64,7 @@ void Sound::play_random_frequency(const int newMin, const int newMax) {
     return;
 
   if(is_wav && Config::getBooleanValue("sfx_enabled")) {
-    al_play_sample(sample, 1.0, 0.0, (float)tools::random_int(newMin,newMax)/100, ALLEGRO_PLAYMODE_ONCE, NULL);
+    al_play_sample(sample, 1.0, 0.0, (float)tools::random_int(newMin,newMax)/100, ALLEGRO_PLAYMODE_ONCE, nullptr);
   }
 }
 
