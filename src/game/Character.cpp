@@ -45,11 +45,8 @@ Character::Character(const float x, const float y, ALLEGRO_BITMAP *image, b2Worl
 Character::~Character() {
   // Remove body
 
-  //TODO put this back plss
 
-
-
-  //delete sensor_box;
+  delete sensor_box;
 
   // Remove sprite as it was created here
   //if (sprite) {
@@ -66,7 +63,6 @@ void Character::update(b2World *world){
 
   // Instead of 1000 checks to the sensor box, we will do precisely one.
   bool sensor_colliding  = sensor_box -> isColliding();
-  //bool sensor_colliding = true;
 
   if (sensor_colliding)
     counter_sensor_contact++;
@@ -88,9 +84,9 @@ void Character::update(b2World *world){
   velocity_old = body ->GetLinearVelocity().y;
 
   // special case of sensor_box colliding, will keep check in
-  if (sensor_box -> isCollidingWithDynamicBody())
-  //if(true)
+  if (sensor_box -> isCollidingWithDynamicBody()){
     landed = true;
+  }
 
 
   // Animation speed

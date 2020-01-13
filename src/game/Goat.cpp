@@ -25,7 +25,6 @@ Goat::Goat(const float x, const float y, Character *character, ALLEGRO_BITMAP *i
 
   // Sensor
   sensor_box = new Sensor(x, y, getWidth(), getHeight());
-  std::cout<<world << " is the world, " << getBody() <<" is the body, " << gameCharacter <<" is the character.\n";
   sensor_box -> init(world,getBody());
 }
 
