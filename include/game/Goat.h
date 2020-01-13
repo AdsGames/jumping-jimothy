@@ -13,6 +13,7 @@
 #include "Box.h"
 #include "Character.h"
 #include "Sensor.h"
+#include <iostream>
 
 class Goat : public Box {
   public:

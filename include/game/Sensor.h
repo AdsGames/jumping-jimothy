@@ -21,7 +21,10 @@ class b2WeldJointDef;
 class Sensor : public Box{
   public:
     // Constructor
-    Sensor(const float x, const float y, const float width, const float height, b2Body *parentBody, b2World *world);
+    Sensor(const float x, const float y, const float width, const float height);
+
+    void init(b2World*, b2Body*);
+    void createBody(int bodyType, bool fixedRotation);
 
     // Destructor
     virtual ~Sensor() {};
@@ -43,6 +46,9 @@ class Sensor : public Box{
 
     // Get type
     virtual int getType() override;
+  private:
+
+    b2World* gameWorld;
 };
 
 #endif // SENSOR_H

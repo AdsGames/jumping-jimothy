@@ -91,7 +91,6 @@ class Box {
     // Snapshot of angular velocity
     float paused_angular_velocity;
 
-  private:
     // Position
     b2Vec2 initial_position;
 
@@ -100,6 +99,9 @@ class Box {
 
     // Angle
     float initial_angle;
+
+  private:
+
 
 };
 

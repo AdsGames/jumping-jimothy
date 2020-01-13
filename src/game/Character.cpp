@@ -27,7 +27,8 @@ Character::Character(const float x, const float y, ALLEGRO_BITMAP *image, b2Worl
   body -> SetFixedRotation(true);
 
   // Create sensor
-  //sensor_box = new Sensor(x, y - 0.55f, getWidth() * 0.4f, 0.6f, getBody(), world);
+  sensor_box = new Sensor(x, y - 0.55f, getWidth() * 0.4f, 0.6f);
+  sensor_box -> init(world, getBody());
 
   // Image
   setImage(image);
@@ -43,7 +44,12 @@ Character::Character(const float x, const float y, ALLEGRO_BITMAP *image, b2Worl
 // Destructor
 Character::~Character() {
   // Remove body
-  delete sensor_box;
+
+  //TODO put this back plss
+
+
+
+  //delete sensor_box;
 
   // Remove sprite as it was created here
   //if (sprite) {
@@ -59,8 +65,8 @@ b2Body* Character::getSensorBody(){
 void Character::update(b2World *world){
 
   // Instead of 1000 checks to the sensor box, we will do precisely one.
-  //bool sensor_colliding  = sensor_box -> isColliding();
-  bool sensor_colliding = true;
+  bool sensor_colliding  = sensor_box -> isColliding();
+  //bool sensor_colliding = true;
 
   if (sensor_colliding)
     counter_sensor_contact++;
@@ -82,8 +88,8 @@ void Character::update(b2World *world){
   velocity_old = body ->GetLinearVelocity().y;
 
   // special case of sensor_box colliding, will keep check in
-  //if (sensor_box -> isCollidingWithDynamicBody())
-  if(true)
+  if (sensor_box -> isCollidingWithDynamicBody())
+  //if(true)
     landed = true;
 
 
