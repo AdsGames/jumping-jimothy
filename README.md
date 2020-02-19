@@ -1,4 +1,6 @@
 # Jumping Jimothy
+[![Maintainability](https://api.codeclimate.com/v1/badges/c0a7a04523e632717de3/maintainability)](https://codeclimate.com/github/AdsGames/JumpingJimothy/maintainability)
+
 Jumping Jimothy is a gravity modifying platformer made in C++ using Box2D and Allegro 5.
 
 ## Compiling
