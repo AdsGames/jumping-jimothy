@@ -1,9 +1,9 @@
-#include "util/ActionBinder.h"
+#include "ActionBinder.h"
 
 #include <allegro5/keycodes.h>
 
-#include "util/KeyListener.h"
-#include "util/JoystickListener.h"
+#include "JoystickListener.h"
+#include "KeyListener.h"
 
 std::vector<Binding*> ActionBinder::bindings;
 
@@ -11,20 +11,20 @@ bool ActionBinder::actionBegun(const int action) {
   std::vector<Binding*> foundBindings = findBindings(action);
 
   for (unsigned int i = 0; i < foundBindings.size(); i++) {
-    if (foundBindings.at(i) -> getCode() != BINDING_NONE) {
-      switch (foundBindings.at(i) -> getType()) {
+    if (foundBindings.at(i)->getCode() != BINDING_NONE) {
+      switch (foundBindings.at(i)->getType()) {
         case TYPE_KEY:
-          if (KeyListener::keyPressed[foundBindings.at(i) -> getCode()]) {
+          if (KeyListener::keyPressed[foundBindings.at(i)->getCode()]) {
             return true;
           }
           break;
         case TYPE_JOY_BUTTON:
-          if (JoystickListener::buttonPressed[foundBindings.at(i) -> getCode()]) {
+          if (JoystickListener::buttonPressed[foundBindings.at(i)->getCode()]) {
             return true;
           }
           break;
         case TYPE_JOY_STICK:
-          if (JoystickListener::stickMoved[foundBindings.at(i) -> getCode()]) {
+          if (JoystickListener::stickMoved[foundBindings.at(i)->getCode()]) {
             return true;
           }
           break;
@@ -38,20 +38,20 @@ bool ActionBinder::actionHeld(const int action) {
   std::vector<Binding*> foundBindings = findBindings(action);
 
   for (unsigned int i = 0; i < foundBindings.size(); i++) {
-    if (foundBindings.at(i) -> getCode() != BINDING_NONE) {
-      switch (foundBindings.at(i) -> getType()) {
+    if (foundBindings.at(i)->getCode() != BINDING_NONE) {
+      switch (foundBindings.at(i)->getType()) {
         case TYPE_KEY:
-          if (KeyListener::key[foundBindings.at(i) -> getCode()]) {
+          if (KeyListener::key[foundBindings.at(i)->getCode()]) {
             return true;
           }
           break;
         case TYPE_JOY_BUTTON:
-          if (JoystickListener::button[foundBindings.at(i) -> getCode()]) {
+          if (JoystickListener::button[foundBindings.at(i)->getCode()]) {
             return true;
           }
           break;
         case TYPE_JOY_STICK:
-          if (JoystickListener::stick[foundBindings.at(i) -> getCode()]) {
+          if (JoystickListener::stick[foundBindings.at(i)->getCode()]) {
             return true;
           }
           break;
@@ -67,7 +67,7 @@ std::vector<Binding*> ActionBinder::findBindings(const int action) {
 
   // Find
   for (unsigned int i = 0; i < ActionBinder::bindings.size(); i++) {
-    if (ActionBinder::bindings.at(i) -> getAction() == action) {
+    if (ActionBinder::bindings.at(i)->getAction() == action) {
       foundBindings.push_back(ActionBinder::bindings.at(i));
     }
   }
@@ -81,7 +81,7 @@ void ActionBinder::addBinding(int action, int type, int code) {
   ActionBinder::bindings.push_back(new Binding(action, type, code));
 }
 
-void ActionBinder::setDefaults(){
+void ActionBinder::setDefaults() {
   // Left
   addBinding(ACTION_LEFT, TYPE_KEY, ALLEGRO_KEY_A);
   addBinding(ACTION_LEFT, TYPE_KEY, ALLEGRO_KEY_LEFT);

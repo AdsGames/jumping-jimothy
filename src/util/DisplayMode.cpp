@@ -1,8 +1,9 @@
-#include "util/DisplayMode.h"
-#include "allegro5/allegro.h"
+#include "DisplayMode.h"
 
-#include "util/Config.h"
-#include "util/Tools.h"
+#include <allegro5/allegro.h>
+
+#include "Config.h"
+#include "Tools.h"
 
 // Initialize
 int DisplayMode::window_w = 1024;
@@ -29,9 +30,8 @@ std::string DisplayMode::getDisplayModeString() {
   return getDisplayModeString(getDisplayMode());
 }
 
-
 std::string DisplayMode::getDisplayModeString(const int mode) {
-// Window mode
+  // Window mode
   switch (mode) {
     // Fullscreen windowed stretch
     case DisplayMode::FULLSCREEN_WINDOW_STRETCH:
@@ -60,7 +60,7 @@ std::string DisplayMode::getDisplayModeString(const int mode) {
 }
 
 // Set active display
-void DisplayMode::setActiveDisplay(ALLEGRO_DISPLAY **newdisplay) {
+void DisplayMode::setActiveDisplay(ALLEGRO_DISPLAY** newdisplay) {
   display = newdisplay;
 }
 
@@ -103,7 +103,6 @@ float DisplayMode::getScaleX() {
 float DisplayMode::getScaleY() {
   return scale_y;
 }
-
 
 // Set window size
 void DisplayMode::setWindowSize(const int width, const int height) {
@@ -169,7 +168,8 @@ void DisplayMode::setMode(const int mode) {
       // Set up screen size and positions
       setWindowSize(info.x2 - info.x1, info.y2 - info.y1);
       setScale(1.0f, 1.0f);
-      setTranslation((window_w  - scale_x * draw_w) / 2, (window_h - scale_y * draw_h) / 2);
+      setTranslation((window_w - scale_x * draw_w) / 2,
+                     (window_h - scale_y * draw_h) / 2);
 
       break;
 
@@ -180,11 +180,10 @@ void DisplayMode::setMode(const int mode) {
 
       // Set up screen size and positions
       setWindowSize(info.x2 - info.x1, info.y2 - info.y1);
-      setScale(std::min((float)window_w / draw_w,
-                        (float)window_h / draw_h),
-               std::min((float)window_w / draw_w,
-                        (float)window_h / draw_h));
-      setTranslation((window_w  - scale_x * draw_w) / 2, (window_h - scale_y * draw_h) / 2);
+      setScale(std::min((float)window_w / draw_w, (float)window_h / draw_h),
+               std::min((float)window_w / draw_w, (float)window_h / draw_h));
+      setTranslation((window_w - scale_x * draw_w) / 2,
+                     (window_h - scale_y * draw_h) / 2);
 
       break;
 

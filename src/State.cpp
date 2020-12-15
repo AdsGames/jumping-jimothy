@@ -1,9 +1,9 @@
 #include "State.h"
 
-#include "game/Game.h"
 #include "editor/Editor.h"
-#include "menu/Menu.h"
+#include "game/Game.h"
 #include "menu/LevelSelect.h"
+#include "menu/Menu.h"
 #include "menu/Options.h"
 
 #include "util/Tools.h"
@@ -15,14 +15,14 @@
 // Draw
 void StateEngine::draw() {
   if (currentState) {
-    currentState -> draw();
+    currentState->draw();
   }
 }
 
 // Update
 void StateEngine::update() {
   if (currentState) {
-    currentState -> update(this);
+    currentState->update(this);
   }
   changeState();
 }
@@ -50,7 +50,7 @@ void StateEngine::changeState() {
   }
 
   // Change the state
-  switch(nextState) {
+  switch (nextState) {
     case STATE_GAME:
       currentState = new Game();
       tools::log_message("Switched state to game.");
@@ -83,12 +83,11 @@ void StateEngine::changeState() {
   nextState = STATE_NULL;
 }
 
-
 /*********
  * STATE
  *********/
 
 // Change state
 void State::setNextState(StateEngine* engine, int state) {
-  engine -> setNextState(state);
+  engine->setNextState(state);
 }

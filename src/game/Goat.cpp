@@ -1,17 +1,20 @@
-#include "game/Goat.h"
+#include "Goat.h"
 
-#include "util/Tools.h"
-#include "util/Globals.h"
+#include "../util/Globals.h"
+#include "../util/Tools.h"
 
 // We'll use this for the goat
-Goat::Goat(const float x, const float y, Character *character, ALLEGRO_BITMAP *image, b2World *world) :
-  Box(x, y, 1.6, 3.2, world) {
-
+Goat::Goat(const float x,
+           const float y,
+           Character* character,
+           ALLEGRO_BITMAP* image,
+           b2World* world)
+    : Box(x, y, 1.6, 3.2, world) {
   goat_frame = 0;
   goat_tick = 0;
 
   // Modify body
-  body -> SetType(b2_dynamicBody);
+  body->SetType(b2_dynamicBody);
 
   gameCharacter = character;
 
@@ -19,8 +22,8 @@ Goat::Goat(const float x, const float y, Character *character, ALLEGRO_BITMAP *i
   setImage(image);
 
   // Cut it up
-  for(int i = 0; i < 16; i++) {
-    goat_images[i] = al_create_sub_bitmap(sprite, i * 32,0, 32, 64);
+  for (int i = 0; i < 16; i++) {
+    goat_images[i] = al_create_sub_bitmap(sprite, i * 32, 0, 32, 64);
   }
 
   // Sensor
@@ -57,19 +60,21 @@ void Goat::draw() {
 
   al_use_transform(&trans);
 
-  al_draw_bitmap(goat_images[goat_frame], -(getWidth() / 2) * 20, -(getHeight() / 2) * 20, 0);
+  al_draw_bitmap(goat_images[goat_frame], -(getWidth() / 2) * 20,
+                 -(getHeight() / 2) * 20, 0);
 
   al_use_transform(&prevTrans);
 }
 
 bool Goat::getWinCondition() {
-  if(gameCharacter && sensor_box -> isCollidingWithBody(gameCharacter -> getBody())){
+  if (gameCharacter &&
+      sensor_box->isCollidingWithBody(gameCharacter->getBody())) {
     return true;
   }
   return false;
 }
 
 // Get box type
-int Goat::getType(){
+int Goat::getType() {
   return GOAT;
 }
