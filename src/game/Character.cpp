@@ -16,6 +16,9 @@ Character::Character(const float x,
                      b2World* world)
     : Box(x, y, 0.8, 2.5, world) {
   timer_sound_delay = 0;
+  timer_jump_delay = 0;
+  counter_sensor_contact = 0;
+  velocity_old = 0;
   tick = 0;
   frame = 0;
   landed = true;
@@ -29,8 +32,8 @@ Character::Character(const float x,
   body->SetFixedRotation(true);
 
   // Create sensor
-  sensor_box =
-      new Sensor(x, y - 0.55f, getWidth() * 0.4f, 0.6f, getBody(), world);
+  sensor_box = new Sensor(x, y - 0.55f, getWidth() * 0.4f, 0.6f);
+  sensor_box->init(world, getBody());
 
   // Image
   setImage(image);
@@ -46,6 +49,7 @@ Character::Character(const float x,
 // Destructor
 Character::~Character() {
   // Remove body
+
   delete sensor_box;
 
   // Remove sprite as it was created here
@@ -60,7 +64,10 @@ b2Body* Character::getSensorBody() {
 }
 
 void Character::update(b2World* world) {
-  if (sensor_box->isColliding())
+  // Instead of 1000 checks to the sensor box, we will do precisely one.
+  bool sensor_colliding = sensor_box->isColliding();
+
+  if (sensor_colliding)
     counter_sensor_contact++;
   else
     counter_sensor_contact = 0;
@@ -70,7 +77,7 @@ void Character::update(b2World* world) {
 
   if ((body->GetLinearVelocity().y >= -0.01f &&
        body->GetLinearVelocity().y <= 0.01f) &&
-      sensor_box->isColliding() && velocity_old < -0.01f) {
+      sensor_colliding && velocity_old < -0.01f) {
     // Volume of land sound
     float land_volume = velocity_old / 20;
     if (land_volume > 1)
@@ -81,12 +88,14 @@ void Character::update(b2World* world) {
 
   velocity_old = body->GetLinearVelocity().y;
 
-  if (sensor_box->isCollidingWithDynamicBody())
+  // special case of sensor_box colliding, will keep check in
+  if (sensor_box->isCollidingWithDynamicBody()) {
     landed = true;
+  }
 
   // Animation speed
   int ticks_per_frame = 5;
-  if (!sensor_box->isColliding()) {
+  if (!sensor_colliding) {
     ticks_per_frame = 2;
   } else {
     body->GetFixtureList()->SetFriction(0.0f);
@@ -118,23 +127,23 @@ void Character::update(b2World* world) {
 
   if (ActionBinder::actionHeld(ACTION_LEFT)) {
     direction = false;
-    if (sensor_box->isColliding())
+    if (sensor_colliding)
       body->SetLinearVelocity(b2Vec2(-x_velocity_ground, yVel));
     else if (getBody()->GetLinearVelocity().x > -x_velocity_air_max)
       body->ApplyLinearImpulse(b2Vec2(-x_velocity_air, 0), position, true);
   } else if (ActionBinder::actionHeld(ACTION_RIGHT)) {
     direction = true;
-    if (sensor_box->isColliding())
+    if (sensor_colliding)
       body->SetLinearVelocity(b2Vec2(x_velocity_ground, yVel));
     else if (getBody()->GetLinearVelocity().x < x_velocity_air_max)
       body->ApplyLinearImpulse(b2Vec2(x_velocity_air, 0), position, true);
-  } else if (sensor_box->isColliding()) {
+  } else if (sensor_colliding) {
     body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
   }
 
   // Jumping Jimothy
   timer_jump_delay++;
-  if (ActionBinder::actionBegun(ACTION_A) && sensor_box->isColliding() &&
+  if (ActionBinder::actionBegun(ACTION_A) && sensor_colliding &&
       body->GetLinearVelocity().y < 0.1f && landed) {
     if (timer_jump_delay > 20) {
       timer_jump_delay = 0;
@@ -149,7 +158,7 @@ void Character::update(b2World* world) {
   timer_sound_delay++;
 
   // Fixed Danny's poop code by getting rid if it =)
-  if (sensor_box->isColliding())
+  if (sensor_colliding)
     color = al_map_rgb(50, 100, 255);
   else
     color = al_map_rgb(0, 0, 255);

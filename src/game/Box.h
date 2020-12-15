@@ -95,7 +95,7 @@ class Box {
   // Snapshot of angular velocity
   float paused_angular_velocity;
 
- private:
+ protected:
   // Position
   b2Vec2 initial_position;
 

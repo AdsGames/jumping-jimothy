@@ -10,12 +10,15 @@
 Sensor::Sensor(const float x,
                const float y,
                const float width,
-               const float height,
-               b2Body* parentBody,
-               b2World* world)
-    : Box(x, y, width, height, world) {
-  // Modify body
-  body->SetType(b2_dynamicBody);
+               const float height)
+    : Box(x, y, width, height, nullptr) {}
+
+void Sensor::init(b2World* world, b2Body* parentBody) {
+  // Set world
+  gameWorld = world;
+
+  // Create body
+  createBody(BODY_DYNAMIC, true);
 
   // Override defaults
   b2Fixture* fixPointer = body->GetFixtureList();
@@ -25,13 +28,58 @@ Sensor::Sensor(const float x,
 
   // Feet anchor
   b2Vec2 FeetAnchor(0, 0);
-
-  // Create joint
   b2WeldJointDef* jointDef = new b2WeldJointDef();
   jointDef->Initialize(getBody(), parentBody, FeetAnchor);
   jointDef->collideConnected = false;
   jointDef->referenceAngle = 0;
-  world->CreateJoint(jointDef);
+  gameWorld->CreateJoint(jointDef);
+}
+
+// Create body
+void Sensor::createBody(int bodyType, bool fixedRotation) {
+  // World must be set
+  if (!gameWorld) {
+    return;
+  }
+
+  // Body
+  b2BodyDef bodyDef;
+
+  // Body types
+  switch (bodyType) {
+    case BODY_DYNAMIC:
+      bodyDef.type = b2_dynamicBody;
+      break;
+    case BODY_KINEMATIC:
+      bodyDef.type = b2_kinematicBody;
+      break;
+    default:
+      bodyDef.type = b2_dynamicBody;
+      break;
+  }
+
+  bodyDef.position.Set(initial_position.x, initial_position.y);
+  body = gameWorld->CreateBody(&bodyDef);
+
+  if (fixedRotation)
+    body->SetFixedRotation(true);
+
+  // Define another box shape for our dynamic body.
+  b2PolygonShape dynamicBox;
+  dynamicBox.SetAsBox(initial_size.x / 2, initial_size.y / 2);
+
+  // Define the dynamic body fixture.
+  b2FixtureDef fixtureDef;
+  fixtureDef.shape = &dynamicBox;
+
+  // Set the box density to be non-zero, so it will be dynamic.
+  fixtureDef.density = 1.0f;
+
+  // Override the default friction.
+  fixtureDef.friction = 0.3f;
+
+  // Add the shape to the body.
+  body->CreateFixture(&fixtureDef);
 }
 
 bool Sensor::isColliding() {

@@ -27,7 +27,8 @@ Goat::Goat(const float x,
   }
 
   // Sensor
-  sensor_box = new Sensor(x, y, getWidth(), getHeight(), getBody(), world);
+  sensor_box = new Sensor(x, y, getWidth(), getHeight());
+  sensor_box->init(world, getBody());
 }
 
 // Destructor
