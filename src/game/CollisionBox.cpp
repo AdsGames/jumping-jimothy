@@ -1,21 +1,23 @@
-#include "game/CollisionBox.h"
+#include "CollisionBox.h"
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "util/KeyListener.h"
-#include "util/Globals.h"
+#include "../util/Globals.h"
+#include "../util/KeyListener.h"
 
-CollisionBox::CollisionBox(const float x, const float y, const float width, const float height, b2World *world) :
-  Box(x, y, width, height, world) {
-
+CollisionBox::CollisionBox(const float x,
+                           const float y,
+                           const float width,
+                           const float height,
+                           b2World* world)
+    : Box(x, y, width, height, world) {
   // Modify body
-  body -> SetType(b2_kinematicBody);
+  body->SetType(b2_kinematicBody);
 }
 
-void CollisionBox::draw(){
-
-  if( KeyListener::key[ALLEGRO_KEY_G]){
+void CollisionBox::draw() {
+  if (KeyListener::key[ALLEGRO_KEY_G]) {
     // Draw transform
     ALLEGRO_TRANSFORM trans, prevTrans;
 
@@ -29,13 +31,16 @@ void CollisionBox::draw(){
 
     al_use_transform(&trans);
 
-    al_draw_filled_rectangle( -(getWidth()/2) * 20 + 1, -(getHeight()/2)*20 + 1, (getWidth()/2) * 20 - 1, (getHeight()/2) * 20 - 1,al_map_rgb(255,0,0));
+    al_draw_filled_rectangle(-(getWidth() / 2) * 20 + 1,
+                             -(getHeight() / 2) * 20 + 1,
+                             (getWidth() / 2) * 20 - 1,
+                             (getHeight() / 2) * 20 - 1, al_map_rgb(255, 0, 0));
 
     al_use_transform(&prevTrans);
   }
 }
 
 // Get box type
-int CollisionBox::getType(){
+int CollisionBox::getType() {
   return COLLISION;
 }

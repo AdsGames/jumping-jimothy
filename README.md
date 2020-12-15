@@ -1,55 +1,61 @@
 # Jumping Jimothy
+
 [![Maintainability](https://api.codeclimate.com/v1/badges/c0a7a04523e632717de3/maintainability)](https://codeclimate.com/github/AdsGames/JumpingJimothy/maintainability)
 
 Jumping Jimothy is a gravity modifying platformer made in C++ using Box2D and Allegro 5.
 
-## Compiling
-Using the C++ 14 standard
+## Getting started
 
-### Game
-Project: JumpingJimothy.cbp
+### Windows (MSYS2)
 
-You will need to install:
+#### Install Libraries
 
-- [Allegro 5](https://liballeg.org/download.html)
-- [Box 2D](https://box2d.org/downloads/)
-
-Link with the following options in this order:
-```
--lallegro
--lallegro_primitives
--lallegro_image
--lallegro_audio
--lallegro_font
--lallegro_color
--lallegro_dialog
--lallegro_ttf
--lallegro_acodec
--lBox2D
+```bash
+pacman --noconfirm -S mingw-w64-i686-gcc-libs mingw-w64-i686-dumb mingw-w64-i686-flac mingw-w64-i686-opusfile mingw-w64-i686-freetype mingw-w64-i686-libjpeg-turbo mingw-w64-i686-libpng mingw-w64-i686-libvorbis mingw-w64-i686-libwebp mingw-w64-i686-openal mingw-w64-i686-physfs mingw-w64-i686-allegro mingw-w64-i686-box2d
 ```
 
-Rapid XML is included in the /include/rapidxml/ directory. Rapid XML license can be found [here](https://github.com/discordapp/rapidxml).
+#### Build
 
-### Testing
-Project: JumpingJimothy.cbp
-
-You will need to install:
-
-- [Allegro 5](https://liballeg.org/download.html)
-- [Box 2D](https://box2d.org/downloads/)
-- [cpptest](http://cpptest.sourceforge.net/)
-
-Link with the following options in this order:
+```bash
+cmake -G "MSYS Makefiles" .
 ```
--lallegro
--lallegro_primitives
--lallegro_image
--lallegro_audio
--lallegro_font
--lallegro_color
--lallegro_dialog
--lallegro_ttf
--lallegro_acodec
--lBox2D
--lcpptest
+
+```bash
+make
+```
+
+### Mac OS
+
+#### Install Libraries
+
+```bash
+brew install allegro
+```
+
+#### Build
+
+```bash
+cmake -G "Unix Makefiles" .
+```
+
+```bash
+make
+```
+
+### Linux
+
+#### Install Libraries
+
+```bash
+sudo apt install liballegro5-dev liballegro-acodec5-dev liballegro-audio5-dev liballegro-image5-dev liballegro-dialog5-dev liballegro-ttf5-dev libbox2d-dev
+```
+
+#### Build
+
+```bash
+cmake -G "Unix Makefiles" .
+```
+
+```bash
+make
 ```

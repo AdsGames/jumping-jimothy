@@ -1,11 +1,9 @@
 #include "StateManager.h"
 
-StateManager::StateManager()
-{
-  //ctor
+StateManager::StateManager() {
+  // ctor
 }
 
-StateManager::~StateManager()
-{
-  //dtor
+StateManager::~StateManager() {
+  // dtor
 }
