@@ -1,41 +1,44 @@
-#include "game/Explosive.h"
+#include "Explosive.h"
 
 #include <allegro5/allegro_primitives.h>
 #include <vector>
 
-#include "util/Globals.h"
+#include "../util/Globals.h"
 
 // Constructor
-Explosive::Explosive(const float x, const float y, const bool affectCharacter, Character *character, b2World *world) :
-  Box(x, y, 1.55f, 1.55f, world) {
-
+Explosive::Explosive(const float x,
+                     const float y,
+                     const bool affectCharacter,
+                     Character* character,
+                     b2World* world)
+    : Box(x, y, 1.55f, 1.55f, world) {
   blastRadius = 10;
   blastPower = 1000;
 
   gameCharacter = character;
   affect_character = affectCharacter;
 
-  color = al_map_rgb(255,0,0);
+  color = al_map_rgb(255, 0, 0);
 
   // Modify body
-  body -> SetType(b2_kinematicBody);
+  body->SetType(b2_kinematicBody);
 }
 
-//subclass b2QueryCallback for proximity query callback
+// subclass b2QueryCallback for proximity query callback
 class MyQueryCallback : public b2QueryCallback {
-  public:
-    // All bodies found by query
-    std::vector<b2Body*> foundBodies;
+ public:
+  // All bodies found by query
+  std::vector<b2Body*> foundBodies;
 
-    bool ReportFixture(b2Fixture* fixture) {
-      foundBodies.push_back( fixture->GetBody() );
-      return true;//keep going to find all fixtures in the query area
-    }
+  bool ReportFixture(b2Fixture* fixture) {
+    foundBodies.push_back(fixture->GetBody());
+    return true;  // keep going to find all fixtures in the query area
+  }
 };
 
-void Explosive::update(b2World *world){
+void Explosive::update(b2World* world) {
   // Center of blast
-  b2Vec2 center = body -> GetPosition();
+  b2Vec2 center = body->GetPosition();
 
   // Find all fixtures within blast radius AABB
   MyQueryCallback queryCallback;
@@ -44,7 +47,7 @@ void Explosive::update(b2World *world){
   b2AABB aabb;
   aabb.lowerBound = center - b2Vec2(blastRadius, blastRadius);
   aabb.upperBound = center + b2Vec2(blastRadius, blastRadius);
-  world -> QueryAABB(&queryCallback, aabb);
+  world->QueryAABB(&queryCallback, aabb);
 
   is_exploding = false;
 
@@ -54,24 +57,32 @@ void Explosive::update(b2World *world){
     b2Body* newBody = queryCallback.foundBodies.at(i);
 
     // Center of world
-    b2Vec2 bodyCom = newBody -> GetWorldCenter();
+    b2Vec2 bodyCom = newBody->GetWorldCenter();
 
     // Ignore bodies outside the blast range
     if ((bodyCom - center).Length() >= blastRadius)
       continue;
-    else{
-      applyBlastImpulse(newBody, center, bodyCom, blastPower * 0.05f );//scale blast power to roughly match results of other methods at 32 rays
+    else {
+      applyBlastImpulse(
+          newBody, center, bodyCom,
+          blastPower * 0.05f);  // scale blast power to roughly match results of
+                                // other methods at 32 rays
     }
   }
 }
 
- //this is the same for proximity and raycast methods so we can put it in a common function
-void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 applyPoint, const float blastPower){
-
-  //ignore the grenade itself, and any non-dynamic bodies
+// this is the same for proximity and raycast methods so we can put it in a
+// common function
+void Explosive::applyBlastImpulse(b2Body* newBody,
+                                  b2Vec2 blastCenter,
+                                  b2Vec2 applyPoint,
+                                  const float blastPower) {
+  // ignore the grenade itself, and any non-dynamic bodies
   // Fricking feet, how do they work?
-  if ( newBody == body || newBody -> GetType() != b2_dynamicBody || ((newBody == gameCharacter -> getBody()
-    || newBody == gameCharacter -> getSensorBody()) && !affect_character))
+  if (newBody == body || newBody->GetType() != b2_dynamicBody ||
+      ((newBody == gameCharacter->getBody() ||
+        newBody == gameCharacter->getSensorBody()) &&
+       !affect_character))
     return;
 
   // Blast direction
@@ -90,34 +101,33 @@ void Explosive::applyBlastImpulse(b2Body* newBody, b2Vec2 blastCenter, b2Vec2 ap
   // Magnitude
   float impulseMag = blastPower * invDistance * invDistance;
 
-  impulseMag = b2Min( impulseMag, 500.0f );
+  impulseMag = b2Min(impulseMag, 500.0f);
 
-  is_exploding=true;
+  is_exploding = true;
 
-  if(orientation == 0) {
+  if (orientation == 0) {
     newBody->ApplyLinearImpulse(impulseMag * blastDir, applyPoint, true);
-  }
-  else {
+  } else {
     // Magnitude
-    const float magnitude=0.2;
+    const float magnitude = 0.2;
 
     // Direction of impulse
     b2Vec2 new_direction;
 
-    if(orientation==1)
-      new_direction = b2Vec2(0,magnitude);
-    else if(orientation==3)
-      new_direction = b2Vec2(0,-magnitude);
-    else if(orientation==2)
-      new_direction = b2Vec2(magnitude,0);
+    if (orientation == 1)
+      new_direction = b2Vec2(0, magnitude);
+    else if (orientation == 3)
+      new_direction = b2Vec2(0, -magnitude);
+    else if (orientation == 2)
+      new_direction = b2Vec2(magnitude, 0);
     else
-      new_direction = b2Vec2(-magnitude,0);
+      new_direction = b2Vec2(-magnitude, 0);
 
     newBody->ApplyLinearImpulse(impulseMag * new_direction, applyPoint, true);
   }
 }
 
-void Explosive::draw(){
+void Explosive::draw() {
   // Transform for drawing
   ALLEGRO_TRANSFORM trans, prevTrans;
 
@@ -132,18 +142,21 @@ void Explosive::draw(){
 
   al_use_transform(&trans);
 
-
-
-  if(is_exploding){
-    //al_draw_filled_circle(0,0,200,al_map_rgba(255,0,0,1));
+  if (is_exploding) {
+    // al_draw_filled_circle(0,0,200,al_map_rgba(255,0,0,1));
     // one day
   }
 
-  if(affect_character)
-    al_draw_filled_rectangle( -(getWidth()/2) * 20 + 1, -(getHeight()/2)*20 + 1, (getWidth()/2) * 20 - 1, (getHeight()/2) * 20 - 1,al_map_rgb(255,0,0));
+  if (affect_character)
+    al_draw_filled_rectangle(-(getWidth() / 2) * 20 + 1,
+                             -(getHeight() / 2) * 20 + 1,
+                             (getWidth() / 2) * 20 - 1,
+                             (getHeight() / 2) * 20 - 1, al_map_rgb(255, 0, 0));
   else
-    al_draw_filled_rectangle( -(getWidth()/2) * 20 + 1, -(getHeight()/2)*20 + 1, (getWidth()/2) * 20 - 1, (getHeight()/2) * 20 - 1,al_map_rgb(0,255,0));
-
+    al_draw_filled_rectangle(-(getWidth() / 2) * 20 + 1,
+                             -(getHeight() / 2) * 20 + 1,
+                             (getWidth() / 2) * 20 - 1,
+                             (getHeight() / 2) * 20 - 1, al_map_rgb(0, 255, 0));
 
   // PI/2 is a quarter turn. Editor boxes orientation is a range from 1-4.
   // So we have a quarter turn * 1-4, creating a quarter turn, half turn, ect.
@@ -155,8 +168,7 @@ void Explosive::draw(){
   al_use_transform(&prevTrans);
 }
 
-
 // Get box type
-int Explosive::getType(){
+int Explosive::getType() {
   return EXPLOSIVE;
 }

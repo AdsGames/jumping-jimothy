@@ -1,47 +1,50 @@
-#include "ui/UIElement.h"
+#include "UIElement.h"
 
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "util/MouseListener.h"
-#include "util/KeyListener.h"
-#include "util/Tools.h"
+#include "../util/KeyListener.h"
+#include "../util/MouseListener.h"
+#include "../util/Tools.h"
 
-#include "util/ActionBinder.h"
+#include "../util/ActionBinder.h"
 
 // Defaults
 UIElement::UIElement() {
-  this -> alpha = 255;
-  this -> background_colour = al_map_rgba(200, 200, 200, alpha);
-  this -> text_colour = al_map_rgba(0, 0, 0, alpha);
-  this -> x = 0;
-  this -> y = 0;
-  this -> width = 10;
-  this -> height = 10;
-  this -> text = "";
-  this -> UIElement_font = nullptr;
-  this -> visible = true;
-  this -> disabled = false;
-  this -> image = nullptr;
-  this -> padding_x = 10;
-  this -> padding_y = 10;
-  this -> id = "";
-  this -> visible_background = true;
-  this -> justification = 0;
-  this -> border_thickness = 2;
-  this -> transparent_cell_fill = false;
-  this -> hover_effect = true;
-  this -> bitmap_rotation_angle = 0;
-  this -> focused = false;
+  this->alpha = 255;
+  this->background_colour = al_map_rgba(200, 200, 200, alpha);
+  this->text_colour = al_map_rgba(0, 0, 0, alpha);
+  this->x = 0;
+  this->y = 0;
+  this->width = 10;
+  this->height = 10;
+  this->text = "";
+  this->UIElement_font = nullptr;
+  this->visible = true;
+  this->disabled = false;
+  this->image = nullptr;
+  this->padding_x = 10;
+  this->padding_y = 10;
+  this->id = "";
+  this->visible_background = true;
+  this->justification = 0;
+  this->border_thickness = 2;
+  this->transparent_cell_fill = false;
+  this->hover_effect = true;
+  this->bitmap_rotation_angle = 0;
+  this->focused = false;
 
-  this -> onClick = nullptr;
-  this -> onHover = nullptr;
-  this -> onFocus = nullptr;
+  this->onClick = nullptr;
+  this->onHover = nullptr;
+  this->onFocus = nullptr;
 }
 
-UIElement::UIElement(const int x, const int y, std::string text, std::string id, ALLEGRO_FONT *font)
-  : UIElement() {
-
+UIElement::UIElement(const int x,
+                     const int y,
+                     std::string text,
+                     std::string id,
+                     ALLEGRO_FONT* font)
+    : UIElement() {
   setId(id);
   setX(x);
   setY(y);
@@ -76,14 +79,14 @@ std::string UIElement::getId() {
 
 // Hide
 void UIElement::hide() {
-  this -> visible = false;
-  this -> disabled = true;
+  this->visible = false;
+  this->disabled = true;
 }
 
 // Show
 void UIElement::show() {
-  this -> visible = true;
-  this -> disabled = false;
+  this->visible = true;
+  this->disabled = false;
 }
 
 // Is visible or not
@@ -93,8 +96,8 @@ bool UIElement::isVisible() {
 
 // Set visiblity
 void UIElement::setVisibility(bool visible) {
-  this -> visible = visible;
-  this -> disabled = !visible;
+  this->visible = visible;
+  this->disabled = !visible;
 }
 
 // Disable element
@@ -114,7 +117,7 @@ bool UIElement::isEnabled() {
 
 // Set transparency level
 void UIElement::setTransparency(const float alpha) {
-  this -> alpha = alpha;
+  this->alpha = alpha;
   text_colour = al_map_rgba(text_colour.r, text_colour.g, text_colour.b, alpha);
   background_colour.a = alpha;
 }
@@ -126,12 +129,12 @@ void UIElement::setBitmapRotationAngle(const float rotation) {
 
 // Set x
 void UIElement::setX(const int x) {
-  this -> x = x;
+  this->x = x;
 }
 
 // Set y
 void UIElement::setY(const int y) {
-  this -> y = y;
+  this->y = y;
 }
 
 // Set text colour
@@ -151,7 +154,7 @@ void UIElement::setCellFillTransparent(const bool n) {
 
 // Set text justification
 void UIElement::setTextJustification(const int justification) {
-  this -> justification = justification;
+  this->justification = justification;
 }
 
 // Element width
@@ -184,32 +187,32 @@ void UIElement::setSize(const int width, const int height) {
 
 // Set text
 void UIElement::setText(std::string text) {
-  this -> text = text;
+  this->text = text;
 }
 
 // Set id
 void UIElement::setId(std::string id) {
-  this -> id = id;
+  this->id = id;
 }
 
 // Sets an image
-void UIElement::setImage(ALLEGRO_BITMAP *image) {
+void UIElement::setImage(ALLEGRO_BITMAP* image) {
   if (image == nullptr)
     return;
 
   // Clone image
-  this -> image = al_clone_bitmap(image);
-  this -> width = al_get_bitmap_width(this -> image);
-  this -> height = al_get_bitmap_height(this -> image);
+  this->image = al_clone_bitmap(image);
+  this->width = al_get_bitmap_width(this->image);
+  this->height = al_get_bitmap_height(this->image);
 }
 
 // Set new font
-void UIElement::setFont(ALLEGRO_FONT *font) {
+void UIElement::setFont(ALLEGRO_FONT* font) {
   if (font == nullptr)
     return;
-  this -> UIElement_font = font;
-  this -> width = al_get_text_width(UIElement_font, text.c_str());
-  this -> height = al_get_font_line_height(UIElement_font);
+  this->UIElement_font = font;
+  this->width = al_get_text_width(UIElement_font, text.c_str());
+  this->height = al_get_font_line_height(UIElement_font);
 }
 
 // Set background visibility
@@ -219,12 +222,12 @@ void UIElement::setVisibleBackground(const bool b) {
 
 // Set width
 void UIElement::setWidth(const int width) {
-  this -> width = width;
+  this->width = width;
 }
 
 // Set height
 void UIElement::setHeight(const int height) {
-  this -> height = height;
+  this->height = height;
 }
 
 // This element can focus
@@ -234,12 +237,12 @@ bool UIElement::canFocus() {
 
 // Focus
 void UIElement::focus() {
-  this -> focused = true;
+  this->focused = true;
 }
 
 // Unfocus
 void UIElement::unfocus() {
-  this -> focused = false;
+  this->focused = false;
 }
 
 // Set border thickness
@@ -264,19 +267,20 @@ bool UIElement::hover() {
 
 // True if clicked
 bool UIElement::clicked() {
-  return !disabled && ((hover() && tools::mouse_clicked(MouseListener::MOUSE_LEFT)) ||
-                       (focused && (ActionBinder::actionBegun(ACTION_SELECT))));
+  return !disabled &&
+         ((hover() && tools::mouse_clicked(MouseListener::MOUSE_LEFT)) ||
+          (focused && (ActionBinder::actionBegun(ACTION_SELECT))));
 }
 
 // Set callbacks
-void UIElement::setOnClick(void *func) {
+void UIElement::setOnClick(void* func) {
   onClick = func;
 }
 
-void UIElement::setOnHover(void *func) {
+void UIElement::setOnHover(void* func) {
   onHover = func;
 }
 
-void UIElement::setOnFocus(void *func) {
+void UIElement::setOnFocus(void* func) {
   onFocus = func;
 }

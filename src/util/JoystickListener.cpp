@@ -1,4 +1,4 @@
-#include "util/JoystickListener.h"
+#include "JoystickListener.h"
 
 bool JoystickListener::button[JOY_MAX_BUTTONS] = {false};
 bool JoystickListener::buttonPressed[JOY_MAX_BUTTONS] = {false};
@@ -13,7 +13,8 @@ bool JoystickListener::stickReleased[JOY_MAX_STICK_BOOLEANS] = {false};
 bool JoystickListener::lastTicksStick[JOY_MAX_STICK_BOOLEANS] = {false};
 
 // For allegro 5, we use events
-void JoystickListener::on_event(ALLEGRO_EVENT_TYPE event_type, const int buttoncode){
+void JoystickListener::on_event(ALLEGRO_EVENT_TYPE event_type,
+                                const int buttoncode) {
   // Button down
   if (event_type == ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN) {
     button[buttoncode] = true;
@@ -26,7 +27,10 @@ void JoystickListener::on_event(ALLEGRO_EVENT_TYPE event_type, const int buttonc
 }
 
 // For allegro 5, we use events
-void JoystickListener::on_event(ALLEGRO_EVENT_TYPE event_type, const int stick, const int axis, const float position){
+void JoystickListener::on_event(ALLEGRO_EVENT_TYPE event_type,
+                                const int stick,
+                                const int axis,
+                                const float position) {
   // Axis moved
   if (event_type == ALLEGRO_EVENT_JOYSTICK_AXIS) {
     const float tolerance = 0.6f;
@@ -36,22 +40,20 @@ void JoystickListener::on_event(ALLEGRO_EVENT_TYPE event_type, const int stick, 
 
     // Check if moved enough
     if (position > tolerance) {
-      this -> stick[trans_axis] = true;
-    }
-    else if (position < -tolerance) {
-      this -> stick[trans_axis + 1] = true;
-    }
-    else {
-      this -> stick[trans_axis]     = false;
-      this -> stick[trans_axis + 1] = false;
+      this->stick[trans_axis] = true;
+    } else if (position < -tolerance) {
+      this->stick[trans_axis + 1] = true;
+    } else {
+      this->stick[trans_axis] = false;
+      this->stick[trans_axis + 1] = false;
     }
   }
 }
 
 // Check those button!
-void JoystickListener::update(){
+void JoystickListener::update() {
   // Check stick just moved
-  for (int i = 0; i < JOY_MAX_STICK_BOOLEANS; i++){
+  for (int i = 0; i < JOY_MAX_STICK_BOOLEANS; i++) {
     // Clear old values
     stickMoved[i] = false;
     stickReleased[i] = false;
@@ -73,7 +75,7 @@ void JoystickListener::update(){
   anyButtonPressed = false;
 
   // Check button just pressed
-  for( int i = 0; i < JOY_MAX_BUTTONS; i++){
+  for (int i = 0; i < JOY_MAX_BUTTONS; i++) {
     // Clear old values
     buttonPressed[i] = false;
     buttonReleased[i] = false;

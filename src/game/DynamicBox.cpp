@@ -1,19 +1,22 @@
-#include "game/DynamicBox.h"
+#include "DynamicBox.h"
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "util/Tools.h"
-#include "util/Globals.h"
+#include "../util/Globals.h"
+#include "../util/Tools.h"
 
-DynamicBox::DynamicBox(const float x, const float y, const float velX, const float velY, b2World *world) :
-  Box(x, y, 1.55f, 1.55f, world) {
-
+DynamicBox::DynamicBox(const float x,
+                       const float y,
+                       const float velX,
+                       const float velY,
+                       b2World* world)
+    : Box(x, y, 1.55f, 1.55f, world) {
   color = al_map_rgb(255, 0, 0);
 
   // Modify body
-  body -> SetType(b2_dynamicBody);
-  body -> SetLinearVelocity(b2Vec2(velX, velY));
+  body->SetType(b2_dynamicBody);
+  body->SetLinearVelocity(b2Vec2(velX, velY));
 }
 
 // Draw box to screen
@@ -31,29 +34,30 @@ void DynamicBox::draw() {
   al_use_transform(&trans);
 
   // Velocity colouring
-  b2Vec2 draw_velocity = b2Vec2(0,0);
+  b2Vec2 draw_velocity = b2Vec2(0, 0);
 
-  if(isPaused)
+  if (isPaused)
     paused_velocity = b2Vec2(paused_velocity.x, paused_velocity.y);
   else
-    paused_velocity = b2Vec2(body -> GetLinearVelocity().x, body -> GetLinearVelocity().y);
-
+    paused_velocity =
+        b2Vec2(body->GetLinearVelocity().x, body->GetLinearVelocity().y);
 
   // Draw colour
-  al_draw_filled_rectangle( -(getWidth()/2) * 20 + 1, -(getHeight()/2)*20 + 1, (getWidth()/2) * 20 - 1, (getHeight()/2) * 20 - 1,
-                  al_map_rgb( tools::clamp( 0, 255, int(draw_velocity.y * -10)),
-                  tools::clamp( 0, 255, 255 - int(draw_velocity.y * -10)),
-                  0));
+  al_draw_filled_rectangle(
+      -(getWidth() / 2) * 20 + 1, -(getHeight() / 2) * 20 + 1,
+      (getWidth() / 2) * 20 - 1, (getHeight() / 2) * 20 - 1,
+      al_map_rgb(tools::clamp(0, 255, int(draw_velocity.y * -10)),
+                 tools::clamp(0, 255, 255 - int(draw_velocity.y * -10)), 0));
 
   // Draw image
-  al_draw_bitmap(sprite,-(getWidth()/2)*20,-(getHeight()/2)*20,0);
+  al_draw_bitmap(sprite, -(getWidth() / 2) * 20, -(getHeight() / 2) * 20, 0);
 
   // restore the old transform
   al_use_transform(&prevTrans);
 }
 
 // Get box type
-int DynamicBox::getType(){
+int DynamicBox::getType() {
   return BOX;
 }
 

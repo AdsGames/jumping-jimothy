@@ -1,17 +1,17 @@
-#include "util/Config.h"
+#include "Config.h"
 
 #include <fstream>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #pragma GCC diagnostic ignored "-Wswitch-default"
-#include "rapidxml/rapidxml.hpp"
-#include "rapidxml/rapidxml_print.hpp"
+#include "../rapidxml/rapidxml.hpp"
+#include "../rapidxml/rapidxml_print.hpp"
 #pragma GCC diagnostic pop
 
-#include "util/Tools.h"
+#include "Tools.h"
 
-std::vector<Config::Dict*>  Config::data;
+std::vector<Config::Dict*> Config::data;
 
 // Read config data from file
 void Config::readFile(std::string path) {
@@ -28,7 +28,8 @@ void Config::readFile(std::string path) {
   }
 
   // Make buffer
-  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(f)),
+                               std::istreambuf_iterator<char>());
 
   // Push EOF
   xml_buffer.push_back('\0');
@@ -40,11 +41,12 @@ void Config::readFile(std::string path) {
   doc.parse<0>(&xml_buffer[0]);
 
   // Find our root node
-  rapidxml::xml_node<> *root_node = doc.first_node("data");
+  rapidxml::xml_node<>* root_node = doc.first_node("data");
 
   // Iterate over the nodes
-  for (rapidxml::xml_node<> *entry = root_node -> first_node("entry"); entry; entry = entry -> next_sibling()) {
-    addKey(entry -> first_attribute() -> name(), entry -> first_attribute() -> value());
+  for (rapidxml::xml_node<>* entry = root_node->first_node("entry"); entry;
+       entry = entry->next_sibling()) {
+    addKey(entry->first_attribute()->name(), entry->first_attribute()->value());
   }
 
   // Clean up
@@ -53,26 +55,30 @@ void Config::readFile(std::string path) {
 }
 
 // Write config data to file
-void Config::writeFile(std::string path){
+void Config::writeFile(std::string path) {
   // Create XML doc
   rapidxml::xml_document<> doc;
 
   // Push encoding and version data
   rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);
-  decl -> append_attribute(doc.allocate_attribute("version", "1.0"));
-  decl -> append_attribute(doc.allocate_attribute("encoding", "utf-8"));
+  decl->append_attribute(doc.allocate_attribute("version", "1.0"));
+  decl->append_attribute(doc.allocate_attribute("encoding", "utf-8"));
   doc.append_node(decl);
 
   // Create root node
-  rapidxml::xml_node<>* root_node = doc.allocate_node(rapidxml::node_element, "data");
+  rapidxml::xml_node<>* root_node =
+      doc.allocate_node(rapidxml::node_element, "data");
   doc.append_node(root_node);
 
   // Parse key val pairs
-  const char *entry = doc.allocate_string("entry");
+  const char* entry = doc.allocate_string("entry");
   for (unsigned int i = 0; i < Config::data.size(); i++) {
-    rapidxml::xml_node<> * object_node = doc.allocate_node(rapidxml::node_element, entry);
-    object_node -> append_attribute(doc.allocate_attribute(doc.allocate_string(Config::data.at(i) -> getKey().c_str()), doc.allocate_string(Config::data.at(i) -> getValue().c_str())));
-    root_node -> append_node(object_node);
+    rapidxml::xml_node<>* object_node =
+        doc.allocate_node(rapidxml::node_element, entry);
+    object_node->append_attribute(doc.allocate_attribute(
+        doc.allocate_string(Config::data.at(i)->getKey().c_str()),
+        doc.allocate_string(Config::data.at(i)->getValue().c_str())));
+    root_node->append_node(object_node);
   }
 
   // Save to file
@@ -92,15 +98,14 @@ void Config::writeFile(std::string path){
   doc.clear();
 }
 
-
 // Get string value from key
 std::string Config::getValue(std::string key) {
   // Find key
-  Dict *element = findKey(key);
+  Dict* element = findKey(key);
 
   // Return value
   if (element != nullptr) {
-    return element -> getValue();
+    return element->getValue();
   }
 
   // Not found
@@ -120,11 +125,11 @@ bool Config::getBooleanValue(std::string key) {
 // Set string value
 void Config::setValue(std::string key, std::string value) {
   // Search for key
-  Dict *element = findKey(key);
+  Dict* element = findKey(key);
 
   // Update value
   if (element != nullptr) {
-    element -> setValue(value);
+    element->setValue(value);
     return;
   }
 
@@ -150,8 +155,8 @@ void Config::setValue(std::string key, const bool value) {
 // Find values
 Config::Dict* Config::findKey(std::string key) {
   // Search by key
-  for(unsigned int i = 0; i < Config::data.size(); i++) {
-    if (Config::data.at(i) -> getKey() == key) {
+  for (unsigned int i = 0; i < Config::data.size(); i++) {
+    if (Config::data.at(i)->getKey() == key) {
       return Config::data.at(i);
     }
   }

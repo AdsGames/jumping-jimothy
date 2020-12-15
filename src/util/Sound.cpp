@@ -1,6 +1,6 @@
-#include "util/Sound.h"
-#include "util/Config.h"
-#include "util/Tools.h"
+#include "Sound.h"
+#include "Config.h"
+#include "Tools.h"
 
 // Ctor
 Sound::Sound() {
@@ -40,7 +40,7 @@ void Sound::load_ogg(std::string path) {
 
 // Play sound
 void Sound::play() {
-  this -> play(1.0f);
+  this->play(1.0f);
 }
 
 // Play sound at volume
@@ -48,11 +48,10 @@ void Sound::play(const float volume) {
   if (!sample)
     return;
 
-  if(is_wav && Config::getBooleanValue("sfx_enabled")) {
+  if (is_wav && Config::getBooleanValue("sfx_enabled")) {
     is_playing = true;
     al_play_sample(sample, volume, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, nullptr);
-  }
-  else if(!is_wav && Config::getBooleanValue("music_enabled")) {
+  } else if (!is_wav && Config::getBooleanValue("music_enabled")) {
     is_playing = true;
     al_play_sample(sample, volume, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, sample_id);
   }
@@ -63,17 +62,19 @@ void Sound::play_random_frequency(const int newMin, const int newMax) {
   if (!sample)
     return;
 
-  if(is_wav && Config::getBooleanValue("sfx_enabled")) {
-    al_play_sample(sample, 1.0, 0.0, (float)tools::random_int(newMin,newMax)/100, ALLEGRO_PLAYMODE_ONCE, nullptr);
+  if (is_wav && Config::getBooleanValue("sfx_enabled")) {
+    al_play_sample(sample, 1.0, 0.0,
+                   (float)tools::random_int(newMin, newMax) / 100,
+                   ALLEGRO_PLAYMODE_ONCE, nullptr);
   }
 }
 
 // Stop sound
-void Sound::stop(){
+void Sound::stop() {
   if (!sample)
     return;
 
-  if(!is_wav){
+  if (!is_wav) {
     al_stop_samples();
   }
 

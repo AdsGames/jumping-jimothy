@@ -1,9 +1,9 @@
-#include "game/StaticBox.h"
+#include "StaticBox.h"
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
 
-#include "util/Globals.h"
+#include "../util/Globals.h"
 
 // I'm trying to make static boxes really just for show,
 // and have the collision handled elsewhere. So, this class
@@ -11,10 +11,8 @@
 // the location and the image
 
 // Static Box Constructors
-StaticBox::StaticBox(const float x, const float y) :
-  Box(x, y, 1.5f, 1.5f, nullptr) {
-
-}
+StaticBox::StaticBox(const float x, const float y)
+    : Box(x, y, 1.5f, 1.5f, nullptr) {}
 
 // Destroy 'custom' image
 StaticBox::~StaticBox() {
@@ -24,7 +22,7 @@ StaticBox::~StaticBox() {
 }
 
 // Draw box to screen
-void StaticBox::draw(){
+void StaticBox::draw() {
   // Transform
   ALLEGRO_TRANSFORM trans, prevTrans;
 
@@ -34,12 +32,12 @@ void StaticBox::draw(){
   // scale using the new transform
   al_identity_transform(&trans);
 
-  //al_rotate_transform(&trans, -angle);
+  // al_rotate_transform(&trans, -angle);
   al_translate_transform(&trans, getX() * 20, getY() * -20);
 
   al_use_transform(&trans);
 
-  al_draw_bitmap(sprite, -(getWidth()/2)*20,-(getHeight()/2)*20, 0);
+  al_draw_bitmap(sprite, -(getWidth() / 2) * 20, -(getHeight() / 2) * 20, 0);
 
   al_use_transform(&prevTrans);
 
@@ -48,6 +46,6 @@ void StaticBox::draw(){
 }
 
 // Get box type
-int StaticBox::getType(){
+int StaticBox::getType() {
   return STATIC;
 }

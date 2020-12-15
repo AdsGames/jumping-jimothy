@@ -1,4 +1,4 @@
-#include "util/Globals.h"
+#include "Globals.h"
 
 const bool LEFT = false;
 const bool RIGHT = true;
