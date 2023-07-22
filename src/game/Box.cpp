@@ -3,7 +3,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/color.h>
 
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
 
 #include "../util/Globals.h"
 #include "../util/Tools.h"

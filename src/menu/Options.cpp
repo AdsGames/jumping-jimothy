@@ -14,8 +14,8 @@
 // Initialize options screen
 Options::Options() {
   // Load fonts
-  options_font = al_load_ttf_font("fonts/munro.ttf", 18, 0);
-  title_font = al_load_ttf_font("fonts/munro.ttf", 36, 0);
+  options_font = al_load_ttf_font("assets/fonts/munro.ttf", 18, 0);
+  title_font = al_load_ttf_font("assets/fonts/munro.ttf", 36, 0);
 
   // Options text
   OptionsUI.addElement(new Label(25, 25, "Options", "lblOptions", title_font));
@@ -105,7 +105,7 @@ void Options::update(StateEngine* engine) {
     setNextState(engine, StateEngine::STATE_MENU);
 
     // Save settings
-    Config::writeFile("data/config.xml");
+    Config::writeFile("assets/data/config.xml");
   }
 
   // SFX checkbox

@@ -37,14 +37,14 @@ Game::Game() {
   gameGoat = nullptr;
 
   // Load fonts
-  game_font = al_load_ttf_font("fonts/munro.ttf", 30, 0);
-  help_font = al_load_ttf_font("fonts/munro.ttf", 50, 0);
-  edit_font = al_load_ttf_font("fonts/fantasque.ttf", 18, 0);
+  game_font = al_load_ttf_font("assets/fonts/munro.ttf", 30, 0);
+  help_font = al_load_ttf_font("assets/fonts/munro.ttf", 50, 0);
+  edit_font = al_load_ttf_font("assets/fonts/fantasque.ttf", 18, 0);
 
   // Load sounds
-  toggle_on.load_wav("sfx/toggle_on.wav");
-  toggle_off.load_wav("sfx/toggle_off.wav");
-  death.load_wav("sfx/death.wav");
+  toggle_on.load_wav("assets/sfx/toggle_on.wav");
+  toggle_off.load_wav("assets/sfx/toggle_off.wav");
+  death.load_wav("assets/sfx/death.wav");
 
   // Back button
   testing_back_button = nullptr;
@@ -332,7 +332,7 @@ void Game::reset() {
   if (Config::getBooleanValue("EditingLevel")) {
     load_world(Config::getValue("EditingLevelFile"));
   } else {
-    load_world("data/level_" + tools::toString(level) + ".xml");
+    load_world("assets/data/level_" + tools::toString(level) + ".xml");
   }
 
   static_mode = true;
@@ -353,15 +353,17 @@ void Game::reset() {
 
 // Load all sprites for in game
 void Game::load_sprites() {
-  box = tools::load_bitmap_ex("images/box.png");
-  box_repel = tools::load_bitmap_ex("images/box_repel.png");
-  box_repel_direction = tools::load_bitmap_ex("images/box_repel_direction.png");
-  goat_map = tools::load_bitmap_ex("images/goat.png");
-  character = tools::load_bitmap_ex("images/character.png");
-  play = tools::load_bitmap_ex("images/play.png");
-  pause = tools::load_bitmap_ex("images/pause.png");
+  box = tools::load_bitmap_ex("assets/images/box.png");
+  box_repel = tools::load_bitmap_ex("assets/images/box_repel.png");
+  box_repel_direction =
+      tools::load_bitmap_ex("assets/images/box_repel_direction.png");
+  goat_map = tools::load_bitmap_ex("assets/images/goat.png");
+  character = tools::load_bitmap_ex("assets/images/character.png");
+  play = tools::load_bitmap_ex("assets/images/play.png");
+  pause = tools::load_bitmap_ex("assets/images/pause.png");
 
-  ALLEGRO_BITMAP* image_box = tools::load_bitmap_ex("images/StaticBlock.png");
+  ALLEGRO_BITMAP* image_box =
+      tools::load_bitmap_ex("assets/images/StaticBlock.png");
 
   for (int i = 0; i < 3; i++)
     for (int t = 0; t < 5; t++)

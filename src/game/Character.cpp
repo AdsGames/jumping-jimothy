@@ -1,6 +1,6 @@
 #include "Character.h"
 
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
 #include <allegro5/allegro_primitives.h>
 
 #include "Box.h"
@@ -38,8 +38,8 @@ Character::Character(const float x,
   // Image
   setImage(image);
 
-  jump.load_wav("sfx/jump.wav");
-  land.load_wav("sfx/land.wav");
+  jump.load_wav("assets/sfx/jump.wav");
+  land.load_wav("assets/sfx/land.wav");
 
   // Slice character images up
   for (int i = 0; i < 15; i++)

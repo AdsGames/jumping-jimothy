@@ -15,14 +15,14 @@ Menu::Menu() {
 
   int button_offset_x = 40;
 
-  title = tools::load_bitmap_ex("images/title_static.png");
-  title_overlay = tools::load_bitmap_ex("images/title_overlay.png");
-  title_shine = tools::load_bitmap_ex("images/title_shine.png");
-  logo = tools::load_bitmap_ex("images/logo.png");
+  title = tools::load_bitmap_ex("assets/images/title_static.png");
+  title_overlay = tools::load_bitmap_ex("assets/images/title_overlay.png");
+  title_shine = tools::load_bitmap_ex("assets/images/title_shine.png");
+  logo = tools::load_bitmap_ex("assets/images/logo.png");
 
-  menu_font = al_load_ttf_font("fonts/munro.ttf", 18, 0);
-  button_font = al_load_ttf_font("fonts/munro.ttf", 24, 0);
-  credits_font = al_load_ttf_font("fonts/munro.ttf", 32, 0);
+  menu_font = al_load_ttf_font("assets/fonts/munro.ttf", 18, 0);
+  button_font = al_load_ttf_font("assets/fonts/munro.ttf", 24, 0);
+  credits_font = al_load_ttf_font("assets/fonts/munro.ttf", 32, 0);
 
   menu_ui.addElement(
       new Button(button_offset_x, 500, "Play", "btnPlay", button_font));
@@ -172,7 +172,7 @@ void Menu::draw() {
     al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location,
                   160 + padding, 1, "RapidXml for level loading/saving");
     al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location,
-                  240 + padding, 1, "Music/code by Allan Legemaate");
+                  240 + padding, 1, "assets/music/code by Allan Legemaate");
     al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location,
                   280 + padding, 1, "Art/game design by Sullivan Stobo");
     al_draw_textf(credits_font, al_map_rgb(255, 255, 255), x_location,

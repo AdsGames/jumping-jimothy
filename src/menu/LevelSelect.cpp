@@ -17,9 +17,9 @@
 #include "../util/Tools.h"
 
 LevelSelect::LevelSelect() {
-  levelselect_font = al_load_ttf_font("fonts/munro.ttf", 24, 0);
+  levelselect_font = al_load_ttf_font("assets/fonts/munro.ttf", 24, 0);
 
-  levelselect_font_large = al_load_ttf_font("fonts/munro.ttf", 48, 0);
+  levelselect_font_large = al_load_ttf_font("assets/fonts/munro.ttf", 48, 0);
 
   levelSelectUI = UIHandler();
 

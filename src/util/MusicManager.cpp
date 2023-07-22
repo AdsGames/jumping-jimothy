@@ -6,9 +6,9 @@ Sound* MusicManager::menu_music;
 // Loads game music
 void MusicManager::load() {
   game_music = new Sound;
-  game_music->load_ogg("music/tojam.ogg");
+  game_music->load_ogg("assets/music/tojam.ogg");
   menu_music = new Sound;
-  menu_music->load_ogg("music/menu.ogg");
+  menu_music->load_ogg("assets/music/menu.ogg");
 }
 
 // Destroys game music samples

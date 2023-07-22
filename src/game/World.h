@@ -1,13 +1,13 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
 
 class World {
  public:
   // Constructor
   World(b2Vec2 gravity,
-        float32 timeStep,
+        float timeStep,
         int32 velocityIterations,
         int32 positionIterations,
         bool doSleep);
@@ -28,7 +28,7 @@ class World {
 
   // Vars
   b2Vec2 gravity;
-  float32 timeStep;
+  float timeStep;
   int32 velocityIterations;
   int32 positionIterations;
   bool doSleep;

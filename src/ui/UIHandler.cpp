@@ -14,7 +14,7 @@
 // Create UI handler
 UIHandler::UIHandler() {
   // Load cursor image
-  ui_cursor = tools::load_bitmap_ex("images/cursor.png");
+  ui_cursor = tools::load_bitmap_ex("assets/images/cursor.png");
 
   // Focused element
   focusedElement = -1;

@@ -1,6 +1,6 @@
 #include "Sensor.h"
 
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
 #include <allegro5/allegro_color.h>
 #include <allegro5/allegro_primitives.h>
 

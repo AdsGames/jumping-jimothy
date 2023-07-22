@@ -44,20 +44,20 @@ Editor::Editor() {
   modified = false;
 
   gui_mode = true;
-  help_menu = tools::load_bitmap_ex("images/help_menu.png");
+  help_menu = tools::load_bitmap_ex("assets/images/help_menu.png");
 
   for (int i = 0; i < 6; i++)
     image_box[i] = nullptr;
 
   // Load box image
-  image_box[0] = tools::load_bitmap_ex("images/box_green.png");
-  image_box[1] = tools::load_bitmap_ex("images/StaticBlock.png");
-  image_box[2] = tools::load_bitmap_ex("images/character.png");
-  image_box[3] = tools::load_bitmap_ex("images/goat.png");
-  image_box[4] = tools::load_bitmap_ex("images/box_repel.png");
-  image_box[5] = tools::load_bitmap_ex("images/box_repel_direction.png");
+  image_box[0] = tools::load_bitmap_ex("assets/images/box_green.png");
+  image_box[1] = tools::load_bitmap_ex("assets/images/StaticBlock.png");
+  image_box[2] = tools::load_bitmap_ex("assets/images/character.png");
+  image_box[3] = tools::load_bitmap_ex("assets/images/goat.png");
+  image_box[4] = tools::load_bitmap_ex("assets/images/box_repel.png");
+  image_box[5] = tools::load_bitmap_ex("assets/images/box_repel_direction.png");
 
-  cursor = tools::load_bitmap_ex("images/cursor.png");
+  cursor = tools::load_bitmap_ex("assets/images/cursor.png");
 
   for (int i = 0; i < 5; i++)
     for (int t = 0; t < 15; t++)
@@ -84,7 +84,7 @@ Editor::Editor() {
 
   srand(time(nullptr));
 
-  edit_font = al_load_ttf_font("fonts/fantasque.ttf", 18, 0);
+  edit_font = al_load_ttf_font("assets/fonts/fantasque.ttf", 18, 0);
 
   if (!edit_font)
     tools::abort_on_error("Could not load 'fantasque.ttf'.\n", "Font Error");
@@ -358,8 +358,9 @@ void Editor::update(StateEngine* engine) {
 
       // Has it been saved already?
       if (!is_saved) {
-        myChooser = al_create_native_file_dialog(
-            "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
+        myChooser =
+            al_create_native_file_dialog("assets/data/", "Save Level",
+                                         "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
 
         // Display open dialog
         if (al_show_native_file_dialog(nullptr, myChooser)) {
@@ -389,7 +390,7 @@ void Editor::update(StateEngine* engine) {
       ALLEGRO_FILECHOOSER* myChooser;
 
       myChooser = al_create_native_file_dialog(
-          "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
+          "assets/data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
 
       // Display open dialog
       const char* temp_name = nullptr;
@@ -424,8 +425,8 @@ void Editor::update(StateEngine* engine) {
   // Load map
   if (editorUI.getElementById("btnLoad")->clicked() ||
       KeyListener::keyPressed[ALLEGRO_KEY_A]) {
-    ALLEGRO_FILECHOOSER* myChooser =
-        al_create_native_file_dialog("data/", "Load Level", "*.xml;*.*", 0);
+    ALLEGRO_FILECHOOSER* myChooser = al_create_native_file_dialog(
+        "assets/data/", "Load Level", "*.xml;*.*", 0);
 
     const char* temp_name;
 

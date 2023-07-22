@@ -213,13 +213,13 @@ class UIElement {
 
   // Function pointers
   // On hover
-  void(*onHover);
+  void* onHover;
 
   // On focus
-  void(*onFocus);
+  void* onFocus;
 
   // On click
-  void(*onClick);
+  void* onClick;
 };
 
 #endif  // UIELEMENT_H

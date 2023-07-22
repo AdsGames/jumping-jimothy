@@ -49,4 +49,7 @@ install_manifest.txt
 bin
 docs
 lib
-build/JumpingJimothy*
+build/
+.ninja*
+build.ninja
+compile_commands.json
