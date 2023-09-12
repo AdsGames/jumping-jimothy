@@ -9,6 +9,8 @@
 #define GOAT_H
 
 #include <allegro5/allegro_primitives.h>
+#include <array>
+#include <memory>
 
 #include "Box.h"
 #include "Character.h"
@@ -23,36 +25,35 @@ class Goat : public Box {
        ALLEGRO_BITMAP* image,
        b2World* world);
 
-  // Destructor
-  virtual ~Goat();
-
   // Draw
-  virtual void draw() override;
+  void draw() override;
 
   // Can win
   bool getWinCondition();
 
   // Update logic
-  virtual void update(b2World* world) override{};
+  void update(b2World* world) override{
+      // Unused
+  };
 
   // Get type
-  virtual int getType() override;
+  int getType() override;
 
  private:
   // Sensor box pointer
-  Sensor* sensor_box;
+  std::unique_ptr<Sensor> sensor_box{nullptr};
 
   // Character pointer
-  Character* gameCharacter;
+  Character* gameCharacter{nullptr};
 
   // Frame of animation
-  int goat_frame;
+  int goat_frame{0};
 
   // Counter for incrementing frame
-  int goat_tick;
+  int goat_tick{0};
 
   // Images of goat
-  ALLEGRO_BITMAP* goat_images[17];
+  std::array<ALLEGRO_BITMAP*, 17> goat_images{nullptr};
 };
 
 #endif  // GOAT_H

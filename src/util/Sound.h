@@ -26,7 +26,7 @@ class Sound {
   ALLEGRO_SAMPLE_ID* getSampleId();
   ALLEGRO_SAMPLE* getSample();
 
-  bool getIsPlaying() { return is_playing; }
+  bool isPlaying() const { return is_playing; }
 
  private:
   ALLEGRO_SAMPLE* sample;

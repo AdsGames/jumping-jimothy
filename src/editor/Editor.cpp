@@ -93,63 +93,65 @@ Editor::Editor() {
   editorBoxes.clear();
 
   // buttons
-  editorUI.addElement(new Button(0, 728, "Dynamic", "btnDynamic", edit_font));
-  editorUI.createAnchoredButton("Static", edit_font, "btnDynamic", "btnStatic",
-                                RIGHT);
-  editorUI.createAnchoredButton("Player", edit_font, "btnStatic", "btnPlayer",
-                                RIGHT);
-  editorUI.createAnchoredButton("Goat", edit_font, "btnPlayer", "btnGoat",
-                                RIGHT);
+  editorUI.addElement(
+      std::make_shared<Button>(0, 728, "Dynamic", "btnDynamic", edit_font));
+  editorUI.createAnchoredButton("Static", edit_font, "btnDynamic", "btnStatic");
+  editorUI.createAnchoredButton("Player", edit_font, "btnStatic", "btnPlayer");
+  editorUI.createAnchoredButton("Goat", edit_font, "btnPlayer", "btnGoat");
   editorUI.createAnchoredButton("Collision", edit_font, "btnGoat",
-                                "btnCollision", RIGHT);
+                                "btnCollision");
   editorUI.createAnchoredButton("Explosive", edit_font, "btnCollision",
-                                "btnExplosive", RIGHT);
+                                "btnExplosive");
   editorUI.createAnchoredButton("<", edit_font, "btnExplosive",
-                                "left_bottom_toggle", RIGHT);
+                                "left_bottom_toggle");
+
+  editorUI.addElement(std::make_shared<Button>(
+      566, 728, ">", "right_bottom_toggle", edit_font));
+  editorUI.createAnchoredButton("Undo", edit_font, "right_bottom_toggle",
+                                "btnUndo");
+  editorUI.createAnchoredButton("Clear", edit_font, "btnUndo", "btnClear");
+  editorUI.createAnchoredButton("Save", edit_font, "btnClear", "btnSave");
+  editorUI.createAnchoredButton("Save as", edit_font, "btnSave", "btnSaveAs");
+  editorUI.createAnchoredButton("Load", edit_font, "btnSaveAs", "btnLoad");
+  editorUI.createAnchoredButton("Grid", edit_font, "btnLoad", "btnGrid");
+  editorUI.createAnchoredButton("Play", edit_font, "btnGrid", "btnPlay");
 
   editorUI.addElement(
-      new Button(566, 728, ">", "right_bottom_toggle", edit_font));
-  editorUI.createAnchoredButton("Undo", edit_font, "right_bottom_toggle",
-                                "btnUndo", LEFT);
-  editorUI.createAnchoredButton("Clear", edit_font, "btnUndo", "btnClear",
-                                LEFT);
-  editorUI.createAnchoredButton("Save", edit_font, "btnClear", "btnSave", LEFT);
-  editorUI.createAnchoredButton("Save as", edit_font, "btnSave", "btnSaveAs",
-                                LEFT);
-  editorUI.createAnchoredButton("Load", edit_font, "btnSaveAs", "btnLoad",
-                                LEFT);
-  editorUI.createAnchoredButton("Grid", edit_font, "btnLoad", "btnGrid", LEFT);
-  editorUI.createAnchoredButton("Play", edit_font, "btnGrid", "btnPlay", LEFT);
+      std::make_shared<Button>(882, 0, ">", "right_top_toggle", edit_font));
+  editorUI.addElement(
+      std::make_shared<Button>(898 + 13, 0, "Help", "btnHelp", edit_font));
+  editorUI.createAnchoredButton("Back", edit_font, "btnHelp", "btnBack");
 
-  editorUI.addElement(new Button(882, 0, ">", "right_top_toggle", edit_font));
-  editorUI.addElement(new Button(898 + 13, 0, "Help", "btnHelp", edit_font));
-  editorUI.createAnchoredButton("Back", edit_font, "btnHelp", "btnBack", LEFT);
-
-  editorUI.addElement(new CheckBox(0, 60, "Block affects character",
-                                   "chkBlockAffectsChar", edit_font));
+  editorUI.addElement(std::make_shared<CheckBox>(
+      0, 60, "Block affects character", "chkBlockAffectsChar", edit_font));
   editorUI.createAnchoredButton("<", edit_font, "chkBlockAffectsChar",
-                                "left_top_toggle", RIGHT);
+                                "left_top_toggle");
 
-  editorUI.addElement(new Button(0, 100, "", "explosive_up", nullptr));
+  editorUI.addElement(
+      std::make_shared<Button>(0, 100, "", "explosive_up", nullptr));
   editorUI.getElementById("explosive_up")->setImage(image_box[5]);
   editorUI.getElementById("explosive_up")->setPadding(2, 2);
 
-  editorUI.addElement(new Button(38, 100, "", "explosive_right", nullptr));
+  editorUI.addElement(
+      std::make_shared<Button>(38, 100, "", "explosive_right", nullptr));
   editorUI.getElementById("explosive_right")->setImage(image_box[5]);
   editorUI.getElementById("explosive_right")->setBitmapRotationAngle(PI / 2);
   editorUI.getElementById("explosive_right")->setPadding(2, 2);
 
-  editorUI.addElement(new Button(76, 100, "", "explosive_down", nullptr));
+  editorUI.addElement(
+      std::make_shared<Button>(76, 100, "", "explosive_down", nullptr));
   editorUI.getElementById("explosive_down")->setImage(image_box[5]);
   editorUI.getElementById("explosive_down")->setBitmapRotationAngle(PI);
   editorUI.getElementById("explosive_down")->setPadding(2, 2);
 
-  editorUI.addElement(new Button(114, 100, "", "explosive_left", nullptr));
+  editorUI.addElement(
+      std::make_shared<Button>(114, 100, "", "explosive_left", nullptr));
   editorUI.getElementById("explosive_left")->setImage(image_box[5]);
   editorUI.getElementById("explosive_left")->setBitmapRotationAngle(PI * 3 / 2);
   editorUI.getElementById("explosive_left")->setPadding(2, 2);
 
-  editorUI.addElement(new Button(152, 100, "", "explosive_circle", nullptr));
+  editorUI.addElement(
+      std::make_shared<Button>(152, 100, "", "explosive_circle", nullptr));
   editorUI.getElementById("explosive_circle")->setImage(image_box[4]);
   editorUI.getElementById("explosive_circle")->setPadding(2, 2);
 

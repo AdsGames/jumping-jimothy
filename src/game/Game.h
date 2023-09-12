@@ -43,8 +43,7 @@ class Game : public State {
                           float y,
                           float velX,
                           float velY,
-                          ALLEGRO_BITMAP*,
-                          bool bodyType);
+                          ALLEGRO_BITMAP*);
   Box* create_explosive_box(float, float, int, bool);
   Box* create_static_box(float x, float y, ALLEGRO_BITMAP*);
   Box* create_collision_box(float x, float y, float, float);
@@ -53,8 +52,8 @@ class Game : public State {
   Character* create_character(float x, float y);
 
   // Our character and goat
-  Goat* gameGoat;
-  Character* gameCharacter;
+  Goat* gameGoat{nullptr};
+  Character* gameCharacter{nullptr};
 
   // Game variables
   std::vector<Box*> gameBoxes;
@@ -65,18 +64,18 @@ class Game : public State {
 
   std::vector<std::string> help_text;
 
-  ALLEGRO_FONT* game_font;
-  ALLEGRO_FONT* help_font;
-  ALLEGRO_FONT* edit_font;
+  ALLEGRO_FONT* game_font{nullptr};
+  ALLEGRO_FONT* help_font{nullptr};
+  ALLEGRO_FONT* edit_font{nullptr};
 
   // Bitmaps
-  ALLEGRO_BITMAP* box;
-  ALLEGRO_BITMAP* box_repel;
-  ALLEGRO_BITMAP* box_repel_direction;
-  ALLEGRO_BITMAP* character;
-  ALLEGRO_BITMAP* goat_map;
-  ALLEGRO_BITMAP* play;
-  ALLEGRO_BITMAP* pause;
+  ALLEGRO_BITMAP* box{nullptr};
+  ALLEGRO_BITMAP* box_repel{nullptr};
+  ALLEGRO_BITMAP* box_repel_direction{nullptr};
+  ALLEGRO_BITMAP* character{nullptr};
+  ALLEGRO_BITMAP* goat_map{nullptr};
+  ALLEGRO_BITMAP* play{nullptr};
+  ALLEGRO_BITMAP* pause{nullptr};
 
   ALLEGRO_BITMAP* new_dynamic_tile[100];
 
@@ -86,10 +85,10 @@ class Game : public State {
   Sound toggle_off;
   Sound toggle_on;
   Sound death;
-  Button* testing_back_button;
+  Button* testing_back_button{nullptr};
 
   // Box 2d game world
-  World* world;
+  World* world{nullptr};
 };
 
 #endif  // GAME_H

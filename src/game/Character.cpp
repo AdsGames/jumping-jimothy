@@ -1,7 +1,7 @@
 #include "Character.h"
 
-#include <box2d/box2d.h>
 #include <allegro5/allegro_primitives.h>
+#include <box2d/box2d.h>
 
 #include "Box.h"
 #include "Sensor.h"
@@ -14,16 +14,7 @@ Character::Character(const float x,
                      const float y,
                      ALLEGRO_BITMAP* image,
                      b2World* world)
-    : Box(x, y, 0.8, 2.5, world) {
-  timer_sound_delay = 0;
-  timer_jump_delay = 0;
-  counter_sensor_contact = 0;
-  velocity_old = 0;
-  tick = 0;
-  frame = 0;
-  landed = true;
-
-  direction = false;
+    : Box(x, y, 0.8f, 2.5f, world) {
   color = al_map_rgb(0, 0, 255);
 
   // Modify body
@@ -32,7 +23,7 @@ Character::Character(const float x,
   body->SetFixedRotation(true);
 
   // Create sensor
-  sensor_box = new Sensor(x, y - 0.55f, getWidth() * 0.4f, 0.6f);
+  sensor_box = std::make_unique<Sensor>(x, y - 0.55f, getWidth() * 0.4f, 0.6f);
   sensor_box->init(world, getBody());
 
   // Image
@@ -42,20 +33,9 @@ Character::Character(const float x,
   land.load_wav("assets/sfx/land.wav");
 
   // Slice character images up
-  for (int i = 0; i < 15; i++)
+  for (int i = 0; i < 15; i++) {
     sprites[i] = al_create_sub_bitmap(sprite, i * 32, 0, 32, 64);
-}
-
-// Destructor
-Character::~Character() {
-  // Remove body
-
-  delete sensor_box;
-
-  // Remove sprite as it was created here
-  // if (sprite) {
-  // al_destroy_bitmap(sprite);
-  //}
+  }
 }
 
 // Get sensor body
@@ -67,13 +47,15 @@ void Character::update(b2World* world) {
   // Instead of 1000 checks to the sensor box, we will do precisely one.
   bool sensor_colliding = sensor_box->isColliding();
 
-  if (sensor_colliding)
+  if (sensor_colliding) {
     counter_sensor_contact++;
-  else
+  } else {
     counter_sensor_contact = 0;
+  }
 
-  if (counter_sensor_contact > 25)
+  if (counter_sensor_contact > 25) {
     landed = true;
+  }
 
   if ((body->GetLinearVelocity().y >= -0.01f &&
        body->GetLinearVelocity().y <= 0.01f) &&
@@ -106,8 +88,9 @@ void Character::update(b2World* world) {
     frame++;
     tick = 0;
   }
-  if (frame == 14)
+  if (frame == 14) {
     frame = 0;
+  }
 
   // Position of body
   b2Vec2 position = body->GetPosition();
@@ -125,25 +108,27 @@ void Character::update(b2World* world) {
   // Max air velocity
   const float x_velocity_air_max = 4.0f;
 
-  if (ActionBinder::actionHeld(ACTION_LEFT)) {
+  if (ActionBinder::actionHeld(Action::LEFT)) {
     direction = false;
-    if (sensor_colliding)
+    if (sensor_colliding) {
       body->SetLinearVelocity(b2Vec2(-x_velocity_ground, yVel));
-    else if (getBody()->GetLinearVelocity().x > -x_velocity_air_max)
+    } else if (getBody()->GetLinearVelocity().x > -x_velocity_air_max) {
       body->ApplyLinearImpulse(b2Vec2(-x_velocity_air, 0), position, true);
-  } else if (ActionBinder::actionHeld(ACTION_RIGHT)) {
+    }
+  } else if (ActionBinder::actionHeld(Action::RIGHT)) {
     direction = true;
-    if (sensor_colliding)
+    if (sensor_colliding) {
       body->SetLinearVelocity(b2Vec2(x_velocity_ground, yVel));
-    else if (getBody()->GetLinearVelocity().x < x_velocity_air_max)
+    } else if (getBody()->GetLinearVelocity().x < x_velocity_air_max) {
       body->ApplyLinearImpulse(b2Vec2(x_velocity_air, 0), position, true);
+    }
   } else if (sensor_colliding) {
     body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
   }
 
   // Jumping Jimothy
   timer_jump_delay++;
-  if (ActionBinder::actionBegun(ACTION_A) && sensor_colliding &&
+  if (ActionBinder::actionBegun(Action::A) && sensor_colliding &&
       body->GetLinearVelocity().y < 0.1f && landed) {
     if (timer_jump_delay > 20) {
       timer_jump_delay = 0;
@@ -158,15 +143,17 @@ void Character::update(b2World* world) {
   timer_sound_delay++;
 
   // Fixed Danny's poop code by getting rid if it =)
-  if (sensor_colliding)
+  if (sensor_colliding) {
     color = al_map_rgb(50, 100, 255);
-  else
+  } else {
     color = al_map_rgb(0, 0, 255);
+  }
 }
 
 void Character::draw() {
   // Transform for draw
-  ALLEGRO_TRANSFORM trans, prevTrans;
+  ALLEGRO_TRANSFORM trans;
+  ALLEGRO_TRANSFORM prevTrans;
 
   // back up the current transform
   al_copy_transform(&prevTrans, al_get_current_transform());
@@ -190,21 +177,23 @@ void Character::draw() {
   const int y_offset = -13;
 
   if (direction) {
-    if (body->GetLinearVelocity().Length() > 0.1f)
+    if (body->GetLinearVelocity().Length() > 0.1f) {
       al_draw_bitmap(sprites[frame], -(getWidth() / 2) * 20 + x_offset,
                      (-(getHeight() / 2) * 20) + y_offset, 0);
-    else
+    } else {
       al_draw_bitmap(sprites[14], -(getWidth() / 2) * 20 + x_offset,
                      (-(getHeight() / 2) * 20) + y_offset, 0);
+    }
   } else {
-    if (body->GetLinearVelocity().Length() > 0.1f)
+    if (body->GetLinearVelocity().Length() > 0.1f) {
       al_draw_bitmap(sprites[frame], -(getWidth() / 2) * 20 + x_offset,
                      (-(getHeight() / 2) * 20) + y_offset,
                      ALLEGRO_FLIP_HORIZONTAL);
-    else
+    } else {
       al_draw_bitmap(sprites[14], -(getWidth() / 2) * 20 + x_offset,
                      (-(getHeight() / 2) * 20) + y_offset,
                      ALLEGRO_FLIP_HORIZONTAL);
+    }
   }
 
   // restore the old transform

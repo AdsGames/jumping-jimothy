@@ -11,58 +11,46 @@
 
 #include <vector>
 
-#define BINDING_NONE -1
+const int BINDING_NONE = -1;
 
-enum actions {
-  ACTION_NONE,
-  ACTION_LEFT,
-  ACTION_RIGHT,
-  ACTION_UP,
-  ACTION_DOWN,
-  ACTION_A,
-  ACTION_B,
-  ACTION_SELECT
-};
+enum class Action { NONE, LEFT, RIGHT, UP, DOWN, A, B, SELECT };
 
-enum types { TYPE_KEY, TYPE_JOY_STICK, TYPE_JOY_BUTTON };
+enum class ActionType { NONE, KEY, JOY_STICK, JOY_BUTTON };
 
 class Binding {
  public:
-  Binding(int action, int type, int code) {
-    this->action = action;
-    this->type = type;
-    this->code = code;
-  }
+  Binding(Action action, ActionType type, int code)
+      : action(action), type(type), code(code) {}
 
-  Binding() : Binding(BINDING_NONE, BINDING_NONE, BINDING_NONE) {}
-  virtual ~Binding() {}
+  Binding() : Binding(Action::NONE, ActionType::NONE, BINDING_NONE) {}
+  virtual ~Binding() = default;
 
-  int getType() { return type; }
-  int getCode() { return code; }
-  int getAction() { return action; }
+  Action getAction() const { return action; }
+  ActionType getType() const { return type; }
+  int getCode() const { return code; }
 
  private:
-  int type;
+  Action action;
+  ActionType type;
   int code;
-  int action;
 };
 
 class ActionBinder {
  public:
-  ActionBinder(){};
-  virtual ~ActionBinder(){};
+  ActionBinder() = default;
+  virtual ~ActionBinder() = default;
 
-  static bool actionBegun(const int action);
-  static bool actionEnded(const int action) { return false; };
-  static bool actionHeld(const int action);
+  static bool actionBegun(const Action action);
+  static bool actionEnded(const Action action) { return false; };
+  static bool actionHeld(const Action action);
 
-  static void addBinding(int action, int type, int code);
+  static void addBinding(Action action, ActionType type, int code);
 
   static void setDefaults();
 
  private:
   static std::vector<Binding*> bindings;
-  static std::vector<Binding*> findBindings(const int action);
+  static std::vector<Binding*> findBindings(const Action action);
 };
 
 #endif  // ACTIONBINDER_H

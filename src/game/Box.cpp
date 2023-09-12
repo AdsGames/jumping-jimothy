@@ -10,23 +10,7 @@
 
 // Construct
 Box::Box() {
-  // Nullify sprite
-  sprite = nullptr;
-
-  orientation = 0;
-
-  isPaused = true;
-
-  paused_velocity = b2Vec2(0, 0);
-  paused_angular_velocity = 0.0f;
-
   color = al_map_rgb(0, 0, 0);
-
-  body = nullptr;
-
-  initial_angle = 0.0f;
-  initial_position = b2Vec2(0, 0);
-  initial_size = b2Vec2(0, 0);
 }
 
 // Detailed constructor
@@ -35,9 +19,8 @@ Box::Box(const float x,
          const float width,
          const float height,
          b2World* world)
-    : Box() {
-  initial_position = b2Vec2(x, y);
-  initial_size = b2Vec2(width, height);
+    : initial_position{b2Vec2(x, y)}, initial_size{b2Vec2(width, height)} {
+  color = al_map_rgb(0, 0, 0);
   createBody(world);
 }
 
@@ -119,33 +102,36 @@ void Box::setPaused(const bool pause) {
 }
 
 // Get x position
-float Box::getX() {
-  if (body)
+float Box::getX() const {
+  if (body) {
     return body->GetPosition().x;
+  }
   return initial_position.x;
 }
 
 // Get y position
-float Box::getY() {
-  if (body)
+float Box::getY() const {
+  if (body) {
     return body->GetPosition().y;
+  }
   return initial_position.y;
 }
 
 // Get width
-float Box::getWidth() {
+float Box::getWidth() const {
   return initial_size.x;
 }
 
 // Get height
-float Box::getHeight() {
+float Box::getHeight() const {
   return initial_size.y;
 }
 
 // Get angle
-float Box::getAngle() {
-  if (body)
+float Box::getAngle() const {
+  if (body) {
     return body->GetAngle();
+  }
   return 0.0f;
 }
 
@@ -160,6 +146,6 @@ bool Box::isPausable() {
 }
 
 // Set orientation
-void Box::setOrientation(const int orientation) {
-  this->orientation = orientation;
+void Box::setOrientation(const int o) {
+  this->orientation = o;
 }

@@ -47,19 +47,19 @@ class Box {
   void setImage(ALLEGRO_BITMAP* image);
 
   // Get X
-  float getX();
+  float getX() const;
 
   // Get Y
-  float getY();
+  float getY() const;
 
   // Get width
-  float getWidth();
+  float getWidth() const;
 
   // Get height
-  float getHeight();
+  float getHeight() const;
 
   // Get angle
-  float getAngle();
+  float getAngle() const;
 
   // Get physics body
   b2Body* getBody();
@@ -75,35 +75,34 @@ class Box {
 
  protected:
   // Orientation
-  int orientation;
+  int orientation{0};
 
   // Colour
   ALLEGRO_COLOR color;
 
   // Sprite for box
-  ALLEGRO_BITMAP* sprite;
+  ALLEGRO_BITMAP* sprite{nullptr};
 
   // Pointer to physics body
-  b2Body* body;
+  b2Body* body{nullptr};
 
   // Paused state
-  bool isPaused;
+  bool isPaused{true};
 
   // Snapshot of velocity
-  b2Vec2 paused_velocity;
+  b2Vec2 paused_velocity{b2Vec2(0, 0)};
 
   // Snapshot of angular velocity
-  float paused_angular_velocity;
+  float paused_angular_velocity{0.0f};
 
- protected:
   // Position
-  b2Vec2 initial_position;
+  b2Vec2 initial_position{b2Vec2(0, 0)};
 
   // Size
-  b2Vec2 initial_size;
+  b2Vec2 initial_size{b2Vec2(0, 0)};
 
   // Angle
-  float initial_angle;
+  float initial_angle{0.0f};
 };
 
 #endif  // BOX_H

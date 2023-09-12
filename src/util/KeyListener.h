@@ -28,7 +28,6 @@ class KeyListener {
   static int lastKeyPressed;
   static int lastKeyReleased;
 
- protected:
  private:
   static bool lastTicksKey[ALLEGRO_KEY_MAX];
 };

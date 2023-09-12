@@ -26,9 +26,6 @@ class Sensor : public Box {
   void init(b2World*, b2Body*);
   void createBody(int bodyType, bool fixedRotation);
 
-  // Destructor
-  virtual ~Sensor(){};
-
   // Colliding with something
   bool isColliding();
 
@@ -39,13 +36,15 @@ class Sensor : public Box {
   bool isCollidingWithBody(b2Body*);
 
   // Update sensor
-  virtual void update(b2World* world) override{};
+  void update(b2World* world) override{
+      // Unused
+  };
 
   // Draw sensor
-  virtual void draw() override;
+  void draw() override;
 
   // Get type
-  virtual int getType() override;
+  int getType() override;
 
  private:
   b2World* gameWorld;

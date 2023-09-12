@@ -11,32 +11,8 @@
 
 // Defaults
 UIElement::UIElement() {
-  this->alpha = 255;
-  this->background_colour = al_map_rgba(200, 200, 200, alpha);
-  this->text_colour = al_map_rgba(0, 0, 0, alpha);
-  this->x = 0;
-  this->y = 0;
-  this->width = 10;
-  this->height = 10;
-  this->text = "";
-  this->UIElement_font = nullptr;
-  this->visible = true;
-  this->disabled = false;
-  this->image = nullptr;
-  this->padding_x = 10;
-  this->padding_y = 10;
-  this->id = "";
-  this->visible_background = true;
-  this->justification = 0;
-  this->border_thickness = 2;
-  this->transparent_cell_fill = false;
-  this->hover_effect = true;
-  this->bitmap_rotation_angle = 0;
-  this->focused = false;
-
-  this->onClick = nullptr;
-  this->onHover = nullptr;
-  this->onFocus = nullptr;
+  this->background_colour = al_map_rgba(200, 200, 200, this->alpha);
+  this->text_colour = al_map_rgba(0, 0, 0, this->alpha);
 }
 
 UIElement::UIElement(const int x,
@@ -58,22 +34,22 @@ UIElement::~UIElement() {
 }
 
 // Get X
-int UIElement::getX() {
+int UIElement::getX() const {
   return x;
 }
 
 // Get y
-int UIElement::getY() {
+int UIElement::getY() const {
   return y;
 }
 
 // Get text of element
-std::string UIElement::getText() {
+std::string UIElement::getText() const {
   return text;
 }
 
 // Get element ID
-std::string UIElement::getId() {
+std::string UIElement::getId() const {
   return id;
 }
 
@@ -90,7 +66,7 @@ void UIElement::show() {
 }
 
 // Is visible or not
-bool UIElement::isVisible() {
+bool UIElement::isVisible() const {
   return visible;
 }
 
@@ -111,7 +87,7 @@ void UIElement::enable() {
 }
 
 // Is enabled or not
-bool UIElement::isEnabled() {
+bool UIElement::isEnabled() const {
   return !disabled;
 }
 
@@ -158,12 +134,12 @@ void UIElement::setTextJustification(const int justification) {
 }
 
 // Element width
-int UIElement::getWidth() {
+int UIElement::getWidth() const {
   return width + padding_x * 2;
 }
 
 // Element height
-int UIElement::getHeight() {
+int UIElement::getHeight() const {
   return height + padding_y * 2;
 }
 
@@ -269,7 +245,7 @@ bool UIElement::hover() {
 bool UIElement::clicked() {
   return !disabled &&
          ((hover() && tools::mouse_clicked(MouseListener::MOUSE_LEFT)) ||
-          (focused && (ActionBinder::actionBegun(ACTION_SELECT))));
+          (focused && (ActionBinder::actionBegun(Action::SELECT))));
 }
 
 // Set callbacks

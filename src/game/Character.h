@@ -11,6 +11,9 @@
 #include "../util/Sound.h"
 #include "Sensor.h"
 
+#include <array>
+#include <memory>
+
 class b2World;
 class b2Body;
 class b2BodyDef;
@@ -28,51 +31,48 @@ class Character : public Box {
             ALLEGRO_BITMAP* image,
             b2World* world);
 
-  // Destructor
-  virtual ~Character();
-
   // Draw
-  virtual void draw() override;
+  void draw() override;
 
   // Update
-  virtual void update(b2World* world) override;
+  void update(b2World* world) override;
 
   // Get sensor body
   b2Body* getSensorBody();
 
   // Get type
-  virtual int getType() override;
+  int getType() override;
 
  private:
   // Animation tick
-  int tick;
+  int tick{0};
 
   // Animation frame
-  int frame;
+  int frame{0};
 
   // Sound delay for jump sound
-  int timer_sound_delay;
+  int timer_sound_delay{0};
 
   // Jump delay
-  int timer_jump_delay;
+  int timer_jump_delay{0};
 
   // Sensing counter
-  int counter_sensor_contact;
+  int counter_sensor_contact{0};
 
   // Landed on ground
-  bool landed;
+  bool landed{false};
 
   // Previous velocity
-  float velocity_old;
+  float velocity_old{0};
 
   // Direciton
-  bool direction;
+  bool direction{false};
 
   // Sensor for collisions
-  Sensor* sensor_box;
+  std::unique_ptr<Sensor> sensor_box;
 
   // Character images
-  ALLEGRO_BITMAP* sprites[NUM_CHARACTER_IMAGES];
+  std::array<ALLEGRO_BITMAP*, NUM_CHARACTER_IMAGES> sprites{nullptr};
 
   // Sample for jump
   Sound jump;

@@ -16,8 +16,6 @@ World::World(b2Vec2 gravity,
   bWorld = new b2World(this->gravity);
 }
 
-World::~World() {}
-
 // Get b2 world
 b2World* World::getB2World() {
   return this->bWorld;

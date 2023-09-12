@@ -26,16 +26,16 @@ class UIElement {
   virtual ~UIElement();
 
   // Get X
-  int getX();
+  int getX() const;
 
   // Get y
-  int getY();
+  int getY() const;
 
   // Get text of element
-  std::string getText();
+  std::string getText() const;
 
   // Get element ID
-  std::string getId();
+  std::string getId() const;
 
   // Hide element
   void hide();
@@ -44,7 +44,7 @@ class UIElement {
   void show();
 
   // Is visible or not
-  bool isVisible();
+  bool isVisible() const;
 
   // Set visibility
   void setVisibility(bool visible);
@@ -56,7 +56,7 @@ class UIElement {
   void enable();
 
   // Is enabled or not
-  bool isEnabled();
+  bool isEnabled() const;
 
   // Set transparency level
   void setTransparency(const float alpha);
@@ -83,10 +83,10 @@ class UIElement {
   void setTextJustification(const int justification);
 
   // Element width
-  int getWidth();
+  int getWidth() const;
 
   // Element height
-  int getHeight();
+  int getHeight() const;
 
   // Set padding
   void setPadding(const int x, const int y);
@@ -155,13 +155,16 @@ class UIElement {
 
  protected:
   // Position
-  int x, y;
+  int x{0};
+  int y{0};
 
   // Dimensions of element
-  int width, height;
+  int width{10};
+  int height{10};
 
   // Padding
-  int padding_x, padding_y;
+  int padding_x{10};
+  int padding_y{10};
 
   // Text colour
   ALLEGRO_COLOR text_colour;
@@ -170,56 +173,56 @@ class UIElement {
   ALLEGRO_COLOR background_colour;
 
   // Fill with transparency
-  bool transparent_cell_fill;
+  bool transparent_cell_fill{false};
 
   // Primitive alpha
-  float alpha;
+  float alpha{255};
 
   // Background visibility
-  bool visible_background;
+  bool visible_background{true};
 
   // Thickness of border
-  int border_thickness;
+  int border_thickness{2};
 
   // Visibility status
-  bool visible;
+  bool visible{true};
 
   // Disabled status
-  bool disabled;
+  bool disabled{false};
 
   // Hover effect enabled
-  bool hover_effect;
+  bool hover_effect{true};
 
   // Image rotation
-  float bitmap_rotation_angle;
+  float bitmap_rotation_angle{0};
 
   // Optional image
-  ALLEGRO_BITMAP* image;
+  ALLEGRO_BITMAP* image{nullptr};
 
   // Font
-  ALLEGRO_FONT* UIElement_font;
+  ALLEGRO_FONT* UIElement_font{nullptr};
 
   // Text of element
-  std::string text;
+  std::string text{""};
 
   // Justification of text
-  int justification;
+  int justification{0};
 
   // Unique id of element
-  std::string id;
+  std::string id{""};
 
   // Focused
-  bool focused;
+  bool focused{false};
 
   // Function pointers
   // On hover
-  void* onHover;
+  void* onHover{nullptr};
 
   // On focus
-  void* onFocus;
+  void* onFocus{nullptr};
 
   // On click
-  void* onClick;
+  void* onClick{nullptr};
 };
 
 #endif  // UIELEMENT_H

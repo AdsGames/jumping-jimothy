@@ -31,6 +31,3 @@ void Label::draw() {
                  y + padding_y, 0, text.c_str());
   }
 }
-
-// Update label
-void Label::update() {}

@@ -17,20 +17,19 @@
 class Options : public State {
  public:
   Options();
-  virtual ~Options();
+  ~Options() override;
 
-  void draw();
-  void update(StateEngine* engine);
+  void draw() override;
+  void update(StateEngine* engine) override;
   void updateUI();
 
- protected:
  private:
-  ALLEGRO_FONT* options_font = nullptr;
-  ALLEGRO_FONT* title_font = nullptr;
+  ALLEGRO_FONT* options_font{nullptr};
+  ALLEGRO_FONT* title_font{nullptr};
 
   UIHandler OptionsUI;
 
-  int temp_graphics_mode = 0;
+  int temp_graphics_mode{0};
 };
 
 #endif  // OPTIONS_H

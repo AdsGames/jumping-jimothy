@@ -8,6 +8,7 @@
 #ifndef UIHANDLER_H
 #define UIHANDLER_H
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -16,8 +17,8 @@
 class UIHandler {
  public:
   UIHandler();
-  virtual ~UIHandler();
-  void addElement(UIElement* newUIElement);
+
+  void addElement(std::shared_ptr<UIElement> elem);
   void draw();
   void update();
   bool isHovering();
@@ -27,30 +28,25 @@ class UIHandler {
                     std::string text,
                     std::string id,
                     ALLEGRO_FONT* font);
+
   void createAnchoredButton(std::string text,
                             ALLEGRO_FONT* font,
                             std::string anchorID,
-                            std::string id,
-                            const bool justification);
-
-  [
-      [deprecated("Look up using getElementById instead using "
-                  "getElementByText")]] UIElement*
-  getElementByText(std::string text);
+                            std::string id);
 
   UIElement* getElementById(std::string id);
 
-  std::vector<UIElement*> getUIElements();
+  std::vector<std::shared_ptr<UIElement>> getUIElements();
 
  private:
   // Container for UI Elements
-  std::vector<UIElement*> ui_elements;
+  std::vector<std::shared_ptr<UIElement>> ui_elements{};
 
   // Cursor image
-  ALLEGRO_BITMAP* ui_cursor;
+  ALLEGRO_BITMAP* ui_cursor{nullptr};
 
   // Element in focus
-  int focusedElement;
+  int focusedElement{-1};
 };
 
 #endif  // UIHANDLER_H

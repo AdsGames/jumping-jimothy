@@ -7,6 +7,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/bitmap.h>
 #include <fstream>
+#include <iostream>
 
 #include "../util/ActionBinder.h"
 #include "../util/KeyListener.h"
@@ -31,11 +32,6 @@
 
 // Constructor
 Game::Game() {
-  // Set to null
-  world = nullptr;
-  gameCharacter = nullptr;
-  gameGoat = nullptr;
-
   // Load fonts
   game_font = al_load_ttf_font("assets/fonts/munro.ttf", 30, 0);
   help_font = al_load_ttf_font("assets/fonts/munro.ttf", 50, 0);
@@ -45,9 +41,6 @@ Game::Game() {
   toggle_on.load_wav("assets/sfx/toggle_on.wav");
   toggle_off.load_wav("assets/sfx/toggle_off.wav");
   death.load_wav("assets/sfx/death.wav");
-
-  // Back button
-  testing_back_button = nullptr;
 
   // Create back button if needed
   if (Config::getBooleanValue("EditingLevel")) {
@@ -85,7 +78,7 @@ Game::~Game() {
 
 // Creates box in world
 Goat* Game::create_goat(float x, float y) {
-  Goat* newGoat = new Goat(x, y, gameCharacter, goat_map, world->getB2World());
+  auto newGoat = new Goat(x, y, gameCharacter, goat_map, world->getB2World());
   if (gameCharacter == nullptr)
     tools::log_message(
         "WARNING: gameCharacter is nullptr when creating a goat.");
@@ -98,10 +91,8 @@ Box* Game::create_dynamic_box(float x,
                               float y,
                               float velX,
                               float velY,
-                              ALLEGRO_BITMAP* image,
-                              bool newBodyType) {
-  DynamicBox* newDynamicBox =
-      new DynamicBox(x, y, velX, velY, world->getB2World());
+                              ALLEGRO_BITMAP* image) {
+  auto newDynamicBox = new DynamicBox(x, y, velX, velY, world->getB2World());
   newDynamicBox->setImage(image);
   gameBoxes.push_back(newDynamicBox);
   return newDynamicBox;
@@ -109,14 +100,14 @@ Box* Game::create_dynamic_box(float x,
 
 // Creates box in world
 Box* Game::create_static_box(float x, float y, ALLEGRO_BITMAP* image) {
-  StaticBox* newStaticBox = new StaticBox(x, y);
+  auto newStaticBox = new StaticBox(x, y);
   newStaticBox->setImage(image);
   gameBoxes.push_back(newStaticBox);
   return newStaticBox;
 }
 
 Box* Game::create_collision_box(float x, float y, float width, float height) {
-  CollisionBox* newCollisionBox =
+  auto newCollisionBox =
       new CollisionBox(x, y, width, height, world->getB2World());
   gameBoxes.push_back(newCollisionBox);
   return newCollisionBox;
@@ -126,7 +117,7 @@ Box* Game::create_explosive_box(float x,
                                 float y,
                                 int orientation,
                                 bool affectsCharacter) {
-  Explosive* newExplosive =
+  auto newExplosive =
       new Explosive(x, y, affectsCharacter, gameCharacter, world->getB2World());
   ALLEGRO_BITMAP* newBoxImage;
 
@@ -148,7 +139,7 @@ Box* Game::create_explosive_box(float x,
 
 // Add character to world
 Character* Game::create_character(float x, float y) {
-  Character* newCharacter = new Character(x, y, character, world->getB2World());
+  auto newCharacter = new Character(x, y, character, world->getB2World());
   gameBoxes.push_back(newCharacter);
   return newCharacter;
 }
@@ -180,132 +171,139 @@ void Game::load_world(std::string file) {
   root_node = doc.first_node("data");
 
   // Make sure node exists
-  if (root_node != 0) {
-    // Iteratboole over objects
-    for (rapidxml::xml_node<>* object_node = root_node->first_node("Object");
-         object_node; object_node = object_node->next_sibling()) {
-      // All the variables we will load
-      std::string type = "Static";
-      std::string x = "0";
-      std::string y = "0";
-      std::string orientation = "0";
-      // std::string bodytype = "Static";
-      std::string width = "0";
-      std::string height = "0";
-      std::string affect_character = "false";
-      int orientation_array[4];
-      Box* newBox = nullptr;
+  if (root_node == nullptr) {
+    return;
+  }
 
-      // Load data
-      if (object_node->first_attribute("type") != 0)
-        type = object_node->first_attribute("type")->value();
-      if (object_node->first_node("x") != 0)
-        x = object_node->first_node("x")->value();
-      if (object_node->first_node("y") != 0)
-        y = object_node->first_node("y")->value();
-      if (object_node->first_node("width") != 0)
-        width = object_node->first_node("width")->value();
-      if (object_node->first_node("height") != 0)
-        height = object_node->first_node("height")->value();
-      // if( object_node -> first_node("bodytype") != 0)
-      //   bodytype = object_node -> first_node("bodytype") -> value();
-      if (object_node->first_node("orientation") != 0)
-        orientation = object_node->first_node("orientation")->value();
-      if (object_node->first_node("affect_character") != 0)
-        affect_character = object_node->first_node("affect_character")->value();
+  // Iteratboole over objects
+  for (rapidxml::xml_node<>* object_node = root_node->first_node("Object");
+       object_node; object_node = object_node->next_sibling("Object")) {
+    // All the variables we will load
+    std::string type = "Static";
+    std::string x = "0";
+    std::string y = "0";
+    std::string orientation = "0";
+    std::string width = "0";
+    std::string height = "0";
+    std::string affect_character = "false";
+    int orientation_array[4];
+    Box* newBox = nullptr;
 
-      if (type == "Static") {
-        std::vector<std::string> splits = tools::split_string(orientation, ' ');
-        if (splits.size() == 4) {
-          for (int k = 0; k < 4; k++) {
-            orientation_array[k] = (tools::stringToInt(splits.at(k)));
-          }
-        }
-
-        // Combine images
-        const int tmp_width = al_get_bitmap_width(new_dynamic_tile[0]) * 2;
-        const int tmp_height = al_get_bitmap_height(new_dynamic_tile[0]) * 2;
-
-        ALLEGRO_BITMAP* combined_image =
-            al_create_bitmap(tmp_width, tmp_height);
-        al_set_target_bitmap(combined_image);
-
-        // Offsets from subtile
-        for (int t = 0; t < 4; t++) {
-          const int off_x = (t == 1 || t == 3) ? 16 : 0;
-          const int off_y = (t >= 2) ? 16 : 0;
-
-          al_draw_bitmap(new_dynamic_tile[orientation_array[t]], off_x, off_y,
-                         0);
-        }
-
-        newBox = create_static_box(tools::stringToFloat(x),
-                                   tools::stringToFloat(y), combined_image);
-
-        static_count++;
-      } else if (type == "Dynamic") {
-        newBox =
-            create_dynamic_box(tools::stringToFloat(x), tools::stringToFloat(y),
-                               tools::stringToFloat(width),
-                               tools::stringToFloat(height), box, true);
-        dynamic_count++;
-      } else if (type == "Collision") {
-        newBox = create_collision_box(
-            tools::stringToFloat(x), tools::stringToFloat(y),
-            tools::stringToFloat(width), tools::stringToFloat(height));
-      } else if (type == "Character") {
-        gameCharacter = create_character(tools::stringToFloat(x),
-                                         tools::stringToFloat(y) - 1.6);
-        character_count++;
-      } else if (type == "Finish") {
-        gameGoat =
-            create_goat(tools::stringToFloat(x), tools::stringToFloat(y) - 1);
-        if (gameCharacter == nullptr)
-          tools::log_message(
-              "WARNING: Game: goat is passed nullptr gameCharacter");
-        goat_count++;
-      } else if (type == "Explosive") {
-        newBox = create_explosive_box(
-            tools::stringToFloat(x), tools::stringToFloat(y),
-            tools::stringToFloat(orientation), (affect_character == "true"));
-      }
+    // Load data
+    if (object_node->first_attribute("type") != nullptr) {
+      type = object_node->first_attribute("type")->value();
+    }
+    if (object_node->first_node("x") != nullptr) {
+      x = object_node->first_node("x")->value();
+    }
+    if (object_node->first_node("y") != nullptr) {
+      y = object_node->first_node("y")->value();
+    }
+    if (object_node->first_node("width") != nullptr) {
+      width = object_node->first_node("width")->value();
+    }
+    if (object_node->first_node("height") != nullptr) {
+      height = object_node->first_node("height")->value();
+    }
+    if (object_node->first_node("orientation") != nullptr) {
+      orientation = object_node->first_node("orientation")->value();
+    }
+    if (object_node->first_node("affect_character") != nullptr) {
+      affect_character = object_node->first_node("affect_character")->value();
     }
 
-    // Get game help text
-    rapidxml::xml_node<>* help_node = root_node->first_node("Help");
-    help_text.clear();
-
-    if (help_node) {
-      std::vector<std::string> temp_help =
-          tools::split_string(help_node->value(), '%');
-      for (unsigned int i = 0; i < temp_help.size(); i++) {
-        help_text.push_back(temp_help.at(i));
+    if (type == "Static") {
+      std::vector<std::string> splits = tools::split_string(orientation, ' ');
+      if (splits.size() == 4) {
+        for (int k = 0; k < 4; k++) {
+          orientation_array[k] = (tools::stringToInt(splits.at(k)));
+        }
       }
+
+      // Combine images
+      const int tmp_width = al_get_bitmap_width(new_dynamic_tile[0]) * 2;
+      const int tmp_height = al_get_bitmap_height(new_dynamic_tile[0]) * 2;
+
+      ALLEGRO_BITMAP* combined_image = al_create_bitmap(tmp_width, tmp_height);
+      al_set_target_bitmap(combined_image);
+
+      // Offsets from subtile
+      for (int t = 0; t < 4; t++) {
+        const int off_x = (t == 1 || t == 3) ? 16 : 0;
+        const int off_y = (t >= 2) ? 16 : 0;
+
+        al_draw_bitmap(new_dynamic_tile[orientation_array[t]], off_x, off_y, 0);
+      }
+
+      create_static_box(tools::stringToFloat(x), tools::stringToFloat(y),
+                        combined_image);
+
+      static_count++;
+    } else if (type == "Dynamic") {
+      create_dynamic_box(tools::stringToFloat(x), tools::stringToFloat(y),
+                         tools::stringToFloat(width),
+                         tools::stringToFloat(height), box);
+      dynamic_count++;
+    } else if (type == "Collision") {
+      create_collision_box(tools::stringToFloat(x), tools::stringToFloat(y),
+                           tools::stringToFloat(width),
+                           tools::stringToFloat(height));
+    } else if (type == "Character") {
+      gameCharacter = create_character(tools::stringToFloat(x),
+                                       tools::stringToFloat(y) - 1.6f);
+      character_count++;
+    } else if (type == "Finish") {
+      gameGoat =
+          create_goat(tools::stringToFloat(x), tools::stringToFloat(y) - 1.0f);
+      if (gameCharacter == nullptr) {
+        tools::log_message(
+            "WARNING: Game: goat is passed nullptr gameCharacter");
+      }
+      goat_count++;
+    } else if (type == "Explosive") {
+      create_explosive_box(tools::stringToFloat(x), tools::stringToFloat(y),
+                           tools::stringToFloat(orientation),
+                           (affect_character == "true"));
+    }
+  }
+
+  // Get game help text
+  rapidxml::xml_node<>* help_node = root_node->first_node("Help");
+  help_text.clear();
+
+  if (help_node != nullptr) {
+    std::vector<std::string> temp_help =
+        tools::split_string(help_node->value(), '%');
+    for (unsigned int i = 0; i < temp_help.size(); i++) {
+      help_text.push_back(temp_help.at(i));
     }
   }
 
   // Nice debug code
   // Allan's big ol' debug lines, they're pretty tho
   tools::log_message("===============================");
-  // std::cout << "Level loaded: " << static_count << " static, " <<
-  // dynamic_count << " dynamic, " << character_count << " character(s), " <<
-  // goat_count << " goat(s)\n";
-  if (character_count > 1)
+
+  if (character_count > 1) {
     tools::log_message(
         "  WARNING: Multiple characters loaded, will have undesired "
         "results...");
-  if (goat_count > 1)
+  }
+  if (goat_count > 1) {
     tools::log_message(
         "  WARNING: Multiple goats loaded, will have undesired results...");
-  if (character_count == 0)
+  }
+  if (character_count == 0) {
     tools::log_message(
         "  WARNING: No character loaded, will have undesired results...");
-  if (goat_count == 0)
+  }
+  if (goat_count == 0) {
     tools::log_message(
         "  WARNING: No goat loaded, will have undesired results...");
+  }
   if (static_count == 0 && dynamic_count == 0 && goat_count == 0 &&
-      character_count == 0)
+      character_count == 0) {
     tools::log_message("  WARNING: No data loaded!");
+  }
   tools::log_message("===============================");
 }
 
@@ -344,11 +342,14 @@ void Game::reset() {
       gameBoxes[i]->setPaused(true);
     }
   }
-  if (gameGoat == nullptr)
-    tools::log_message("WARNING: Goat is undeclared in game");
 
-  if (gameCharacter == nullptr)
+  if (gameGoat == nullptr) {
+    tools::log_message("WARNING: Goat is undeclared in game");
+  }
+
+  if (gameCharacter == nullptr) {
     tools::log_message("WARNING: gameCharacter is undeclared in game");
+  }
 }
 
 // Load all sprites for in game
@@ -365,10 +366,12 @@ void Game::load_sprites() {
   ALLEGRO_BITMAP* image_box =
       tools::load_bitmap_ex("assets/images/StaticBlock.png");
 
-  for (int i = 0; i < 3; i++)
-    for (int t = 0; t < 5; t++)
+  for (int i = 0; i < 3; i++) {
+    for (int t = 0; t < 5; t++) {
       new_dynamic_tile[i + t * 3] =
           al_create_sub_bitmap(image_box, i * 16, t * 16, 16, 16);
+    }
+  }
 }
 
 // Update game logic
@@ -414,8 +417,9 @@ void Game::update(StateEngine* engine) {
   world->step();
 
   // Update character
-  for (unsigned int i = 0; i < gameBoxes.size(); i++)
-    gameBoxes[i]->update(world->getB2World());
+  for (auto& gameBox : gameBoxes) {
+    gameBox->update(world->getB2World());
+  }
 
   if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]) {
     setNextState(engine, StateEngine::STATE_MENU);
@@ -438,18 +442,19 @@ void Game::update(StateEngine* engine) {
   // Previous level
   if (KeyListener::keyPressed[ALLEGRO_KEY_X]) {
     tools::log_message("Level " + tools::toString(level) + " skipped back.");
-    if (level > 1)
+    if (level > 1) {
       level--;
+    }
     reset();
   }
 
   // Pause/Play time
-  if (ActionBinder::actionBegun(ACTION_B)) {
+  if (ActionBinder::actionBegun(Action::B)) {
     static_mode = !static_mode;
 
-    for (unsigned int i = 0; i < gameBoxes.size(); i++) {
-      if (gameBoxes[i]->isPausable()) {
-        gameBoxes[i]->setPaused(static_mode);
+    for (auto& gameBox : gameBoxes) {
+      if (gameBox->isPausable()) {
+        gameBox->setPaused(static_mode);
       }
     }
 
@@ -500,13 +505,15 @@ void Game::draw() {
   }
 
   // Pause/play buttons
-  if (testing_back_button)
+  if (testing_back_button) {
     testing_back_button->draw();
+  }
 
-  if (static_mode)
+  if (static_mode) {
     al_draw_bitmap(pause, 10, 10, 0);
-  else
+  } else {
     al_draw_bitmap(play, 10, 10, 0);
+  }
 
   al_draw_textf(game_font, al_map_rgb(255, 255, 255), 1010, 15, 2, "Level %i",
                 level);

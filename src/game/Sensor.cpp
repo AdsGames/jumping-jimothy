@@ -1,8 +1,8 @@
 #include "Sensor.h"
 
-#include <box2d/box2d.h>
 #include <allegro5/allegro_color.h>
 #include <allegro5/allegro_primitives.h>
+#include <box2d/box2d.h>
 
 #include "../util/Globals.h"
 #include "../util/KeyListener.h"
@@ -28,7 +28,7 @@ void Sensor::init(b2World* world, b2Body* parentBody) {
 
   // Feet anchor
   b2Vec2 FeetAnchor(0, 0);
-  b2WeldJointDef* jointDef = new b2WeldJointDef();
+  auto jointDef = new b2WeldJointDef();
   jointDef->Initialize(getBody(), parentBody, FeetAnchor);
   jointDef->collideConnected = false;
   jointDef->referenceAngle = 0;

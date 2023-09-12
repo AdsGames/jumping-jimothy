@@ -12,16 +12,12 @@ class World {
         int32 positionIterations,
         bool doSleep);
 
-  // Destructor
-  virtual ~World();
-
   // Get b2 world
   b2World* getB2World();
 
   // Step
   void step();
 
- protected:
  private:
   // Box 2d game world
   b2World* bWorld;
