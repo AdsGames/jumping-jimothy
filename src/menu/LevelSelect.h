@@ -16,20 +16,20 @@
 class LevelSelect : public State {
  public:
   LevelSelect();
-  virtual ~LevelSelect();
+  ~LevelSelect() override;
 
-  void draw();
-  void update(StateEngine* engine);
+  void draw() override;
+  void update(StateEngine* engine) override;
 
  private:
   void createLevelButton(int, int, int);
 
-  ALLEGRO_FONT* levelselect_font;
-  ALLEGRO_FONT* levelselect_font_large;
+  ALLEGRO_FONT* levelselect_font{nullptr};
+  ALLEGRO_FONT* levelselect_font_large{nullptr};
 
-  UIHandler levelSelectUI;
+  UIHandler levelSelectUI{};
 
-  bool reset_game_menu;
+  bool reset_game_menu{false};
 };
 
 #endif  // LEVELSELECT_H

@@ -3,11 +3,7 @@
 #include <allegro5/allegro_primitives.h>
 
 // Default constructor
-CheckBox::CheckBox() : UIElement() {
-  this->checkbox_size = 20;
-  this->checked = false;
-  this->toggled = false;
-}
+CheckBox::CheckBox() : UIElement() {}
 
 // Detailed constructor
 CheckBox::CheckBox(const int x,
@@ -16,10 +12,6 @@ CheckBox::CheckBox(const int x,
                    std::string id,
                    ALLEGRO_FONT* font)
     : UIElement(x, y, text, id, font) {
-  this->checkbox_size = 20;
-  this->checked = false;
-  this->toggled = false;
-
   if (font != nullptr) {
     this->width =
         al_get_text_width(font, text.c_str()) + checkbox_size + padding_x;
@@ -81,7 +73,7 @@ void CheckBox::draw() {
 }
 
 // Get checked state
-bool CheckBox::getChecked() {
+bool CheckBox::getChecked() const {
   return checked;
 }
 
@@ -91,7 +83,7 @@ void CheckBox::setChecked(const bool checked) {
 }
 
 // Set checked state
-bool CheckBox::getToggled() {
+bool CheckBox::getToggled() const {
   return toggled;
 }
 

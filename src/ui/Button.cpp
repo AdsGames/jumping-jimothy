@@ -18,8 +18,9 @@ Button::Button(const int x,
 // Draw button
 void Button::draw() {
   // Do not draw if not visible
-  if (!visible)
+  if (!visible) {
     return;
+  }
 
   // Red value
   const int new_r = tools::negative_clamp_thing(
@@ -71,12 +72,13 @@ void Button::draw() {
 
   // Image if avail
   if (image != nullptr) {
-    if (bitmap_rotation_angle > 0.0f)
+    if (bitmap_rotation_angle > 0.0f) {
       al_draw_rotated_bitmap(
           image, width / 2, width / 2, x + padding_x + width / 2,
           y + padding_y + height / 2, bitmap_rotation_angle, 0);
-    else
+    } else {
       al_draw_bitmap(image, x + padding_x, y + padding_y, 0);
+    }
   }
 }
 
@@ -84,6 +86,3 @@ void Button::draw() {
 bool Button::canFocus() {
   return true;
 }
-
-// Update button
-void Button::update() {}

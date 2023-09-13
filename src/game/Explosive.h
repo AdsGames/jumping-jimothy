@@ -20,14 +20,11 @@ class Explosive : public Box {
             Character* character,
             b2World* world);
 
-  // Destructor
-  virtual ~Explosive(){};
-
   // Draw
-  virtual void draw() override;
+  void draw() override;
 
   // Update
-  virtual void update(b2World* world) override;
+  void update(b2World* world) override;
 
   // Apply impulse
   void applyBlastImpulse(b2Body* body,
@@ -36,23 +33,23 @@ class Explosive : public Box {
                          const float blastPower);
 
   // Get type
-  virtual int getType() override;
+  int getType() override;
 
  private:
   // Pointer to character
-  Character* gameCharacter;
+  Character* gameCharacter{nullptr};
 
   // Blast radius
-  int blastRadius;
+  float blastRadius{10.0f};
 
   // Power of explosive
-  int blastPower;
+  float blastPower{1000.0f};
 
   // Can affect character or not
-  bool affect_character;
+  bool affect_character{false};
 
   // Is currently exploding
-  bool is_exploding;
+  bool is_exploding{false};
 };
 
 #endif  // EXPLOSIVE_H

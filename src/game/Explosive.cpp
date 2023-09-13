@@ -11,13 +11,9 @@ Explosive::Explosive(const float x,
                      const bool affectCharacter,
                      Character* character,
                      b2World* world)
-    : Box(x, y, 1.55f, 1.55f, world) {
-  blastRadius = 10;
-  blastPower = 1000;
-
-  gameCharacter = character;
-  affect_character = affectCharacter;
-
+    : Box(x, y, 1.55f, 1.55f, world),
+      gameCharacter(character),
+      affect_character(affectCharacter) {
   color = al_map_rgb(255, 0, 0);
 
   // Modify body
@@ -30,7 +26,7 @@ class MyQueryCallback : public b2QueryCallback {
   // All bodies found by query
   std::vector<b2Body*> foundBodies;
 
-  bool ReportFixture(b2Fixture* fixture) {
+  bool ReportFixture(b2Fixture* fixture) override {
     foundBodies.push_back(fixture->GetBody());
     return true;  // keep going to find all fixtures in the query area
   }
@@ -52,19 +48,16 @@ void Explosive::update(b2World* world) {
   is_exploding = false;
 
   // Check which of these have their center of mass within the blast radius
-  for (unsigned int i = 0; i < queryCallback.foundBodies.size(); i++) {
-    // Temp body
-    b2Body* newBody = queryCallback.foundBodies.at(i);
-
+  for (auto& body : queryCallback.foundBodies) {
     // Center of world
-    b2Vec2 bodyCom = newBody->GetWorldCenter();
+    b2Vec2 bodyCom = body->GetWorldCenter();
 
     // Ignore bodies outside the blast range
     if ((bodyCom - center).Length() >= blastRadius)
       continue;
     else {
       applyBlastImpulse(
-          newBody, center, bodyCom,
+          body, center, bodyCom,
           blastPower * 0.05f);  // scale blast power to roughly match results of
                                 // other methods at 32 rays
     }
@@ -82,8 +75,9 @@ void Explosive::applyBlastImpulse(b2Body* newBody,
   if (newBody == body || newBody->GetType() != b2_dynamicBody ||
       ((newBody == gameCharacter->getBody() ||
         newBody == gameCharacter->getSensorBody()) &&
-       !affect_character))
+       !affect_character)) {
     return;
+  }
 
   // Blast direction
   b2Vec2 blastDir = applyPoint - blastCenter;
@@ -109,7 +103,7 @@ void Explosive::applyBlastImpulse(b2Body* newBody,
     newBody->ApplyLinearImpulse(impulseMag * blastDir, applyPoint, true);
   } else {
     // Magnitude
-    const float magnitude = 0.2;
+    const float magnitude = 0.2f;
 
     // Direction of impulse
     b2Vec2 new_direction;
@@ -129,7 +123,8 @@ void Explosive::applyBlastImpulse(b2Body* newBody,
 
 void Explosive::draw() {
   // Transform for drawing
-  ALLEGRO_TRANSFORM trans, prevTrans;
+  ALLEGRO_TRANSFORM trans;
+  ALLEGRO_TRANSFORM prevTrans;
 
   // back up the current transform
   al_copy_transform(&prevTrans, al_get_current_transform());

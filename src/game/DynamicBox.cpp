@@ -34,7 +34,7 @@ void DynamicBox::draw() {
   al_use_transform(&trans);
 
   // Velocity colouring
-  b2Vec2 draw_velocity = b2Vec2(0, 0);
+  auto draw_velocity = b2Vec2(0, 0);
 
   if (isPaused)
     paused_velocity = b2Vec2(paused_velocity.x, paused_velocity.y);

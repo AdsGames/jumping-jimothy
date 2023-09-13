@@ -9,14 +9,9 @@ Goat::Goat(const float x,
            Character* character,
            ALLEGRO_BITMAP* image,
            b2World* world)
-    : Box(x, y, 1.6, 3.2, world) {
-  goat_frame = 0;
-  goat_tick = 0;
-
+    : Box(x, y, 1.6f, 3.2f, world), gameCharacter(character) {
   // Modify body
   body->SetType(b2_dynamicBody);
-
-  gameCharacter = character;
 
   // Image
   setImage(image);
@@ -27,13 +22,8 @@ Goat::Goat(const float x,
   }
 
   // Sensor
-  sensor_box = new Sensor(x, y, getWidth(), getHeight());
+  sensor_box = std::make_unique<Sensor>(x, y, getWidth(), getHeight());
   sensor_box->init(world, getBody());
-}
-
-// Destructor
-Goat::~Goat() {
-  delete sensor_box;
 }
 
 // Draw box to screen
@@ -44,11 +34,13 @@ void Goat::draw() {
     goat_frame++;
     goat_tick = 0;
   }
-  if (goat_frame > 14)
+  if (goat_frame > 14) {
     goat_frame = 0;
+  }
 
   // Draw transform
-  ALLEGRO_TRANSFORM trans, prevTrans;
+  ALLEGRO_TRANSFORM trans;
+  ALLEGRO_TRANSFORM prevTrans;
 
   // back up the current transform
   al_copy_transform(&prevTrans, al_get_current_transform());
@@ -68,11 +60,8 @@ void Goat::draw() {
 }
 
 bool Goat::getWinCondition() {
-  if (gameCharacter &&
-      sensor_box->isCollidingWithBody(gameCharacter->getBody())) {
-    return true;
-  }
-  return false;
+  return gameCharacter &&
+         sensor_box->isCollidingWithBody(gameCharacter->getBody());
 }
 
 // Get box type

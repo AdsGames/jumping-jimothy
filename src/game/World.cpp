@@ -1,7 +1,7 @@
 #include "World.h"
 
 World::World(b2Vec2 gravity,
-             float32 timeStep,
+             float timeStep,
              int32 velocityIterations,
              int32 positionIterations,
              bool doSleep) {
@@ -15,8 +15,6 @@ World::World(b2Vec2 gravity,
   // Create world
   bWorld = new b2World(this->gravity);
 }
-
-World::~World() {}
 
 // Get b2 world
 b2World* World::getB2World() {

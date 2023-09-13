@@ -86,12 +86,12 @@ int DisplayMode::getTranslationY() {
 
 // Gets scale width
 int DisplayMode::getScaleWidth() {
-  return scale_x * draw_w;
+  return static_cast<int>(scale_x * draw_w);
 }
 
 // Gets scale height
 int DisplayMode::getScaleHeight() {
-  return scale_y * draw_h;
+  return static_cast<int>(scale_y * draw_h);
 }
 
 // Gets scale x

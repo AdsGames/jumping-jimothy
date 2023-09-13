@@ -18,12 +18,13 @@ class Button : public UIElement {
          std::string text,
          std::string id,
          ALLEGRO_FONT* font);
-  inline virtual ~Button(){};
 
-  virtual void draw() override;
-  virtual void update() override;
+  void draw() override;
+  void update() override{
+      // Do nothing
+  };
 
-  virtual bool canFocus() override;
+  bool canFocus() override;
 };
 
 #endif  // BUTTON_H

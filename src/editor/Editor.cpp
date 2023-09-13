@@ -44,20 +44,20 @@ Editor::Editor() {
   modified = false;
 
   gui_mode = true;
-  help_menu = tools::load_bitmap_ex("images/help_menu.png");
+  help_menu = tools::load_bitmap_ex("assets/images/help_menu.png");
 
   for (int i = 0; i < 6; i++)
     image_box[i] = nullptr;
 
   // Load box image
-  image_box[0] = tools::load_bitmap_ex("images/box_green.png");
-  image_box[1] = tools::load_bitmap_ex("images/StaticBlock.png");
-  image_box[2] = tools::load_bitmap_ex("images/character.png");
-  image_box[3] = tools::load_bitmap_ex("images/goat.png");
-  image_box[4] = tools::load_bitmap_ex("images/box_repel.png");
-  image_box[5] = tools::load_bitmap_ex("images/box_repel_direction.png");
+  image_box[0] = tools::load_bitmap_ex("assets/images/box_green.png");
+  image_box[1] = tools::load_bitmap_ex("assets/images/StaticBlock.png");
+  image_box[2] = tools::load_bitmap_ex("assets/images/character.png");
+  image_box[3] = tools::load_bitmap_ex("assets/images/goat.png");
+  image_box[4] = tools::load_bitmap_ex("assets/images/box_repel.png");
+  image_box[5] = tools::load_bitmap_ex("assets/images/box_repel_direction.png");
 
-  cursor = tools::load_bitmap_ex("images/cursor.png");
+  cursor = tools::load_bitmap_ex("assets/images/cursor.png");
 
   for (int i = 0; i < 5; i++)
     for (int t = 0; t < 15; t++)
@@ -84,7 +84,7 @@ Editor::Editor() {
 
   srand(time(nullptr));
 
-  edit_font = al_load_ttf_font("fonts/fantasque.ttf", 18, 0);
+  edit_font = al_load_ttf_font("assets/fonts/fantasque.ttf", 18, 0);
 
   if (!edit_font)
     tools::abort_on_error("Could not load 'fantasque.ttf'.\n", "Font Error");
@@ -93,63 +93,65 @@ Editor::Editor() {
   editorBoxes.clear();
 
   // buttons
-  editorUI.addElement(new Button(0, 728, "Dynamic", "btnDynamic", edit_font));
-  editorUI.createAnchoredButton("Static", edit_font, "btnDynamic", "btnStatic",
-                                RIGHT);
-  editorUI.createAnchoredButton("Player", edit_font, "btnStatic", "btnPlayer",
-                                RIGHT);
-  editorUI.createAnchoredButton("Goat", edit_font, "btnPlayer", "btnGoat",
-                                RIGHT);
+  editorUI.addElement(
+      std::make_shared<Button>(0, 728, "Dynamic", "btnDynamic", edit_font));
+  editorUI.createAnchoredButton("Static", edit_font, "btnDynamic", "btnStatic");
+  editorUI.createAnchoredButton("Player", edit_font, "btnStatic", "btnPlayer");
+  editorUI.createAnchoredButton("Goat", edit_font, "btnPlayer", "btnGoat");
   editorUI.createAnchoredButton("Collision", edit_font, "btnGoat",
-                                "btnCollision", RIGHT);
+                                "btnCollision");
   editorUI.createAnchoredButton("Explosive", edit_font, "btnCollision",
-                                "btnExplosive", RIGHT);
+                                "btnExplosive");
   editorUI.createAnchoredButton("<", edit_font, "btnExplosive",
-                                "left_bottom_toggle", RIGHT);
+                                "left_bottom_toggle");
+
+  editorUI.addElement(std::make_shared<Button>(
+      566, 728, ">", "right_bottom_toggle", edit_font));
+  editorUI.createAnchoredButton("Undo", edit_font, "right_bottom_toggle",
+                                "btnUndo");
+  editorUI.createAnchoredButton("Clear", edit_font, "btnUndo", "btnClear");
+  editorUI.createAnchoredButton("Save", edit_font, "btnClear", "btnSave");
+  editorUI.createAnchoredButton("Save as", edit_font, "btnSave", "btnSaveAs");
+  editorUI.createAnchoredButton("Load", edit_font, "btnSaveAs", "btnLoad");
+  editorUI.createAnchoredButton("Grid", edit_font, "btnLoad", "btnGrid");
+  editorUI.createAnchoredButton("Play", edit_font, "btnGrid", "btnPlay");
 
   editorUI.addElement(
-      new Button(566, 728, ">", "right_bottom_toggle", edit_font));
-  editorUI.createAnchoredButton("Undo", edit_font, "right_bottom_toggle",
-                                "btnUndo", LEFT);
-  editorUI.createAnchoredButton("Clear", edit_font, "btnUndo", "btnClear",
-                                LEFT);
-  editorUI.createAnchoredButton("Save", edit_font, "btnClear", "btnSave", LEFT);
-  editorUI.createAnchoredButton("Save as", edit_font, "btnSave", "btnSaveAs",
-                                LEFT);
-  editorUI.createAnchoredButton("Load", edit_font, "btnSaveAs", "btnLoad",
-                                LEFT);
-  editorUI.createAnchoredButton("Grid", edit_font, "btnLoad", "btnGrid", LEFT);
-  editorUI.createAnchoredButton("Play", edit_font, "btnGrid", "btnPlay", LEFT);
+      std::make_shared<Button>(882, 0, ">", "right_top_toggle", edit_font));
+  editorUI.addElement(
+      std::make_shared<Button>(898 + 13, 0, "Help", "btnHelp", edit_font));
+  editorUI.createAnchoredButton("Back", edit_font, "btnHelp", "btnBack");
 
-  editorUI.addElement(new Button(882, 0, ">", "right_top_toggle", edit_font));
-  editorUI.addElement(new Button(898 + 13, 0, "Help", "btnHelp", edit_font));
-  editorUI.createAnchoredButton("Back", edit_font, "btnHelp", "btnBack", LEFT);
-
-  editorUI.addElement(new CheckBox(0, 60, "Block affects character",
-                                   "chkBlockAffectsChar", edit_font));
+  editorUI.addElement(std::make_shared<CheckBox>(
+      0, 60, "Block affects character", "chkBlockAffectsChar", edit_font));
   editorUI.createAnchoredButton("<", edit_font, "chkBlockAffectsChar",
-                                "left_top_toggle", RIGHT);
+                                "left_top_toggle");
 
-  editorUI.addElement(new Button(0, 100, "", "explosive_up", nullptr));
+  editorUI.addElement(
+      std::make_shared<Button>(0, 100, "", "explosive_up", nullptr));
   editorUI.getElementById("explosive_up")->setImage(image_box[5]);
   editorUI.getElementById("explosive_up")->setPadding(2, 2);
 
-  editorUI.addElement(new Button(38, 100, "", "explosive_right", nullptr));
+  editorUI.addElement(
+      std::make_shared<Button>(38, 100, "", "explosive_right", nullptr));
   editorUI.getElementById("explosive_right")->setImage(image_box[5]);
   editorUI.getElementById("explosive_right")->setBitmapRotationAngle(PI / 2);
   editorUI.getElementById("explosive_right")->setPadding(2, 2);
 
-  editorUI.addElement(new Button(76, 100, "", "explosive_down", nullptr));
+  editorUI.addElement(
+      std::make_shared<Button>(76, 100, "", "explosive_down", nullptr));
   editorUI.getElementById("explosive_down")->setImage(image_box[5]);
   editorUI.getElementById("explosive_down")->setBitmapRotationAngle(PI);
   editorUI.getElementById("explosive_down")->setPadding(2, 2);
 
-  editorUI.addElement(new Button(114, 100, "", "explosive_left", nullptr));
+  editorUI.addElement(
+      std::make_shared<Button>(114, 100, "", "explosive_left", nullptr));
   editorUI.getElementById("explosive_left")->setImage(image_box[5]);
   editorUI.getElementById("explosive_left")->setBitmapRotationAngle(PI * 3 / 2);
   editorUI.getElementById("explosive_left")->setPadding(2, 2);
 
-  editorUI.addElement(new Button(152, 100, "", "explosive_circle", nullptr));
+  editorUI.addElement(
+      std::make_shared<Button>(152, 100, "", "explosive_circle", nullptr));
   editorUI.getElementById("explosive_circle")->setImage(image_box[4]);
   editorUI.getElementById("explosive_circle")->setPadding(2, 2);
 
@@ -358,8 +360,9 @@ void Editor::update(StateEngine* engine) {
 
       // Has it been saved already?
       if (!is_saved) {
-        myChooser = al_create_native_file_dialog(
-            "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
+        myChooser =
+            al_create_native_file_dialog("assets/data/", "Save Level",
+                                         "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
 
         // Display open dialog
         if (al_show_native_file_dialog(nullptr, myChooser)) {
@@ -389,7 +392,7 @@ void Editor::update(StateEngine* engine) {
       ALLEGRO_FILECHOOSER* myChooser;
 
       myChooser = al_create_native_file_dialog(
-          "data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
+          "assets/data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
 
       // Display open dialog
       const char* temp_name = nullptr;
@@ -424,8 +427,8 @@ void Editor::update(StateEngine* engine) {
   // Load map
   if (editorUI.getElementById("btnLoad")->clicked() ||
       KeyListener::keyPressed[ALLEGRO_KEY_A]) {
-    ALLEGRO_FILECHOOSER* myChooser =
-        al_create_native_file_dialog("data/", "Load Level", "*.xml;*.*", 0);
+    ALLEGRO_FILECHOOSER* myChooser = al_create_native_file_dialog(
+        "assets/data/", "Load Level", "*.xml;*.*", 0);
 
     const char* temp_name;
 

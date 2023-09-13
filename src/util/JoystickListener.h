@@ -15,9 +15,6 @@
 
 class JoystickListener {
  public:
-  JoystickListener(){};
-  virtual ~JoystickListener(){};
-
   void on_event(ALLEGRO_EVENT_TYPE event_type, const int keycode);
   void on_event(ALLEGRO_EVENT_TYPE event_type,
                 const int stick,
@@ -40,7 +37,6 @@ class JoystickListener {
   static bool stickMoved[JOY_MAX_STICK_BOOLEANS];
   static bool stickReleased[JOY_MAX_STICK_BOOLEANS];
 
- protected:
  private:
   static bool lastTicksButton[JOY_MAX_BUTTONS];
 

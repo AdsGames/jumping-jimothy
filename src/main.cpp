@@ -77,7 +77,7 @@ void setup() {
   al_reserve_samples(20);
 
   // Load config
-  Config::readFile("data/config.xml");
+  Config::readFile("assets/data/config.xml");
 
   // Set display mode to windowed
   DisplayMode::setActiveDisplay(&display);
@@ -260,7 +260,7 @@ int main() {
   }
 
   // Save settings
-  Config::writeFile("data/config.xml");
+  Config::writeFile("assets/data/config.xml");
 
   // Destory display
   MusicManager::destroy();

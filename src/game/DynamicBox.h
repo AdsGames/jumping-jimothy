@@ -20,22 +20,19 @@ class DynamicBox : public Box {
              const float velY,
              b2World* world);
 
-  // Destructor
-  virtual ~DynamicBox(){};
-
   // Draw
-  virtual void draw() override;
+  void draw() override;
 
   // Update
-  virtual void update(b2World* world) override{};
+  void update(b2World* world) override{
+      // Unused
+  };
 
   // Get type
-  virtual int getType() override;
+  int getType() override;
 
   // Is pausable
-  virtual bool isPausable() override;
-
- private:
+  bool isPausable() override;
 };
 
 #endif  // DYNAMICBOX_H

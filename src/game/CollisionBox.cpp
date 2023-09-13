@@ -19,7 +19,8 @@ CollisionBox::CollisionBox(const float x,
 void CollisionBox::draw() {
   if (KeyListener::key[ALLEGRO_KEY_G]) {
     // Draw transform
-    ALLEGRO_TRANSFORM trans, prevTrans;
+    ALLEGRO_TRANSFORM trans;
+    ALLEGRO_TRANSFORM prevTrans;
 
     // back up the current transform
     al_copy_transform(&prevTrans, al_get_current_transform());

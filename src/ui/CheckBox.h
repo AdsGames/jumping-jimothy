@@ -22,36 +22,33 @@ class CheckBox : public UIElement {
            std::string id,
            ALLEGRO_FONT* font);
 
-  // Dtor
-  virtual ~CheckBox(){};
-
   // Update
-  virtual void update() override;
+  void update() override;
 
   // Draw
-  virtual void draw() override;
+  void draw() override;
 
   // Check
-  bool getChecked();
+  bool getChecked() const;
 
   // Set checked
   void setChecked(const bool checked);
 
   // Get toggled
-  bool getToggled();
+  bool getToggled() const;
 
   // Enable focus
-  virtual bool canFocus() override;
+  bool canFocus() override;
 
  private:
   // Width of checkbox
-  int checkbox_size;
+  int checkbox_size{20};
 
   // Checked
-  bool checked;
+  bool checked{false};
 
   // Just toggled
-  bool toggled;
+  bool toggled{false};
 };
 
 #endif  // CHECKBOX_H

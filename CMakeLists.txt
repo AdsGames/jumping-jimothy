@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.11)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project (JumpingJimothy)
 
@@ -25,7 +26,7 @@ find_library(ALLEGRO_IMAGE_LIBRARY NAMES allegro_image REQUIRED)
 find_library(ALLEGRO_MAIN_LIBRARY NAMES allegro_main REQUIRED)
 find_library(ALLEGRO_PRIMITIVES_LIBRARY NAMES allegro_primitives REQUIRED)
 find_library(ALLEGRO_TTF_LIBRARY NAMES allegro_ttf REQUIRED)
-find_library(BOX2D_LIBRARY NAMES Box2D REQUIRED)
+find_library(BOX2D_LIBRARY NAMES box2d REQUIRED)
 
 # Link Libs
 target_link_libraries(${PROJECT_NAME} ${ALLEGRO_LIBRARY})
@@ -39,3 +40,5 @@ target_link_libraries(${PROJECT_NAME} ${ALLEGRO_MAIN_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${ALLEGRO_PRIMITIVES_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${ALLEGRO_TTF_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${BOX2D_LIBRARY})
+
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets/ DESTINATION ${CMAKE_BINARY_DIR}/build/assets/)

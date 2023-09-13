@@ -27,27 +27,27 @@ enum {
 class Menu : public State {
  public:
   Menu();
-  virtual ~Menu();
+  ~Menu() override;
 
-  void update(StateEngine* engine);
-  void draw();
+  void update(StateEngine* engine) override;
+  void draw() override;
 
  private:
   // Images
-  ALLEGRO_BITMAP* title;
-  ALLEGRO_BITMAP* title_overlay;
-  ALLEGRO_BITMAP* title_shine;
+  ALLEGRO_BITMAP* title{nullptr};
+  ALLEGRO_BITMAP* title_overlay{nullptr};
+  ALLEGRO_BITMAP* title_shine{nullptr};
 
-  ALLEGRO_BITMAP* logo;
+  ALLEGRO_BITMAP* logo{nullptr};
 
-  ALLEGRO_FONT* menu_font;
-  ALLEGRO_FONT* credits_font;
-  ALLEGRO_FONT* button_font;
+  ALLEGRO_FONT* menu_font{nullptr};
+  ALLEGRO_FONT* credits_font{nullptr};
+  ALLEGRO_FONT* button_font{nullptr};
 
   UIHandler menu_ui;
 
-  bool credits_menu;
-  int counter_title;
+  bool credits_menu{false};
+  int counter_title{0};
 };
 
 #endif  // MENU_H
