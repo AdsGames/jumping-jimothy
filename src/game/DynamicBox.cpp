@@ -10,7 +10,7 @@ DynamicBox::DynamicBox(const float x,
                        const float y,
                        const float velX,
                        const float velY,
-                       b2World* world)
+                       std::shared_ptr<b2World> world)
     : Box(x, y, 1.55f, 1.55f, world) {
   color = al_map_rgb(255, 0, 0);
 
@@ -22,7 +22,8 @@ DynamicBox::DynamicBox(const float x,
 // Draw box to screen
 void DynamicBox::draw() {
   // Allegro transform
-  ALLEGRO_TRANSFORM trans, prevTrans;
+  ALLEGRO_TRANSFORM trans;
+  ALLEGRO_TRANSFORM prevTrans;
 
   // back up the current transform
   al_copy_transform(&prevTrans, al_get_current_transform());

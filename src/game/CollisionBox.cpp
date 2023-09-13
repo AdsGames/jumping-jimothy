@@ -10,7 +10,7 @@ CollisionBox::CollisionBox(const float x,
                            const float y,
                            const float width,
                            const float height,
-                           b2World* world)
+                           std::shared_ptr<b2World> world)
     : Box(x, y, width, height, world) {
   // Modify body
   body->SetType(b2_kinematicBody);

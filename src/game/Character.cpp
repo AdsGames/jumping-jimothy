@@ -13,7 +13,7 @@
 Character::Character(const float x,
                      const float y,
                      ALLEGRO_BITMAP* image,
-                     b2World* world)
+                     std::shared_ptr<b2World> world)
     : Box(x, y, 0.8f, 2.5f, world) {
   color = al_map_rgb(0, 0, 255);
 
@@ -43,7 +43,7 @@ b2Body* Character::getSensorBody() {
   return sensor_box->getBody();
 }
 
-void Character::update(b2World* world) {
+void Character::update(std::shared_ptr<b2World> world) {
   // Instead of 1000 checks to the sensor box, we will do precisely one.
   bool sensor_colliding = sensor_box->isColliding();
 

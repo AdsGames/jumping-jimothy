@@ -10,6 +10,7 @@
 
 #include <allegro5/allegro.h>
 #include <box2d/box2d.h>
+#include <memory>
 
 class b2World;
 class b2Body;
@@ -26,19 +27,19 @@ class Box {
       const float y,
       const float width,
       const float height,
-      b2World* world);
+      std::shared_ptr<b2World> world);
 
   // Destructor
   virtual ~Box();
 
   // Create body
-  void createBody(b2World* world);
+  void createBody(std::shared_ptr<b2World> world);
 
   // Draw
   virtual void draw() = 0;
 
   // Update logic
-  virtual void update(b2World* world) = 0;
+  virtual void update(std::shared_ptr<b2World> world) = 0;
 
   // Get type
   virtual int getType() = 0;

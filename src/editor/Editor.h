@@ -40,17 +40,10 @@ class Editor : public State {
   virtual ~Editor();
 
   // Override parent
-  void update(StateEngine* engine);
-  void draw();
+  void update(StateEngine* engine) override;
+  void draw() override;
 
  private:
-  UIHandler editorUI;
-  // Images
-  ALLEGRO_BITMAP* image_box[6];
-  ALLEGRO_BITMAP* tiles[5][15];
-  ALLEGRO_BITMAP* help_menu;
-  ALLEGRO_BITMAP* cursor;
-
   // Functions
   void calculate_orientation_global();
 
@@ -66,36 +59,44 @@ class Editor : public State {
 
   void set_explosive_ui_status();
 
+  UIHandler editorUI;
+
+  // Images
+  ALLEGRO_BITMAP* image_box[6]{nullptr};
+  ALLEGRO_BITMAP* tiles[5][15]{nullptr};
+  ALLEGRO_BITMAP* help_menu{nullptr};
+  ALLEGRO_BITMAP* cursor{nullptr};
+
   // Tiles
   std::vector<editor_box> editorBoxes;
 
   // Map name
   std::string file_name;
 
-  bool gui_mode;
+  bool gui_mode{false};
   float box_1_x;
   float box_1_y;
 
   float box_2_x;
   float box_2_y;
 
-  bool is_dragging_box;
-  bool dialog_open;
+  bool is_dragging_box{false};
+  bool dialog_open{false};
 
   // Remember saves
-  bool is_saved;
-  bool display_help;
+  bool is_saved{false};
+  bool display_help{false};
 
   // Vars
-  bool grid_on;
+  bool grid_on{false};
 
-  int explosive_orientation;
+  int explosive_orientation{1};
 
-  int tile_type;
-  bool modified;
+  int tile_type{0};
+  bool modified{false};
 
   // The font
-  ALLEGRO_FONT* edit_font;
+  ALLEGRO_FONT* edit_font{nullptr};
 };
 
 #endif  // EDITOR_H

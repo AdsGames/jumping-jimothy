@@ -25,12 +25,11 @@ class Game : public State {
  public:
   // Construct / destruct
   Game();
-  ~Game();
+  ~Game() override;
 
   // Override parent
-  void update(StateEngine* engine);
-  void draw();
-  bool level_complete();
+  void update(StateEngine* engine) override;
+  void draw() override;
 
  private:
   // Functions

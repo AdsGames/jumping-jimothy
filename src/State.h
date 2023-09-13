@@ -10,8 +10,13 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include <memory>
+
 // Class
 class State;
+
+// Game states
+enum class ProgramState { EMPTY, EXIT, MENU, GAME, EDIT, LEVELSELECT, OPTIONS };
 
 /*****************
  * STATE ENGINE
@@ -25,34 +30,23 @@ class StateEngine {
   void draw();
 
   // Set next state
-  void setNextState(int newState);
+  void setNextState(ProgramState newState);
 
   // Get state id
-  int getStateId();
-
-  // Game states
-  enum programStates {
-    STATE_NULL,
-    STATE_EXIT,
-    STATE_MENU,
-    STATE_GAME,
-    STATE_EDIT,
-    STATE_LEVELSELECT,
-    STATE_OPTIONS
-  };
+  ProgramState getStateId() const;
 
  private:
   // Change state
   void changeState();
 
   // Current state object
-  State* currentState = nullptr;
+  std::unique_ptr<State> currentState{nullptr};
 
   // Next state
-  int nextState = STATE_NULL;
+  ProgramState nextState{ProgramState::EMPTY};
 
   // State id
-  int stateId = STATE_NULL;
+  ProgramState stateId{ProgramState::EMPTY};
 };
 
 /*********
@@ -61,7 +55,7 @@ class StateEngine {
 class State {
  public:
   // Virtual destructor
-  virtual ~State(){};
+  virtual ~State() = default;
 
   // Draw to screen
   virtual void draw() = 0;
@@ -70,7 +64,7 @@ class State {
   virtual void update(StateEngine* engine) = 0;
 
   // Change state
-  void setNextState(StateEngine* engine, int state);
+  void setNextState(StateEngine* engine, ProgramState state) const;
 };
 
 #endif  // STATE_H

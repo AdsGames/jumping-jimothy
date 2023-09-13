@@ -18,13 +18,13 @@ class CollisionBox : public Box {
                const float y,
                const float width,
                const float height,
-               b2World* world);
+               std::shared_ptr<b2World> world);
 
   // Draw
   void draw() override;
 
   // Update
-  void update(b2World* world) override{
+  void update(std::shared_ptr<b2World> world) override{
       // Unused
   };
 

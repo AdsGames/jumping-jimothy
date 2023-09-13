@@ -23,7 +23,7 @@ class Goat : public Box {
        const float y,
        Character* character,
        ALLEGRO_BITMAP* image,
-       b2World* world);
+       std::shared_ptr<b2World> world);
 
   // Draw
   void draw() override;
@@ -32,7 +32,7 @@ class Goat : public Box {
   bool getWinCondition();
 
   // Update logic
-  void update(b2World* world) override{
+  void update(std::shared_ptr<b2World> world) override{
       // Unused
   };
 

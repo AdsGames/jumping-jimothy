@@ -28,47 +28,42 @@ void StateEngine::update() {
 }
 
 // Set next state
-void StateEngine::setNextState(int newState) {
+void StateEngine::setNextState(ProgramState newState) {
   nextState = newState;
 }
 
 // Get state id
-int StateEngine::getStateId() {
+ProgramState StateEngine::getStateId() const {
   return stateId;
 }
 
 // Change game screen
 void StateEngine::changeState() {
   // If the state needs to be changed
-  if (nextState == STATE_NULL) {
+  if (nextState == ProgramState::EMPTY) {
     return;
-  }
-
-  // Delete the current state
-  if (currentState != nullptr) {
-    delete currentState;
   }
 
   // Change the state
   switch (nextState) {
-    case STATE_GAME:
-      currentState = new Game();
+    case ProgramState::GAME:
+      currentState = std::make_unique<Game>();
       tools::log_message("Switched state to game.");
       break;
-    case STATE_EDIT:
-      currentState = new Editor();
+    case ProgramState::EDIT:
+      currentState = std::make_unique<Editor>();
       tools::log_message("Switched state to editor.");
       break;
-    case STATE_MENU:
-      currentState = new Menu();
+    case ProgramState::MENU:
+      currentState = std::make_unique<Menu>();
       tools::log_message("Switched state to main menu.");
       break;
-    case STATE_LEVELSELECT:
-      currentState = new LevelSelect();
+    case ProgramState::LEVELSELECT:
+      currentState = std::make_unique<LevelSelect>();
       tools::log_message("Switched state to level select.");
       break;
-    case STATE_OPTIONS:
-      currentState = new Options();
+    case ProgramState::OPTIONS:
+      currentState = std::make_unique<Options>();
       tools::log_message("Switched state to options.");
       break;
     default:
@@ -80,7 +75,7 @@ void StateEngine::changeState() {
   stateId = nextState;
 
   // NULL the next state ID
-  nextState = STATE_NULL;
+  nextState = ProgramState::EMPTY;
 }
 
 /*********
@@ -88,6 +83,6 @@ void StateEngine::changeState() {
  *********/
 
 // Change state
-void State::setNextState(StateEngine* engine, int state) {
+void State::setNextState(StateEngine* engine, ProgramState state) const {
   engine->setNextState(state);
 }

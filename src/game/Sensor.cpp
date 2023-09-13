@@ -13,7 +13,7 @@ Sensor::Sensor(const float x,
                const float height)
     : Box(x, y, width, height, nullptr) {}
 
-void Sensor::init(b2World* world, b2Body* parentBody) {
+void Sensor::init(std::shared_ptr<b2World> world, b2Body* parentBody) {
   // Set world
   gameWorld = world;
 
@@ -84,19 +84,19 @@ void Sensor::createBody(int bodyType, bool fixedRotation) {
 
 bool Sensor::isColliding() {
   // Parse contacts
-  for (b2ContactEdge* contact = body->GetContactList(); contact;
-       contact = contact->next)
-    return true;
-  return false;
+  b2ContactEdge* contact = body->GetContactList();
+  return contact != nullptr;
 }
 
 bool Sensor::isCollidingWithDynamicBody() {
   // Parse contacts
   for (b2ContactEdge* contact = body->GetContactList(); contact;
        contact = contact->next) {
-    if (contact->other->GetType() == b2_dynamicBody)
+    if (contact->other->GetType() == b2_dynamicBody) {
       return true;
+    }
   }
+
   return false;
 }
 
@@ -113,7 +113,8 @@ bool Sensor::isCollidingWithBody(b2Body* newBody) {
 // Draw box to screen
 void Sensor::draw() {
   // Draw transform
-  ALLEGRO_TRANSFORM trans, prevTrans;
+  ALLEGRO_TRANSFORM trans;
+  ALLEGRO_TRANSFORM prevTrans;
 
   // back up the current transform
   al_copy_transform(&prevTrans, al_get_current_transform());

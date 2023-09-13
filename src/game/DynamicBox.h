@@ -18,13 +18,13 @@ class DynamicBox : public Box {
              const float y,
              const float velX,
              const float velY,
-             b2World* world);
+             std::shared_ptr<b2World> world);
 
   // Draw
   void draw() override;
 
   // Update
-  void update(b2World* world) override{
+  void update(std::shared_ptr<b2World> world) override{
       // Unused
   };
 

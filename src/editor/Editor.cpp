@@ -30,24 +30,9 @@
 
 // Init editor
 Editor::Editor() {
-  is_dragging_box = false;
-  dialog_open = false;
-
-  // Remember saves
-  is_saved = false;
-  display_help = false;
-
   MusicManager::menu_music->stop();
 
-  editorUI = UIHandler();
-
-  modified = false;
-
-  gui_mode = true;
   help_menu = tools::load_bitmap_ex("assets/images/help_menu.png");
-
-  for (int i = 0; i < 6; i++)
-    image_box[i] = nullptr;
 
   // Load box image
   image_box[0] = tools::load_bitmap_ex("assets/images/box_green.png");
@@ -59,15 +44,19 @@ Editor::Editor() {
 
   cursor = tools::load_bitmap_ex("assets/images/cursor.png");
 
-  for (int i = 0; i < 5; i++)
-    for (int t = 0; t < 15; t++)
+  for (int i = 0; i < 5; i++) {
+    for (int t = 0; t < 15; t++) {
       tiles[i][t] = nullptr;
+    }
+  }
 
   // Static
-  for (int i = 0; i < 3; i++)
-    for (int t = 0; t < 5; t++)
+  for (int i = 0; i < 3; i++) {
+    for (int t = 0; t < 5; t++) {
       tiles[1][i + t * 3] =
           al_create_sub_bitmap(image_box[1], i * 16, t * 16, 16, 16);
+    }
+  }
 
   // Player
   tiles[2][0] = al_create_sub_bitmap(image_box[2], 0, 0, 32, 64);
@@ -80,16 +69,14 @@ Editor::Editor() {
   tiles[4][0] = image_box[4];
   tiles[4][1] = image_box[5];
 
-  tile_type = 0;
-
   srand(time(nullptr));
 
   edit_font = al_load_ttf_font("assets/fonts/fantasque.ttf", 18, 0);
 
-  if (!edit_font)
+  if (!edit_font) {
     tools::abort_on_error("Could not load 'fantasque.ttf'.\n", "Font Error");
+  }
 
-  grid_on = false;
   editorBoxes.clear();
 
   // buttons
@@ -154,8 +141,6 @@ Editor::Editor() {
       std::make_shared<Button>(152, 100, "", "explosive_circle", nullptr));
   editorUI.getElementById("explosive_circle")->setImage(image_box[4]);
   editorUI.getElementById("explosive_circle")->setPadding(2, 2);
-
-  explosive_orientation = 1;
 
   set_explosive_ui_status();
 
@@ -340,10 +325,10 @@ void Editor::update(StateEngine* engine) {
                                      "Return to main menu?",
                                      "All unsaved changes will be lost.",
                                      nullptr, ALLEGRO_MESSAGEBOX_YES_NO) == 1) {
-        setNextState(engine, StateEngine::STATE_MENU);
+        setNextState(engine, ProgramState::MENU);
       }
     } else {
-      setNextState(engine, StateEngine::STATE_MENU);
+      setNextState(engine, ProgramState::MENU);
     }
   }
 
@@ -464,7 +449,7 @@ void Editor::update(StateEngine* engine) {
         save_map(file_name);
         Config::setValue("EditingLevel", true);
         Config::setValue("EditingLevelFile", file_name);
-        setNextState(engine, StateEngine::STATE_GAME);
+        setNextState(engine, ProgramState::GAME);
       } else {
         al_show_native_message_box(
             nullptr, "Missing player",
@@ -623,8 +608,7 @@ void Editor::update(StateEngine* engine) {
     if (MouseListener::mouse_released & 1) {
       is_dragging_box = false;
 
-      if (!over_Button && gui_mode && (box_2_x - box_1_x) != 0 &&
-          (box_2_x - box_1_x) != 0) {
+      if (!over_Button && gui_mode && box_2_x - box_1_x != 0) {
         // Backwards dragged box correction, Box2D chokes on negative
         // widths/heights
         if (box_2_x < box_1_x) {

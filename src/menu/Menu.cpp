@@ -70,22 +70,22 @@ void Menu::update(StateEngine* engine) {
   if (!credits_menu) {
     // Click play
     if (menu_ui.getElementById("btnPlay")->clicked()) {
-      setNextState(engine, StateEngine::STATE_LEVELSELECT);
+      setNextState(engine, ProgramState::LEVELSELECT);
     }
 
     // Click editor
     if (menu_ui.getElementById("btnEditor")->clicked()) {
-      setNextState(engine, StateEngine::STATE_EDIT);
+      setNextState(engine, ProgramState::EDIT);
     }
 
     // Click editor
     if (menu_ui.getElementById("btnExit")->clicked()) {
-      setNextState(engine, StateEngine::STATE_EXIT);
+      setNextState(engine, ProgramState::EXIT);
     }
 
     // Click settings
     if (menu_ui.getElementById("btnSettings")->clicked()) {
-      setNextState(engine, StateEngine::STATE_OPTIONS);
+      setNextState(engine, ProgramState::OPTIONS);
     }
 
     // Click credits
