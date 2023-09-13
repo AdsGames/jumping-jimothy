@@ -22,7 +22,7 @@ class StaticBox : public Box {
   virtual void draw() override;
 
   // Update
-  virtual void update(b2World* world) override{};
+  virtual void update(std::shared_ptr<b2World> world) override{};
 
   // Get type
   virtual int getType() override;

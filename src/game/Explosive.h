@@ -18,13 +18,13 @@ class Explosive : public Box {
             const float y,
             const bool affectCharacter,
             Character* character,
-            b2World* world);
+            std::shared_ptr<b2World> world);
 
   // Draw
   void draw() override;
 
   // Update
-  void update(b2World* world) override;
+  void update(std::shared_ptr<b2World> world) override;
 
   // Apply impulse
   void applyBlastImpulse(b2Body* body,

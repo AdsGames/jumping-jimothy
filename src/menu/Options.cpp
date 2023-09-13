@@ -95,7 +95,7 @@ void Options::update(StateEngine* engine) {
   // Back button pressed
   if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE] ||
       OptionsUI.getElementById("btnBack")->clicked()) {
-    setNextState(engine, StateEngine::STATE_MENU);
+    setNextState(engine, ProgramState::MENU);
 
     // Save settings
     Config::writeFile("assets/data/config.xml");

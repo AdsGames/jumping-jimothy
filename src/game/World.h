@@ -2,6 +2,7 @@
 #define WORLD_H
 
 #include <box2d/box2d.h>
+#include <memory>
 
 class World {
  public:
@@ -13,14 +14,14 @@ class World {
         bool doSleep);
 
   // Get b2 world
-  b2World* getB2World();
+  std::shared_ptr<b2World> getB2World() const;
 
   // Step
-  void step();
+  void step() const;
 
  private:
   // Box 2d game world
-  b2World* bWorld;
+  std::shared_ptr<b2World> bWorld;
 
   // Vars
   b2Vec2 gravity;

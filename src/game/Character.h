@@ -29,13 +29,13 @@ class Character : public Box {
   Character(const float x,
             const float y,
             ALLEGRO_BITMAP* image,
-            b2World* world);
+            std::shared_ptr<b2World> world);
 
   // Draw
   void draw() override;
 
   // Update
-  void update(b2World* world) override;
+  void update(std::shared_ptr<b2World> world) override;
 
   // Get sensor body
   b2Body* getSensorBody();

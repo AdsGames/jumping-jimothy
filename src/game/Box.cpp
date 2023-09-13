@@ -18,7 +18,7 @@ Box::Box(const float x,
          const float y,
          const float width,
          const float height,
-         b2World* world)
+         std::shared_ptr<b2World> world)
     : initial_position{b2Vec2(x, y)}, initial_size{b2Vec2(width, height)} {
   color = al_map_rgb(0, 0, 0);
   createBody(world);
@@ -38,7 +38,7 @@ void Box::setImage(ALLEGRO_BITMAP* image) {
 }
 
 // Create body
-void Box::createBody(b2World* world) {
+void Box::createBody(std::shared_ptr<b2World> world) {
   // World must be set
   if (!world)
     return;

@@ -8,7 +8,7 @@ Goat::Goat(const float x,
            const float y,
            Character* character,
            ALLEGRO_BITMAP* image,
-           b2World* world)
+           std::shared_ptr<b2World> world)
     : Box(x, y, 1.6f, 3.2f, world), gameCharacter(character) {
   // Modify body
   body->SetType(b2_dynamicBody);

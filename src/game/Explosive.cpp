@@ -10,7 +10,7 @@ Explosive::Explosive(const float x,
                      const float y,
                      const bool affectCharacter,
                      Character* character,
-                     b2World* world)
+                     std::shared_ptr<b2World> world)
     : Box(x, y, 1.55f, 1.55f, world),
       gameCharacter(character),
       affect_character(affectCharacter) {
@@ -32,7 +32,7 @@ class MyQueryCallback : public b2QueryCallback {
   }
 };
 
-void Explosive::update(b2World* world) {
+void Explosive::update(std::shared_ptr<b2World> world) {
   // Center of blast
   b2Vec2 center = body->GetPosition();
 

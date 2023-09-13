@@ -100,7 +100,7 @@ void LevelSelect::update(StateEngine* engine) {
 
   if (ActionBinder::actionBegun(Action::B) ||
       levelSelectUI.getElementById("btnBack")->clicked()) {
-    setNextState(engine, StateEngine::STATE_MENU);
+    setNextState(engine, ProgramState::MENU);
   }
 
   if (levelSelectUI.getElementById("btnResetSave")->clicked()) {
@@ -114,7 +114,7 @@ void LevelSelect::update(StateEngine* engine) {
   if (levelSelectUI.getElementById("btnReallyReset")->clicked()) {
     for (int i = 0; i < 16; i++)
       Config::setValue("level_" + tools::toString(i) + "_completed", false);
-    setNextState(engine, StateEngine::STATE_LEVELSELECT);
+    setNextState(engine, ProgramState::LEVELSELECT);
   }
 
   if (levelSelectUI.getElementById("btnCancel")->clicked()) {
@@ -128,7 +128,7 @@ void LevelSelect::update(StateEngine* engine) {
   for (int i = 1; i < 14; i++) {
     if (levelSelectUI.getUIElements().at(i)->clicked()) {
       Config::setValue("level_to_start", i);
-      setNextState(engine, StateEngine::STATE_GAME);
+      setNextState(engine, ProgramState::GAME);
     }
   }
 }

@@ -24,7 +24,8 @@ StaticBox::~StaticBox() {
 // Draw box to screen
 void StaticBox::draw() {
   // Transform
-  ALLEGRO_TRANSFORM trans, prevTrans;
+  ALLEGRO_TRANSFORM trans;
+  ALLEGRO_TRANSFORM prevTrans;
 
   // back up the current transform
   al_copy_transform(&prevTrans, al_get_current_transform());
@@ -32,7 +33,6 @@ void StaticBox::draw() {
   // scale using the new transform
   al_identity_transform(&trans);
 
-  // al_rotate_transform(&trans, -angle);
   al_translate_transform(&trans, getX() * 20, getY() * -20);
 
   al_use_transform(&trans);

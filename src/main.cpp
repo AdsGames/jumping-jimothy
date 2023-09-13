@@ -166,7 +166,7 @@ void update() {
     game_state.update();
 
     // Exit
-    if (game_state.getStateId() == StateEngine::STATE_EXIT)
+    if (game_state.getStateId() == ProgramState::EXIT)
       closing = true;
   }
 
@@ -242,7 +242,7 @@ void update() {
 
     // FPS = average
     fps = fps_total / 100;
-    // al_set_window_title(display,tools::convertIntToString(fps).c_str());
+    al_set_window_title(display, std::to_string(fps).c_str());
   }
 }
 
@@ -252,7 +252,7 @@ int main() {
   setup();
 
   // Set the current state ID
-  game_state.setNextState(StateEngine::STATE_MENU);
+  game_state.setNextState(ProgramState::MENU);
 
   // Run game
   while (!closing) {

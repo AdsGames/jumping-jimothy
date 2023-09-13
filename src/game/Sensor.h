@@ -23,7 +23,7 @@ class Sensor : public Box {
   // Constructor
   Sensor(const float x, const float y, const float width, const float height);
 
-  void init(b2World*, b2Body*);
+  void init(std::shared_ptr<b2World>, b2Body*);
   void createBody(int bodyType, bool fixedRotation);
 
   // Colliding with something
@@ -36,7 +36,7 @@ class Sensor : public Box {
   bool isCollidingWithBody(b2Body*);
 
   // Update sensor
-  void update(b2World* world) override{
+  void update(std::shared_ptr<b2World> world) override{
       // Unused
   };
 
@@ -47,7 +47,7 @@ class Sensor : public Box {
   int getType() override;
 
  private:
-  b2World* gameWorld;
+  std::shared_ptr<b2World> gameWorld;
 };
 
 #endif  // SENSOR_H
