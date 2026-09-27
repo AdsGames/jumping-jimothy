@@ -1,149 +1,81 @@
 #include "Options.h"
 
-#include <allegro5/allegro_ttf.h>
-
+#include "../util/Audio.h"
 #include "../util/Config.h"
-#include "../util/DisplayMode.h"
-#include "../util/KeyListener.h"
-#include "../util/MusicManager.h"
+#include "../util/Input.h"
 
-#include "../ui/Button.h"
-#include "../ui/CheckBox.h"
-#include "../ui/Label.h"
+namespace {
+constexpr float ROW_X = 100;
+constexpr float ROW_WIDTH = 180;
+constexpr float ROW_HEIGHT = 18;
 
-// Initialize options screen
-Options::Options() {
-  // Load fonts
-  options_font = al_load_ttf_font("assets/fonts/munro.ttf", 18, 0);
-  title_font = al_load_ttf_font("assets/fonts/munro.ttf", 36, 0);
+const asw::Color WHITE(255, 255, 255);
 
-  // Options text
-  OptionsUI.addElement(
-      std::make_shared<Label>(25, 25, "Options", "lblOptions", title_font));
-  OptionsUI.getElementById("lblOptions")
-      ->setTextColour(al_map_rgb(255, 255, 255));
+std::string gamepadText() {
+  if (asw::input::get_controller_count() == 0) {
+    return "Gamepad: None detected.";
+  }
 
-  // Joystick data
-  OptionsUI.addElement(std::make_shared<Label>(
-      400, 25, "Gamepad: " + Config::getValue("joystick_data"), "lblJoydata",
-      options_font));
-  OptionsUI.getElementById("lblJoydata")
-      ->setTextColour(al_map_rgb(255, 255, 255));
+  return "Gamepad: " + asw::input::get_controller_name(0);
+}
+}  // namespace
 
-  // SFX toggle button
-  OptionsUI.addElement(std::make_shared<CheckBox>(100, 101, "SFX Enabled",
-                                                  "chkSFX", options_font));
-  OptionsUI.getElementById("chkSFX")->setSize(180, 18);
+void Options::init() {
+  options_font = asw::assets::load_font("assets/fonts/munro.ttf", 18,
+                                        asw::FontStyle::Pixel);
+  title_font = asw::assets::load_font("assets/fonts/munro.ttf", 36,
+                                      asw::FontStyle::Pixel);
 
-  dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkSFX"))
-      ->setChecked(Config::getBooleanValue("sfx_enabled"));
+  ui.clear();
 
-  // Music toggle button
-  OptionsUI.addElement(std::make_shared<CheckBox>(100, 151, "Music Enabled",
-                                                  "chkMusic", options_font));
-  OptionsUI.getElementById("chkMusic")->setSize(180, 18);
+  ui.add<Label>(25, 25, "Options", title_font).setTextColour(WHITE);
 
-  dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkMusic"))
-      ->setChecked(Config::getBooleanValue("music_enabled"));
+  lbl_gamepad = &ui.add<Label>(400, 25, gamepadText(), options_font);
+  lbl_gamepad->setTextColour(WHITE);
 
-  // Graphics mode button
-  OptionsUI.addElement(std::make_shared<Button>(
-      100, 201, "Graphics Mode", "btnGraphicsMode", options_font));
-  OptionsUI.getElementById("btnGraphicsMode")->setSize(180, 18);
+  auto add_checkbox = [this](float y, const std::string& text, bool checked) {
+    auto& checkbox = ui.add<CheckBox>(ROW_X, y, text, options_font);
+    checkbox.setSize(ROW_WIDTH, ROW_HEIGHT);
+    checkbox.setChecked(checked);
+    return &checkbox;
+  };
 
-  // Graphics label
-  OptionsUI.addElement(
-      std::make_shared<Label>(300, 200, DisplayMode::getDisplayModeString(),
-                              "lblGraphicsMode", options_font));
-  OptionsUI.getElementById("lblGraphicsMode")
-      ->setTextColour(al_map_rgb(255, 255, 255));
+  chk_sfx = add_checkbox(101, "SFX Enabled", Config::getBool("sfx_enabled"));
+  chk_music =
+      add_checkbox(151, "Music Enabled", Config::getBool("music_enabled"));
+  chk_fullscreen =
+      add_checkbox(201, "Fullscreen", Config::getBool("fullscreen"));
 
-  // Apply graphics
-  OptionsUI.addElement(std::make_shared<Button>(100, 251, "Apply Graphics",
-                                                "btnApplyGFX", options_font));
-  OptionsUI.getElementById("btnApplyGFX")->setSize(180, 18);
-
-  // Back
-  OptionsUI.addElement(
-      std::make_shared<Button>(100, 301, "Back", "btnBack", options_font));
-  OptionsUI.getElementById("btnBack")->setSize(180, 18);
-
-  // Temp graphics mode
-  temp_graphics_mode = DisplayMode::getDisplayMode();
+  btn_back = &ui.add<Button>(ROW_X, 251, "Back", options_font);
+  btn_back->setSize(ROW_WIDTH, ROW_HEIGHT);
 }
 
-// Destructor
-Options::~Options() {
-  al_destroy_font(options_font);
-  al_destroy_font(title_font);
+void Options::tick() {
+  ui.update();
+
+  if (chk_sfx->getToggled()) {
+    Audio::setSfxEnabled(chk_sfx->getChecked());
+  }
+
+  if (chk_music->getToggled()) {
+    Audio::setMusicEnabled(chk_music->getChecked());
+  }
+
+  if (chk_fullscreen->getToggled()) {
+    Config::setBool("fullscreen", chk_fullscreen->getChecked());
+    asw::display::set_fullscreen(chk_fullscreen->getChecked());
+  }
+
+  // Controllers can be plugged in while the menu is open
+  lbl_gamepad->setText(gamepadText());
+
+  if (input::keyPressed(asw::input::Key::Escape) || btn_back->clicked()) {
+    Config::save();
+    manager.set_next_scene(ProgramState::Menu);
+  }
 }
 
-// Draw options menu
 void Options::draw() {
-  // Background colour
-  al_clear_to_color(al_map_rgb(50, 50, 50));
-
-  // Draw ui elements
-  OptionsUI.draw();
-}
-
-// Update options UI
-void Options::update(StateEngine* engine) {
-  // Update UI
-  OptionsUI.update();
-
-  // Back button pressed
-  if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE] ||
-      OptionsUI.getElementById("btnBack")->clicked()) {
-    setNextState(engine, ProgramState::MENU);
-
-    // Save settings
-    Config::writeFile("assets/data/config.xml");
-  }
-
-  // SFX checkbox
-  Config::setValue("sfx_enabled",
-                   dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkSFX"))
-                       ->getChecked());
-
-  // Music checkbox
-  Config::setValue("music_enabled",
-                   dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkMusic"))
-                       ->getChecked());
-
-  // Toggle Music pressed
-  if (dynamic_cast<CheckBox*>(OptionsUI.getElementById("chkMusic"))
-          ->getToggled()) {
-    if (Config::getBooleanValue("music_enabled")) {
-      MusicManager::menu_music->play();
-    } else {
-      MusicManager::menu_music->stop();
-    }
-  }
-
-  // Cycle graphics mode pressed
-  if (OptionsUI.getElementById("btnGraphicsMode") &&
-      OptionsUI.getElementById("btnGraphicsMode")->clicked()) {
-    temp_graphics_mode =
-        (temp_graphics_mode + 1) % DisplayMode::NUM_GRAPHICS_MODES;
-    OptionsUI.getElementById("lblGraphicsMode")
-        ->setText(DisplayMode::getDisplayModeString(temp_graphics_mode));
-  }
-
-  // Apply graphics pressed
-  if (OptionsUI.getElementById("btnApplyGFX") &&
-      OptionsUI.getElementById("btnApplyGFX")->clicked()) {
-    DisplayMode::setMode(temp_graphics_mode);
-  }
-
-  // Keep UI in sync
-  updateUI();
-}
-
-void Options::updateUI() {
-  // Joystick config
-  if (OptionsUI.getElementById("lblJoydata")) {
-    OptionsUI.getElementById("lblJoydata")
-        ->setText("Gamepad: " + Config::getValue("joystick_data"));
-  }
+  asw::draw::clear_color(asw::Color(50, 50, 50));
+  ui.draw();
 }

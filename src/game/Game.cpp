@@ -1,520 +1,320 @@
 #include "Game.h"
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_audio.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_native_dialog.h>
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/bitmap.h>
-#include <fstream>
-#include <iostream>
+#include <cmath>
+#include <format>
 
+#include "../Globals.h"
 #include "../util/ActionBinder.h"
-#include "../util/KeyListener.h"
-#include "../util/MouseListener.h"
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
-#pragma GCC diagnostic ignored "-Wswitch-default"
-#include "../rapidxml/rapidxml.hpp"
-#include "../rapidxml/rapidxml_print.hpp"
-#pragma GCC diagnostic pop
-
+#include "../util/Audio.h"
+#include "../util/Config.h"
+#include "../util/Dialog.h"
+#include "../util/Input.h"
 #include "CollisionBox.h"
 #include "DynamicBox.h"
 #include "Explosive.h"
+#include "Level.h"
 #include "StaticBox.h"
 
-#include "../util/Config.h"
-#include "../util/Globals.h"
-#include "../util/MusicManager.h"
-#include "../util/Tools.h"
+namespace {
+using asw::input::Key;
 
-// Constructor
-Game::Game() {
-  // Load fonts
-  game_font = al_load_ttf_font("assets/fonts/munro.ttf", 30, 0);
-  help_font = al_load_ttf_font("assets/fonts/munro.ttf", 50, 0);
-  edit_font = al_load_ttf_font("assets/fonts/fantasque.ttf", 18, 0);
+const b2Vec2 GRAVITY(0.0F, -10.0F);
+constexpr int VELOCITY_ITERATIONS = 6;
+constexpr int POSITION_ITERATIONS = 2;
 
-  // Load sounds
-  toggle_on.load_wav("assets/sfx/toggle_on.wav");
-  toggle_off.load_wav("assets/sfx/toggle_off.wav");
-  death.load_wav("assets/sfx/death.wav");
+// Leaving this area kills the character, in metres
+constexpr float BOUNDS_LEFT = -1.0F;
+constexpr float BOUNDS_RIGHT = 51.5F;
+constexpr float BOUNDS_TOP = 2.0F;
+constexpr float BOUNDS_BOTTOM = -40.0F;
 
-  // Create back button if needed
-  if (Config::getBooleanValue("EditingLevel")) {
+// Spawn offsets from the level file position, in metres
+constexpr float CHARACTER_SPAWN_OFFSET = -1.6F;
+constexpr float GOAT_SPAWN_OFFSET = -1.0F;
+}  // namespace
+
+void Game::init() {
+  leaving = false;
+
+  game_font = asw::assets::load_font("assets/fonts/munro.ttf", 30,
+                                     asw::FontStyle::Pixel);
+  help_font = asw::assets::load_font("assets/fonts/munro.ttf", 50,
+                                     asw::FontStyle::Pixel);
+  edit_font = asw::assets::load_font("assets/fonts/fantasque.ttf", 18);
+
+  assets.load();
+
+  ui.clear();
+  back_button = nullptr;
+
+  if (session.editing_level) {
     level = 0;
-    testing_back_button = new Button(966, 728, "Back", "btnBack", edit_font);
+    back_button = &ui.add<Button>(966, 728, "Back", edit_font);
   } else {
-    level = Config::getIntValue("level_to_start");
+    level = session.level_to_start;
   }
 
-  // Load images
-  load_sprites();
-
-  // Reset fresh
   reset();
 
-  // Load and play music
-  MusicManager::menu_music->stop();
-  MusicManager::game_music->play();
+  Audio::playMusic(Audio::Track::Game);
 }
 
-// Destructor
-Game::~Game() {
-  // Destory bitmaps
-  // if (box != nullptr)
-  //  al_destroy_bitmap( box);
-  if (goat_map != nullptr)
-    al_destroy_bitmap(goat_map);
-  if (character != nullptr)
-    al_destroy_bitmap(character);
-  if (play != nullptr)
-    al_destroy_bitmap(play);
-  if (pause != nullptr)
-    al_destroy_bitmap(pause);
+void Game::cleanup() {
+  character = nullptr;
+  goat = nullptr;
+  boxes.clear();
+  world.reset();
+  ui.clear();
+  back_button = nullptr;
+
+  FixedScene::cleanup();
 }
 
-// Creates box in world
-Goat* Game::create_goat(float x, float y) {
-  auto newGoat = new Goat(x, y, gameCharacter, goat_map, world->getB2World());
-  if (gameCharacter == nullptr)
-    tools::log_message(
-        "WARNING: gameCharacter is nullptr when creating a goat.");
-  gameBoxes.push_back(newGoat);
-  return newGoat;
+void Game::changeScene(ProgramState state) {
+  leaving = true;
+  manager.set_next_scene(state);
 }
 
-// Creates box in world
-Box* Game::create_dynamic_box(float x,
-                              float y,
-                              float velX,
-                              float velY,
-                              ALLEGRO_BITMAP* image) {
-  auto newDynamicBox = new DynamicBox(x, y, velX, velY, world->getB2World());
-  newDynamicBox->setImage(image);
-  gameBoxes.push_back(newDynamicBox);
-  return newDynamicBox;
+void Game::reset() {
+  character = nullptr;
+  goat = nullptr;
+  boxes.clear();
+  world = std::make_unique<b2World>(GRAVITY);
+
+  if (session.editing_level) {
+    loadLevel(session.editing_file);
+  } else {
+    loadLevel(asw::assets::get_path(levelPath(level)));
+  }
+
+  // Levels start with time frozen
+  static_mode = true;
+  first_play = true;
+  for (const auto& box : boxes) {
+    box->setPaused(true);
+  }
 }
 
-// Creates box in world
-Box* Game::create_static_box(float x, float y, ALLEGRO_BITMAP* image) {
-  auto newStaticBox = new StaticBox(x, y);
-  newStaticBox->setImage(image);
-  gameBoxes.push_back(newStaticBox);
-  return newStaticBox;
-}
+void Game::loadLevel(const std::string& path) {
+  asw::log::info("Loading level {}", path);
 
-Box* Game::create_collision_box(float x, float y, float width, float height) {
-  auto newCollisionBox =
-      new CollisionBox(x, y, width, height, world->getB2World());
-  gameBoxes.push_back(newCollisionBox);
-  return newCollisionBox;
-}
-
-Box* Game::create_explosive_box(float x,
-                                float y,
-                                int orientation,
-                                bool affectsCharacter) {
-  auto newExplosive =
-      new Explosive(x, y, affectsCharacter, gameCharacter, world->getB2World());
-  ALLEGRO_BITMAP* newBoxImage;
-
-  if (orientation == 0)
-    newBoxImage = box_repel;
-  else
-    newBoxImage = box_repel_direction;
-
-  newExplosive->setImage(newBoxImage);
-  newExplosive->setOrientation(orientation);
-
-  if (gameCharacter == nullptr)
-    tools::log_message(
-        "WARNING: gameCharacter is nullptr when creating an explosive box.");
-
-  gameBoxes.push_back(newExplosive);
-  return newExplosive;
-}
-
-// Add character to world
-Character* Game::create_character(float x, float y) {
-  auto newCharacter = new Character(x, y, character, world->getB2World());
-  gameBoxes.push_back(newCharacter);
-  return newCharacter;
-}
-
-// Load world from xml
-void Game::load_world(std::string file) {
-  // Load level message
-  tools::log_message("Attempting to load " + file + " into game");
-
-  int goat_count = 0;
-  int character_count = 0;
-  int dynamic_count = 0;
-  int static_count = 0;
-
-  // Doc
-  rapidxml::xml_document<> doc;
-  rapidxml::xml_node<>* root_node;
-
-  // Make an xml object
-  std::ifstream theFile(file);
-  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)),
-                               std::istreambuf_iterator<char>());
-  xml_buffer.push_back('\0');
-
-  // Parse the buffer using the xml file parsing library into doc
-  doc.parse<0>(&xml_buffer[0]);
-
-  // Find our root node
-  root_node = doc.first_node("data");
-
-  // Make sure node exists
-  if (root_node == nullptr) {
+  const auto level_data = Level::load(path);
+  if (!level_data) {
     return;
   }
 
-  // Iteratboole over objects
-  for (rapidxml::xml_node<>* object_node = root_node->first_node("Object");
-       object_node; object_node = object_node->next_sibling("Object")) {
-    // All the variables we will load
-    std::string type = "Static";
-    std::string x = "0";
-    std::string y = "0";
-    std::string orientation = "0";
-    std::string width = "0";
-    std::string height = "0";
-    std::string affect_character = "false";
-    int orientation_array[4];
-    Box* newBox = nullptr;
+  std::vector<Goat*> goats;
+  std::vector<Explosive*> explosives;
+  int character_count = 0;
 
-    // Load data
-    if (object_node->first_attribute("type") != nullptr) {
-      type = object_node->first_attribute("type")->value();
-    }
-    if (object_node->first_node("x") != nullptr) {
-      x = object_node->first_node("x")->value();
-    }
-    if (object_node->first_node("y") != nullptr) {
-      y = object_node->first_node("y")->value();
-    }
-    if (object_node->first_node("width") != nullptr) {
-      width = object_node->first_node("width")->value();
-    }
-    if (object_node->first_node("height") != nullptr) {
-      height = object_node->first_node("height")->value();
-    }
-    if (object_node->first_node("orientation") != nullptr) {
-      orientation = object_node->first_node("orientation")->value();
-    }
-    if (object_node->first_node("affect_character") != nullptr) {
-      affect_character = object_node->first_node("affect_character")->value();
-    }
+  for (const auto& object : level_data->objects) {
+    switch (object.type) {
+      case ObjectType::Static:
+        boxes.push_back(std::make_unique<StaticBox>(
+            object.x, object.y, assets.static_tiles, object.orientation));
+        break;
 
-    if (type == "Static") {
-      std::vector<std::string> splits = tools::split_string(orientation, ' ');
-      if (splits.size() == 4) {
-        for (int k = 0; k < 4; k++) {
-          orientation_array[k] = (tools::stringToInt(splits.at(k)));
-        }
+      case ObjectType::Dynamic:
+        boxes.push_back(std::make_unique<DynamicBox>(object.x, object.y,
+                                                     assets.box, *world));
+        break;
+
+      case ObjectType::Collision:
+        boxes.push_back(std::make_unique<CollisionBox>(
+            object.x, object.y, object.width, object.height, *world));
+        break;
+
+      case ObjectType::Character: {
+        auto new_character = std::make_unique<Character>(
+            object.x, object.y + CHARACTER_SPAWN_OFFSET, assets, *world);
+        character = new_character.get();
+        boxes.push_back(std::move(new_character));
+        character_count++;
+        break;
       }
 
-      // Combine images
-      const int tmp_width = al_get_bitmap_width(new_dynamic_tile[0]) * 2;
-      const int tmp_height = al_get_bitmap_height(new_dynamic_tile[0]) * 2;
-
-      ALLEGRO_BITMAP* combined_image = al_create_bitmap(tmp_width, tmp_height);
-      al_set_target_bitmap(combined_image);
-
-      // Offsets from subtile
-      for (int t = 0; t < 4; t++) {
-        const int off_x = (t == 1 || t == 3) ? 16 : 0;
-        const int off_y = (t >= 2) ? 16 : 0;
-
-        al_draw_bitmap(new_dynamic_tile[orientation_array[t]], off_x, off_y, 0);
+      case ObjectType::Finish: {
+        auto new_goat = std::make_unique<Goat>(
+            object.x, object.y + GOAT_SPAWN_OFFSET, assets, *world);
+        goats.push_back(new_goat.get());
+        boxes.push_back(std::move(new_goat));
+        break;
       }
 
-      create_static_box(tools::stringToFloat(x), tools::stringToFloat(y),
-                        combined_image);
-
-      static_count++;
-    } else if (type == "Dynamic") {
-      create_dynamic_box(tools::stringToFloat(x), tools::stringToFloat(y),
-                         tools::stringToFloat(width),
-                         tools::stringToFloat(height), box);
-      dynamic_count++;
-    } else if (type == "Collision") {
-      create_collision_box(tools::stringToFloat(x), tools::stringToFloat(y),
-                           tools::stringToFloat(width),
-                           tools::stringToFloat(height));
-    } else if (type == "Character") {
-      gameCharacter = create_character(tools::stringToFloat(x),
-                                       tools::stringToFloat(y) - 1.6f);
-      character_count++;
-    } else if (type == "Finish") {
-      gameGoat =
-          create_goat(tools::stringToFloat(x), tools::stringToFloat(y) - 1.0f);
-      if (gameCharacter == nullptr) {
-        tools::log_message(
-            "WARNING: Game: goat is passed nullptr gameCharacter");
+      case ObjectType::Explosive: {
+        auto explosive = std::make_unique<Explosive>(
+            object.x, object.y, object.orientation[0], object.affect_character,
+            assets, *world);
+        explosives.push_back(explosive.get());
+        boxes.push_back(std::move(explosive));
+        break;
       }
-      goat_count++;
-    } else if (type == "Explosive") {
-      create_explosive_box(tools::stringToFloat(x), tools::stringToFloat(y),
-                           tools::stringToFloat(orientation),
-                           (affect_character == "true"));
     }
   }
 
-  // Get game help text
-  rapidxml::xml_node<>* help_node = root_node->first_node("Help");
-  help_text.clear();
-
-  if (help_node != nullptr) {
-    std::vector<std::string> temp_help =
-        tools::split_string(help_node->value(), '%');
-    for (unsigned int i = 0; i < temp_help.size(); i++) {
-      help_text.push_back(temp_help.at(i));
-    }
+  // Link the character once everything is loaded, the order in the file
+  // does not matter
+  for (auto* g : goats) {
+    g->setCharacter(character);
   }
 
-  // Nice debug code
-  // Allan's big ol' debug lines, they're pretty tho
-  tools::log_message("===============================");
-
-  if (character_count > 1) {
-    tools::log_message(
-        "  WARNING: Multiple characters loaded, will have undesired "
-        "results...");
-  }
-  if (goat_count > 1) {
-    tools::log_message(
-        "  WARNING: Multiple goats loaded, will have undesired results...");
-  }
-  if (character_count == 0) {
-    tools::log_message(
-        "  WARNING: No character loaded, will have undesired results...");
-  }
-  if (goat_count == 0) {
-    tools::log_message(
-        "  WARNING: No goat loaded, will have undesired results...");
-  }
-  if (static_count == 0 && dynamic_count == 0 && goat_count == 0 &&
-      character_count == 0) {
-    tools::log_message("  WARNING: No data loaded!");
-  }
-  tools::log_message("===============================");
-}
-
-// Reset game
-void Game::reset() {
-  // Remove boxes, including character and goatr
-  for (unsigned int i = 0; i < gameBoxes.size(); i++) {
-    delete gameBoxes.at(i);
-  }
-  gameBoxes.clear();
-
-  gameGoat = nullptr;
-  gameCharacter = nullptr;
-
-  // Box2D game world
-  if (world != nullptr) {
-    delete world;
+  for (auto* explosive : explosives) {
+    explosive->setCharacter(character);
   }
 
-  // Create world
-  world = new World(b2Vec2(0.0f, -10.0f), 1.0f / 60.0f, 6, 2, true);
+  goat = goats.empty() ? nullptr : goats.front();
+  help_text = level_data->helpLines();
 
-  // Load file
-  if (Config::getBooleanValue("EditingLevel")) {
-    load_world(Config::getValue("EditingLevelFile"));
-  } else {
-    load_world("assets/data/level_" + tools::toString(level) + ".xml");
+  if (character_count != 1) {
+    asw::log::warn("Level has {} characters, expected 1", character_count);
   }
 
-  static_mode = true;
-  first_play = true;
-
-  // Pause boxes
-  for (unsigned int i = 0; i < gameBoxes.size(); i++) {
-    if (gameBoxes[i]->getType() == BOX) {
-      gameBoxes[i]->setPaused(true);
-    }
-  }
-
-  if (gameGoat == nullptr) {
-    tools::log_message("WARNING: Goat is undeclared in game");
-  }
-
-  if (gameCharacter == nullptr) {
-    tools::log_message("WARNING: gameCharacter is undeclared in game");
+  if (goats.size() != 1) {
+    asw::log::warn("Level has {} goats, expected 1", goats.size());
   }
 }
 
-// Load all sprites for in game
-void Game::load_sprites() {
-  box = tools::load_bitmap_ex("assets/images/box.png");
-  box_repel = tools::load_bitmap_ex("assets/images/box_repel.png");
-  box_repel_direction =
-      tools::load_bitmap_ex("assets/images/box_repel_direction.png");
-  goat_map = tools::load_bitmap_ex("assets/images/goat.png");
-  character = tools::load_bitmap_ex("assets/images/character.png");
-  play = tools::load_bitmap_ex("assets/images/play.png");
-  pause = tools::load_bitmap_ex("assets/images/pause.png");
+void Game::tick() {
+  if (leaving) {
+    return;
+  }
 
-  ALLEGRO_BITMAP* image_box =
-      tools::load_bitmap_ex("assets/images/StaticBlock.png");
+  ui.update();
 
-  for (int i = 0; i < 3; i++) {
-    for (int t = 0; t < 5; t++) {
-      new_dynamic_tile[i + t * 3] =
-          al_create_sub_bitmap(image_box, i * 16, t * 16, 16, 16);
+  // Back to the editor when testing a level
+  if (back_button != nullptr && back_button->clicked()) {
+    changeScene(ProgramState::Editor);
+    return;
+  }
+
+  if (session.editing_level && input::keyPressed(Key::P)) {
+    changeScene(ProgramState::Editor);
+    return;
+  }
+
+  if (input::keyPressed(Key::Escape)) {
+    Audio::stopMusic();
+    changeScene(ProgramState::Menu);
+    return;
+  }
+
+  if (goat != nullptr && goat->getWinCondition()) {
+    completeLevel();
+    return;
+  }
+
+  world->Step(TICK_SECONDS, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+
+  for (const auto& box : boxes) {
+    box->update(*world);
+  }
+
+  // Skip level
+  if (input::keyPressed(Key::C)) {
+    if (session.editing_level) {
+      Dialog::info("Level complete!", "Opening editor");
+      changeScene(ProgramState::Editor);
+      return;
     }
-  }
-}
 
-// Update game logic
-void Game::update(StateEngine* engine) {
-  // Back button
-  if (testing_back_button) {
-    testing_back_button->update();
-
-    if (testing_back_button->clicked())
-      setNextState(engine, ProgramState::EDIT);
-  }
-
-  // Game mode
-  if (KeyListener::keyPressed[ALLEGRO_KEY_P])
-    setNextState(engine, ProgramState::EDIT);
-
-  // Change state?
-  if (KeyListener::key[ALLEGRO_KEY_I])
-    setNextState(engine, ProgramState::MENU);
-
-  // Touching goat
-  if (gameGoat != nullptr && gameGoat->getWinCondition()) {
-    level++;
-    if (level > 14) {
-      setNextState(engine, ProgramState::MENU);
-    } else {
-      tools::log_message("Level " + tools::toString(level - 1) +
-                         " completed, loading next level.");
-      Config::setValue("level_" + tools::toString(level - 1) + "_completed",
-                       true);
-
-      if (!Config::getBooleanValue("EditingLevel")) {
-        reset();
-      } else {
-        al_show_native_message_box(nullptr, "Level complete!", "Opening editor",
-                                   "", "Okily dokily.", 0);
-        setNextState(engine, ProgramState::EDIT);
-      }
-    }
-  }
-
-  // Update the Box2D game world
-  world->step();
-
-  // Update character
-  for (auto& gameBox : gameBoxes) {
-    gameBox->update(world->getB2World());
-  }
-
-  if (KeyListener::keyPressed[ALLEGRO_KEY_ESCAPE]) {
-    setNextState(engine, ProgramState::MENU);
-    MusicManager::game_music->stop();
-  }
-
-  // Next level
-  if (KeyListener::keyPressed[ALLEGRO_KEY_C]) {
-    if (!Config::getBooleanValue("EditingLevel")) {
-      tools::log_message("Level " + tools::toString(level) + " skipped.");
-      level++;
-      reset();
-    } else {
-      al_show_native_message_box(nullptr, "Level complete!", "Opening editor",
-                                 nullptr, nullptr, 0);
-      setNextState(engine, ProgramState::EDIT);
-    }
+    asw::log::info("Level {} skipped", level);
+    nextLevel();
+    return;
   }
 
   // Previous level
-  if (KeyListener::keyPressed[ALLEGRO_KEY_X]) {
-    tools::log_message("Level " + tools::toString(level) + " skipped back.");
-    if (level > 1) {
-      level--;
-    }
+  if (input::keyPressed(Key::X) && !session.editing_level) {
+    asw::log::info("Level {} skipped back", level);
+    level = std::max(level - 1, 1);
     reset();
+    return;
   }
 
-  // Pause/Play time
   if (ActionBinder::actionBegun(Action::B)) {
-    static_mode = !static_mode;
+    togglePause();
+  }
 
-    for (auto& gameBox : gameBoxes) {
-      if (gameBox->isPausable()) {
-        gameBox->setPaused(static_mode);
-      }
-    }
+  // Fell out of the level
+  if (character != nullptr) {
+    const float x = character->getX();
+    const float y = character->getY();
 
-    if (static_mode) {
-      toggle_off.play();
-    } else {
-      toggle_on.play();
-      first_play = false;
+    if (!std::isfinite(x) || !std::isfinite(y) || x < BOUNDS_LEFT ||
+        x > BOUNDS_RIGHT || y > BOUNDS_TOP || y < BOUNDS_BOTTOM) {
+      die();
+      return;
     }
   }
 
-  // Off screen
-  // Brutal hack don't look. Prevens character from dying when the character's
-  // location is undefined or something. It's really big anyways
-  if (gameCharacter != nullptr && gameCharacter->getX() > -5000 &&
-      gameCharacter->getX() < 5000 && gameCharacter->getY() > -5000 &&
-      gameCharacter->getY() < 5000) {
-    if (gameCharacter->getX() < -1 || gameCharacter->getX() > 51.5f ||
-        gameCharacter->getY() > 2 || gameCharacter->getY() < -40) {
-      death.play();
-      reset();
-      tools::log_message("===========" +
-                         tools::toString(gameCharacter->getX()));
-    }
-  }
-
-  // Die
-  if (KeyListener::keyPressed[ALLEGRO_KEY_R]) {
-    death.play();
-    reset();
+  if (input::keyPressed(Key::R)) {
+    die();
   }
 }
 
-// Draw to screen
+void Game::completeLevel() {
+  if (session.editing_level) {
+    Dialog::info("Level complete!", "Opening editor");
+    changeScene(ProgramState::Editor);
+    return;
+  }
+
+  asw::log::info("Level {} completed", level);
+  Config::setBool(std::format("level_{}_completed", level), true);
+  Config::save();
+
+  nextLevel();
+}
+
+void Game::nextLevel() {
+  if (level >= LEVEL_COUNT) {
+    Audio::stopMusic();
+    changeScene(ProgramState::Menu);
+    return;
+  }
+
+  level++;
+  reset();
+}
+
+void Game::die() {
+  asw::sound::play(assets.death);
+  reset();
+}
+
+void Game::togglePause() {
+  static_mode = !static_mode;
+
+  for (const auto& box : boxes) {
+    box->setPaused(static_mode, !first_play);
+  }
+
+  if (!static_mode) {
+    first_play = false;
+  }
+
+  asw::sound::play(static_mode ? assets.toggle_off : assets.toggle_on);
+}
+
 void Game::draw() {
-  // Background
-  al_clear_to_color(al_map_rgb(40, 40, 60));
+  asw::draw::clear_color(asw::Color(40, 40, 60));
 
   // Help text
-  for (unsigned int i = 0; i < help_text.size(); i++) {
-    al_draw_textf(help_font, al_map_rgb(255, 255, 255), 500, 75 + i * 50, 1,
-                  help_text.at(i).c_str());
+  for (std::size_t i = 0; i < help_text.size(); i++) {
+    asw::draw::text(help_font, help_text[i],
+                    asw::Vec2<float>(500, 75 + (static_cast<float>(i) * 50)),
+                    asw::Color(255, 255, 255), asw::TextJustify::Center);
   }
 
-  // Draw boxes
-  for (unsigned int i = 0; i < gameBoxes.size(); i++) {
-    gameBoxes[i]->draw();
+  for (const auto& box : boxes) {
+    box->draw();
   }
 
-  // Pause/play buttons
-  if (testing_back_button) {
-    testing_back_button->draw();
-  }
+  ui.draw();
 
-  if (static_mode) {
-    al_draw_bitmap(pause, 10, 10, 0);
-  } else {
-    al_draw_bitmap(play, 10, 10, 0);
-  }
+  asw::draw::sprite(static_mode ? assets.pause : assets.play,
+                    asw::Vec2<float>(10, 10));
 
-  al_draw_textf(game_font, al_map_rgb(255, 255, 255), 1010, 15, 2, "Level %i",
-                level);
+  asw::draw::text(game_font, std::format("Level {}", level),
+                  asw::Vec2<float>(1010, 15), asw::Color(255, 255, 255),
+                  asw::TextJustify::Right);
 }

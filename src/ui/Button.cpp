@@ -1,88 +1,57 @@
 #include "Button.h"
 
-#include <allegro5/allegro_primitives.h>
+#include <algorithm>
 
-#include "../util/Tools.h"
+#include "../util/Graphics.h"
 
-// Default empty button
-Button::Button() : UIElement() {}
+namespace {
+// Brighten a colour when the button is hovered or focused
+constexpr int HOVER_BRIGHTEN = 40;
 
-// Ctor
-Button::Button(const int x,
-               const int y,
-               std::string text,
-               std::string id,
-               ALLEGRO_FONT* font)
-    : UIElement(x, y, text, id, font) {}
+uint8_t brighten(uint8_t value) {
+  return static_cast<uint8_t>(std::min(255, value + HOVER_BRIGHTEN));
+}
+}  // namespace
 
-// Draw button
 void Button::draw() {
-  // Do not draw if not visible
   if (!visible) {
     return;
   }
 
-  // Red value
-  const int new_r = tools::negative_clamp_thing(
-      0, 255, (int)((background_colour.r * 255) + (40 * (hover() || focused))));
+  const asw::Quad<float> bounds(x, y, getWidth(), getHeight());
 
-  // Green value
-  const int new_g = tools::negative_clamp_thing(
-      0, 255, (int)((background_colour.g * 255) + (40 * (hover() || focused))));
-
-  // Blue value
-  const int new_b = tools::negative_clamp_thing(
-      0, 255, (int)((background_colour.b * 255) + (40 * (hover() || focused))));
-
-  // Calculated hover colour
-  ALLEGRO_COLOR hover_colour = al_map_rgba(new_r, new_g, new_b, alpha);
-
-  if (!hover_effect)
-    hover_colour = background_colour;
-
-  // Draw button background
+  // Background
   if (visible_background) {
-    if (!transparent_cell_fill)
-      al_draw_filled_rectangle(x, y, x + width + padding_x * 2,
-                               y + height + padding_y * 2, hover_colour);
-    al_draw_rectangle(x, y, x + width + padding_x * 2,
-                      y + height + padding_y * 2, al_map_rgba(0, 0, 0, alpha),
-                      border_thickness);
+    if (!transparent_cell_fill) {
+      auto fill = background_colour;
+      if (hover() || focused) {
+        fill = asw::Color(brighten(fill.r), brighten(fill.g), brighten(fill.b));
+      }
+      asw::draw::rect_fill(bounds, withAlpha(fill));
+    }
+
+    gfx::thickRect(bounds, border_thickness, withAlpha(asw::Color(0, 0, 0)));
   }
 
   // Text
-  if (UIElement_font != nullptr) {
-    if (justification == 0) {
-      al_draw_text(UIElement_font, text_colour, x + padding_x, y + padding_y, 0,
-                   text.c_str());
-    }
-    if (justification == 1) {
-      // Temp x position calculation
-      const int text_x = x + padding_x + width / 2;
-
-      // Temp y position calculation
-      const int text_y =
-          y + padding_y -
-          (tools::get_text_height(UIElement_font, text) - height) / 2 -
-          tools::get_text_offset_y(UIElement_font, text);
-      al_draw_textf(UIElement_font, text_colour, text_x, text_y, justification,
-                    text.c_str());
-    }
-  }
-
-  // Image if avail
-  if (image != nullptr) {
-    if (bitmap_rotation_angle > 0.0f) {
-      al_draw_rotated_bitmap(
-          image, width / 2, width / 2, x + padding_x + width / 2,
-          y + padding_y + height / 2, bitmap_rotation_angle, 0);
+  if (font != nullptr && !text.empty()) {
+    if (justification == TextJustify::Center) {
+      const float text_y =
+          y + padding_y + ((height - gfx::lineHeight(font)) / 2.0F);
+      asw::draw::text(font, text,
+                      asw::Vec2<float>(x + padding_x + (width / 2.0F), text_y),
+                      withAlpha(text_colour), asw::TextJustify::Center);
     } else {
-      al_draw_bitmap(image, x + padding_x, y + padding_y, 0);
+      asw::draw::text(font, text, asw::Vec2<float>(x + padding_x, y + padding_y),
+                      withAlpha(text_colour));
     }
   }
-}
 
-// Buttons can focus
-bool Button::canFocus() {
-  return true;
+  // Image
+  if (image != nullptr) {
+    const auto size = asw::util::get_texture_size(image);
+    gfx::region(image, asw::Quad<float>(0, 0, size.x, size.y),
+                asw::Quad<float>(x + padding_x, y + padding_y, size.x, size.y),
+                image_rotation);
+  }
 }

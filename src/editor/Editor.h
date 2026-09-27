@@ -5,98 +5,136 @@
  * 05/05/2017
  **/
 
-#ifndef EDITOR_H
-#define EDITOR_H
+#pragma once
 
-#include <allegro5/allegro_font.h>
-#include <allegro5/allegro_image.h>
-
+#include <array>
 #include <string>
 #include <vector>
 
-#include "../State.h"
+#include "../FixedScene.h"
+#include "../game/Level.h"
+#include "../ui/Button.h"
+#include "../ui/CheckBox.h"
 #include "../ui/UIHandler.h"
 
-// Nice editor boxes
-struct editor_box {
-  float x;
-  float y;
-  std::string x_str;
-  std::string y_str;
-  std::string type_str;
-  int type;
-  int orientation[4];
-  int width;
-  int height;
-  bool affect_character;
-  std::string width_str;
-  std::string height_str;
+// A placed object, positions are in screen pixels
+struct EditorBox {
+  ObjectType type{ObjectType::Dynamic};
+
+  // Top left
+  float x{0};
+  float y{0};
+
+  // Collision boxes can be any size, everything else fills one cell
+  float width{32};
+  float height{32};
+
+  std::array<int, 4> orientation{};
+  bool affect_character{false};
 };
 
-// The editor state
-class Editor : public State {
+class Editor : public FixedScene {
  public:
-  Editor();
-  virtual ~Editor();
+  using FixedScene::FixedScene;
 
-  // Override parent
-  void update(StateEngine* engine) override;
+  void init() override;
   void draw() override;
+  void cleanup() override;
+
+ protected:
+  void tick() override;
 
  private:
-  // Functions
-  void calculate_orientation_global();
+  // What to do with the file the chooser returns
+  enum class FileAction { None, Save, SaveAs, Load };
 
-  bool box_at(int x, int y);
-  bool box_at_with_type(int newType, int x, int y);
+  void createUI();
+  void updateExplosiveButtons();
+  void setTileType(ObjectType type);
+  void setExplosiveUIVisible(bool visible);
 
-  bool is_player();
+  void handleShortcutsAndButtons();
+  void handleToggles();
+  void handleFileChosen(FileAction action, const std::string& path);
+  void placeTiles();
+  void dragCollisionBox();
+  void removeTiles();
 
-  bool save_map(std::string mapName);
-  bool load_map(std::string mapName);
+  void save();
+  void saveAs();
+  void load();
+  void play();
+  void back();
 
-  static const int BUTTON_COUNT = 17;
+  // Pick the tile of each corner of the static boxes from their neighbours
+  void calculateOrientations();
 
-  void set_explosive_ui_status();
+  bool boxAt(ObjectType type, float x, float y) const;
+  bool hasPlayer() const;
 
-  UIHandler editorUI;
+  bool saveMap(const std::string& path) const;
+  bool loadMap(const std::string& path);
+
+  void drawBox(const EditorBox& box) const;
+
+  // Leave for another scene, no more ticks run here
+  void changeScene(ProgramState state);
 
   // Images
-  ALLEGRO_BITMAP* image_box[6]{nullptr};
-  ALLEGRO_BITMAP* tiles[5][15]{nullptr};
-  ALLEGRO_BITMAP* help_menu{nullptr};
-  ALLEGRO_BITMAP* cursor{nullptr};
+  asw::Texture box_green;
+  asw::Texture static_tiles;
+  asw::Texture character;
+  asw::Texture goat;
+  asw::Texture box_repel;
+  asw::Texture box_repel_direction;
+  asw::Texture help_menu;
 
-  // Tiles
-  std::vector<editor_box> editorBoxes;
+  asw::Font edit_font;
 
-  // Map name
+  // UI
+  UIHandler ui;
+  Button* btn_dynamic{nullptr};
+  Button* btn_static{nullptr};
+  Button* btn_player{nullptr};
+  Button* btn_goat{nullptr};
+  Button* btn_collision{nullptr};
+  Button* btn_explosive{nullptr};
+  Button* left_bottom_toggle{nullptr};
+  Button* right_bottom_toggle{nullptr};
+  Button* btn_undo{nullptr};
+  Button* btn_clear{nullptr};
+  Button* btn_save{nullptr};
+  Button* btn_save_as{nullptr};
+  Button* btn_load{nullptr};
+  Button* btn_grid{nullptr};
+  Button* btn_play{nullptr};
+  Button* right_top_toggle{nullptr};
+  Button* btn_help{nullptr};
+  Button* btn_back{nullptr};
+  CheckBox* chk_affects_char{nullptr};
+  Button* left_top_toggle{nullptr};
+
+  // Explosive direction buttons, indexed by orientation
+  std::array<Button*, 5> explosive_buttons{};
+
+  // Level
+  std::vector<EditorBox> boxes;
+  std::string help_text;
   std::string file_name;
 
-  bool gui_mode{false};
-  float box_1_x;
-  float box_1_y;
-
-  float box_2_x;
-  float box_2_y;
-
+  // Collision box drag, in grid cells
   bool is_dragging_box{false};
-  bool dialog_open{false};
+  asw::Vec2<float> drag_start;
+  asw::Vec2<float> drag_end;
 
-  // Remember saves
+  FileAction pending_file_action{FileAction::None};
+
   bool is_saved{false};
+  bool modified{false};
   bool display_help{false};
-
-  // Vars
   bool grid_on{false};
+  bool leaving{false};
 
   int explosive_orientation{1};
-
-  int tile_type{0};
-  bool modified{false};
-
-  // The font
-  ALLEGRO_FONT* edit_font{nullptr};
+  ObjectType tile_type{ObjectType::Dynamic};
 };
-
-#endif  // EDITOR_H

@@ -5,80 +5,59 @@
  * 05/05/2017
  **/
 
-#ifndef CHARACTER_H
-#define CHARACTER_H
+#pragma once
 
-#include "../util/Sound.h"
-#include "Sensor.h"
-
-#include <array>
-#include <memory>
-
-class b2World;
-class b2Body;
-class b2BodyDef;
-class b2Vec2;
-class keyListener;
-
-// Number of character images
-const int NUM_CHARACTER_IMAGES = 20;
+#include "Box.h"
+#include "GameAssets.h"
 
 class Character : public Box {
  public:
-  // Constructor
-  Character(const float x,
-            const float y,
-            ALLEGRO_BITMAP* image,
-            std::shared_ptr<b2World> world);
+  Character(float x, float y, const GameAssets& assets, b2World& world);
 
-  // Draw
-  void draw() override;
+  void update(b2World& world) override;
+  void draw() const override;
+  BoxType getType() const override { return BoxType::Character; }
 
-  // Update
-  void update(std::shared_ptr<b2World> world) override;
-
-  // Get sensor body
-  b2Body* getSensorBody();
-
-  // Get type
-  int getType() override;
+  // Standing on something, updated each tick
+  bool isGrounded() const { return ground.body != nullptr; }
 
  private:
-  // Animation tick
-  int tick{0};
+  // What the character stands on
+  struct Ground {
+    // Nullptr when in the air
+    b2Body* body{nullptr};
 
-  // Animation frame
+    // Velocity of the ground under the character
+    b2Vec2 velocity{0, 0};
+  };
+
+  // Find the ground from the contacts of the last physics step
+  Ground findGround() const;
+
+  // Set the friction of every contact the character has
+  void setContactFriction(float friction) const;
+
+  const GameAssets& assets;
+
+  Ground ground;
+
+  // Animation
+  int tick{0};
   int frame{0};
 
-  // Sound delay for jump sound
+  // Ticks since the last jump and jump sound
+  int timer_jump_delay{0};
   int timer_sound_delay{0};
 
-  // Jump delay
-  int timer_jump_delay{0};
+  // Ticks on the ground
+  int counter_ground_contact{0};
 
-  // Sensing counter
-  int counter_sensor_contact{0};
-
-  // Landed on ground
+  // Allowed to jump
   bool landed{false};
 
-  // Previous velocity
+  // Y velocity relative to the ground last tick
   float velocity_old{0};
 
-  // Direciton
+  // Facing right
   bool direction{false};
-
-  // Sensor for collisions
-  std::unique_ptr<Sensor> sensor_box;
-
-  // Character images
-  std::array<ALLEGRO_BITMAP*, NUM_CHARACTER_IMAGES> sprites{nullptr};
-
-  // Sample for jump
-  Sound jump;
-
-  // Sample for landing
-  Sound land;
 };
-
-#endif  // CHARACTER_H

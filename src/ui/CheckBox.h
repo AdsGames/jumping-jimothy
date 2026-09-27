@@ -5,50 +5,26 @@
  * 16/10/2017
  **/
 
-#ifndef CHECKBOX_H
-#define CHECKBOX_H
+#pragma once
 
 #include "UIElement.h"
 
 class CheckBox : public UIElement {
  public:
-  // Default constructor
-  CheckBox();
+  CheckBox(float x, float y, std::string text, asw::Font font);
 
-  // Detailed constructor
-  CheckBox(const int x,
-           const int y,
-           std::string text,
-           std::string id,
-           ALLEGRO_FONT* font);
-
-  // Update
   void update() override;
-
-  // Draw
   void draw() override;
+  bool canFocus() const override { return true; }
 
-  // Check
-  bool getChecked() const;
+  bool getChecked() const { return checked; }
+  void setChecked(bool checked) { this->checked = checked; }
 
-  // Set checked
-  void setChecked(const bool checked);
-
-  // Get toggled
-  bool getToggled() const;
-
-  // Enable focus
-  bool canFocus() override;
+  // True on the tick the box was toggled
+  bool getToggled() const { return toggled; }
 
  private:
-  // Width of checkbox
-  int checkbox_size{20};
-
-  // Checked
+  float checkbox_size{20};
   bool checked{false};
-
-  // Just toggled
   bool toggled{false};
 };
-
-#endif  // CHECKBOX_H

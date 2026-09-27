@@ -1,47 +1,23 @@
 #include "CollisionBox.h"
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
+#include "../Globals.h"
+#include "../util/Input.h"
 
-#include "../util/Globals.h"
-#include "../util/KeyListener.h"
-
-CollisionBox::CollisionBox(const float x,
-                           const float y,
-                           const float width,
-                           const float height,
-                           std::shared_ptr<b2World> world)
-    : Box(x, y, width, height, world) {
-  // Modify body
-  body->SetType(b2_kinematicBody);
+CollisionBox::CollisionBox(float x,
+                           float y,
+                           float width,
+                           float height,
+                           b2World& world)
+    : Box(x, y, width, height) {
+  createBody(world, b2_kinematicBody);
 }
 
-void CollisionBox::draw() {
-  if (KeyListener::key[ALLEGRO_KEY_G]) {
-    // Draw transform
-    ALLEGRO_TRANSFORM trans;
-    ALLEGRO_TRANSFORM prevTrans;
-
-    // back up the current transform
-    al_copy_transform(&prevTrans, al_get_current_transform());
-
-    // scale using the new transform
-    al_identity_transform(&trans);
-
-    al_translate_transform(&trans, getX() * 20, getY() * -20);
-
-    al_use_transform(&trans);
-
-    al_draw_filled_rectangle(-(getWidth() / 2) * 20 + 1,
-                             -(getHeight() / 2) * 20 + 1,
-                             (getWidth() / 2) * 20 - 1,
-                             (getHeight() / 2) * 20 - 1, al_map_rgb(255, 0, 0));
-
-    al_use_transform(&prevTrans);
+void CollisionBox::draw() const {
+  if (!input::keyHeld(asw::input::Key::G)) {
+    return;
   }
-}
 
-// Get box type
-int CollisionBox::getType() {
-  return COLLISION;
+  asw::draw::rect_fill(screenQuad((getWidth() * PIXELS_PER_METER) - 2,
+                                  (getHeight() * PIXELS_PER_METER) - 2),
+                       asw::Color(255, 0, 0));
 }

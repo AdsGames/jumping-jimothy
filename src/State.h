@@ -1,70 +1,17 @@
 /**
- * State for machine and State Engine
+ * State
  * Allan Legemaate
  * 30/12/2016
- * Compartmentalize program into states
- *   which can handle only their own logic,
- *   drawing and transitions
+ * Ids for the scenes of the program
  */
 
-#ifndef STATE_H
-#define STATE_H
-
-#include <memory>
-
-// Class
-class State;
+#pragma once
 
 // Game states
-enum class ProgramState { EMPTY, EXIT, MENU, GAME, EDIT, LEVELSELECT, OPTIONS };
-
-/*****************
- * STATE ENGINE
- *****************/
-class StateEngine {
- public:
-  // Update
-  void update();
-
-  // Draw
-  void draw();
-
-  // Set next state
-  void setNextState(ProgramState newState);
-
-  // Get state id
-  ProgramState getStateId() const;
-
- private:
-  // Change state
-  void changeState();
-
-  // Current state object
-  std::unique_ptr<State> currentState{nullptr};
-
-  // Next state
-  ProgramState nextState{ProgramState::EMPTY};
-
-  // State id
-  ProgramState stateId{ProgramState::EMPTY};
+enum class ProgramState {
+  Menu,
+  Game,
+  Editor,
+  LevelSelect,
+  Options,
 };
-
-/*********
- * STATE
- *********/
-class State {
- public:
-  // Virtual destructor
-  virtual ~State() = default;
-
-  // Draw to screen
-  virtual void draw() = 0;
-
-  // Update logic
-  virtual void update(StateEngine* engine) = 0;
-
-  // Change state
-  void setNextState(StateEngine* engine, ProgramState state) const;
-};
-
-#endif  // STATE_H

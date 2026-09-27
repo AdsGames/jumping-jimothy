@@ -5,31 +5,34 @@
  * 04/01/2018
  **/
 
-#ifndef LEVELSELECT_H
-#define LEVELSELECT_H
+#pragma once
 
-#include <allegro5/allegro_font.h>
+#include <vector>
 
-#include "../State.h"
+#include "../FixedScene.h"
+#include "../ui/Button.h"
 #include "../ui/UIHandler.h"
 
-class LevelSelect : public State {
+class LevelSelect : public FixedScene {
  public:
-  LevelSelect();
-  ~LevelSelect() override;
+  using FixedScene::FixedScene;
 
+  void init() override;
   void draw() override;
-  void update(StateEngine* engine) override;
+
+ protected:
+  void tick() override;
 
  private:
-  void createLevelButton(int, int, int);
+  void showResetConfirm(bool show);
 
-  ALLEGRO_FONT* levelselect_font{nullptr};
-  ALLEGRO_FONT* levelselect_font_large{nullptr};
+  asw::Font font;
+  asw::Font font_large;
 
-  UIHandler levelSelectUI{};
-
-  bool reset_game_menu{false};
+  UIHandler ui;
+  std::vector<Button*> level_buttons;
+  Button* btn_back{nullptr};
+  Button* btn_reset{nullptr};
+  Button* btn_really_reset{nullptr};
+  Button* btn_cancel{nullptr};
 };
-
-#endif  // LEVELSELECT_H

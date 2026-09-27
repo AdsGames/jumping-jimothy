@@ -1,35 +1,19 @@
 /**
  * Collision Box
  * Danny Van Stemp
- * A collidable box. Implemented for more
- *   precise collision.
+ * Invisible solid box, gives static boxes their collision.
+ *   Hold G to see them.
  * 09/07/2017
  **/
 
-#ifndef COLLISIONBOX_H
-#define COLLISIONBOX_H
+#pragma once
 
 #include "Box.h"
 
 class CollisionBox : public Box {
  public:
-  // Constructor
-  CollisionBox(const float x,
-               const float y,
-               const float width,
-               const float height,
-               std::shared_ptr<b2World> world);
+  CollisionBox(float x, float y, float width, float height, b2World& world);
 
-  // Draw
-  void draw() override;
-
-  // Update
-  void update(std::shared_ptr<b2World> world) override{
-      // Unused
-  };
-
-  // Get type
-  int getType() override;
+  void draw() const override;
+  BoxType getType() const override { return BoxType::Collision; }
 };
-
-#endif  // COLLISIONBOX_H

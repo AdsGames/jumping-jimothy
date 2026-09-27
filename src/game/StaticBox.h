@@ -1,31 +1,29 @@
 /**
  * Static Box
- * Danny Vanstemp
- * Physics box not effected by gravity
+ * Danny Van Stemp
+ * Decoration only, collision comes from collision boxes
  * 05/05/2017
  **/
 
-#ifndef STATICBOX_H
-#define STATICBOX_H
+#pragma once
+
+#include <array>
 
 #include "Box.h"
 
 class StaticBox : public Box {
  public:
-  // Constructor
-  StaticBox(const float x, const float y);
+  // Tiles are indices into the 3 by 5 static tile sheet for the top left, top
+  // right, bottom left and bottom right corners
+  StaticBox(float x,
+            float y,
+            const asw::Texture& tile_sheet,
+            const std::array<int, 4>& tiles);
 
-  // Destructor
-  virtual ~StaticBox();
+  void draw() const override;
+  BoxType getType() const override { return BoxType::Static; }
 
-  // Draw
-  virtual void draw() override;
-
-  // Update
-  virtual void update(std::shared_ptr<b2World> world) override{};
-
-  // Get type
-  virtual int getType() override;
+ private:
+  asw::Texture tile_sheet;
+  std::array<int, 4> tiles;
 };
-
-#endif  // STATICBOX_H

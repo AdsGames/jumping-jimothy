@@ -40,16 +40,6 @@ Icon
 .Spotlight-V100
 .Trashes
 
-CppCheckResults.xml
-CMakeFiles
-CMakeCache.txt
-Makefile
-*.cmake
-install_manifest.txt
-bin
-docs
-lib
-build/
-.ninja*
-build.ninja
+# Build
+/build
 compile_commands.json

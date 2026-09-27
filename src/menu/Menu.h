@@ -5,49 +5,44 @@
  * 06/05/2017
  **/
 
-#ifndef MENU_H
-#define MENU_H
+#pragma once
 
-#include <allegro5/allegro_image.h>
-
-#include "../State.h"
+#include "../FixedScene.h"
 #include "../ui/Button.h"
 #include "../ui/UIHandler.h"
-#include "../util/Sound.h"
 
-enum {
-  menu_button_play,
-  menu_button_exit,
-  menu_button_edit,
-  menu_button_help,
-  menu_button_options,
-};
-
-// Menu
-class Menu : public State {
+class Menu : public FixedScene {
  public:
-  Menu();
-  ~Menu() override;
+  using FixedScene::FixedScene;
 
-  void update(StateEngine* engine) override;
+  void init() override;
   void draw() override;
 
+ protected:
+  void tick() override;
+
  private:
-  // Images
-  ALLEGRO_BITMAP* title{nullptr};
-  ALLEGRO_BITMAP* title_overlay{nullptr};
-  ALLEGRO_BITMAP* title_shine{nullptr};
+  void drawTitle() const;
+  void drawCredits() const;
 
-  ALLEGRO_BITMAP* logo{nullptr};
+  asw::Texture title;
+  asw::Texture title_overlay;
+  asw::Texture title_shine;
+  asw::Texture logo;
 
-  ALLEGRO_FONT* menu_font{nullptr};
-  ALLEGRO_FONT* credits_font{nullptr};
-  ALLEGRO_FONT* button_font{nullptr};
+  asw::Font menu_font;
+  asw::Font button_font;
+  asw::Font credits_font;
 
-  UIHandler menu_ui;
+  UIHandler ui;
+  Button* btn_play{nullptr};
+  Button* btn_editor{nullptr};
+  Button* btn_settings{nullptr};
+  Button* btn_credits{nullptr};
+  Button* btn_exit{nullptr};
 
   bool credits_menu{false};
+
+  // Title shine animation
   int counter_title{0};
 };
-
-#endif  // MENU_H

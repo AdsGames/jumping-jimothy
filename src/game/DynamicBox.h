@@ -1,38 +1,23 @@
 /**
- * Dyanmic Box
+ * Dynamic Box
  * Danny Van Stemp
  * Physics based box that is influenced by
- *   gravity.
+ *   gravity. Freezes while time is paused.
  * 30/07/2017
  **/
 
-#ifndef DYNAMICBOX_H
-#define DYNAMICBOX_H
+#pragma once
 
 #include "Box.h"
 
 class DynamicBox : public Box {
  public:
-  // Constructor
-  DynamicBox(const float x,
-             const float y,
-             const float velX,
-             const float velY,
-             std::shared_ptr<b2World> world);
+  DynamicBox(float x, float y, const asw::Texture& image, b2World& world);
 
-  // Draw
-  void draw() override;
+  void draw() const override;
+  BoxType getType() const override { return BoxType::Dynamic; }
+  bool isPausable() const override { return true; }
 
-  // Update
-  void update(std::shared_ptr<b2World> world) override{
-      // Unused
-  };
-
-  // Get type
-  int getType() override;
-
-  // Is pausable
-  bool isPausable() override;
+ private:
+  asw::Texture image;
 };
-
-#endif  // DYNAMICBOX_H

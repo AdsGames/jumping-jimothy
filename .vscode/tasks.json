@@ -6,10 +6,10 @@
     {
       "label": "Build",
       "type": "shell",
-      "detail": "Run and build jim farm",
-      "command": "cmake --build . && cd build && ./JumpingJimothy",
+      "detail": "Build and run Jumping Jimothy",
+      "command": "cmake --build --preset debug && ./build/debug/target/JumpingJimothy",
       "windows": {
-        "command": "cmake --build . && cd build && JumpingJimothy.exe"
+        "command": "cmake --build --preset debug && .\\build\\debug\\target\\JumpingJimothy.exe"
       },
       "group": "build",
       "problemMatcher": "$gcc"

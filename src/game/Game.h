@@ -5,89 +5,80 @@
  * 05/05/2017
  **/
 
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
 #include <box2d/box2d.h>
+#include <memory>
+#include <string>
 #include <vector>
 
-#include "../State.h"
-
+#include "../FixedScene.h"
 #include "../ui/Button.h"
-#include "../util/Sound.h"
+#include "../ui/UIHandler.h"
 #include "Box.h"
 #include "Character.h"
+#include "GameAssets.h"
 #include "Goat.h"
 
-#include "World.h"
-
-class Game : public State {
+class Game : public FixedScene {
  public:
-  // Construct / destruct
-  Game();
-  ~Game() override;
+  using FixedScene::FixedScene;
 
-  // Override parent
-  void update(StateEngine* engine) override;
+  void init() override;
   void draw() override;
+  void cleanup() override;
+
+ protected:
+  void tick() override;
 
  private:
-  // Functions
-  void load_world(std::string file);
-  void load_sprites();
+  // Reload the current level
   void reset();
 
-  // Creation code
-  Box* create_dynamic_box(float x,
-                          float y,
-                          float velX,
-                          float velY,
-                          ALLEGRO_BITMAP*);
-  Box* create_explosive_box(float, float, int, bool);
-  Box* create_static_box(float x, float y, ALLEGRO_BITMAP*);
-  Box* create_collision_box(float x, float y, float, float);
+  // Build the world from a level file
+  void loadLevel(const std::string& path);
 
-  Goat* create_goat(float, float);
-  Character* create_character(float x, float y);
+  // Reached the goat
+  void completeLevel();
 
-  // Our character and goat
-  Goat* gameGoat{nullptr};
-  Character* gameCharacter{nullptr};
+  // Go to the next level, or the menu after the last one
+  void nextLevel();
 
-  // Game variables
-  std::vector<Box*> gameBoxes;
+  // Restart the level
+  void die();
 
-  int level;
-  bool first_play;
-  bool static_mode;
+  // Toggle frozen time
+  void togglePause();
+
+  // Leave for another scene, no more ticks run here
+  void changeScene(ProgramState state);
+
+  GameAssets assets;
+
+  asw::Font game_font;
+  asw::Font help_font;
+  asw::Font edit_font;
+
+  UIHandler ui;
+  Button* back_button{nullptr};
+
+  // Declared before the boxes so the boxes go first
+  std::unique_ptr<b2World> world;
+  std::vector<std::unique_ptr<Box>> boxes;
+
+  Character* character{nullptr};
+  Goat* goat{nullptr};
 
   std::vector<std::string> help_text;
 
-  ALLEGRO_FONT* game_font{nullptr};
-  ALLEGRO_FONT* help_font{nullptr};
-  ALLEGRO_FONT* edit_font{nullptr};
+  int level{1};
 
-  // Bitmaps
-  ALLEGRO_BITMAP* box{nullptr};
-  ALLEGRO_BITMAP* box_repel{nullptr};
-  ALLEGRO_BITMAP* box_repel_direction{nullptr};
-  ALLEGRO_BITMAP* character{nullptr};
-  ALLEGRO_BITMAP* goat_map{nullptr};
-  ALLEGRO_BITMAP* play{nullptr};
-  ALLEGRO_BITMAP* pause{nullptr};
+  // Time is frozen
+  bool static_mode{true};
 
-  ALLEGRO_BITMAP* new_dynamic_tile[100];
+  // Time has not run since the level started, boxes placed in the air must
+  // fall on the first unpause instead of sleeping
+  bool first_play{true};
 
-  // TODO (Danny#1#): FIX WHEN NOT DEAD INSIDE
-
-  // Samples
-  Sound toggle_off;
-  Sound toggle_on;
-  Sound death;
-  Button* testing_back_button{nullptr};
-
-  // Box 2d game world
-  World* world{nullptr};
+  bool leaving{false};
 };
-
-#endif  // GAME_H

@@ -5,31 +5,32 @@
  * 22/11/2018
  **/
 
-#ifndef OPTIONS_H
-#define OPTIONS_H
+#pragma once
 
-#include <allegro5/allegro_font.h>
-
-#include "../State.h"
+#include "../FixedScene.h"
+#include "../ui/Button.h"
+#include "../ui/CheckBox.h"
+#include "../ui/Label.h"
 #include "../ui/UIHandler.h"
 
-// Options state
-class Options : public State {
+class Options : public FixedScene {
  public:
-  Options();
-  ~Options() override;
+  using FixedScene::FixedScene;
 
+  void init() override;
   void draw() override;
-  void update(StateEngine* engine) override;
-  void updateUI();
+
+ protected:
+  void tick() override;
 
  private:
-  ALLEGRO_FONT* options_font{nullptr};
-  ALLEGRO_FONT* title_font{nullptr};
+  asw::Font options_font;
+  asw::Font title_font;
 
-  UIHandler OptionsUI;
-
-  int temp_graphics_mode{0};
+  UIHandler ui;
+  Label* lbl_gamepad{nullptr};
+  CheckBox* chk_sfx{nullptr};
+  CheckBox* chk_music{nullptr};
+  CheckBox* chk_fullscreen{nullptr};
+  Button* btn_back{nullptr};
 };
-
-#endif  // OPTIONS_H

@@ -1,70 +1,49 @@
 #include "Goat.h"
 
-#include "../util/Globals.h"
-#include "../util/Tools.h"
+#include "../util/Graphics.h"
 
-// We'll use this for the goat
-Goat::Goat(const float x,
-           const float y,
-           Character* character,
-           ALLEGRO_BITMAP* image,
-           std::shared_ptr<b2World> world)
-    : Box(x, y, 1.6f, 3.2f, world), gameCharacter(character) {
-  // Modify body
-  body->SetType(b2_dynamicBody);
+namespace {
+constexpr float WIDTH = 1.6F;
+constexpr float HEIGHT = 3.2F;
 
-  // Image
-  setImage(image);
+// Sprite sheet layout
+constexpr float FRAME_WIDTH = 32;
+constexpr float FRAME_HEIGHT = 64;
+constexpr int FRAMES = 15;
+constexpr int TICKS_PER_FRAME = 11;
+}  // namespace
 
-  // Cut it up
-  for (int i = 0; i < 16; i++) {
-    goat_images[i] = al_create_sub_bitmap(sprite, i * 32, 0, 32, 64);
-  }
-
-  // Sensor
-  sensor_box = std::make_unique<Sensor>(x, y, getWidth(), getHeight());
-  sensor_box->init(world, getBody());
+Goat::Goat(float x, float y, const GameAssets& assets, b2World& world)
+    : Box(x, y, WIDTH, HEIGHT), assets(assets) {
+  createBody(world, b2_dynamicBody);
 }
 
-// Draw box to screen
-void Goat::draw() {
-  goat_tick++;
-
-  if (goat_tick > 10) {
-    goat_frame++;
-    goat_tick = 0;
+void Goat::update(b2World& /*world*/) {
+  tick++;
+  if (tick >= TICKS_PER_FRAME) {
+    frame = (frame + 1) % FRAMES;
+    tick = 0;
   }
-  if (goat_frame > 14) {
-    goat_frame = 0;
-  }
-
-  // Draw transform
-  ALLEGRO_TRANSFORM trans;
-  ALLEGRO_TRANSFORM prevTrans;
-
-  // back up the current transform
-  al_copy_transform(&prevTrans, al_get_current_transform());
-
-  // scale using the new transform
-  al_identity_transform(&trans);
-
-  al_rotate_transform(&trans, -getAngle());
-  al_translate_transform(&trans, getX() * 20, getY() * -20);
-
-  al_use_transform(&trans);
-
-  al_draw_bitmap(goat_images[goat_frame], -(getWidth() / 2) * 20,
-                 -(getHeight() / 2) * 20, 0);
-
-  al_use_transform(&prevTrans);
 }
 
-bool Goat::getWinCondition() {
-  return gameCharacter &&
-         sensor_box->isCollidingWithBody(gameCharacter->getBody());
+void Goat::draw() const {
+  gfx::region(assets.goat,
+              asw::Quad<float>(static_cast<float>(frame) * FRAME_WIDTH, 0,
+                               FRAME_WIDTH, FRAME_HEIGHT),
+              screenQuad(FRAME_WIDTH, FRAME_HEIGHT), screenAngle());
 }
 
-// Get box type
-int Goat::getType() {
-  return GOAT;
+bool Goat::getWinCondition() const {
+  if (character == nullptr) {
+    return false;
+  }
+
+  for (const auto* edge = body->GetContactList(); edge != nullptr;
+       edge = edge->next) {
+    if (edge->other == character->getBody() && edge->contact->IsTouching()) {
+      return true;
+    }
+  }
+
+  return false;
 }

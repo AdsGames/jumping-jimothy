@@ -1,1193 +1,793 @@
 #include "Editor.h"
 
-#include <math.h>
 #include <algorithm>
-#include <fstream>
+#include <cmath>
+#include <filesystem>
+#include <initializer_list>
+#include <numbers>
+#include <utility>
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_native_dialog.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_ttf.h>
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
-#pragma GCC diagnostic ignored "-Wswitch-default"
-#include "../rapidxml/rapidxml.hpp"
-#include "../rapidxml/rapidxml_print.hpp"
-#pragma GCC diagnostic pop
-
-#include "../util/Globals.h"
-#include "../util/KeyListener.h"
-#include "../util/MouseListener.h"
-#include "../util/MusicManager.h"
-#include "../util/Tools.h"
-
+#include "../Globals.h"
+#include "../util/Audio.h"
 #include "../util/Config.h"
-#include "../util/DisplayMode.h"
+#include "../util/Dialog.h"
+#include "../util/Graphics.h"
+#include "../util/Input.h"
 
-#include "../ui/Button.h"
-#include "../ui/CheckBox.h"
+namespace {
+using asw::input::Key;
+using asw::input::MouseButton;
 
-// Init editor
-Editor::Editor() {
-  MusicManager::menu_music->stop();
+constexpr float CELL = 32;
+constexpr float HALF_CELL = CELL / 2;
 
-  help_menu = tools::load_bitmap_ex("assets/images/help_menu.png");
+constexpr float BAR_Y = 728;
 
-  // Load box image
-  image_box[0] = tools::load_bitmap_ex("assets/images/box_green.png");
-  image_box[1] = tools::load_bitmap_ex("assets/images/StaticBlock.png");
-  image_box[2] = tools::load_bitmap_ex("assets/images/character.png");
-  image_box[3] = tools::load_bitmap_ex("assets/images/goat.png");
-  image_box[4] = tools::load_bitmap_ex("assets/images/box_repel.png");
-  image_box[5] = tools::load_bitmap_ex("assets/images/box_repel_direction.png");
+// Static tile sheet layout
+constexpr int SHEET_COLUMNS = 3;
+constexpr int SHEET_TILES = 15;
+constexpr float TILE_SIZE = 16;
 
-  cursor = tools::load_bitmap_ex("assets/images/cursor.png");
+// Candidate tiles for a static box corner
+constexpr int TILE_OPTIONS = 13;
 
-  for (int i = 0; i < 5; i++) {
-    for (int t = 0; t < 15; t++) {
-      tiles[i][t] = nullptr;
-    }
+const asw::Color BLACK(0, 0, 0);
+const asw::Color SELECTED(0, 150, 0);
+const asw::Color UNSELECTED(200, 200, 200);
+const asw::Color COLLISION_FILL(0, 255, 0, 50);
+
+// Explosive button order matches the orientation values
+constexpr std::array<float, 5> EXPLOSIVE_BUTTON_X{152, 0, 38, 76, 114};
+
+std::string defaultFile() {
+  return Config::savePath() + "untitled.xml";
+}
+
+// Snap a pixel position to the top left of its grid cell
+float snap(float value) {
+  return std::floor(value / CELL) * CELL;
+}
+
+const char* typeName(ObjectType type) {
+  switch (type) {
+    case ObjectType::Dynamic:
+      return "Dynamic";
+    case ObjectType::Static:
+      return "Static";
+    case ObjectType::Character:
+      return "Character spawn";
+    case ObjectType::Finish:
+      return "Endgame goat";
+    case ObjectType::Collision:
+      return "Collision Box";
+    case ObjectType::Explosive:
+      return "Explosive Box";
   }
 
-  // Static
-  for (int i = 0; i < 3; i++) {
-    for (int t = 0; t < 5; t++) {
-      tiles[1][i + t * 3] =
-          al_create_sub_bitmap(image_box[1], i * 16, t * 16, 16, 16);
-    }
+  return "";
+}
+
+// Level files hold centres in metres with y up, the editor top left pixels
+LevelObject toLevelObject(const EditorBox& box) {
+  LevelObject object;
+  object.type = box.type;
+  object.x = (box.x + (box.width / 2)) / PIXELS_PER_METER;
+  object.y = -(box.y + (box.height / 2)) / PIXELS_PER_METER;
+  object.orientation = box.orientation;
+  object.affect_character = box.affect_character;
+
+  if (box.type == ObjectType::Collision) {
+    object.width = box.width / PIXELS_PER_METER;
+    object.height = box.height / PIXELS_PER_METER;
   }
 
-  // Player
-  tiles[2][0] = al_create_sub_bitmap(image_box[2], 0, 0, 32, 64);
+  return object;
+}
 
-  // Goat
-  tiles[3][0] = al_create_sub_bitmap(image_box[3], 0, 0, 32, 64);
-  tiles[0][0] = image_box[0];
+EditorBox fromLevelObject(const LevelObject& object) {
+  EditorBox box;
+  box.type = object.type;
+  box.orientation = object.orientation;
+  box.affect_character = object.affect_character;
 
-  // Explode/repel
-  tiles[4][0] = image_box[4];
-  tiles[4][1] = image_box[5];
-
-  srand(time(nullptr));
-
-  edit_font = al_load_ttf_font("assets/fonts/fantasque.ttf", 18, 0);
-
-  if (!edit_font) {
-    tools::abort_on_error("Could not load 'fantasque.ttf'.\n", "Font Error");
+  if (object.type == ObjectType::Collision) {
+    box.width = object.width * PIXELS_PER_METER;
+    box.height = object.height * PIXELS_PER_METER;
   }
 
-  editorBoxes.clear();
+  box.x = (object.x * PIXELS_PER_METER) - (box.width / 2);
+  box.y = (-object.y * PIXELS_PER_METER) - (box.height / 2);
 
-  // buttons
-  editorUI.addElement(
-      std::make_shared<Button>(0, 728, "Dynamic", "btnDynamic", edit_font));
-  editorUI.createAnchoredButton("Static", edit_font, "btnDynamic", "btnStatic");
-  editorUI.createAnchoredButton("Player", edit_font, "btnStatic", "btnPlayer");
-  editorUI.createAnchoredButton("Goat", edit_font, "btnPlayer", "btnGoat");
-  editorUI.createAnchoredButton("Collision", edit_font, "btnGoat",
-                                "btnCollision");
-  editorUI.createAnchoredButton("Explosive", edit_font, "btnCollision",
-                                "btnExplosive");
-  editorUI.createAnchoredButton("<", edit_font, "btnExplosive",
-                                "left_bottom_toggle");
+  return box;
+}
+}  // namespace
 
-  editorUI.addElement(std::make_shared<Button>(
-      566, 728, ">", "right_bottom_toggle", edit_font));
-  editorUI.createAnchoredButton("Undo", edit_font, "right_bottom_toggle",
-                                "btnUndo");
-  editorUI.createAnchoredButton("Clear", edit_font, "btnUndo", "btnClear");
-  editorUI.createAnchoredButton("Save", edit_font, "btnClear", "btnSave");
-  editorUI.createAnchoredButton("Save as", edit_font, "btnSave", "btnSaveAs");
-  editorUI.createAnchoredButton("Load", edit_font, "btnSaveAs", "btnLoad");
-  editorUI.createAnchoredButton("Grid", edit_font, "btnLoad", "btnGrid");
-  editorUI.createAnchoredButton("Play", edit_font, "btnGrid", "btnPlay");
+void Editor::init() {
+  leaving = false;
 
-  editorUI.addElement(
-      std::make_shared<Button>(882, 0, ">", "right_top_toggle", edit_font));
-  editorUI.addElement(
-      std::make_shared<Button>(898 + 13, 0, "Help", "btnHelp", edit_font));
-  editorUI.createAnchoredButton("Back", edit_font, "btnHelp", "btnBack");
+  box_green = asw::assets::load_texture("assets/images/box_green.png");
+  static_tiles = asw::assets::load_texture("assets/images/StaticBlock.png");
+  character = asw::assets::load_texture("assets/images/character.png");
+  goat = asw::assets::load_texture("assets/images/goat.png");
+  box_repel = asw::assets::load_texture("assets/images/box_repel.png");
+  box_repel_direction =
+      asw::assets::load_texture("assets/images/box_repel_direction.png");
+  help_menu = asw::assets::load_texture("assets/images/help_menu.png");
 
-  editorUI.addElement(std::make_shared<CheckBox>(
-      0, 60, "Block affects character", "chkBlockAffectsChar", edit_font));
-  editorUI.createAnchoredButton("<", edit_font, "chkBlockAffectsChar",
-                                "left_top_toggle");
+  edit_font = asw::assets::load_font("assets/fonts/fantasque.ttf", 18);
 
-  editorUI.addElement(
-      std::make_shared<Button>(0, 100, "", "explosive_up", nullptr));
-  editorUI.getElementById("explosive_up")->setImage(image_box[5]);
-  editorUI.getElementById("explosive_up")->setPadding(2, 2);
+  boxes.clear();
+  help_text.clear();
+  tile_type = ObjectType::Dynamic;
+  explosive_orientation = 1;
+  is_dragging_box = false;
+  pending_file_action = FileAction::None;
+  modified = false;
+  display_help = false;
+  grid_on = false;
 
-  editorUI.addElement(
-      std::make_shared<Button>(38, 100, "", "explosive_right", nullptr));
-  editorUI.getElementById("explosive_right")->setImage(image_box[5]);
-  editorUI.getElementById("explosive_right")->setBitmapRotationAngle(PI / 2);
-  editorUI.getElementById("explosive_right")->setPadding(2, 2);
+  createUI();
 
-  editorUI.addElement(
-      std::make_shared<Button>(76, 100, "", "explosive_down", nullptr));
-  editorUI.getElementById("explosive_down")->setImage(image_box[5]);
-  editorUI.getElementById("explosive_down")->setBitmapRotationAngle(PI);
-  editorUI.getElementById("explosive_down")->setPadding(2, 2);
+  Audio::stopMusic();
 
-  editorUI.addElement(
-      std::make_shared<Button>(114, 100, "", "explosive_left", nullptr));
-  editorUI.getElementById("explosive_left")->setImage(image_box[5]);
-  editorUI.getElementById("explosive_left")->setBitmapRotationAngle(PI * 3 / 2);
-  editorUI.getElementById("explosive_left")->setPadding(2, 2);
+  // Coming back from testing a level
+  file_name = defaultFile();
+  is_saved = false;
 
-  editorUI.addElement(
-      std::make_shared<Button>(152, 100, "", "explosive_circle", nullptr));
-  editorUI.getElementById("explosive_circle")->setImage(image_box[4]);
-  editorUI.getElementById("explosive_circle")->setPadding(2, 2);
-
-  set_explosive_ui_status();
-
-  if (Config::getIntValue("graphics_mode") != DisplayMode::WINDOWED)
-    DisplayMode::setMode(DisplayMode::WINDOWED);
-
-  // Filename
-  if (Config::getBooleanValue("EditingLevel")) {
-    file_name = Config::getValue("EditingLevelFile");
+  if (session.editing_level && loadMap(session.editing_file)) {
+    file_name = session.editing_file;
     is_saved = true;
-    if (!load_map(file_name)) {
-      file_name = "untitled.xml";
-      is_saved = false;
+  }
+
+  session.editing_level = false;
+  session.editing_file.clear();
+}
+
+void Editor::cleanup() {
+  ui.clear();
+  boxes.clear();
+  FixedScene::cleanup();
+}
+
+void Editor::changeScene(ProgramState state) {
+  leaving = true;
+  manager.set_next_scene(state);
+}
+
+void Editor::createUI() {
+  ui.clear();
+
+  // Bottom left, object types
+  btn_dynamic = &ui.add<Button>(0, BAR_Y, "Dynamic", edit_font);
+  btn_static = &ui.addAfter<Button>(*btn_dynamic, "Static", edit_font);
+  btn_player = &ui.addAfter<Button>(*btn_static, "Player", edit_font);
+  btn_goat = &ui.addAfter<Button>(*btn_player, "Goat", edit_font);
+  btn_collision = &ui.addAfter<Button>(*btn_goat, "Collision", edit_font);
+  btn_explosive = &ui.addAfter<Button>(*btn_collision, "Explosive", edit_font);
+  left_bottom_toggle = &ui.addAfter<Button>(*btn_explosive, "<", edit_font);
+
+  // Bottom right, file actions
+  right_bottom_toggle = &ui.add<Button>(566, BAR_Y, ">", edit_font);
+  btn_undo = &ui.addAfter<Button>(*right_bottom_toggle, "Undo", edit_font);
+  btn_clear = &ui.addAfter<Button>(*btn_undo, "Clear", edit_font);
+  btn_save = &ui.addAfter<Button>(*btn_clear, "Save", edit_font);
+  btn_save_as = &ui.addAfter<Button>(*btn_save, "Save as", edit_font);
+  btn_load = &ui.addAfter<Button>(*btn_save_as, "Load", edit_font);
+  btn_grid = &ui.addAfter<Button>(*btn_load, "Grid", edit_font);
+  btn_play = &ui.addAfter<Button>(*btn_grid, "Play", edit_font);
+
+  // Top right
+  right_top_toggle = &ui.add<Button>(882, 0, ">", edit_font);
+  btn_help = &ui.add<Button>(911, 0, "Help", edit_font);
+  btn_back = &ui.addAfter<Button>(*btn_help, "Back", edit_font);
+
+  // Top left, explosive settings
+  chk_affects_char =
+      &ui.add<CheckBox>(0, 60, "Block affects character", edit_font);
+  left_top_toggle = &ui.addAfter<Button>(*chk_affects_char, "<", edit_font);
+
+  for (std::size_t i = 0; i < explosive_buttons.size(); i++) {
+    auto& button = ui.add<Button>(EXPLOSIVE_BUTTON_X[i], 100, "", nullptr);
+
+    if (i == 0) {
+      button.setImage(box_repel);
+    } else {
+      button.setImage(box_repel_direction);
+      button.setImageRotation((std::numbers::pi_v<float> / 2.0F) *
+                              static_cast<float>(i - 1));
     }
+
+    button.setPadding(2, 2);
+    explosive_buttons[i] = &button;
+  }
+
+  setExplosiveUIVisible(false);
+}
+
+void Editor::setExplosiveUIVisible(bool visible) {
+  chk_affects_char->setVisible(visible);
+  left_top_toggle->setVisible(visible);
+
+  for (auto* button : explosive_buttons) {
+    button->setVisible(visible);
+  }
+}
+
+void Editor::setTileType(ObjectType type) {
+  tile_type = type;
+  setExplosiveUIVisible(type == ObjectType::Explosive);
+
+  if (type == ObjectType::Explosive) {
+    left_top_toggle->setText("<");
+    left_top_toggle->setTransparency(255);
+    left_top_toggle->setPosition(257, 60);
+  }
+}
+
+void Editor::updateExplosiveButtons() {
+  for (std::size_t i = 0; i < explosive_buttons.size(); i++) {
+    if (explosive_buttons[i]->clicked()) {
+      explosive_orientation = static_cast<int>(i);
+    }
+  }
+
+  for (std::size_t i = 0; i < explosive_buttons.size(); i++) {
+    explosive_buttons[i]->setBackgroundColour(
+        static_cast<int>(i) == explosive_orientation ? SELECTED : UNSELECTED);
+  }
+}
+
+void Editor::tick() {
+  if (leaving) {
+    return;
+  }
+
+  // Wait for the file chooser
+  if (pending_file_action != FileAction::None) {
+    if (Dialog::filePending()) {
+      return;
+    }
+
+    const auto action = std::exchange(pending_file_action, FileAction::None);
+    if (const auto path = Dialog::takeFile()) {
+      handleFileChosen(action, *path);
+    }
+    return;
+  }
+
+  ui.update();
+  updateExplosiveButtons();
+
+  handleShortcutsAndButtons();
+  if (leaving || pending_file_action != FileAction::None) {
+    return;
+  }
+
+  handleToggles();
+
+  if (tile_type == ObjectType::Collision) {
+    dragCollisionBox();
   } else {
-    file_name = "untitled.xml";
-    is_saved = false;
+    placeTiles();
   }
 
-  Config::setValue("EditingLevel", false);
-  Config::setValue("EditingLevelFile", "");
+  removeTiles();
 }
 
-// Destruct
-Editor::~Editor() {
-  // Destroy resources if loaded
-  if (edit_font != nullptr) {
-    al_destroy_font(edit_font);
+void Editor::handleShortcutsAndButtons() {
+  // Object types
+  if (input::keyPressed(Key::Q) || btn_dynamic->clicked()) {
+    setTileType(ObjectType::Dynamic);
   }
 
-  // Parent bitmaps
-  for (int i = 0; i < 4; i++) {
-    al_destroy_bitmap(image_box[i]);
-  }
-}
-
-bool Editor::is_player() {
-  for (unsigned int i = 0; i < editorBoxes.size(); i++) {
-    if (editorBoxes.at(i).type == 2)
-      return true;
-  }
-  return false;
-}
-
-void Editor::set_explosive_ui_status() {
-  editorUI.getElementById("chkBlockAffectsChar")->setVisibility(tile_type == 5);
-  editorUI.getElementById("explosive_up")->setVisibility(tile_type == 5);
-  editorUI.getElementById("explosive_left")->setVisibility(tile_type == 5);
-  editorUI.getElementById("explosive_right")->setVisibility(tile_type == 5);
-  editorUI.getElementById("explosive_down")->setVisibility(tile_type == 5);
-  editorUI.getElementById("explosive_circle")->setVisibility(tile_type == 5);
-  editorUI.getElementById("left_top_toggle")->setVisibility(tile_type == 5);
-}
-
-// Update editor
-void Editor::update(StateEngine* engine) {
-  // Update buttons
-  editorUI.update();
-
-  if (editorUI.getElementById("explosive_circle")->clicked())
-    explosive_orientation = 0;
-
-  if (editorUI.getElementById("explosive_up")->clicked())
-    explosive_orientation = 1;
-
-  if (editorUI.getElementById("explosive_right")->clicked())
-    explosive_orientation = 2;
-
-  if (editorUI.getElementById("explosive_down")->clicked())
-    explosive_orientation = 3;
-
-  if (editorUI.getElementById("explosive_left")->clicked())
-    explosive_orientation = 4;
-
-  ALLEGRO_COLOR selected_colour = al_map_rgba(0, 150, 0, 255);
-
-  if (explosive_orientation == 0)
-    editorUI.getElementById("explosive_circle")
-        ->setBackgroundColour(selected_colour);
-  else
-    editorUI.getElementById("explosive_circle")
-        ->setBackgroundColour(al_map_rgba(200, 200, 200, 255));
-
-  if (explosive_orientation == 1)
-    editorUI.getElementById("explosive_up")
-        ->setBackgroundColour(selected_colour);
-  else
-    editorUI.getElementById("explosive_up")
-        ->setBackgroundColour(al_map_rgba(200, 200, 200, 255));
-
-  if (explosive_orientation == 2)
-    editorUI.getElementById("explosive_right")
-        ->setBackgroundColour(selected_colour);
-  else
-    editorUI.getElementById("explosive_right")
-        ->setBackgroundColour(al_map_rgba(200, 200, 200, 255));
-
-  if (explosive_orientation == 3)
-    editorUI.getElementById("explosive_down")
-        ->setBackgroundColour(selected_colour);
-  else
-    editorUI.getElementById("explosive_down")
-        ->setBackgroundColour(al_map_rgba(200, 200, 200, 255));
-
-  if (explosive_orientation == 4)
-    editorUI.getElementById("explosive_left")
-        ->setBackgroundColour(selected_colour);
-  else
-    editorUI.getElementById("explosive_left")
-        ->setBackgroundColour(al_map_rgba(200, 200, 200, 255));
-
-  // Check if over Button
-  bool over_Button = editorUI.isHovering();
-
-  // Changing types
-  if (KeyListener::keyPressed[ALLEGRO_KEY_Q] ||
-      editorUI.getElementById("btnDynamic")->clicked()) {
-    tile_type = 0;
-    set_explosive_ui_status();
-  }
-  if (KeyListener::keyPressed[ALLEGRO_KEY_W] ||
-      editorUI.getElementById("btnStatic")->clicked()) {
-    tile_type = 1;
-    set_explosive_ui_status();
+  if (input::keyPressed(Key::W) || btn_static->clicked()) {
+    setTileType(ObjectType::Static);
   }
 
-  if (KeyListener::keyPressed[ALLEGRO_KEY_E] ||
-      editorUI.getElementById("btnPlayer")->clicked()) {
-    tile_type = 2;
-    set_explosive_ui_status();
+  if (input::keyPressed(Key::E) || btn_player->clicked()) {
+    setTileType(ObjectType::Character);
   }
 
-  if (KeyListener::keyPressed[ALLEGRO_KEY_R] ||
-      editorUI.getElementById("btnGoat")->clicked()) {
-    tile_type = 3;
-    set_explosive_ui_status();
+  if (input::keyPressed(Key::R) || btn_goat->clicked()) {
+    setTileType(ObjectType::Finish);
   }
 
-  if (KeyListener::keyPressed[ALLEGRO_KEY_T] ||
-      editorUI.getElementById("btnCollision")->clicked()) {
-    tile_type = 4;
-    set_explosive_ui_status();
+  if (input::keyPressed(Key::T) || btn_collision->clicked()) {
+    setTileType(ObjectType::Collision);
   }
 
-  if (KeyListener::keyPressed[ALLEGRO_KEY_H] ||
-      editorUI.getElementById("btnHelp")->clicked()) {
+  if (input::keyPressed(Key::Y) || btn_explosive->clicked()) {
+    setTileType(ObjectType::Explosive);
+  }
+
+  if (input::keyPressed(Key::H) || btn_help->clicked()) {
     display_help = !display_help;
   }
 
-  if (KeyListener::keyPressed[ALLEGRO_KEY_Y] ||
-      editorUI.getElementById("btnExplosive")->clicked()) {
-    tile_type = 5;
-    editorUI.getElementById("left_top_toggle")->setText("<");
-    editorUI.getElementById("left_top_toggle")->setText("<");
-    editorUI.getElementById("left_top_toggle")->setTransparency(255);
-    editorUI.getElementById("left_top_toggle")->setPosition(257, 60);
-    set_explosive_ui_status();
-  }
-
-  // Rockin' three liner undo Button
-  if ((KeyListener::keyPressed[ALLEGRO_KEY_Z] ||
-       editorUI.getElementById("btnUndo")->clicked()) &&
-      editorBoxes.size() > 0) {
-    editorBoxes.pop_back();
-    calculate_orientation_global();
-  }
-
-  // Clear world Button
-  if (KeyListener::keyPressed[ALLEGRO_KEY_C] ||
-      editorUI.getElementById("btnClear")->clicked()) {
-    if (al_show_native_message_box(nullptr, "Clear?", "Clear the map?",
-                                   "There is no recovering this masterpiece.",
-                                   nullptr, ALLEGRO_MESSAGEBOX_YES_NO) == 1)
-      editorBoxes.clear();
-  }
-
-  if (KeyListener::keyPressed[ALLEGRO_KEY_V] ||
-      editorUI.getElementById("btnBack")->clicked() ||
-      KeyListener::keyReleased[ALLEGRO_KEY_ESCAPE]) {
-    if (modified) {
-      if (al_show_native_message_box(nullptr, "Main menu?",
-                                     "Return to main menu?",
-                                     "All unsaved changes will be lost.",
-                                     nullptr, ALLEGRO_MESSAGEBOX_YES_NO) == 1) {
-        setNextState(engine, ProgramState::MENU);
-      }
-    } else {
-      setNextState(engine, ProgramState::MENU);
-    }
-  }
-
-  // Activate advanced mode
-  // Don't tell Allan, but I really don't like his buttons
-  if (KeyListener::keyPressed[ALLEGRO_KEY_X])
-    gui_mode = !gui_mode;
-
-  // Save
-  if (editorUI.getElementById("btnSave")->clicked() ||
-      KeyListener::keyPressed[ALLEGRO_KEY_S]) {
-    if (editorBoxes.size() > 0) {
-      ALLEGRO_FILECHOOSER* myChooser;
-
-      // Has it been saved already?
-      if (!is_saved) {
-        myChooser =
-            al_create_native_file_dialog("assets/data/", "Save Level",
-                                         "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
-
-        // Display open dialog
-        if (al_show_native_file_dialog(nullptr, myChooser)) {
-          file_name = al_get_native_file_dialog_path(myChooser, 0);
-        }
-      }
-
-      // Make sure saves correctly
-      if (save_map(file_name)) {
-        is_saved = true;
-        modified = false;
-      } else {
-        al_show_native_message_box(nullptr, "Error!",
-                                   "Error saving map to: ", file_name.c_str(),
-                                   nullptr, ALLEGRO_MESSAGEBOX_ERROR);
-      }
-    } else
-      al_show_native_message_box(nullptr, "Empty Map",
-                                 "You can't save an empty map!", "", nullptr,
-                                 ALLEGRO_MESSAGEBOX_ERROR);
-  }
-
-  // Save as
-  if (editorUI.getElementById("btnSaveAs")->clicked() ||
-      KeyListener::keyPressed[ALLEGRO_KEY_D]) {
-    if (editorBoxes.size() > 0) {
-      ALLEGRO_FILECHOOSER* myChooser;
-
-      myChooser = al_create_native_file_dialog(
-          "assets/data/", "Save Level", "*.xml;*.*", ALLEGRO_FILECHOOSER_SAVE);
-
-      // Display open dialog
-      const char* temp_name = nullptr;
-
-      if (al_show_native_file_dialog(nullptr, myChooser))
-        temp_name = al_get_native_file_dialog_path(myChooser, 0);
-
-      if (temp_name != nullptr) {
-        file_name = temp_name;
-
-        // Make sure saves correctly
-        if (save_map(file_name)) {
-          al_show_native_message_box(
-              nullptr, "Saved map", "We've saved a map to: ", file_name.c_str(),
-              nullptr, 0);
-          is_saved = true;
-          modified = false;
-        } else {
-          al_show_native_message_box(nullptr, "Error!",
-                                     "Error saving map to: ", file_name.c_str(),
-                                     nullptr, ALLEGRO_MESSAGEBOX_ERROR);
-        }
-      }
-
-    } else {
-      al_show_native_message_box(nullptr, "Empty Map",
-                                 "You can't save an empty map!", "", nullptr,
-                                 ALLEGRO_MESSAGEBOX_ERROR);
-    }
-  }
-
-  // Load map
-  if (editorUI.getElementById("btnLoad")->clicked() ||
-      KeyListener::keyPressed[ALLEGRO_KEY_A]) {
-    ALLEGRO_FILECHOOSER* myChooser = al_create_native_file_dialog(
-        "assets/data/", "Load Level", "*.xml;*.*", 0);
-
-    const char* temp_name;
-
-    // Display open di alog
-    if (al_show_native_file_dialog(nullptr, myChooser)) {
-      temp_name = al_get_native_file_dialog_path(myChooser, 0);
-
-      // You also need to check for cancel Button here too
-      if (temp_name != nullptr) {
-        file_name = temp_name;
-        editorBoxes.clear();
-
-        // Make sure loads correctly
-        if (load_map(file_name)) {
-          al_show_native_message_box(
-              nullptr, "Loaded map",
-              "We've loaded a map from: ", file_name.c_str(), nullptr, 0);
-          is_saved = true;
-          modified = false;
-        } else
-          al_show_native_message_box(
-              nullptr, "Error!", "Error loading map from: ", file_name.c_str(),
-              nullptr, 0);
-      }
-    }
-  }
-
-  // Play
-  if (editorUI.getElementById("btnPlay")->clicked() ||
-      KeyListener::keyPressed[ALLEGRO_KEY_F]) {
-    if (editorBoxes.size() > 0) {
-      if (is_player()) {
-        save_map(file_name);
-        Config::setValue("EditingLevel", true);
-        Config::setValue("EditingLevelFile", file_name);
-        setNextState(engine, ProgramState::GAME);
-      } else {
-        al_show_native_message_box(
-            nullptr, "Missing player",
-            "You must place a player spawn to test the level.", "", "Whoopsie!",
-            0);
-      }
-    } else
-      al_show_native_message_box(nullptr, "Attemping to play an empty level",
-                                 "That wouldn't be very fun would it?", "",
-                                 "No it wouldn't.", 0);
-  }
-
-  // Grid toggle
-  if (editorUI.getElementById("btnGrid")->clicked() ||
-      KeyListener::keyPressed[ALLEGRO_KEY_G])
+  if (input::keyPressed(Key::G) || btn_grid->clicked()) {
     grid_on = !grid_on;
-
-  // Gosh darn toggle hide buttons take so much freakin' room
-  if (editorUI.getElementById("left_bottom_toggle")->clicked() ||
-      KeyListener::keyPressed[ALLEGRO_KEY_LEFT]) {
-    bool hide_buttons = false;
-    if (editorUI.getElementById("left_bottom_toggle")->getText() == "<") {
-      editorUI.getElementById("left_bottom_toggle")->setPosition(0, 728);
-      editorUI.getElementById("left_bottom_toggle")->setText(">");
-      editorUI.getElementById("left_bottom_toggle")->setTransparency(150);
-    } else {
-      hide_buttons = true;
-      editorUI.getElementById("left_bottom_toggle")->setPosition(489, 728);
-      editorUI.getElementById("left_bottom_toggle")->setText("<");
-      editorUI.getElementById("left_bottom_toggle")->setTransparency(255);
-    }
-
-    editorUI.getElementById("btnCollision")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnStatic")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnDynamic")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnPlayer")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnGoat")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnExplosive")->setVisibility(hide_buttons);
   }
 
-  if (editorUI.getElementById("right_bottom_toggle")->clicked() ||
-      KeyListener::keyPressed[ALLEGRO_KEY_RIGHT]) {
-    bool hide_buttons = false;
-    if (editorUI.getElementById("right_bottom_toggle")->getText() == "<") {
-      hide_buttons = true;
-      editorUI.getElementById("right_bottom_toggle")
-          ->setPosition(556 + 8 + 2, 728);
-      editorUI.getElementById("right_bottom_toggle")->setText(">");
-      editorUI.getElementById("right_bottom_toggle")->setTransparency(255);
-    } else {
-      editorUI.getElementById("right_bottom_toggle")->setPosition(994, 728);
-      editorUI.getElementById("right_bottom_toggle")->setText("<");
-      editorUI.getElementById("right_bottom_toggle")->setTransparency(150);
-    }
-
-    editorUI.getElementById("btnUndo")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnClear")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnSave")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnSaveAs")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnLoad")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnPlay")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnGrid")->setVisibility(hide_buttons);
+  if ((input::keyPressed(Key::Z) || btn_undo->clicked()) && !boxes.empty()) {
+    boxes.pop_back();
+    modified = true;
+    calculateOrientations();
   }
 
-  if (editorUI.getElementById("right_top_toggle")->clicked() ||
-      KeyListener::keyPressed[ALLEGRO_KEY_UP]) {
-    bool hide_buttons = false;
-    if (editorUI.getElementById("right_top_toggle")->getText() == "<") {
-      hide_buttons = true;
-      editorUI.getElementById("right_top_toggle")->setPosition(882, 0);
-      editorUI.getElementById("right_top_toggle")->setText(">");
-      editorUI.getElementById("right_top_toggle")->setTransparency(255);
-    } else {
-      editorUI.getElementById("right_top_toggle")->setPosition(994, 0);
-      editorUI.getElementById("right_top_toggle")->setText("<");
-      editorUI.getElementById("right_top_toggle")->setTransparency(150);
-    }
-
-    editorUI.getElementById("btnBack")->setVisibility(hide_buttons);
-    editorUI.getElementById("btnHelp")->setVisibility(hide_buttons);
-  }
-
-  if (editorUI.getElementById("left_top_toggle")->clicked()) {
-    bool hide_buttons = false;
-    if (editorUI.getElementById("left_top_toggle")->getText() == "<") {
-      editorUI.getElementById("left_top_toggle")->setPosition(0, 60);
-      editorUI.getElementById("left_top_toggle")->setText(">");
-      editorUI.getElementById("left_top_toggle")->setTransparency(150);
-    } else {
-      hide_buttons = true;
-      editorUI.getElementById("left_top_toggle")->setPosition(257, 60);
-      editorUI.getElementById("left_top_toggle")->setText("<");
-      editorUI.getElementById("left_top_toggle")->setTransparency(255);
-    }
-
-    editorUI.getElementById("explosive_up")->setVisibility(hide_buttons);
-    editorUI.getElementById("explosive_down")->setVisibility(hide_buttons);
-    editorUI.getElementById("explosive_left")->setVisibility(hide_buttons);
-    editorUI.getElementById("explosive_right")->setVisibility(hide_buttons);
-    editorUI.getElementById("explosive_circle")->setVisibility(hide_buttons);
-    editorUI.getElementById("chkBlockAffectsChar")->setVisibility(hide_buttons);
-  }
-
-  // Add tile
-  if (tile_type != 4) {
-    if (MouseListener::mouse_button & 1 &&
-        !box_at_with_type(0, MouseListener::mouse_x, MouseListener::mouse_y) &&
-        !box_at_with_type(1, MouseListener::mouse_x, MouseListener::mouse_y) &&
-        !box_at_with_type(2, MouseListener::mouse_x, MouseListener::mouse_y) &&
-        !box_at_with_type(3, MouseListener::mouse_x, MouseListener::mouse_y) &&
-        !box_at_with_type(5, MouseListener::mouse_x, MouseListener::mouse_y)
-
-        && ((!over_Button && gui_mode) || !gui_mode)) {
-      editor_box newBox;
-      newBox.x = MouseListener::mouse_x - MouseListener::mouse_x % 32;
-      newBox.y = MouseListener::mouse_y - MouseListener::mouse_y % 32;
-      newBox.x_str = tools::toString(float(newBox.x + 16) / 20.0f);
-      newBox.y_str = tools::toString(-1 * float(newBox.y + 16) / 20.0f);
-      newBox.type = tile_type;
-      newBox.affect_character =
-          dynamic_cast<CheckBox*>(
-              editorUI.getElementById("chkBlockAffectsChar"))
-              ->getChecked();
-
-      for (int i = 0; i < 4; i++)
-        newBox.orientation[i] = 0;
-
-      if (tile_type == 0)
-        newBox.type_str = "Dynamic";
-      else if (tile_type == 1)
-        newBox.type_str = "Static";
-      else if (tile_type == 2)
-        newBox.type_str = "Character";
-      else if (tile_type == 3)
-        newBox.type_str = "Finish";
-      else if (tile_type == 5) {
-        newBox.type_str = "Explosive";
-        newBox.orientation[0] = explosive_orientation;
-      }
-      editorBoxes.push_back(newBox);
+  if (input::keyPressed(Key::C) || btn_clear->clicked()) {
+    if (Dialog::confirm("Clear?",
+                        "Clear the map? There is no recovering this "
+                        "masterpiece.")) {
+      boxes.clear();
       modified = true;
-
-      // Calculate orientation of boxes
-      calculate_orientation_global();
     }
   }
-  // Drag n drop madness
-  if (tile_type == 4 && !dialog_open) {
-    if (MouseListener::mouse_pressed & 1 &&
-        !box_at_with_type(0, MouseListener::mouse_x, MouseListener::mouse_y) &&
-        ((!over_Button && gui_mode) || !gui_mode)) {
+
+  if (input::keyPressed(Key::S) || btn_save->clicked()) {
+    save();
+  } else if (input::keyPressed(Key::D) || btn_save_as->clicked()) {
+    saveAs();
+  } else if (input::keyPressed(Key::A) || btn_load->clicked()) {
+    load();
+  } else if (input::keyPressed(Key::F) || btn_play->clicked()) {
+    play();
+  } else if (input::keyPressed(Key::V) || input::keyPressed(Key::Escape) ||
+             btn_back->clicked()) {
+    back();
+  }
+}
+
+// Buttons that hide and show groups of buttons to free up room
+void Editor::handleToggles() {
+  if (left_bottom_toggle->clicked() || input::keyPressed(Key::Left)) {
+    const bool show = left_bottom_toggle->getText() != "<";
+
+    if (show) {
+      left_bottom_toggle->setPosition(489, BAR_Y);
+      left_bottom_toggle->setText("<");
+      left_bottom_toggle->setTransparency(255);
+    } else {
+      left_bottom_toggle->setPosition(0, BAR_Y);
+      left_bottom_toggle->setText(">");
+      left_bottom_toggle->setTransparency(150);
+    }
+
+    for (auto* button : {btn_collision, btn_static, btn_dynamic, btn_player,
+                         btn_goat, btn_explosive}) {
+      button->setVisible(show);
+    }
+  }
+
+  if (right_bottom_toggle->clicked() || input::keyPressed(Key::Right)) {
+    const bool show = right_bottom_toggle->getText() == "<";
+
+    if (show) {
+      right_bottom_toggle->setPosition(566, BAR_Y);
+      right_bottom_toggle->setText(">");
+      right_bottom_toggle->setTransparency(255);
+    } else {
+      right_bottom_toggle->setPosition(994, BAR_Y);
+      right_bottom_toggle->setText("<");
+      right_bottom_toggle->setTransparency(150);
+    }
+
+    for (auto* button : {btn_undo, btn_clear, btn_save, btn_save_as, btn_load,
+                         btn_play, btn_grid}) {
+      button->setVisible(show);
+    }
+  }
+
+  if (right_top_toggle->clicked() || input::keyPressed(Key::Up)) {
+    const bool show = right_top_toggle->getText() == "<";
+
+    if (show) {
+      right_top_toggle->setPosition(882, 0);
+      right_top_toggle->setText(">");
+      right_top_toggle->setTransparency(255);
+    } else {
+      right_top_toggle->setPosition(994, 0);
+      right_top_toggle->setText("<");
+      right_top_toggle->setTransparency(150);
+    }
+
+    btn_back->setVisible(show);
+    btn_help->setVisible(show);
+  }
+
+  if (left_top_toggle->clicked()) {
+    const bool show = left_top_toggle->getText() != "<";
+
+    if (show) {
+      left_top_toggle->setPosition(257, 60);
+      left_top_toggle->setText("<");
+      left_top_toggle->setTransparency(255);
+    } else {
+      left_top_toggle->setPosition(0, 60);
+      left_top_toggle->setText(">");
+      left_top_toggle->setTransparency(150);
+    }
+
+    chk_affects_char->setVisible(show);
+    for (auto* button : explosive_buttons) {
+      button->setVisible(show);
+    }
+  }
+}
+
+void Editor::placeTiles() {
+  if (!input::mouseHeld(MouseButton::Left) || ui.isHovering()) {
+    return;
+  }
+
+  const auto mouse = input::mousePosition();
+  if (mouse.x < 0 || mouse.y < 0 || mouse.x >= SCREEN_WIDTH ||
+      mouse.y >= SCREEN_HEIGHT) {
+    return;
+  }
+
+  // One object per cell
+  for (auto type : {ObjectType::Dynamic, ObjectType::Static,
+                    ObjectType::Character, ObjectType::Finish,
+                    ObjectType::Explosive}) {
+    if (boxAt(type, mouse.x, mouse.y)) {
+      return;
+    }
+  }
+
+  EditorBox box;
+  box.type = tile_type;
+  box.x = snap(mouse.x);
+  box.y = snap(mouse.y);
+  box.affect_character = chk_affects_char->getChecked();
+
+  if (tile_type == ObjectType::Explosive) {
+    box.orientation[0] = explosive_orientation;
+  }
+
+  boxes.push_back(box);
+  modified = true;
+  calculateOrientations();
+}
+
+void Editor::dragCollisionBox() {
+  const auto mouse = input::mousePosition();
+  const asw::Vec2<float> cell(snap(mouse.x), snap(mouse.y));
+
+  if (!is_dragging_box) {
+    if (input::mousePressed(MouseButton::Left) && !ui.isHovering()) {
       is_dragging_box = true;
-      box_1_x = MouseListener::mouse_x - MouseListener::mouse_x % 32;
-      box_1_y = MouseListener::mouse_y - MouseListener::mouse_y % 32;
+      drag_start = cell;
+      drag_end = cell;
     }
-    if (MouseListener::mouse_released & 1) {
-      is_dragging_box = false;
-
-      if (!over_Button && gui_mode && box_2_x - box_1_x != 0) {
-        // Backwards dragged box correction, Box2D chokes on negative
-        // widths/heights
-        if (box_2_x < box_1_x) {
-          int holder_value = box_2_x;
-          box_2_x = box_1_x;
-          box_1_x = holder_value;
-        }
-        if (box_2_y < box_1_y) {
-          int holder_value = box_2_y;
-          box_2_y = box_1_y;
-          box_1_y = holder_value;
-        }
-
-        editor_box newBox;
-        newBox.width = (box_2_x - box_1_x);
-        newBox.height = (box_2_y - box_1_y);
-        newBox.x = box_1_x;
-        newBox.y = box_1_y;
-        newBox.x_str =
-            tools::toString((float(newBox.x) + newBox.width / 2) / 20.0f);
-        newBox.y_str =
-            tools::toString(-1 * (float(newBox.y) + newBox.height / 2) / 20.0f);
-        newBox.type = 4;
-        newBox.width_str =
-            tools::toString(float(((box_2_x - box_1_x)) / 20.0f));
-        newBox.height_str =
-            tools::toString(float(((box_2_y - box_1_y)) / 20.0f));
-        newBox.type_str = "Collision";
-
-        editorBoxes.push_back(newBox);
-        modified = true;
-      }
-    }
-    if (MouseListener::mouse_button & 1) {
-      box_2_x = (MouseListener::mouse_x - MouseListener::mouse_x % 32) + 32;
-      box_2_y = (MouseListener::mouse_y - MouseListener::mouse_y % 32) + 32;
-    }
+    return;
   }
 
-  // Remove tile
-  if (MouseListener::mouse_button & 2) {
-    for (unsigned int i = 0; i < editorBoxes.size(); i++) {
-      if (tools::collision(
-              editorBoxes.at(i).x, editorBoxes.at(i).x + 32,
-              (float)MouseListener::mouse_x, (float)MouseListener::mouse_x,
-              editorBoxes.at(i).y, editorBoxes.at(i).y + 32,
-              (float)MouseListener::mouse_y, (float)MouseListener::mouse_y)) {
-        editorBoxes.erase(editorBoxes.begin() + i);
-        modified = true;
-        calculate_orientation_global();
-      }
+  if (input::mouseHeld(MouseButton::Left)) {
+    drag_end = cell;
+    return;
+  }
+
+  // Released, covers every cell between the start and end
+  is_dragging_box = false;
+
+  EditorBox box;
+  box.type = ObjectType::Collision;
+  box.x = std::min(drag_start.x, drag_end.x);
+  box.y = std::min(drag_start.y, drag_end.y);
+  box.width = std::max(drag_start.x, drag_end.x) + CELL - box.x;
+  box.height = std::max(drag_start.y, drag_end.y) + CELL - box.y;
+
+  boxes.push_back(box);
+  modified = true;
+}
+
+void Editor::removeTiles() {
+  if (!input::mouseHeld(MouseButton::Right) || ui.isHovering()) {
+    return;
+  }
+
+  const auto mouse = input::mousePosition();
+  const auto removed = std::erase_if(boxes, [&mouse](const EditorBox& box) {
+    return mouse.x > box.x && mouse.x < box.x + box.width &&
+           mouse.y > box.y && mouse.y < box.y + box.height;
+  });
+
+  if (removed > 0) {
+    modified = true;
+    calculateOrientations();
+  }
+}
+
+void Editor::save() {
+  if (boxes.empty()) {
+    Dialog::error("Empty Map", "You can't save an empty map!");
+    return;
+  }
+
+  if (!is_saved) {
+    pending_file_action = FileAction::Save;
+    Dialog::requestFile(Dialog::FileMode::Save, Config::savePath());
+    return;
+  }
+
+  if (saveMap(file_name)) {
+    modified = false;
+  } else {
+    Dialog::error("Error!", "Error saving map to: " + file_name);
+  }
+}
+
+void Editor::saveAs() {
+  if (boxes.empty()) {
+    Dialog::error("Empty Map", "You can't save an empty map!");
+    return;
+  }
+
+  pending_file_action = FileAction::SaveAs;
+  Dialog::requestFile(Dialog::FileMode::Save, Config::savePath());
+}
+
+void Editor::load() {
+  pending_file_action = FileAction::Load;
+  Dialog::requestFile(Dialog::FileMode::Open,
+                      asw::assets::get_path("assets/data/"));
+}
+
+void Editor::handleFileChosen(FileAction action, const std::string& path) {
+  if (action == FileAction::Load) {
+    if (loadMap(path)) {
+      file_name = path;
+      is_saved = true;
+      modified = false;
+    } else {
+      Dialog::error("Error!", "Error loading map from: " + path);
+    }
+    return;
+  }
+
+  // Save and save as
+  std::filesystem::path save_path(path);
+  if (!save_path.has_extension()) {
+    save_path.replace_extension(".xml");
+  }
+
+  if (!saveMap(save_path.string())) {
+    Dialog::error("Error!", "Error saving map to: " + save_path.string());
+    return;
+  }
+
+  file_name = save_path.string();
+  is_saved = true;
+  modified = false;
+
+  if (action == FileAction::SaveAs) {
+    Dialog::info("Saved map", "We've saved a map to: " + file_name);
+  }
+}
+
+void Editor::play() {
+  if (boxes.empty()) {
+    Dialog::info("Attempting to play an empty level",
+                 "That wouldn't be very fun would it?");
+    return;
+  }
+
+  if (!hasPlayer()) {
+    Dialog::info("Missing player",
+                 "You must place a player spawn to test the level.");
+    return;
+  }
+
+  if (!saveMap(file_name)) {
+    Dialog::error("Error!", "Error saving map to: " + file_name);
+    return;
+  }
+
+  session.editing_level = true;
+  session.editing_file = file_name;
+  changeScene(ProgramState::Game);
+}
+
+void Editor::back() {
+  if (modified && !Dialog::confirm("Main menu?",
+                                   "Return to main menu? All unsaved changes "
+                                   "will be lost.")) {
+    return;
+  }
+
+  changeScene(ProgramState::Menu);
+}
+
+void Editor::calculateOrientations() {
+  for (auto& box : boxes) {
+    if (box.type != ObjectType::Static) {
+      continue;
+    }
+
+    for (std::size_t corner = 0; corner < box.orientation.size(); corner++) {
+      const float x = box.x + ((corner % 2 == 1) ? HALF_CELL : 0);
+      const float y = box.y + ((corner >= 2) ? HALF_CELL : 0);
+
+      const auto neighbour = [this, x, y](float dx, float dy) {
+        return boxAt(ObjectType::Static, x + (dx * HALF_CELL),
+                     y + (dy * HALF_CELL));
+      };
+
+      std::array<bool, TILE_OPTIONS> options{};
+      options.fill(true);
+
+      const auto remove = [&options](std::initializer_list<int> tiles) {
+        for (int tile : tiles) {
+          options[tile] = false;
+        }
+      };
+
+      // Edges rule out the tiles that border them, or need them
+      neighbour(0, -1) ? remove({0, 1, 2}) : remove({3, 4, 5});
+      neighbour(1, 0) ? remove({2, 5, 8}) : remove({1, 4, 7});
+      neighbour(0, 1) ? remove({6, 7, 8}) : remove({3, 4, 5});
+      neighbour(-1, 0) ? remove({0, 3, 6}) : remove({1, 4, 7});
+
+      // Corners pick between the full tile and the inner corner tiles
+      neighbour(1, -1) ? remove({11}) : remove({4});
+      neighbour(1, 1) ? remove({9}) : remove({4});
+      neighbour(-1, 1) ? remove({10}) : remove({4});
+      neighbour(-1, -1) ? remove({12}) : remove({4});
+
+      const auto first = std::ranges::find(options, true);
+      box.orientation[corner] =
+          first != options.end()
+              ? static_cast<int>(std::distance(options.begin(), first))
+              : 0;
     }
   }
 }
 
-// Calculate all the orientations of blocks
-void Editor::calculate_orientation_global() {
-  // Calc boxes
-  for (unsigned int i = 0; i < editorBoxes.size(); i++) {
-    // If not...
-    if (editorBoxes.at(i).type == 1) {
-      // Scroll through all 4 parts
-      for (int t = 0; t < 4; t++) {
-        // Offsets from subtile
-        int off_x = (t == 1 || t == 3) ? 16 : 0;
-        int off_y = (t >= 2) ? 16 : 0;
-
-        // Options
-        std::vector<int> options;
-        for (int k = 0; k < 13; k++)
-          options.push_back(k);
-
-        int box_type = editorBoxes.at(i).type;
-
-        bool north = box_at_with_type(box_type, editorBoxes.at(i).x + off_x,
-                                      editorBoxes.at(i).y + off_y - 16);
-        bool north_east =
-            box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16,
-                             editorBoxes.at(i).y + off_y - 16);
-        bool east = box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16,
-                                     editorBoxes.at(i).y + off_y);
-        bool south_east =
-            box_at_with_type(box_type, editorBoxes.at(i).x + off_x + 16,
-                             editorBoxes.at(i).y + off_y + 16);
-        bool south = box_at_with_type(box_type, editorBoxes.at(i).x + off_x,
-                                      editorBoxes.at(i).y + off_y + 16);
-        bool south_west =
-            box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16,
-                             editorBoxes.at(i).y + off_y + 16);
-        bool west = box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16,
-                                     editorBoxes.at(i).y + off_y);
-        bool north_west =
-            box_at_with_type(box_type, editorBoxes.at(i).x + off_x - 16,
-                             editorBoxes.at(i).y + off_y - 16);
-
-        // NORTH
-        if (north) {
-          options.erase(std::remove(options.begin(), options.end(), 0),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 1),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 2),
-                        options.end());
-        } else {
-          options.erase(std::remove(options.begin(), options.end(), 3),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 4),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 5),
-                        options.end());
-        }
-
-        // NORTH EAST
-        if (north_east) {
-          options.erase(std::remove(options.begin(), options.end(), 11),
-                        options.end());
-        } else {
-          options.erase(std::remove(options.begin(), options.end(), 4),
-                        options.end());
-        }
-
-        // EAST
-        if (east) {
-          options.erase(std::remove(options.begin(), options.end(), 2),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 5),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 8),
-                        options.end());
-        } else {
-          options.erase(std::remove(options.begin(), options.end(), 1),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 4),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 7),
-                        options.end());
-        }
-
-        // SOUTH EAST
-        if (south_east) {
-          options.erase(std::remove(options.begin(), options.end(), 9),
-                        options.end());
-        } else {
-          options.erase(std::remove(options.begin(), options.end(), 4),
-                        options.end());
-        }
-
-        // SOUTH
-        if (south) {
-          options.erase(std::remove(options.begin(), options.end(), 6),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 7),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 8),
-                        options.end());
-        } else {
-          options.erase(std::remove(options.begin(), options.end(), 3),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 4),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 5),
-                        options.end());
-        }
-        // SOUTH WEST
-        if (south_west) {
-          options.erase(std::remove(options.begin(), options.end(), 10),
-                        options.end());
-        } else {
-          options.erase(std::remove(options.begin(), options.end(), 4),
-                        options.end());
-        }
-
-        // WEST
-        if (west) {
-          options.erase(std::remove(options.begin(), options.end(), 0),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 3),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 6),
-                        options.end());
-        } else {
-          options.erase(std::remove(options.begin(), options.end(), 1),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 4),
-                        options.end());
-          options.erase(std::remove(options.begin(), options.end(), 7),
-                        options.end());
-        }
-
-        // NORTH WEST
-        if (north_west) {
-          options.erase(std::remove(options.begin(), options.end(), 12),
-                        options.end());
-        } else {
-          options.erase(std::remove(options.begin(), options.end(), 4),
-                        options.end());
-        }
-
-        if (options.size() > 0)
-          editorBoxes.at(i).orientation[t] = options.at(0);
-        else
-          editorBoxes.at(i).orientation[t] = 0;
-      }
-    }
-  }
+bool Editor::boxAt(ObjectType type, float x, float y) const {
+  return std::ranges::any_of(boxes, [type, x, y](const EditorBox& box) {
+    return box.type == type && box.x < x + 1 && x < box.x + CELL &&
+           box.y < y + 1 && y < box.y + CELL;
+  });
 }
 
-// Draw to screen
+bool Editor::hasPlayer() const {
+  return std::ranges::any_of(boxes, [](const EditorBox& box) {
+    return box.type == ObjectType::Character;
+  });
+}
+
+bool Editor::saveMap(const std::string& path) const {
+  Level level;
+  level.help = help_text;
+
+  for (const auto& box : boxes) {
+    level.objects.push_back(toLevelObject(box));
+  }
+
+  return level.save(path);
+}
+
+bool Editor::loadMap(const std::string& path) {
+  const auto level = Level::load(path);
+  if (!level) {
+    return false;
+  }
+
+  boxes.clear();
+  for (const auto& object : level->objects) {
+    boxes.push_back(fromLevelObject(object));
+  }
+
+  help_text = level->help;
+  return true;
+}
+
 void Editor::draw() {
-  // Background
-  al_clear_to_color(al_map_rgb(200, 200, 255));
+  asw::draw::clear_color(asw::Color(200, 200, 255));
 
-  // Grid
   if (grid_on) {
-    for (int i = 0; i < 1024; i += 32) {
-      al_draw_line(i, 0, i, 768, al_map_rgb(0, 0, 0), 1);
+    for (float x = 0; x < SCREEN_WIDTH; x += CELL) {
+      asw::draw::line(asw::Vec2<float>(x, 0), asw::Vec2<float>(x, SCREEN_HEIGHT),
+                      BLACK);
     }
 
-    for (int i = 0; i < 768; i += 32) {
-      al_draw_line(0, i, 1024, i, al_map_rgb(0, 0, 0), 1);
-    }
-  }
-
-  // Draw tiles
-  for (unsigned int i = 0; i < editorBoxes.size(); i++) {
-    if (editorBoxes.at(i).type == 1) {
-      if (editorBoxes.at(i).type == 0)
-        al_draw_filled_rectangle(
-            editorBoxes.at(i).x + 0, editorBoxes.at(i).y + 0,
-            editorBoxes.at(i).x + 32, editorBoxes.at(i).y + 32,
-            al_map_rgb(0, 255, 0));
-
-      // Scroll through all 4 parts
-      for (int t = 0; t < 4; t++) {
-        // Offsets from subtile
-        int off_x = (t == 1 || t == 3) ? 16 : 0;
-        int off_y = (t >= 2) ? 16 : 0;
-
-        if (editorBoxes.at(i).orientation[t] >= 0 &&
-            editorBoxes.at(i).orientation[t] < 16)
-          al_draw_bitmap(
-              tiles[editorBoxes.at(i).type][editorBoxes.at(i).orientation[t]],
-              editorBoxes.at(i).x + off_x, editorBoxes.at(i).y + off_y, 0);
-      }
-    } else if (editorBoxes.at(i).type == 0)
-      al_draw_bitmap(tiles[0][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
-
-    else if (editorBoxes.at(i).type == 2)
-      al_draw_bitmap(tiles[2][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
-    else if (editorBoxes.at(i).type == 3)
-      al_draw_bitmap(tiles[3][0], editorBoxes.at(i).x, editorBoxes.at(i).y, 0);
-    else if (editorBoxes.at(i).type == 5) {
-      if (editorBoxes.at(i).affect_character)
-        al_draw_filled_rectangle(
-            editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4,
-            editorBoxes.at(i).x + 28, editorBoxes.at(i).y + 28,
-            al_map_rgb(255, 0, 0));
-      else
-        al_draw_filled_rectangle(
-            editorBoxes.at(i).x + 4, editorBoxes.at(i).y + 4,
-            editorBoxes.at(i).x + 28, editorBoxes.at(i).y + 28,
-            al_map_rgb(0, 255, 0));
-
-      if (editorBoxes.at(i).orientation[0] == 0)
-        al_draw_bitmap(tiles[4][0], editorBoxes.at(i).x, editorBoxes.at(i).y,
-                       0);
-
-      if (editorBoxes.at(i).orientation[0] > 0) {
-        // PI/2 is a quarter turn. Editor boxes orientation is a range from 1-4.
-        // So we have a quarter turn * 1-4, creating a quarter turn, half turn,
-        // ect.
-        // - PI/2 is because we start rotated right a quarter turn.
-        float new_angle = (PI / 2) * editorBoxes.at(i).orientation[0] - PI / 2;
-        al_draw_rotated_bitmap(tiles[4][1], 16, 16, editorBoxes.at(i).x + 16,
-                               editorBoxes.at(i).y + 16, new_angle, 0);
-      }
+    for (float y = 0; y < SCREEN_HEIGHT; y += CELL) {
+      asw::draw::line(asw::Vec2<float>(0, y), asw::Vec2<float>(SCREEN_WIDTH, y),
+                      BLACK);
     }
   }
 
-  // Gotta draw the tranparent boxes in front
-  for (unsigned int i = 0; i < editorBoxes.size(); i++) {
-    if (editorBoxes.at(i).type == 4) {
-      al_draw_filled_rectangle(editorBoxes.at(i).x, editorBoxes.at(i).y,
-                               editorBoxes.at(i).x + editorBoxes.at(i).width,
-                               editorBoxes.at(i).y + editorBoxes.at(i).height,
-                               al_map_rgba(0, 255, 0, 50));
+  for (const auto& box : boxes) {
+    drawBox(box);
+  }
+
+  // Collision boxes see through, on top
+  for (const auto& box : boxes) {
+    if (box.type == ObjectType::Collision) {
+      asw::draw::rect_fill(asw::Quad<float>(box.x, box.y, box.width, box.height),
+                           COLLISION_FILL);
     }
   }
 
   if (is_dragging_box) {
-    al_draw_filled_rectangle(box_1_x, box_1_y, box_2_x, box_2_y,
-                             al_map_rgba(0, 255, 0, 50));
+    const float x = std::min(drag_start.x, drag_end.x);
+    const float y = std::min(drag_start.y, drag_end.y);
+    asw::draw::rect_fill(
+        asw::Quad<float>(x, y, std::max(drag_start.x, drag_end.x) + CELL - x,
+                         std::max(drag_start.y, drag_end.y) + CELL - y),
+        COLLISION_FILL);
   }
 
-  // Tile type
-  if (tile_type == 0)
-    al_draw_textf(edit_font, al_map_rgb(0, 0, 0), 10, 30, 0, "Type: Dynamic");
-  if (tile_type == 1)
-    al_draw_textf(edit_font, al_map_rgb(0, 0, 0), 10, 30, 0, "Type: Static");
-  if (tile_type == 2)
-    al_draw_textf(edit_font, al_map_rgb(0, 0, 0), 10, 30, 0,
-                  "Type: Character spawn");
-  if (tile_type == 3)
-    al_draw_textf(edit_font, al_map_rgb(0, 0, 0), 10, 30, 0,
-                  "Type: Endgame goat");
-  if (tile_type == 4)
-    al_draw_textf(edit_font, al_map_rgb(0, 0, 0), 10, 30, 0,
-                  "Type: Collision Box");
-  if (tile_type == 5)
-    al_draw_textf(edit_font, al_map_rgb(0, 0, 0), 10, 30, 0,
-                  "Type: Explosive Box");
+  asw::draw::text(edit_font, std::string("Type: ") + typeName(tile_type),
+                  asw::Vec2<float>(10, 30), BLACK);
 
-  std::string modified_character = "";
-  if (modified)
-    modified_character = "*";
+  asw::draw::text(edit_font,
+                  "File: " +
+                      std::filesystem::path(file_name).filename().string() +
+                      (modified ? " *" : ""),
+                  asw::Vec2<float>(10, 10), BLACK);
 
-  // Current map opened
-  al_draw_textf(edit_font, al_map_rgb(0, 0, 0), 10, 10, 0, "File: %s %s",
-                file_name.c_str(), modified_character.c_str());
+  if (display_help) {
+    asw::draw::sprite(help_menu, asw::Vec2<float>(110, 75));
+  }
 
-  if (display_help)
-    al_draw_bitmap(help_menu, 110, 75, 0);
-
-  // Draw buttons
-  editorUI.draw();
-
-  if (Config::getBooleanValue("draw_cursor"))
-    al_draw_bitmap(cursor, MouseListener::mouse_x, MouseListener::mouse_y, 0);
+  ui.draw();
 }
 
-// Check if box is at location
-bool Editor::box_at_with_type(int newType, int x, int y) {
-  for (unsigned int i = 0; i < editorBoxes.size(); i++)
-    if (tools::collision(editorBoxes.at(i).x, editorBoxes.at(i).x + 32,
-                         (float)x, (float)x + 1, editorBoxes.at(i).y,
-                         editorBoxes.at(i).y + 32, (float)y, (float)y + 1) &&
-        editorBoxes.at(i).type == newType)
-      return true;
-  return false;
-}
+void Editor::drawBox(const EditorBox& box) const {
+  switch (box.type) {
+    case ObjectType::Static:
+      for (std::size_t corner = 0; corner < box.orientation.size(); corner++) {
+        const int tile = box.orientation[corner];
+        if (tile < 0 || tile >= SHEET_TILES) {
+          continue;
+        }
 
-// Check if box is at location
-bool Editor::box_at(int x, int y) {
-  for (unsigned int i = 0; i < editorBoxes.size(); i++)
-    if (tools::collision(editorBoxes.at(i).x, editorBoxes.at(i).x + 32,
-                         (float)x, (float)x + 1, editorBoxes.at(i).y,
-                         editorBoxes.at(i).y + 32, (float)y, (float)y + 1))
-      return true;
-  return false;
-}
+        const auto column = static_cast<float>(tile % SHEET_COLUMNS);
+        const auto row = static_cast<float>(tile / SHEET_COLUMNS);
 
-// Load map from xml-
-bool Editor::load_map(std::string mapName) {
-  // Doc
-  rapidxml::xml_document<> doc;
+        gfx::region(static_tiles,
+                    asw::Quad<float>(column * TILE_SIZE, row * TILE_SIZE,
+                                     TILE_SIZE, TILE_SIZE),
+                    asw::Quad<float>(box.x + ((corner % 2 == 1) ? TILE_SIZE : 0),
+                                     box.y + ((corner >= 2) ? TILE_SIZE : 0),
+                                     TILE_SIZE, TILE_SIZE));
+      }
+      break;
 
-  // Make an xml object
-  std::ifstream theFile(mapName);
+    case ObjectType::Dynamic:
+      asw::draw::sprite(box_green, asw::Vec2<float>(box.x, box.y));
+      break;
 
-  if (!theFile)
-    return false;
+    case ObjectType::Character:
+      gfx::region(character, asw::Quad<float>(0, 0, CELL, CELL * 2),
+                  asw::Quad<float>(box.x, box.y, CELL, CELL * 2));
+      break;
 
-  // Dump into buffer
-  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)),
-                               std::istreambuf_iterator<char>());
-  xml_buffer.push_back('\0');
+    case ObjectType::Finish:
+      gfx::region(goat, asw::Quad<float>(0, 0, CELL, CELL * 2),
+                  asw::Quad<float>(box.x, box.y, CELL, CELL * 2));
+      break;
 
-  // Parse the buffer using the xml file parsing library into doc
-  doc.parse<0>(&xml_buffer[0]);
+    case ObjectType::Explosive: {
+      asw::draw::rect_fill(
+          asw::Quad<float>(box.x + 4, box.y + 4, CELL - 8, CELL - 8),
+          box.affect_character ? asw::Color(255, 0, 0)
+                               : asw::Color(0, 255, 0));
 
-  // Find our root node
-  rapidxml::xml_node<>* root_node;
-  root_node = doc.first_node("data");
-
-  // Iterate over the nodes
-  for (rapidxml::xml_node<>* object_node = root_node->first_node("Object");
-       object_node; object_node = object_node->next_sibling()) {
-    std::string type_str = "";
-    std::string x = "";
-    std::string y = "";
-    std::string width = "0";
-    std::string height = "0";
-    std::string orientation = "0 0 0 0";
-    std::string affect_character = "false";
-
-    // Load data
-    if (object_node->first_attribute("type") != nullptr)
-      type_str = object_node->first_attribute("type")->value();
-    if (object_node->first_node("x") != nullptr)
-      x = object_node->first_node("x")->value();
-    if (object_node->first_node("y") != nullptr)
-      y = object_node->first_node("y")->value();
-    if (object_node->first_node("width") != nullptr)
-      width = object_node->first_node("width")->value();
-    if (object_node->first_node("height") != nullptr)
-      height = object_node->first_node("height")->value();
-    // if( object_node -> first_node("type_str") != nullptr)
-    //   type_str = object_node -> first_node("type_str") -> value();
-    if (object_node->first_node("orientation") != nullptr)
-      orientation = object_node->first_node("orientation")->value();
-    if (object_node->first_node("affect_character") != nullptr)
-      affect_character = object_node->first_node("affect_character")->value();
-
-    editor_box newBox;
-    newBox.type_str = type_str;
-    newBox.x_str = x;
-    newBox.y_str = y;
-    // newBox.type_str = type_str;
-    newBox.affect_character = (affect_character == "true");
-
-    // Idek dude but it works
-    if (newBox.type_str == "Collision") {
-      newBox.width = (tools::stringToFloat(width) * 20.0f);
-      newBox.height = (tools::stringToFloat(height) * 20.0f);
-      newBox.x =
-          (tools::stringToFloat(x) - tools::stringToFloat(width) / 2) * 20.0f;
-      // This guy is positive because we make it negative later
-      newBox.y =
-          (tools::stringToFloat(y) + tools::stringToFloat(height) / 2) * -20.0f;
+      const int orientation = box.orientation[0];
+      if (orientation == 0) {
+        asw::draw::sprite(box_repel, asw::Vec2<float>(box.x, box.y));
+      } else {
+        gfx::region(box_repel_direction, asw::Quad<float>(0, 0, CELL, CELL),
+                    asw::Quad<float>(box.x, box.y, CELL, CELL),
+                    (std::numbers::pi_v<float> / 2.0F) *
+                        static_cast<float>(orientation - 1));
+      }
+      break;
     }
 
-    if (newBox.type_str != "Collision") {
-      newBox.width = (tools::stringToFloat(width) * 20.0f) - 16.0f;
-      newBox.height = (tools::stringToFloat(height) * 20.0f) - 16.0f;
-      newBox.x = (tools::stringToFloat(x) * 20.0f) - 16.0f;
-      newBox.y = (tools::stringToFloat(y) * -20.0f) - 16.0f;
-    }
-
-    newBox.height_str = height;
-    newBox.width_str = width;
-
-    // Correct orientation format
-    std::vector<std::string> splits = tools::split_string(orientation, ' ');
-    if (splits.size() == 4) {
-      for (int k = 0; k < 4; k++)
-        newBox.orientation[k] = (tools::stringToInt(splits.at(k)));
-    }
-    // Maybe we can salvage it?
-    else if (splits.size() > 0) {
-      for (int k = 0; k < 4; k++)
-        newBox.orientation[k] = (tools::stringToInt(splits.at(0)));
-    }
-    // All hope is lost!
-    else {
-      return false;
-    }
-
-    tools::log_message(type_str + " is type_str");
-
-    // Body
-    if (newBox.type_str == "Dynamic")
-      newBox.type = 0;
-    else if (newBox.type_str == "Static")
-      newBox.type = 1;
-    else if (newBox.type_str == "Character")
-      newBox.type = 2;
-    else if (newBox.type_str == "Finish")
-      newBox.type = 3;
-    else if (newBox.type_str == "Collision")
-      newBox.type = 4;
-    else if (newBox.type_str == "Explosive")
-      newBox.type = 5;
-    else {
-      newBox.type = 0;
-      tools::log_message("WARNING: Tile created as no type (type 0).");
-    }
-    // Add box
-    editorBoxes.push_back(newBox);
+    case ObjectType::Collision:
+      break;
   }
-
-  // Success
-  return true;
-}
-
-// Save map to xml
-bool Editor::save_map(std::string mapName) {
-  // NSFW haxx to prevent goat loading before player
-  for (unsigned int i = 0; i < editorBoxes.size(); i++) {
-    if (editorBoxes[i].type == GOAT) {
-      editor_box newBox = editorBoxes[i];
-      editorBoxes.erase(editorBoxes.begin() + i);
-      editorBoxes.insert(editorBoxes.begin(), newBox);
-    }
-  }
-  for (unsigned int i = 0; i < editorBoxes.size(); i++) {
-    if (editorBoxes[i].type == 5) {
-      editor_box newBox = editorBoxes[i];
-      editorBoxes.erase(editorBoxes.begin() + i);
-      editorBoxes.push_back(newBox);
-    }
-  }
-
-  // Write xml file
-  rapidxml::xml_document<> doc;
-  rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);
-  decl->append_attribute(doc.allocate_attribute("version", "1.0"));
-  decl->append_attribute(doc.allocate_attribute("encoding", "utf-8"));
-  doc.append_node(decl);
-
-  rapidxml::xml_node<>* root_node =
-      doc.allocate_node(rapidxml::node_element, "data");
-  doc.append_node(root_node);
-
-  // Tiles
-  for (unsigned int i = 0; i < editorBoxes.size(); i++) {
-    // editorBoxes.at(i).type_str=editorBoxes.at(i).bodyType;
-    // Object
-    char* node_name = doc.allocate_string("Object");
-    rapidxml::xml_node<>* object_node =
-        doc.allocate_node(rapidxml::node_element, node_name);
-
-    std::string xml_type = "Tile";
-    std::string output_orientation = "";
-
-    if (editorBoxes.at(i).type != 5) {
-      output_orientation =
-          tools::toString(editorBoxes.at(i).orientation[0]) + " " +
-          tools::toString(editorBoxes.at(i).orientation[1]) + " " +
-          tools::toString(editorBoxes.at(i).orientation[2]) + " " +
-          tools::toString(editorBoxes.at(i).orientation[3]);
-    } else {
-      output_orientation = tools::toString(editorBoxes.at(i).orientation[0]);
-    }
-    char* output_orientation_char =
-        doc.allocate_string(output_orientation.c_str());
-
-    if (editorBoxes.at(i).type == 2)
-      xml_type = "Character";
-    else if (editorBoxes.at(i).type == 3)
-      xml_type = "Finish";
-    else if (editorBoxes.at(i).type == 5) {
-      xml_type = "Explosive";
-    }
-
-    object_node->append_attribute(doc.allocate_attribute(
-        "type", doc.allocate_string(editorBoxes.at(i).type_str.c_str())));
-    root_node->append_node(object_node);
-
-    // Save data
-    object_node->append_node(doc.allocate_node(
-        rapidxml::node_element, "x", editorBoxes.at(i).x_str.c_str()));
-    object_node->append_node(doc.allocate_node(
-        rapidxml::node_element, "y", editorBoxes.at(i).y_str.c_str()));
-
-    if (editorBoxes.at(i).type_str == "Static")
-      object_node->append_node(doc.allocate_node(
-          rapidxml::node_element, "orientation", output_orientation_char));
-
-    if (editorBoxes.at(i).type_str == "Collision") {
-      object_node->append_node(
-          doc.allocate_node(rapidxml::node_element, "width",
-                            editorBoxes.at(i).width_str.c_str()));
-      object_node->append_node(
-          doc.allocate_node(rapidxml::node_element, "height",
-                            editorBoxes.at(i).height_str.c_str()));
-    }
-    if (editorBoxes.at(i).type_str == "Explosive") {
-      if (editorBoxes.at(i).affect_character)
-        object_node->append_node(doc.allocate_node(rapidxml::node_element,
-                                                   "affect_character", "true"));
-      else
-        object_node->append_node(doc.allocate_node(
-            rapidxml::node_element, "affect_character", "false"));
-
-      object_node->append_node(doc.allocate_node(
-          rapidxml::node_element, "orientation", output_orientation_char));
-    }
-
-    // Write this last for consistency of placement in the xml (hint: always
-    // last element) object_node -> append_node( doc.allocate_node(
-    // rapidxml::node_element, "type_str", editorBoxes.at(i).type_str.c_str()));
-  }
-
-  // Save to file
-  std::ofstream file_stored(mapName);
-  file_stored << doc;
-  file_stored.close();
-  doc.clear();
-
-  // Success
-  return true;
 }
