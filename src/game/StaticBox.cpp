@@ -1,51 +1,44 @@
 #include "StaticBox.h"
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
+#include "../Globals.h"
+#include "../util/Graphics.h"
 
-#include "../util/Globals.h"
+namespace {
+constexpr float SIZE = 1.5F;
 
-// I'm trying to make static boxes really just for show,
-// and have the collision handled elsewhere. So, this class
-// will inherit for Box.cpp but will (should) only hold
-// the location and the image
+// Tile sheet layout
+constexpr int SHEET_COLUMNS = 3;
+constexpr int SHEET_TILES = 15;
+constexpr float TILE_SIZE = 16;
+}  // namespace
 
-// Static Box Constructors
-StaticBox::StaticBox(const float x, const float y)
-    : Box(x, y, 1.5f, 1.5f, nullptr) {}
-
-// Destroy 'custom' image
-StaticBox::~StaticBox() {
-  // Destroy custom image
-  if (sprite != nullptr)
-    al_destroy_bitmap(sprite);
+StaticBox::StaticBox(float x,
+                     float y,
+                     const asw::Texture& tile_sheet,
+                     const std::array<int, 4>& tiles)
+    : Box(x, y, SIZE, SIZE), tile_sheet(tile_sheet), tiles(tiles) {
+  // Unknown tiles use the first one
+  for (auto& tile : this->tiles) {
+    if (tile < 0 || tile >= SHEET_TILES) {
+      tile = 0;
+    }
+  }
 }
 
-// Draw box to screen
-void StaticBox::draw() {
-  // Transform
-  ALLEGRO_TRANSFORM trans;
-  ALLEGRO_TRANSFORM prevTrans;
+void StaticBox::draw() const {
+  const auto corner = screenPosition() - asw::Vec2<float>(SIZE, SIZE) *
+                                             (PIXELS_PER_METER / 2);
 
-  // back up the current transform
-  al_copy_transform(&prevTrans, al_get_current_transform());
+  for (std::size_t i = 0; i < tiles.size(); i++) {
+    const auto column = static_cast<float>(tiles[i] % SHEET_COLUMNS);
+    const auto row = static_cast<float>(tiles[i] / SHEET_COLUMNS);
+    const float offset_x = (i % 2 == 1) ? TILE_SIZE : 0;
+    const float offset_y = (i >= 2) ? TILE_SIZE : 0;
 
-  // scale using the new transform
-  al_identity_transform(&trans);
-
-  al_translate_transform(&trans, getX() * 20, getY() * -20);
-
-  al_use_transform(&trans);
-
-  al_draw_bitmap(sprite, -(getWidth() / 2) * 20, -(getHeight() / 2) * 20, 0);
-
-  al_use_transform(&prevTrans);
-
-  // I suck at programming
-  // - Danny Van Stemp, July 30, 2017
-}
-
-// Get box type
-int StaticBox::getType() {
-  return STATIC;
+    gfx::region(tile_sheet,
+                asw::Quad<float>(column * TILE_SIZE, row * TILE_SIZE,
+                                 TILE_SIZE, TILE_SIZE),
+                asw::Quad<float>(corner.x + offset_x, corner.y + offset_y,
+                                 TILE_SIZE, TILE_SIZE));
+  }
 }

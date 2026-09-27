@@ -90,5 +90,5 @@
     "thread": "cpp",
     "shared_mutex": "cpp"
   },
-  "sonarlint.pathToCompileCommands": "${workspaceFolder}\\compile_commands.json"
+  "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/debug/compile_commands.json"
 }

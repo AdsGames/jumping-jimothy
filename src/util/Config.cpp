@@ -1,171 +1,81 @@
 #include "Config.h"
 
-#include <fstream>
+#include <asw/asw.h>
+#include <charconv>
+#include <map>
+#include <pugixml.hpp>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
-#pragma GCC diagnostic ignored "-Wswitch-default"
-#include "../rapidxml/rapidxml.hpp"
-#include "../rapidxml/rapidxml_print.hpp"
-#pragma GCC diagnostic pop
+namespace {
+constexpr auto DEFAULTS_FILE = "assets/data/config.xml";
+constexpr auto CONFIG_FILE = "config.xml";
 
-#include "Tools.h"
+std::map<std::string, std::string, std::less<>> values;
 
-std::vector<Config::Dict*> Config::data;
-
-// Read config data from file
-void Config::readFile(const std::string path) {
-  // Clear old config
-  Config::data.clear();
-
-  // Load XML from file
-  std::ifstream f(path.c_str());
-
-  // Ensure file exists
-  if (!f.good()) {
-    tools::log_message("Warning: Could not find file " + path);
+// Each entry is stored as <entry key="value"/>
+void readFile(const std::string& path) {
+  pugi::xml_document doc;
+  if (!doc.load_file(path.c_str())) {
     return;
   }
 
-  // Make buffer
-  std::vector<char> xml_buffer((std::istreambuf_iterator<char>(f)),
-                               std::istreambuf_iterator<char>());
-
-  // Push EOF
-  xml_buffer.push_back('\0');
-
-  // Create XML doc
-  rapidxml::xml_document<> doc;
-
-  // Parse the buffer using the xml file parsing library into doc
-  doc.parse<0>(&xml_buffer[0]);
-
-  // Find our root node
-  rapidxml::xml_node<>* root_node = doc.first_node("data");
-
-  // Iterate over the nodes
-  for (rapidxml::xml_node<>* entry = root_node->first_node("entry"); entry;
-       entry = entry->next_sibling()) {
-    addKey(entry->first_attribute()->name(), entry->first_attribute()->value());
-  }
-
-  // Clean up
-  f.close();
-  doc.clear();
-}
-
-// Write config data to file
-void Config::writeFile(const std::string path) {
-  // Create XML doc
-  rapidxml::xml_document<> doc;
-
-  // Push encoding and version data
-  rapidxml::xml_node<>* decl = doc.allocate_node(rapidxml::node_declaration);
-  decl->append_attribute(doc.allocate_attribute("version", "1.0"));
-  decl->append_attribute(doc.allocate_attribute("encoding", "utf-8"));
-  doc.append_node(decl);
-
-  // Create root node
-  rapidxml::xml_node<>* root_node =
-      doc.allocate_node(rapidxml::node_element, "data");
-  doc.append_node(root_node);
-
-  // Parse key val pairs
-  const char* entry = doc.allocate_string("entry");
-  for (unsigned int i = 0; i < Config::data.size(); i++) {
-    rapidxml::xml_node<>* object_node =
-        doc.allocate_node(rapidxml::node_element, entry);
-    object_node->append_attribute(doc.allocate_attribute(
-        doc.allocate_string(Config::data.at(i)->getKey().c_str()),
-        doc.allocate_string(Config::data.at(i)->getValue().c_str())));
-    root_node->append_node(object_node);
-  }
-
-  // Save to file
-  std::ofstream f(path);
-
-  // Ensure file exists
-  if (!f.good()) {
-    tools::log_message("Warning: Could not find file " + path);
-    return;
-  }
-
-  // Output
-  f << doc;
-
-  // Clean up
-  f.close();
-  doc.clear();
-}
-
-// Get string value from key
-std::string Config::getValue(const std::string key) {
-  // Find key
-  Dict* element = findKey(key);
-
-  // Return value
-  if (element != nullptr) {
-    return element->getValue();
-  }
-
-  // Not found
-  return "";
-}
-
-// Get int value from key
-int Config::getIntValue(const std::string key) {
-  return tools::stringToInt(getValue(key));
-}
-
-// Get boolean value from key
-bool Config::getBooleanValue(const std::string key) {
-  return (bool)tools::stringToInt(getValue(key));
-}
-
-// Set string value
-void Config::setValue(const std::string key, const std::string value) {
-  // Search for key
-  Dict* element = findKey(key);
-
-  // Update value
-  if (element != nullptr) {
-    element->setValue(value);
-    return;
-  }
-
-  // Create key value if not found
-  addKey(key, value);
-}
-
-// Set int const char
-void Config::setValue(const std::string key, const char* value) {
-  setValue(key, tools::toString(value));
-}
-
-// Set int value
-void Config::setValue(const std::string key, const int value) {
-  setValue(key, tools::toString(value));
-}
-
-// Set boolean value
-void Config::setValue(const std::string key, const bool value) {
-  setValue(key, tools::toString(value));
-}
-
-// Find values
-Config::Dict* Config::findKey(const std::string key) {
-  // Search by key
-  for (auto& d : Config::data) {
-    if (d->getKey() == key) {
-      return d;
+  for (const auto& entry : doc.child("data").children("entry")) {
+    const auto attribute = entry.first_attribute();
+    if (attribute) {
+      values[attribute.name()] = attribute.value();
     }
   }
+}
+}  // namespace
 
-  // Not found
-  return nullptr;
+std::string Config::savePath() {
+  return asw::assets::get_save_path("adsgames", "jumping-jimothy");
 }
 
-// Add key
-void Config::addKey(const std::string key, const std::string value) {
-  Config::data.push_back(new Dict(key, value));
+void Config::load() {
+  values.clear();
+  readFile(asw::assets::get_path(DEFAULTS_FILE));
+  readFile(savePath() + CONFIG_FILE);
+}
+
+void Config::save() {
+  pugi::xml_document doc;
+  auto data = doc.append_child("data");
+
+  for (const auto& [key, value] : values) {
+    data.append_child("entry").append_attribute(key.c_str()).set_value(
+        value.c_str());
+  }
+
+  const auto path = savePath() + CONFIG_FILE;
+  if (!doc.save_file(path.c_str())) {
+    asw::log::warn("Could not save config to {}", path);
+  }
+}
+
+std::string Config::getString(const std::string& key) {
+  const auto it = values.find(key);
+  return it != values.end() ? it->second : "";
+}
+
+int Config::getInt(const std::string& key) {
+  const auto value = getString(key);
+  int result = 0;
+  std::from_chars(value.data(), value.data() + value.size(), result);
+  return result;
+}
+
+bool Config::getBool(const std::string& key) {
+  return getInt(key) != 0;
+}
+
+void Config::setString(const std::string& key, const std::string& value) {
+  values[key] = value;
+}
+
+void Config::setInt(const std::string& key, int value) {
+  setString(key, std::to_string(value));
+}
+
+void Config::setBool(const std::string& key, bool value) {
+  setInt(key, value ? 1 : 0);
 }

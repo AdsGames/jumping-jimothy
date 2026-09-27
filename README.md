@@ -2,60 +2,39 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/c0a7a04523e632717de3/maintainability)](https://codeclimate.com/github/AdsGames/JumpingJimothy/maintainability)
 
-Jumping Jimothy is a gravity modifying platformer made in C++ using Box2D and Allegro 5.
+Jumping Jimothy is a gravity modifying platformer made in C++ using [ASW](https://github.com/adsgames/asw) (SDL3) and Box2D.
 
-## Getting started
+## Setup
 
-### Windows (MSYS2)
+Dependencies (ASW, SDL3, Box2D and pugixml) are fetched by CMake with [CPM](https://github.com/cpm-cmake/CPM.cmake), so only CMake and a C++20 compiler are needed.
 
-#### Install Libraries
-
-```bash
-pacman --noconfirm -S mingw-w64-i686-gcc-libs mingw-w64-i686-dumb mingw-w64-i686-flac mingw-w64-i686-opusfile mingw-w64-i686-freetype mingw-w64-i686-libjpeg-turbo mingw-w64-i686-libpng mingw-w64-i686-libvorbis mingw-w64-i686-libwebp mingw-w64-i686-openal mingw-w64-i686-physfs mingw-w64-i686-allegro mingw-w64-i686-box2d
-```
-
-#### Build
+### CMake
 
 ```bash
-cmake -G "MSYS Makefiles" .
+cmake --preset debug
+cmake --build --preset debug
+./build/debug/target/JumpingJimothy
 ```
+
+### Build Emscripten
 
 ```bash
-make
+emcmake cmake --preset release
+cmake --build --preset release
 ```
 
-### Mac OS
+The level editor is not available in the browser build.
 
-#### Install Libraries
+## Controls
 
-```bash
-brew install allegro
-```
+| Action           | Keyboard        | Controller |
+| ---------------- | --------------- | ---------- |
+| Move             | A / D, arrows   | Left stick, D-pad |
+| Jump             | W               | A          |
+| Freeze time      | Space           | B          |
+| Restart level    | R               |            |
+| Menu             | Escape          |            |
 
-#### Build
+## Level Editor
 
-```bash
-cmake -G "Unix Makefiles" .
-```
-
-```bash
-make
-```
-
-### Linux
-
-#### Install Libraries
-
-```bash
-sudo apt install liballegro5-dev liballegro-acodec5-dev liballegro-audio5-dev liballegro-image5-dev liballegro-dialog5-dev liballegro-ttf5-dev libbox2d-dev
-```
-
-#### Build
-
-```bash
-cmake -G "Unix Makefiles" .
-```
-
-```bash
-make
-```
+Levels are XML files in `assets/data`. The editor saves new levels to the user save folder by default.

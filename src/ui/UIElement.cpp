@@ -1,262 +1,81 @@
 #include "UIElement.h"
 
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_primitives.h>
-
-#include "../util/KeyListener.h"
-#include "../util/MouseListener.h"
-#include "../util/Tools.h"
+#include <utility>
 
 #include "../util/ActionBinder.h"
+#include "../util/Graphics.h"
+#include "../util/Input.h"
 
-// Defaults
-UIElement::UIElement() {
-  this->background_colour = al_map_rgba(200, 200, 200, this->alpha);
-  this->text_colour = al_map_rgba(0, 0, 0, this->alpha);
+UIElement::UIElement(float x, float y, std::string text, asw::Font font)
+    : x(x), y(y), font(std::move(font)), text(std::move(text)) {
+  setText(this->text);
 }
 
-UIElement::UIElement(const int x,
-                     const int y,
-                     std::string text,
-                     std::string id,
-                     ALLEGRO_FONT* font)
-    : UIElement() {
-  setId(id);
-  setX(x);
-  setY(y);
-  setText(text);
-  setFont(font);
-}
-
-// Destruct
-UIElement::~UIElement() {
-  al_destroy_bitmap(image);
-}
-
-// Get X
-int UIElement::getX() const {
-  return x;
-}
-
-// Get y
-int UIElement::getY() const {
-  return y;
-}
-
-// Get text of element
-std::string UIElement::getText() const {
-  return text;
-}
-
-// Get element ID
-std::string UIElement::getId() const {
-  return id;
-}
-
-// Hide
-void UIElement::hide() {
-  this->visible = false;
-  this->disabled = true;
-}
-
-// Show
-void UIElement::show() {
-  this->visible = true;
-  this->disabled = false;
-}
-
-// Is visible or not
-bool UIElement::isVisible() const {
-  return visible;
-}
-
-// Set visiblity
-void UIElement::setVisibility(bool visible) {
-  this->visible = visible;
-  this->disabled = !visible;
-}
-
-// Disable element
-void UIElement::disable() {
-  disabled = true;
-}
-
-// Enable element
-void UIElement::enable() {
-  disabled = false;
-}
-
-// Is enabled or not
-bool UIElement::isEnabled() const {
-  return !disabled;
-}
-
-// Set transparency level
-void UIElement::setTransparency(const float alpha) {
-  this->alpha = alpha;
-  text_colour = al_map_rgba(text_colour.r, text_colour.g, text_colour.b, alpha);
-  background_colour.a = alpha;
-}
-
-// Set image rotation
-void UIElement::setBitmapRotationAngle(const float rotation) {
-  bitmap_rotation_angle = rotation;
-}
-
-// Set x
-void UIElement::setX(const int x) {
+void UIElement::setPosition(float x, float y) {
   this->x = x;
-}
-
-// Set y
-void UIElement::setY(const int y) {
   this->y = y;
 }
 
-// Set text colour
-void UIElement::setTextColour(ALLEGRO_COLOR colour) {
-  text_colour = colour;
+void UIElement::setSize(float width, float height) {
+  this->width = width;
+  this->height = height;
 }
 
-// Set background colour
-void UIElement::setBackgroundColour(ALLEGRO_COLOR colour) {
-  background_colour = colour;
-}
-
-// Set cell fill
-void UIElement::setCellFillTransparent(const bool n) {
-  transparent_cell_fill = n;
-}
-
-// Set text justification
-void UIElement::setTextJustification(const int justification) {
-  this->justification = justification;
-}
-
-// Element width
-int UIElement::getWidth() const {
-  return width + padding_x * 2;
-}
-
-// Element height
-int UIElement::getHeight() const {
-  return height + padding_y * 2;
-}
-
-// Set padding
-void UIElement::setPadding(const int x, const int y) {
+void UIElement::setPadding(float x, float y) {
   padding_x = x;
   padding_y = y;
 }
 
-// Set position
-void UIElement::setPosition(const int x, const int y) {
-  setX(x);
-  setY(y);
-}
-
-// Set element size
-void UIElement::setSize(const int width, const int height) {
-  setWidth(width);
-  setHeight(height);
-}
-
-// Set text
-void UIElement::setText(std::string text) {
+// Fit the element to its text
+void UIElement::setText(const std::string& text) {
   this->text = text;
+
+  if (font != nullptr) {
+    width = static_cast<float>(asw::util::get_text_size(font, text).x);
+    height = gfx::lineHeight(font);
+  }
 }
 
-// Set id
-void UIElement::setId(std::string id) {
-  this->id = id;
+// Fit the element to its image
+void UIElement::setImage(const asw::Texture& image) {
+  this->image = image;
+
+  if (image != nullptr) {
+    const auto size = asw::util::get_texture_size(image);
+    width = size.x;
+    height = size.y;
+  }
 }
 
-// Sets an image
-void UIElement::setImage(ALLEGRO_BITMAP* image) {
-  if (image == nullptr)
-    return;
-
-  // Clone image
-  this->image = al_clone_bitmap(image);
-  this->width = al_get_bitmap_width(this->image);
-  this->height = al_get_bitmap_height(this->image);
+void UIElement::setVisible(bool visible) {
+  this->visible = visible;
+  disabled = !visible;
 }
 
-// Set new font
-void UIElement::setFont(ALLEGRO_FONT* font) {
-  if (font == nullptr)
-    return;
-  this->UIElement_font = font;
-  this->width = al_get_text_width(UIElement_font, text.c_str());
-  this->height = al_get_font_line_height(UIElement_font);
+bool UIElement::hover() const {
+  if (!visible) {
+    return false;
+  }
+
+  const auto mouse = input::mousePosition();
+  return mouse.x >= x && mouse.x < x + getWidth() && mouse.y >= y &&
+         mouse.y < y + getHeight();
 }
 
-// Set background visibility
-void UIElement::setVisibleBackground(const bool b) {
-  visible_background = b;
+bool UIElement::clicked() const {
+  if (disabled) {
+    return false;
+  }
+
+  if (hover() && input::mouseReleased(asw::input::MouseButton::Left)) {
+    input::consumeMouseRelease(asw::input::MouseButton::Left);
+    return true;
+  }
+
+  return focused && ActionBinder::actionBegun(Action::Select);
 }
 
-// Set width
-void UIElement::setWidth(const int width) {
-  this->width = width;
-}
-
-// Set height
-void UIElement::setHeight(const int height) {
-  this->height = height;
-}
-
-// This element can focus
-bool UIElement::canFocus() {
-  return false;
-}
-
-// Focus
-void UIElement::focus() {
-  this->focused = true;
-}
-
-// Unfocus
-void UIElement::unfocus() {
-  this->focused = false;
-}
-
-// Set border thickness
-void UIElement::setBorderThickness(const int thickness) {
-  border_thickness = thickness;
-}
-
-// Disable hover effect
-void UIElement::disableHoverEffect() {
-  hover_effect = false;
-}
-
-// Disable hover effect
-void UIElement::enableHoverEffect() {
-  hover_effect = true;
-}
-
-// True if hovering
-bool UIElement::hover() {
-  return tools::mouse_over(getX(), getY(), getWidth(), getHeight());
-}
-
-// True if clicked
-bool UIElement::clicked() {
-  return !disabled &&
-         ((hover() && tools::mouse_clicked(MouseListener::MOUSE_LEFT)) ||
-          (focused && (ActionBinder::actionBegun(Action::SELECT))));
-}
-
-// Set callbacks
-void UIElement::setOnClick(void* func) {
-  onClick = func;
-}
-
-void UIElement::setOnHover(void* func) {
-  onHover = func;
-}
-
-void UIElement::setOnFocus(void* func) {
-  onFocus = func;
+asw::Color UIElement::withAlpha(asw::Color colour) const {
+  colour.a = alpha;
+  return colour;
 }

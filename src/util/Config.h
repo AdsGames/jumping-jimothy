@@ -1,80 +1,32 @@
 /**
  * Config
  * Allan Legemaate
- * Global configuration. Responsible for
- *   reading config data and updating on close.
+ * Global configuration. Defaults come from the assets folder,
+ *   changes are saved to the user's save folder.
  * 22/11/2018
  **/
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#pragma once
 
 #include <string>
-#include <vector>
 
-// Static config class
-class Config {
- public:
-  // Constructor
-  Config(){};
+namespace Config {
 
-  // Destructor
-  virtual ~Config(){};
+// Load defaults, then the user's saved values over them
+void load();
 
-  // Read keyvals from file
-  static void readFile(const std::string path);
+// Write all values to the user's save folder
+void save();
 
-  // Write keyvals to file
-  static void writeFile(const std::string path);
+std::string getString(const std::string& key);
+int getInt(const std::string& key);
+bool getBool(const std::string& key);
 
-  // Get string value from key
-  static std::string getValue(const std::string key);
+void setString(const std::string& key, const std::string& value);
+void setInt(const std::string& key, int value);
+void setBool(const std::string& key, bool value);
 
-  // Get int value from key
-  static int getIntValue(const std::string key);
+// Folder for user files such as the config and editor levels
+std::string savePath();
 
-  // Get boolean value from key
-  static bool getBooleanValue(const std::string key);
-
-  // Set string value
-  static void setValue(const std::string key, const std::string value);
-
-  // String literal (so int is not called)
-  static void setValue(const std::string key, const char* value);
-
-  // Set int value
-  static void setValue(const std::string key, const int value);
-
-  // Set boolean value
-  static void setValue(const std::string key, const bool value);
-
- private:
-  // Key value pairs
-  class Dict {
-   public:
-    Dict(const std::string key, const std::string value)
-        : key(key), value(value) {}
-
-    std::string getKey() const { return key; }
-    std::string getValue() const { return value; }
-    void setValue(const std::string v) { this->value = v; }
-
-   private:
-    // Key
-    std::string key;
-
-    // Value
-    std::string value;
-  };
-
-  // Find key val pair
-  static Dict* findKey(const std::string key);
-
-  // Add ket val pair
-  static void addKey(const std::string key, const std::string value);
-
-  // Values
-  static std::vector<Dict*> data;
-};
-
-#endif  // CONFIG_H
+}  // namespace Config

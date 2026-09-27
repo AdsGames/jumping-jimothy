@@ -1,44 +1,53 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.24)
 
-set(CMAKE_CXX_STANDARD 14)
+project(JumpingJimothy VERSION 1.0.0 LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/target)
 
-project (JumpingJimothy)
+include(cmake/get_cpm.cmake)
+CPMAddPackage("gh:adsgames/asw@0.10.8")
+CPMAddPackage("gh:zeux/pugixml@1.16")
+CPMAddPackage(
+  NAME box2d
+  GITHUB_REPOSITORY erincatto/box2d
+  VERSION 2.4.2
+  OPTIONS
+    "BOX2D_BUILD_UNIT_TESTS OFF"
+    "BOX2D_BUILD_TESTBED OFF"
+    "BOX2D_BUILD_DOCS OFF"
+)
 
-# Source code
-file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
-file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE HEADERS CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
 
-add_executable (${PROJECT_NAME} ${SOURCES} ${HEADERS})
-
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -pedantic)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+  asw
+  box2d
+  pugixml::pugixml
+)
 
-# Find libs
-find_library(ALLEGRO_LIBRARY NAMES allegro REQUIRED)
-find_library(ALLEGRO_ACODEC_LIBRARY NAMES allegro_acodec REQUIRED)
-find_library(ALLEGRO_AUDIO_LIBRARY NAMES allegro_audio REQUIRED)
-find_library(ALLEGRO_COLOR_LIBRARY NAMES allegro_color REQUIRED)
-find_library(ALLEGRO_DIALOG_LIBRARY NAMES allegro_dialog REQUIRED)
-find_library(ALLEGRO_FONT_LIBRARY NAMES allegro_font REQUIRED)
-find_library(ALLEGRO_IMAGE_LIBRARY NAMES allegro_image REQUIRED)
-find_library(ALLEGRO_MAIN_LIBRARY NAMES allegro_main REQUIRED)
-find_library(ALLEGRO_PRIMITIVES_LIBRARY NAMES allegro_primitives REQUIRED)
-find_library(ALLEGRO_TTF_LIBRARY NAMES allegro_ttf REQUIRED)
-find_library(BOX2D_LIBRARY NAMES box2d REQUIRED)
+if(EMSCRIPTEN)
+  set_target_properties(${PROJECT_NAME} PROPERTIES
+    OUTPUT_NAME "index"
+    SUFFIX ".html"
+  )
 
-# Link Libs
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_ACODEC_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_AUDIO_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_COLOR_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_DIALOG_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_FONT_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_IMAGE_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_MAIN_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_PRIMITIVES_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${ALLEGRO_TTF_LIBRARY})
-target_link_libraries(${PROJECT_NAME} ${BOX2D_LIBRARY})
+  target_link_options(${PROJECT_NAME} PRIVATE
+    -sWASM=1
+    -sALLOW_MEMORY_GROWTH=1
+    -sMAXIMUM_MEMORY=1gb
+    -sSTACK_SIZE=32mb
+    -sINITIAL_MEMORY=64mb
+  )
 
-file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets/ DESTINATION ${CMAKE_BINARY_DIR}/build/assets/)
+  set_target_properties(${PROJECT_NAME} PROPERTIES
+    LINK_FLAGS "--preload-file ${CMAKE_CURRENT_LIST_DIR}/assets@/assets --use-preload-plugins --shell-file ${CMAKE_CURRENT_LIST_DIR}/index.html"
+  )
+endif()
+
+file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets/)

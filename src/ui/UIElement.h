@@ -5,224 +5,98 @@
  * 24/09/2017
  **/
 
-#ifndef UIELEMENT_H
-#define UIELEMENT_H
+#pragma once
 
-#include <allegro5/allegro_font.h>
-
+#include <asw/asw.h>
 #include <string>
+
+enum class TextJustify { Left, Center };
 
 class UIElement {
  public:
-  // Constructor
-  UIElement();
-  UIElement(const int x,
-            const int y,
-            std::string text,
-            std::string id,
-            ALLEGRO_FONT* font);
+  UIElement() = default;
+  UIElement(float x, float y, std::string text, asw::Font font);
 
-  // Dtor
-  virtual ~UIElement();
+  virtual ~UIElement() = default;
+  UIElement(const UIElement&) = delete;
+  UIElement& operator=(const UIElement&) = delete;
+  UIElement(UIElement&&) = delete;
+  UIElement& operator=(UIElement&&) = delete;
 
-  // Get X
-  int getX() const;
-
-  // Get y
-  int getY() const;
-
-  // Get text of element
-  std::string getText() const;
-
-  // Get element ID
-  std::string getId() const;
-
-  // Hide element
-  void hide();
-
-  // Show element
-  void show();
-
-  // Is visible or not
-  bool isVisible() const;
-
-  // Set visibility
-  void setVisibility(bool visible);
-
-  // Disable element
-  void disable();
-
-  // Enable element
-  void enable();
-
-  // Is enabled or not
-  bool isEnabled() const;
-
-  // Set transparency level
-  void setTransparency(const float alpha);
-
-  // Set image rotation
-  void setBitmapRotationAngle(const float rotation);
-
-  // Set x
-  void setX(const int x);
-
-  // Set y
-  void setY(const int y);
-
-  // Set text colour
-  void setTextColour(ALLEGRO_COLOR colour);
-
-  // Set background colour
-  void setBackgroundColour(ALLEGRO_COLOR colour);
-
-  // Set cell fill
-  void setCellFillTransparent(const bool n);
-
-  // Set text justification
-  void setTextJustification(const int justification);
-
-  // Element width
-  int getWidth() const;
-
-  // Element height
-  int getHeight() const;
-
-  // Set padding
-  void setPadding(const int x, const int y);
-
-  // Set position
-  void setPosition(const int x, const int y);
-
-  // Set element size
-  void setSize(const int width, const int height);
-
-  // Set text
-  void setText(std::string text);
-
-  // Set id
-  void setId(std::string id);
-
-  // Set image
-  void setImage(ALLEGRO_BITMAP* image);
-
-  // Set font
-  void setFont(ALLEGRO_FONT* font);
-
-  // Set background visibility
-  void setVisibleBackground(const bool b);
-
-  // Set width
-  void setWidth(const int width);
-
-  // Set height
-  void setHeight(const int height);
-
-  // Can focus
-  virtual bool canFocus();
-
-  // Focus
-  void focus();
-
-  // Unfocus
-  void unfocus();
-
-  // Set border thickness
-  void setBorderThickness(const int thickness);
-
-  // Disable hover effect
-  void disableHoverEffect();
-
-  // Disable hover effect
-  void enableHoverEffect();
-
-  // Mouse over
-  bool hover();
-
-  // Clicked
-  bool clicked();
-
-  // Update element
-  virtual void update() = 0;
-
-  // Draw element
+  virtual void update() {}
   virtual void draw() = 0;
+  virtual bool canFocus() const { return false; }
 
-  // Set callbacks
-  void setOnClick(void* func);
-  void setOnHover(void* func);
-  void setOnFocus(void* func);
+  // Position
+  float getX() const { return x; }
+  float getY() const { return y; }
+  void setPosition(float x, float y);
+
+  // Size including padding
+  float getWidth() const { return width + (padding_x * 2); }
+  float getHeight() const { return height + (padding_y * 2); }
+
+  // Size excluding padding
+  void setSize(float width, float height);
+  void setPadding(float x, float y);
+
+  // Text
+  const std::string& getText() const { return text; }
+  void setText(const std::string& text);
+  void setTextColour(asw::Color colour) { text_colour = colour; }
+  void setTextJustification(TextJustify justify) { justification = justify; }
+
+  // Look
+  void setBackgroundColour(asw::Color colour) { background_colour = colour; }
+  void setCellFillTransparent(bool transparent) {
+    transparent_cell_fill = transparent;
+  }
+  void setTransparency(uint8_t alpha) { this->alpha = alpha; }
+  void setImage(const asw::Texture& image);
+  void setImageRotation(float angle) { image_rotation = angle; }
+
+  // Visible elements are also enabled
+  bool isVisible() const { return visible; }
+  void setVisible(bool visible);
+  void show() { setVisible(true); }
+  void hide() { setVisible(false); }
+  bool isEnabled() const { return !disabled; }
+
+  // Keyboard and controller focus
+  void focus() { focused = true; }
+  void unfocus() { focused = false; }
+
+  // Mouse over a visible element
+  bool hover() const;
+
+  // Clicked with the mouse or selected while focused
+  bool clicked() const;
 
  protected:
-  // Position
-  int x{0};
-  int y{0};
+  asw::Color withAlpha(asw::Color colour) const;
 
-  // Dimensions of element
-  int width{10};
-  int height{10};
+  float x{0};
+  float y{0};
+  float width{10};
+  float height{10};
+  float padding_x{10};
+  float padding_y{10};
 
-  // Padding
-  int padding_x{10};
-  int padding_y{10};
-
-  // Text colour
-  ALLEGRO_COLOR text_colour;
-
-  // Background colour
-  ALLEGRO_COLOR background_colour;
-
-  // Fill with transparency
+  asw::Color text_colour{0, 0, 0};
+  asw::Color background_colour{200, 200, 200};
+  uint8_t alpha{255};
   bool transparent_cell_fill{false};
-
-  // Primitive alpha
-  float alpha{255};
-
-  // Background visibility
   bool visible_background{true};
+  float border_thickness{2};
 
-  // Thickness of border
-  int border_thickness{2};
-
-  // Visibility status
   bool visible{true};
-
-  // Disabled status
   bool disabled{false};
-
-  // Hover effect enabled
-  bool hover_effect{true};
-
-  // Image rotation
-  float bitmap_rotation_angle{0};
-
-  // Optional image
-  ALLEGRO_BITMAP* image{nullptr};
-
-  // Font
-  ALLEGRO_FONT* UIElement_font{nullptr};
-
-  // Text of element
-  std::string text{""};
-
-  // Justification of text
-  int justification{0};
-
-  // Unique id of element
-  std::string id{""};
-
-  // Focused
   bool focused{false};
 
-  // Function pointers
-  // On hover
-  void* onHover{nullptr};
+  asw::Texture image;
+  float image_rotation{0};
 
-  // On focus
-  void* onFocus{nullptr};
-
-  // On click
-  void* onClick{nullptr};
+  asw::Font font;
+  std::string text;
+  TextJustify justification{TextJustify::Left};
 };
-
-#endif  // UIELEMENT_H

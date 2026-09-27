@@ -1,55 +1,42 @@
 /**
  * Explosive
  * Danny Van Stemp
- * Box that applys gravity in a direction
+ * Box that pushes dynamic bodies away, or in one direction
  * 21/09/2017
  **/
 
-#ifndef EXPLOSIVE_H
-#define EXPLOSIVE_H
+#pragma once
 
 #include "Box.h"
 #include "Character.h"
+#include "GameAssets.h"
 
 class Explosive : public Box {
  public:
-  // Constructor
-  Explosive(const float x,
-            const float y,
-            const bool affectCharacter,
-            Character* character,
-            std::shared_ptr<b2World> world);
+  // Orientation 0 pushes away in all directions, 1-4 pushes up, right, down
+  // or left
+  Explosive(float x,
+            float y,
+            int orientation,
+            bool affect_character,
+            const GameAssets& assets,
+            b2World& world);
 
-  // Draw
-  void draw() override;
+  void update(b2World& world) override;
+  void draw() const override;
+  BoxType getType() const override { return BoxType::Explosive; }
 
-  // Update
-  void update(std::shared_ptr<b2World> world) override;
-
-  // Apply impulse
-  void applyBlastImpulse(b2Body* body,
-                         b2Vec2 blastCenter,
-                         b2Vec2 applyPoint,
-                         const float blastPower);
-
-  // Get type
-  int getType() override;
+  void setCharacter(const Character* character) {
+    this->character = character;
+  }
 
  private:
-  // Pointer to character
-  Character* gameCharacter{nullptr};
+  void applyBlastImpulse(b2Body* target,
+                         const b2Vec2& blast_centre,
+                         const b2Vec2& apply_point) const;
 
-  // Blast radius
-  float blastRadius{10.0f};
-
-  // Power of explosive
-  float blastPower{1000.0f};
-
-  // Can affect character or not
+  const GameAssets& assets;
+  const Character* character{nullptr};
+  int orientation{0};
   bool affect_character{false};
-
-  // Is currently exploding
-  bool is_exploding{false};
 };
-
-#endif  // EXPLOSIVE_H

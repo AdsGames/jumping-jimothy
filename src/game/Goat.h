@@ -5,55 +5,32 @@
  * 06/05/2017
  **/
 
-#ifndef GOAT_H
-#define GOAT_H
-
-#include <allegro5/allegro_primitives.h>
-#include <array>
-#include <memory>
+#pragma once
 
 #include "Box.h"
 #include "Character.h"
-#include "Sensor.h"
+#include "GameAssets.h"
 
 class Goat : public Box {
  public:
-  // Constructor
-  Goat(const float x,
-       const float y,
-       Character* character,
-       ALLEGRO_BITMAP* image,
-       std::shared_ptr<b2World> world);
+  Goat(float x, float y, const GameAssets& assets, b2World& world);
 
-  // Draw
-  void draw() override;
+  void update(b2World& world) override;
+  void draw() const override;
+  BoxType getType() const override { return BoxType::Goat; }
 
-  // Can win
-  bool getWinCondition();
+  void setCharacter(const Character* character) {
+    this->character = character;
+  }
 
-  // Update logic
-  void update(std::shared_ptr<b2World> world) override{
-      // Unused
-  };
-
-  // Get type
-  int getType() override;
+  // The character reached the goat
+  bool getWinCondition() const;
 
  private:
-  // Sensor box pointer
-  std::unique_ptr<Sensor> sensor_box{nullptr};
+  const GameAssets& assets;
+  const Character* character{nullptr};
 
-  // Character pointer
-  Character* gameCharacter{nullptr};
-
-  // Frame of animation
-  int goat_frame{0};
-
-  // Counter for incrementing frame
-  int goat_tick{0};
-
-  // Images of goat
-  std::array<ALLEGRO_BITMAP*, 17> goat_images{nullptr};
+  // Animation
+  int frame{0};
+  int tick{0};
 };
-
-#endif  // GOAT_H

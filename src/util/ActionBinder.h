@@ -1,56 +1,21 @@
 /**
  * Action Binder
  * Danny Van Stemp and Allan Legemaate
- * Abstraction layer on top of key/joy
+ * Abstraction layer on top of key/controller
  *   codes for keybindings
  * 05/05/2017
  **/
 
-#ifndef ACTIONBINDER_H
-#define ACTIONBINDER_H
+#pragma once
 
-#include <vector>
+enum class Action { Left, Right, Up, Down, A, B, Select };
 
-const int BINDING_NONE = -1;
+namespace ActionBinder {
 
-enum class Action { NONE, LEFT, RIGHT, UP, DOWN, A, B, SELECT };
+// True on the tick an action starts
+bool actionBegun(Action action);
 
-enum class ActionType { NONE, KEY, JOY_STICK, JOY_BUTTON };
+// True while an action is held
+bool actionHeld(Action action);
 
-class Binding {
- public:
-  Binding(Action action, ActionType type, int code)
-      : action(action), type(type), code(code) {}
-
-  Binding() : Binding(Action::NONE, ActionType::NONE, BINDING_NONE) {}
-  virtual ~Binding() = default;
-
-  Action getAction() const { return action; }
-  ActionType getType() const { return type; }
-  int getCode() const { return code; }
-
- private:
-  Action action;
-  ActionType type;
-  int code;
-};
-
-class ActionBinder {
- public:
-  ActionBinder() = default;
-  virtual ~ActionBinder() = default;
-
-  static bool actionBegun(const Action action);
-  static bool actionEnded(const Action action) { return false; };
-  static bool actionHeld(const Action action);
-
-  static void addBinding(Action action, ActionType type, int code);
-
-  static void setDefaults();
-
- private:
-  static std::vector<Binding*> bindings;
-  static std::vector<Binding*> findBindings(const Action action);
-};
-
-#endif  // ACTIONBINDER_H
+}  // namespace ActionBinder

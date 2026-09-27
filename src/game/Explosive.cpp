@@ -1,169 +1,125 @@
 #include "Explosive.h"
 
-#include <allegro5/allegro_primitives.h>
+#include <algorithm>
+#include <numbers>
 #include <vector>
 
-#include "../util/Globals.h"
+#include "../Globals.h"
+#include "../util/Graphics.h"
 
-// Constructor
-Explosive::Explosive(const float x,
-                     const float y,
-                     const bool affectCharacter,
-                     Character* character,
-                     std::shared_ptr<b2World> world)
-    : Box(x, y, 1.55f, 1.55f, world),
-      gameCharacter(character),
-      affect_character(affectCharacter) {
-  color = al_map_rgb(255, 0, 0);
+namespace {
+constexpr float SIZE = 1.55F;
+constexpr float IMAGE_SIZE = 32;
 
-  // Modify body
-  body->SetType(b2_kinematicBody);
-}
+constexpr float BLAST_RADIUS = 10.0F;
+constexpr float BLAST_POWER = 1000.0F * 0.05F;
+constexpr float MAX_IMPULSE = 500.0F;
 
-// subclass b2QueryCallback for proximity query callback
-class MyQueryCallback : public b2QueryCallback {
+// Impulse direction of the one way explosives
+constexpr float DIRECTIONAL_MAGNITUDE = 0.2F;
+
+// Collects every body with a fixture in the query area
+class QueryCallback : public b2QueryCallback {
  public:
-  // All bodies found by query
-  std::vector<b2Body*> foundBodies;
+  std::vector<b2Body*> bodies;
 
   bool ReportFixture(b2Fixture* fixture) override {
-    foundBodies.push_back(fixture->GetBody());
-    return true;  // keep going to find all fixtures in the query area
+    bodies.push_back(fixture->GetBody());
+    return true;
   }
 };
+}  // namespace
 
-void Explosive::update(std::shared_ptr<b2World> world) {
-  // Center of blast
-  b2Vec2 center = body->GetPosition();
+Explosive::Explosive(float x,
+                     float y,
+                     int orientation,
+                     bool affect_character,
+                     const GameAssets& assets,
+                     b2World& world)
+    : Box(x, y, SIZE, SIZE),
+      assets(assets),
+      orientation(orientation),
+      affect_character(affect_character) {
+  createBody(world, b2_kinematicBody);
+}
 
-  // Find all fixtures within blast radius AABB
-  MyQueryCallback queryCallback;
+void Explosive::update(b2World& world) {
+  const auto centre = body->GetPosition();
+  const b2Vec2 extent(BLAST_RADIUS, BLAST_RADIUS);
 
-  // AABB
+  QueryCallback query;
   b2AABB aabb;
-  aabb.lowerBound = center - b2Vec2(blastRadius, blastRadius);
-  aabb.upperBound = center + b2Vec2(blastRadius, blastRadius);
-  world->QueryAABB(&queryCallback, aabb);
+  aabb.lowerBound = centre - extent;
+  aabb.upperBound = centre + extent;
+  world.QueryAABB(&query, aabb);
 
-  is_exploding = false;
+  // Push bodies whose centre of mass is inside the blast radius
+  for (auto* target : query.bodies) {
+    const auto target_centre = target->GetWorldCenter();
 
-  // Check which of these have their center of mass within the blast radius
-  for (auto& body : queryCallback.foundBodies) {
-    // Center of world
-    b2Vec2 bodyCom = body->GetWorldCenter();
-
-    // Ignore bodies outside the blast range
-    if ((bodyCom - center).Length() >= blastRadius)
-      continue;
-    else {
-      applyBlastImpulse(
-          body, center, bodyCom,
-          blastPower * 0.05f);  // scale blast power to roughly match results of
-                                // other methods at 32 rays
+    if ((target_centre - centre).Length() < BLAST_RADIUS) {
+      applyBlastImpulse(target, centre, target_centre);
     }
   }
 }
 
-// this is the same for proximity and raycast methods so we can put it in a
-// common function
-void Explosive::applyBlastImpulse(b2Body* newBody,
-                                  b2Vec2 blastCenter,
-                                  b2Vec2 applyPoint,
-                                  const float blastPower) {
-  // ignore the grenade itself, and any non-dynamic bodies
-  // Fricking feet, how do they work?
-  if (newBody == body || newBody->GetType() != b2_dynamicBody ||
-      ((newBody == gameCharacter->getBody() ||
-        newBody == gameCharacter->getSensorBody()) &&
-       !affect_character)) {
+void Explosive::applyBlastImpulse(b2Body* target,
+                                  const b2Vec2& blast_centre,
+                                  const b2Vec2& apply_point) const {
+  // Ignore itself, non dynamic bodies, and the character unless allowed
+  if (target == body || target->GetType() != b2_dynamicBody) {
     return;
   }
 
-  // Blast direction
-  b2Vec2 blastDir = applyPoint - blastCenter;
-
-  // Distance
-  const float distance = blastDir.Normalize();
-
-  // Ignore bodies exactly at the blast point - blast direction is undefined
-  if (distance < 0.01f)
+  if (!affect_character && character != nullptr &&
+      target == character->getBody()) {
     return;
-
-  // Distance
-  const float invDistance = 1 / distance;
-
-  // Magnitude
-  float impulseMag = blastPower * invDistance * invDistance;
-
-  impulseMag = b2Min(impulseMag, 500.0f);
-
-  is_exploding = true;
-
-  if (orientation == 0) {
-    newBody->ApplyLinearImpulse(impulseMag * blastDir, applyPoint, true);
-  } else {
-    // Magnitude
-    const float magnitude = 0.2f;
-
-    // Direction of impulse
-    b2Vec2 new_direction;
-
-    if (orientation == 1)
-      new_direction = b2Vec2(0, magnitude);
-    else if (orientation == 3)
-      new_direction = b2Vec2(0, -magnitude);
-    else if (orientation == 2)
-      new_direction = b2Vec2(magnitude, 0);
-    else
-      new_direction = b2Vec2(-magnitude, 0);
-
-    newBody->ApplyLinearImpulse(impulseMag * new_direction, applyPoint, true);
-  }
-}
-
-void Explosive::draw() {
-  // Transform for drawing
-  ALLEGRO_TRANSFORM trans;
-  ALLEGRO_TRANSFORM prevTrans;
-
-  // back up the current transform
-  al_copy_transform(&prevTrans, al_get_current_transform());
-
-  // scale using the new transform
-  al_identity_transform(&trans);
-
-  al_rotate_transform(&trans, -getAngle());
-  al_translate_transform(&trans, getX() * 20, getY() * -20);
-
-  al_use_transform(&trans);
-
-  if (is_exploding) {
-    // al_draw_filled_circle(0,0,200,al_map_rgba(255,0,0,1));
-    // one day
   }
 
-  if (affect_character)
-    al_draw_filled_rectangle(-(getWidth() / 2) * 20 + 1,
-                             -(getHeight() / 2) * 20 + 1,
-                             (getWidth() / 2) * 20 - 1,
-                             (getHeight() / 2) * 20 - 1, al_map_rgb(255, 0, 0));
-  else
-    al_draw_filled_rectangle(-(getWidth() / 2) * 20 + 1,
-                             -(getHeight() / 2) * 20 + 1,
-                             (getWidth() / 2) * 20 - 1,
-                             (getHeight() / 2) * 20 - 1, al_map_rgb(0, 255, 0));
+  b2Vec2 direction = apply_point - blast_centre;
+  const float distance = direction.Normalize();
 
-  // PI/2 is a quarter turn. Editor boxes orientation is a range from 1-4.
-  // So we have a quarter turn * 1-4, creating a quarter turn, half turn, ect.
-  // - PI/2 is because we start rotated right a quarter turn.
-  const float new_angle = (PI / 2) * orientation - PI / 2;
-  al_draw_rotated_bitmap(sprite, 16, 16, 0, 0, new_angle, 0);
+  // Direction is undefined at the centre
+  if (distance < 0.01F) {
+    return;
+  }
 
-  // restore the old transform
-  al_use_transform(&prevTrans);
+  const float inverse_distance = 1.0F / distance;
+  const float magnitude = std::min(
+      BLAST_POWER * inverse_distance * inverse_distance, MAX_IMPULSE);
+
+  switch (orientation) {
+    case 1:
+      direction = b2Vec2(0, DIRECTIONAL_MAGNITUDE);
+      break;
+    case 2:
+      direction = b2Vec2(DIRECTIONAL_MAGNITUDE, 0);
+      break;
+    case 3:
+      direction = b2Vec2(0, -DIRECTIONAL_MAGNITUDE);
+      break;
+    case 4:
+      direction = b2Vec2(-DIRECTIONAL_MAGNITUDE, 0);
+      break;
+    default:
+      break;
+  }
+
+  target->ApplyLinearImpulse(magnitude * direction, apply_point, true);
 }
 
-// Get box type
-int Explosive::getType() {
-  return EXPLOSIVE;
+void Explosive::draw() const {
+  const float fill = (SIZE * PIXELS_PER_METER) - 2;
+  const auto colour =
+      affect_character ? asw::Color(255, 0, 0) : asw::Color(0, 255, 0);
+  gfx::rotatedRectFill(screenQuad(fill, fill), screenAngle(), colour);
+
+  // Directional image points up, turn a quarter per orientation step
+  const auto& image =
+      orientation == 0 ? assets.box_repel : assets.box_repel_direction;
+  const float angle = (std::numbers::pi_v<float> / 2.0F) *
+                      static_cast<float>(orientation - 1);
+
+  gfx::region(image, asw::Quad<float>(0, 0, IMAGE_SIZE, IMAGE_SIZE),
+              screenQuad(IMAGE_SIZE, IMAGE_SIZE), angle + screenAngle());
 }

@@ -5,105 +5,62 @@
  * 05/05/2017
  **/
 
-#ifndef BOX_H
-#define BOX_H
+#pragma once
 
-#include <allegro5/allegro.h>
+#include <asw/asw.h>
 #include <box2d/box2d.h>
-#include <memory>
 
-class b2World;
-class b2Body;
-class b2BodyDef;
-class b2Vec2;
-class Sensor;
-class Character;
+enum class BoxType { Dynamic, Character, Goat, Static, Collision, Explosive };
 
 class Box {
  public:
-  // Constructor
-  Box();
-  Box(const float x,
-      const float y,
-      const float width,
-      const float height,
-      std::shared_ptr<b2World> world);
+  // Position is the centre, all values are in metres
+  Box(float x, float y, float width, float height);
 
-  // Destructor
-  virtual ~Box();
+  // Bodies belong to the world and are freed with it
+  virtual ~Box() = default;
+  Box(const Box&) = delete;
+  Box& operator=(const Box&) = delete;
+  Box(Box&&) = delete;
+  Box& operator=(Box&&) = delete;
 
-  // Create body
-  void createBody(std::shared_ptr<b2World> world);
+  virtual void update(b2World& /*world*/) {}
+  virtual void draw() const = 0;
+  virtual BoxType getType() const = 0;
 
-  // Draw
-  virtual void draw() = 0;
+  // Pausable boxes freeze while time is stopped. When can_sleep is set, a box
+  // that was at rest goes to sleep on unpause so it does not jitter.
+  virtual bool isPausable() const { return false; }
+  void setPaused(bool pause, bool can_sleep = true);
 
-  // Update logic
-  virtual void update(std::shared_ptr<b2World> world) = 0;
-
-  // Get type
-  virtual int getType() = 0;
-
-  // Set images
-  void setImage(ALLEGRO_BITMAP* image);
-
-  // Get X
   float getX() const;
-
-  // Get Y
   float getY() const;
-
-  // Get width
-  float getWidth() const;
-
-  // Get height
-  float getHeight() const;
-
-  // Get angle
+  float getWidth() const { return size.x; }
+  float getHeight() const { return size.y; }
   float getAngle() const;
-
-  // Get physics body
-  b2Body* getBody();
-
-  // Set paused
-  void setPaused(const bool pause);
-
-  // Is pausable
-  virtual bool isPausable();
-
-  // Set orientation
-  void setOrientation(const int orientation);
+  b2Body* getBody() const { return body; }
 
  protected:
-  // Orientation
-  int orientation{0};
+  void createBody(b2World& world, b2BodyType type);
 
-  // Colour
-  ALLEGRO_COLOR color;
+  // Centre on screen in pixels
+  asw::Vec2<float> screenPosition() const;
 
-  // Sprite for box
-  ALLEGRO_BITMAP* sprite{nullptr};
+  // Screen quad of a w by h pixel image centred on the box, shifted by offset
+  asw::Quad<float> screenQuad(float w,
+                              float h,
+                              asw::Vec2<float> offset = {0, 0}) const;
 
-  // Pointer to physics body
+  // Screen angle, SDL rotates clockwise and Box2D counter clockwise
+  float screenAngle() const { return -getAngle(); }
+
   b2Body* body{nullptr};
 
-  // Paused state
-  bool isPaused{true};
+ private:
+  bool is_paused{false};
+  b2Vec2 paused_velocity{0, 0};
+  float paused_angular_velocity{0};
 
-  // Snapshot of velocity
-  b2Vec2 paused_velocity{b2Vec2(0, 0)};
-
-  // Snapshot of angular velocity
-  float paused_angular_velocity{0.0f};
-
-  // Position
-  b2Vec2 initial_position{b2Vec2(0, 0)};
-
-  // Size
-  b2Vec2 initial_size{b2Vec2(0, 0)};
-
-  // Angle
-  float initial_angle{0.0f};
+  b2Vec2 initial_position;
+  b2Vec2 size;
 };
-
-#endif  // BOX_H

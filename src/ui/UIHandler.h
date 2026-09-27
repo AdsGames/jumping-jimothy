@@ -1,52 +1,48 @@
 /**
  * UIHandler
  * Danny Van Stemp and Allan Legemaate
- * Manages UI
+ * Owns, updates and draws UI elements, and moves
+ *   focus between them with the keyboard or controller
  * 24/09/2017
  **/
 
-#ifndef UIHANDLER_H
-#define UIHANDLER_H
+#pragma once
 
 #include <memory>
-#include <string>
 #include <vector>
 
 #include "UIElement.h"
 
 class UIHandler {
  public:
-  UIHandler();
+  // Create an element, the handler keeps it for its lifetime
+  template <typename T, typename... Args>
+  T& add(Args&&... args) {
+    auto element = std::make_unique<T>(std::forward<Args>(args)...);
+    auto& ref = *element;
+    elements.push_back(std::move(element));
+    return ref;
+  }
 
-  void addElement(std::shared_ptr<UIElement> elem);
-  void draw();
+  // Create a button to the right of another element
+  template <typename T, typename... Args>
+  T& addAfter(const UIElement& anchor, Args&&... args) {
+    return add<T>(anchor.getX() + anchor.getWidth(), anchor.getY(),
+                  std::forward<Args>(args)...);
+  }
+
+  void clear();
   void update();
-  bool isHovering();
+  void draw() const;
 
-  void createButton(const int x,
-                    const int y,
-                    std::string text,
-                    std::string id,
-                    ALLEGRO_FONT* font);
-
-  void createAnchoredButton(std::string text,
-                            ALLEGRO_FONT* font,
-                            std::string anchorID,
-                            std::string id);
-
-  UIElement* getElementById(std::string id);
-
-  std::vector<std::shared_ptr<UIElement>> getUIElements();
+  // True if the mouse is over a visible element
+  bool isHovering() const;
 
  private:
-  // Container for UI Elements
-  std::vector<std::shared_ptr<UIElement>> ui_elements{};
+  void moveFocus(int direction);
 
-  // Cursor image
-  ALLEGRO_BITMAP* ui_cursor{nullptr};
+  std::vector<std::unique_ptr<UIElement>> elements;
 
-  // Element in focus
-  int focusedElement{-1};
+  // Index of the focused element, -1 for none
+  int focused_element{-1};
 };
-
-#endif  // UIHANDLER_H

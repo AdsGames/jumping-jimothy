@@ -1,151 +1,85 @@
 #include "Box.h"
 
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/color.h>
+#include <cmath>
 
-#include <box2d/box2d.h>
+#include "../Globals.h"
 
-#include "../util/Globals.h"
-#include "../util/Tools.h"
+namespace {
+// Boxes this slow when paused go to sleep instead of keeping their velocity
+constexpr float REST_LINEAR_X = 0.1F;
+constexpr float REST_LINEAR_Y = 0.01F;
+constexpr float REST_ANGULAR = 0.1F;
+}  // namespace
 
-// Construct
-Box::Box() {
-  color = al_map_rgb(0, 0, 0);
+Box::Box(float x, float y, float width, float height)
+    : initial_position(x, y), size(width, height) {}
+
+void Box::createBody(b2World& world, b2BodyType type) {
+  b2BodyDef body_def;
+  body_def.type = type;
+  body_def.position = initial_position;
+
+  b2PolygonShape shape;
+  shape.SetAsBox(size.x / 2, size.y / 2);
+
+  b2FixtureDef fixture_def;
+  fixture_def.shape = &shape;
+  fixture_def.density = 1.0F;
+  fixture_def.friction = 0.3F;
+
+  body = world.CreateBody(&body_def);
+  body->CreateFixture(&fixture_def);
 }
 
-// Detailed constructor
-Box::Box(const float x,
-         const float y,
-         const float width,
-         const float height,
-         std::shared_ptr<b2World> world)
-    : initial_position{b2Vec2(x, y)}, initial_size{b2Vec2(width, height)} {
-  color = al_map_rgb(0, 0, 0);
-  createBody(world);
-}
-
-// Destructor
-Box::~Box() {
-  // Remove body
-  if (body) {
-    body->GetWorld()->DestroyBody(body);
+void Box::setPaused(bool pause, bool can_sleep) {
+  if (!isPausable() || body == nullptr) {
+    return;
   }
-}
 
-// Set images
-void Box::setImage(ALLEGRO_BITMAP* image) {
-  sprite = image;
-}
+  is_paused = pause;
 
-// Create body
-void Box::createBody(std::shared_ptr<b2World> world) {
-  // World must be set
-  if (!world)
-    return;
-
-  // Body definition
-  b2BodyDef bodyDef;
-
-  // Body position
-  bodyDef.position.Set(getX(), getY());
-
-  // Shape definition
-  b2PolygonShape dynamicBox;
-  dynamicBox.SetAsBox(getWidth() / 2, getHeight() / 2);
-
-  // Fixture definition
-  b2FixtureDef fixtureDef;
-  fixtureDef.shape = &dynamicBox;
-
-  // Set the box density to be non-zero, so it will be dynamic.
-  fixtureDef.density = 1.0f;
-
-  // Override the default friction.
-  fixtureDef.friction = 0.3f;
-
-  // Create body and create fixture
-  body = world->CreateBody(&bodyDef);
-  body->CreateFixture(&fixtureDef);
-}
-
-// Set static mode
-void Box::setPaused(const bool pause) {
-  // Must be pausable
-  if (!isPausable())
-    return;
-
-  // Set paused state
-  isPaused = pause;
-
-  // Body must be defined
-  if (!body)
-    return;
-
-  if (isPaused) {
+  if (is_paused) {
     paused_velocity = body->GetLinearVelocity();
     paused_angular_velocity = body->GetAngularVelocity();
     body->SetType(b2_staticBody);
+    return;
+  }
+
+  body->SetType(b2_dynamicBody);
+
+  const bool at_rest = can_sleep &&
+                       std::abs(paused_velocity.x) <= REST_LINEAR_X &&
+                       std::abs(paused_velocity.y) <= REST_LINEAR_Y &&
+                       std::abs(paused_angular_velocity) <= REST_ANGULAR;
+
+  if (at_rest) {
+    body->SetAwake(false);
+    body->SetLinearVelocity(b2Vec2(0, 0));
   } else {
-    isPaused = false;
-    body->SetType(b2_dynamicBody);
-    if (isPausable() &&
-        (paused_velocity.y <= 0.01f && paused_velocity.y >= -0.01f &&
-         paused_velocity.x <= 0.1f && paused_velocity.x >= -0.1f &&
-         paused_angular_velocity <= 0.1f && paused_angular_velocity >= -0.1f)) {
-      body->SetAwake(false);
-      body->SetLinearVelocity(b2Vec2(0, 0));
-    } else {
-      body->SetLinearVelocity(paused_velocity);
-      body->SetAngularVelocity(paused_angular_velocity);
-    }
+    body->SetLinearVelocity(paused_velocity);
+    body->SetAngularVelocity(paused_angular_velocity);
   }
 }
 
-// Get x position
 float Box::getX() const {
-  if (body) {
-    return body->GetPosition().x;
-  }
-  return initial_position.x;
+  return body != nullptr ? body->GetPosition().x : initial_position.x;
 }
 
-// Get y position
 float Box::getY() const {
-  if (body) {
-    return body->GetPosition().y;
-  }
-  return initial_position.y;
+  return body != nullptr ? body->GetPosition().y : initial_position.y;
 }
 
-// Get width
-float Box::getWidth() const {
-  return initial_size.x;
-}
-
-// Get height
-float Box::getHeight() const {
-  return initial_size.y;
-}
-
-// Get angle
 float Box::getAngle() const {
-  if (body) {
-    return body->GetAngle();
-  }
-  return 0.0f;
+  return body != nullptr ? body->GetAngle() : 0.0F;
 }
 
-// Get physics body
-b2Body* Box::getBody() {
-  return body;
+asw::Vec2<float> Box::screenPosition() const {
+  return {getX() * PIXELS_PER_METER, -getY() * PIXELS_PER_METER};
 }
 
-// Get physics body
-bool Box::isPausable() {
-  return false;
-}
-
-// Set orientation
-void Box::setOrientation(const int o) {
-  this->orientation = o;
+asw::Quad<float> Box::screenQuad(float w,
+                                 float h,
+                                 asw::Vec2<float> offset) const {
+  const auto centre = screenPosition() + offset;
+  return {centre.x - (w / 2), centre.y - (h / 2), w, h};
 }

@@ -1,144 +1,68 @@
 #include "UIHandler.h"
 
-#include "../util/Config.h"
-
-#include "Button.h"
-#include "Label.h"
-
-#include "../util/Globals.h"
-#include "../util/Tools.h"
+#include <algorithm>
 
 #include "../util/ActionBinder.h"
-#include "../util/MouseListener.h"
+#include "../util/Input.h"
 
-// Create UI handler
-UIHandler::UIHandler() {
-  // Load cursor image
-  ui_cursor = tools::load_bitmap_ex("assets/images/cursor.png");
+void UIHandler::clear() {
+  elements.clear();
+  focused_element = -1;
 }
 
-// Add element to handler
-void UIHandler::addElement(std::shared_ptr<UIElement> elem) {
-  ui_elements.emplace_back(elem);
-}
-
-// Is hovering over ui element
-bool UIHandler::isHovering() {
-  // Check global hover status
-  for (unsigned int i = 0; i < ui_elements.size(); i++) {
-    if (ui_elements.at(i)->hover()) {
-      return true;
-    }
-  }
-  return false;
-}
-
-// Get all UI elements
-std::vector<std::shared_ptr<UIElement>> UIHandler::getUIElements() {
-  return ui_elements;
-}
-
-// Create button
-void UIHandler::createButton(const int x,
-                             const int y,
-                             std::string text,
-                             std::string id,
-                             ALLEGRO_FONT* font) {
-  ui_elements.emplace_back(new Button(x, y, text, id, font));
-}
-
-// Create anchored button
-void UIHandler::createAnchoredButton(std::string text,
-                                     ALLEGRO_FONT* font,
-                                     std::string anchorID,
-                                     std::string id) {
-  ui_elements.emplace_back(new Button(
-      getElementById(anchorID)->getX() + getElementById(anchorID)->getWidth(),
-      getElementById(anchorID)->getY(), text, id, font));
-}
-
-// Search for elemnt by ID
-UIElement* UIHandler::getElementById(std::string id) {
-  // Find element
-  for (auto& elem : ui_elements) {
-    if (elem->getId() == id) {
-      return elem.get();
-    }
-  }
-  tools::log_message("Warning: not found " + id);
-
-  // Not found
-  return nullptr;
-}
-
-// Draw UIElement to screen
-void UIHandler::draw() {
-  // Draw all elements
-  for (auto& elem : ui_elements) {
-    elem->draw();
-  }
-
-  // Draw cursor if required
-  if (Config::getBooleanValue("draw_cursor") && ui_cursor) {
-    al_draw_bitmap(ui_cursor, MouseListener::mouse_x, MouseListener::mouse_y,
-                   0);
-  }
-}
-
-// Update UIElement logic
 void UIHandler::update() {
-  // Update all elements
-  for (const auto& elem : ui_elements) {
-    elem->update();
+  for (const auto& element : elements) {
+    element->update();
   }
 
-  // Move between elements
-  if (!ui_elements.empty()) {
-    // Key pressed
-    if (ActionBinder::actionBegun(Action::UP) ||
-        ActionBinder::actionBegun(Action::DOWN)) {
-      // Unfocus current
-      if (focusedElement >= 0 && focusedElement < (signed)ui_elements.size())
-        ui_elements.at(focusedElement)->unfocus();
+  if (elements.empty()) {
+    return;
+  }
 
-      // Focus direction -1 down, 0 none, 1 up
-      int focusDirection = 0;
+  if (ActionBinder::actionBegun(Action::Up)) {
+    moveFocus(-1);
+  } else if (ActionBinder::actionBegun(Action::Down)) {
+    moveFocus(1);
+  }
 
-      // Choose direction
-      if (ActionBinder::actionBegun(Action::UP)) {
-        focusDirection = -1;
-      } else if (ActionBinder::actionBegun(Action::DOWN)) {
-        focusDirection = 1;
-      }
+  // The mouse takes over from the keyboard
+  if (input::mouseMoved() && focused_element >= 0) {
+    elements[focused_element]->unfocus();
+    focused_element = -1;
+  }
+}
 
-      // Find next focusable
-      for (const auto& _ : ui_elements) {
-        // Increment focused element
-        focusedElement += focusDirection;
+void UIHandler::moveFocus(int direction) {
+  const auto count = static_cast<int>(elements.size());
 
-        // Keep in bounds
-        if (focusedElement >= (signed)ui_elements.size()) {
-          focusedElement = 0;
-        } else if (focusedElement < 0) {
-          focusedElement = (signed)ui_elements.size() - 1;
-        }
+  if (focused_element >= 0) {
+    elements[focused_element]->unfocus();
+  } else {
+    // Nothing focused, start before the first or after the last element
+    focused_element = direction > 0 ? -1 : count;
+  }
 
-        // Check if focusable
-        if (ui_elements.at(focusedElement)->canFocus() &&
-            ui_elements.at(focusedElement)->isEnabled() &&
-            ui_elements.at(focusedElement)->isVisible()) {
-          ui_elements.at(focusedElement)->focus();
-          break;
-        }
-      }
-    }
+  // Step to the next element that can take focus, wrapping around
+  for (int i = 0; i < count; i++) {
+    focused_element = (focused_element + direction + count) % count;
 
-    // Unfocus if mouse moved
-    if (MouseListener::mouse_moved) {
-      if (focusedElement >= 0 && focusedElement < (signed)ui_elements.size()) {
-        ui_elements.at(focusedElement)->unfocus();
-      }
-      focusedElement = -1;
+    const auto& element = elements[focused_element];
+    if (element->canFocus() && element->isEnabled() && element->isVisible()) {
+      element->focus();
+      return;
     }
   }
+
+  focused_element = -1;
+}
+
+void UIHandler::draw() const {
+  for (const auto& element : elements) {
+    element->draw();
+  }
+}
+
+bool UIHandler::isHovering() const {
+  return std::ranges::any_of(
+      elements, [](const auto& element) { return element->hover(); });
 }
