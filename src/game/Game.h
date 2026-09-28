@@ -14,6 +14,7 @@
 
 #include "../State.h"
 #include "../ui/Button.h"
+#include "../Globals.h"
 #include "../ui/UIHandler.h"
 #include "Box.h"
 #include "Character.h"
@@ -48,6 +49,9 @@ class Game : public asw::scene::Scene<ProgramState> {
   // Toggle frozen time
   void togglePause();
 
+  // Dust, shake and so on when the character lands hard
+  void updateEffects();
+
   // Leave for another scene, no more ticks run here
   void changeScene(ProgramState state);
 
@@ -68,6 +72,15 @@ class Game : public asw::scene::Scene<ProgramState> {
   Goat* goat{nullptr};
 
   std::vector<std::string> help_text;
+
+  // Shakes the world on death and hard landings
+  asw::Camera camera{asw::Vec2<float>(SCREEN_WIDTH, SCREEN_HEIGHT)};
+
+  // Kicked up by hard landings
+  asw::ParticleEmitter dust;
+
+  // Left behind when the character dies
+  asw::ParticleEmitter burst;
 
   int level{1};
 

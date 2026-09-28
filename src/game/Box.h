@@ -25,7 +25,7 @@ class Box {
   Box& operator=(Box&&) = delete;
 
   virtual void update(b2World& /*world*/) {}
-  virtual void draw() const = 0;
+  virtual void draw(const asw::Camera& camera) const = 0;
   virtual BoxType getType() const = 0;
 
   // Pausable boxes freeze while time is stopped. When can_sleep is set, a box
@@ -40,14 +40,15 @@ class Box {
   float getAngle() const;
   b2Body* getBody() const { return body; }
 
+  // Centre in world pixels, y is down like the screen
+  asw::Vec2<float> pixelPosition() const;
+
  protected:
   void createBody(b2World& world, b2BodyType type);
 
-  // Centre on screen in pixels
-  asw::Vec2<float> screenPosition() const;
-
   // Screen quad of a w by h pixel image centred on the box, shifted by offset
-  asw::Quad<float> screenQuad(float w,
+  asw::Quad<float> screenQuad(const asw::Camera& camera,
+                              float w,
                               float h,
                               asw::Vec2<float> offset = {0, 0}) const;
 

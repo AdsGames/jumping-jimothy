@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <format>
+#include <numbers>
 
 #include "../Globals.h"
 #include "../util/Controls.h"
@@ -26,6 +27,50 @@ constexpr float BOUNDS_RIGHT = 51.5F;
 constexpr float BOUNDS_TOP = 2.0F;
 constexpr float BOUNDS_BOTTOM = -40.0F;
 
+// Landing faster than this, in metres per second, kicks up dust
+constexpr float DUST_LANDING_SPEED = 6.0F;
+
+// Landing faster than this shakes the screen
+constexpr float SHAKE_LANDING_SPEED = 12.0F;
+
+// Screen shake strength in pixels
+constexpr float LANDING_SHAKE = 4.0F;
+constexpr float DEATH_SHAKE = 10.0F;
+
+// Feet of the character below its centre, in pixels
+constexpr float FEET_OFFSET = 25.0F;
+
+asw::ParticleConfig dustConfig() {
+  asw::ParticleConfig config;
+  config.lifetime_min = 0.25F;
+  config.lifetime_max = 0.5F;
+  config.speed_min = 30.0F;
+  config.speed_max = 90.0F;
+  // Upwards fan, screen angles so up is -pi/2
+  config.angle_min = -std::numbers::pi_v<float>;
+  config.angle_max = 0.0F;
+  config.size_start = 5.0F;
+  config.size_end = 1.0F;
+  config.color_start = asw::Color(200, 200, 210, 200);
+  config.color_end = asw::Color(200, 200, 210, 0);
+  config.gravity = asw::Vec2<float>(0, 200);
+  return config;
+}
+
+asw::ParticleConfig burstConfig() {
+  asw::ParticleConfig config;
+  config.lifetime_min = 0.4F;
+  config.lifetime_max = 0.9F;
+  config.speed_min = 80.0F;
+  config.speed_max = 260.0F;
+  config.size_start = 6.0F;
+  config.size_end = 1.0F;
+  config.color_start = asw::Color(255, 255, 255);
+  config.color_end = asw::Color(255, 60, 60, 0);
+  config.gravity = asw::Vec2<float>(0, 400);
+  return config;
+}
+
 // Spawn offsets from the level file position, in metres
 constexpr float CHARACTER_SPAWN_OFFSET = -1.6F;
 constexpr float GOAT_SPAWN_OFFSET = -1.0F;
@@ -41,6 +86,10 @@ void Game::init() {
   edit_font = asw::assets::load_font("assets/fonts/fantasque.ttf", 18);
 
   assets.load();
+
+  dust = asw::ParticleEmitter(dustConfig(), 128);
+  burst = asw::ParticleEmitter(burstConfig(), 128);
+  camera.snap_to(asw::Vec2<float>(SCREEN_WIDTH / 2.0F, SCREEN_HEIGHT / 2.0F));
 
   ui.clear();
   back_button = nullptr;
@@ -109,7 +158,7 @@ void Game::loadLevel(const std::string& path) {
     switch (object.type) {
       case ObjectType::Static:
         boxes.push_back(std::make_unique<StaticBox>(
-            object.x, object.y, assets.static_tiles, object.orientation));
+            object.x, object.y, assets.tile_sheet, object.orientation));
         break;
 
       case ObjectType::Dynamic:
@@ -207,6 +256,8 @@ void Game::update(float /*dt*/) {
     box->update(*world);
   }
 
+  updateEffects();
+
   // Skip level
   if (asw::input::get_key_down(Key::C)) {
     if (session.editing_level) {
@@ -244,8 +295,30 @@ void Game::update(float /*dt*/) {
     }
   }
 
-  if (asw::input::get_key_down(Key::R)) {
+  if (asw::input::get_action_down(Controls::RESTART)) {
     die();
+  }
+}
+
+void Game::updateEffects() {
+  camera.update(TICK_SECONDS);
+  dust.update(TICK_SECONDS);
+  burst.update(TICK_SECONDS);
+
+  if (character == nullptr) {
+    return;
+  }
+
+  const float landing = character->takeLanding();
+
+  if (landing > DUST_LANDING_SPEED) {
+    dust.transform.position =
+        character->pixelPosition() + asw::Vec2<float>(0, FEET_OFFSET);
+    dust.emit(static_cast<uint32_t>(landing * 2.0F));
+  }
+
+  if (landing > SHAKE_LANDING_SPEED) {
+    camera.shake(LANDING_SHAKE);
   }
 }
 
@@ -275,7 +348,16 @@ void Game::nextLevel() {
 }
 
 void Game::die() {
-  asw::sound::play(assets.death);
+  if (character != nullptr) {
+    const auto position = character->pixelPosition();
+    Audio::playAt(assets.death, position.x);
+    burst.transform.position = position;
+    burst.emit(60);
+  } else {
+    asw::sound::play(assets.death);
+  }
+
+  camera.shake(DEATH_SHAKE);
   reset();
 }
 
@@ -296,23 +378,29 @@ void Game::togglePause() {
 void Game::draw() {
   asw::draw::clear_color(asw::Color(40, 40, 60));
 
-  // Help text
+  // Help text, prompts match the device the player uses
   for (std::size_t i = 0; i < help_text.size(); i++) {
-    asw::draw::text(help_font, help_text[i],
-                    asw::Vec2<float>(500, 75 + (static_cast<float>(i) * 50)),
-                    asw::Color(255, 255, 255), asw::TextJustify::Center);
+    asw::draw::text_shadow(
+        help_font, Controls::describe(help_text[i]),
+        asw::Vec2<float>(500, 75 + (static_cast<float>(i) * 50)),
+        asw::Color(255, 255, 255), asw::Color(0, 0, 0, 160),
+        asw::Vec2<float>(3, 3), asw::TextJustify::Center);
   }
 
   for (const auto& box : boxes) {
-    box->draw();
+    box->draw(camera);
   }
+
+  dust.draw(camera);
+  burst.draw(camera);
 
   ui.draw();
 
   asw::draw::sprite(static_mode ? assets.pause : assets.play,
                     asw::Vec2<float>(10, 10));
 
-  asw::draw::text(game_font, std::format("Level {}", level),
-                  asw::Vec2<float>(1010, 15), asw::Color(255, 255, 255),
-                  asw::TextJustify::Right);
+  asw::draw::text_shadow(game_font, std::format("Level {}", level),
+                         asw::Vec2<float>(1010, 15), asw::Color(255, 255, 255),
+                         asw::Color(0, 0, 0, 160), asw::Vec2<float>(2, 2),
+                         asw::TextJustify::Right);
 }

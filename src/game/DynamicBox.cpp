@@ -15,12 +15,12 @@ DynamicBox::DynamicBox(float x,
   createBody(world, b2_dynamicBody);
 }
 
-void DynamicBox::draw() const {
+void DynamicBox::draw(const asw::Camera& camera) const {
   // Backing shows through the see through parts of the image
   const float fill = (SIZE * PIXELS_PER_METER) - 2;
-  asw::draw::rect_fill_rotate(screenQuad(fill, fill), screenAngle(),
+  asw::draw::rect_fill_rotate(screenQuad(camera, fill, fill), screenAngle(),
                        asw::Color(0, 255, 0));
 
   asw::draw::stretch_sprite_rotate_blit(image, asw::Quad<float>(0, 0, IMAGE_SIZE, IMAGE_SIZE),
-              screenQuad(IMAGE_SIZE, IMAGE_SIZE), screenAngle());
+              screenQuad(camera, IMAGE_SIZE, IMAGE_SIZE), screenAngle());
 }

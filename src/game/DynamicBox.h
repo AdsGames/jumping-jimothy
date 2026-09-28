@@ -14,7 +14,7 @@ class DynamicBox : public Box {
  public:
   DynamicBox(float x, float y, const asw::Texture& image, b2World& world);
 
-  void draw() const override;
+  void draw(const asw::Camera& camera) const override;
   BoxType getType() const override { return BoxType::Dynamic; }
   bool isPausable() const override { return true; }
 

@@ -80,9 +80,9 @@ class Editor : public asw::scene::Scene<ProgramState> {
 
   // Images
   asw::Texture box_green;
-  asw::Texture static_tiles;
-  asw::Texture character;
-  asw::Texture goat;
+  asw::SpriteSheet tile_sheet;
+  asw::SpriteSheet character_sheet;
+  asw::SpriteSheet goat_sheet;
   asw::Texture box_repel;
   asw::Texture box_repel_direction;
   asw::Texture help_menu;

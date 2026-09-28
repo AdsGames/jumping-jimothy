@@ -1,6 +1,8 @@
 #include "Controls.h"
 
+#include <array>
 #include <asw/asw.h>
+#include <utility>
 
 namespace {
 using asw::input::ControllerAxis;
@@ -58,7 +60,43 @@ void Controls::bind() {
   bindKey(FREEZE, Key::Space);
   bindButton(FREEZE, ControllerButton::B);
 
+  bindKey(RESTART, Key::R);
+  bindButton(RESTART, ControllerButton::Back);
+
   bindKey(SELECT, Key::Return);
   bindButton(SELECT, ControllerButton::A);
   bindButton(SELECT, ControllerButton::Start);
+}
+
+std::string Controls::describe(const std::string& text) {
+  using Names = std::array<std::pair<std::string_view, std::string_view>, 4>;
+
+  static constexpr Names KEYBOARD{{
+      {"{jump}", "W"},
+      {"{freeze}", "Space"},
+      {"{restart}", "R"},
+      {"{move}", "A and D"},
+  }};
+
+  static constexpr Names CONTROLLER{{
+      {"{jump}", "A"},
+      {"{freeze}", "B"},
+      {"{restart}", "Back"},
+      {"{move}", "the left stick"},
+  }};
+
+  const auto& names = asw::input::get_last_device() ==
+                              asw::input::InputDevice::Controller
+                          ? CONTROLLER
+                          : KEYBOARD;
+
+  std::string result = text;
+  for (const auto& [token, name] : names) {
+    for (auto pos = result.find(token); pos != std::string::npos;
+         pos = result.find(token, pos + name.size())) {
+      result.replace(pos, token.size(), name);
+    }
+  }
+
+  return result;
 }

@@ -14,6 +14,6 @@ class CollisionBox : public Box {
  public:
   CollisionBox(float x, float y, float width, float height, b2World& world);
 
-  void draw() const override;
+  void draw(const asw::Camera& camera) const override;
   BoxType getType() const override { return BoxType::Collision; }
 };

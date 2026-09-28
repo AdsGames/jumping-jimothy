@@ -13,17 +13,17 @@
 
 class StaticBox : public Box {
  public:
-  // Tiles are indices into the 3 by 5 static tile sheet for the top left, top
-  // right, bottom left and bottom right corners
+  // Tiles are frames of the static tile sheet for the top left, top right,
+  // bottom left and bottom right corners
   StaticBox(float x,
             float y,
-            const asw::Texture& tile_sheet,
+            const asw::SpriteSheet& tile_sheet,
             const std::array<int, 4>& tiles);
 
-  void draw() const override;
+  void draw(const asw::Camera& camera) const override;
   BoxType getType() const override { return BoxType::Static; }
 
  private:
-  asw::Texture tile_sheet;
+  asw::SpriteSheet tile_sheet;
   std::array<int, 4> tiles;
 };

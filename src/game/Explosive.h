@@ -23,7 +23,7 @@ class Explosive : public Box {
             b2World& world);
 
   void update(b2World& world) override;
-  void draw() const override;
+  void draw(const asw::Camera& camera) const override;
   BoxType getType() const override { return BoxType::Explosive; }
 
   void setCharacter(const Character* character) {
@@ -31,7 +31,8 @@ class Explosive : public Box {
   }
 
  private:
-  void applyBlastImpulse(b2Body* target,
+  // True if the target was pushed
+  bool applyBlastImpulse(b2Body* target,
                          const b2Vec2& blast_centre,
                          const b2Vec2& apply_point) const;
 
@@ -39,4 +40,8 @@ class Explosive : public Box {
   const Character* character{nullptr};
   int orientation{0};
   bool affect_character{false};
+
+  // Sprays while the explosive pushes something. Drawing particles changes
+  // no game state, so draw() stays const.
+  mutable asw::ParticleEmitter particles;
 };

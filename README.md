@@ -32,7 +32,7 @@ The level editor is not available in the browser build.
 | Move             | A / D, arrows   | Left stick, D-pad |
 | Jump             | W               | A          |
 | Freeze time      | Space           | B          |
-| Restart level    | R               |            |
+| Restart level    | R               | Back       |
 | Menu             | Escape          |            |
 
 ## Level Editor

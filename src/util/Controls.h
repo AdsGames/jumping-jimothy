@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <string>
 #include <string_view>
 
 namespace Controls {
@@ -18,8 +19,13 @@ inline constexpr std::string_view DOWN = "down";
 inline constexpr std::string_view JUMP = "jump";
 inline constexpr std::string_view FREEZE = "freeze";
 inline constexpr std::string_view SELECT = "select";
+inline constexpr std::string_view RESTART = "restart";
 
 // Register the default bindings with asw, call once at start up
 void bind();
+
+// Replace {jump}, {freeze}, {restart} and {move} in text with the key or
+// button names of the device the player used last
+std::string describe(const std::string& text);
 
 }  // namespace Controls

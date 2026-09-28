@@ -20,9 +20,6 @@ constexpr float HALF_CELL = CELL / 2;
 
 constexpr float BAR_Y = 728;
 
-// Static tile sheet layout
-constexpr int SHEET_COLUMNS = 3;
-constexpr int SHEET_TILES = 15;
 constexpr float TILE_SIZE = 16;
 
 // Candidate tiles for a static box corner
@@ -108,9 +105,15 @@ void Editor::init() {
   leaving = false;
 
   box_green = asw::assets::load_texture("assets/images/box_green.png");
-  static_tiles = asw::assets::load_texture("assets/images/StaticBlock.png");
-  character = asw::assets::load_texture("assets/images/character.png");
-  goat = asw::assets::load_texture("assets/images/goat.png");
+  tile_sheet = asw::SpriteSheet(
+      asw::assets::load_texture("assets/images/StaticBlock.png"),
+      asw::Vec2<float>(TILE_SIZE, TILE_SIZE));
+  character_sheet = asw::SpriteSheet(
+      asw::assets::load_texture("assets/images/character.png"),
+      asw::Vec2<float>(CELL, CELL * 2));
+  goat_sheet =
+      asw::SpriteSheet(asw::assets::load_texture("assets/images/goat.png"),
+                       asw::Vec2<float>(CELL, CELL * 2));
   box_repel = asw::assets::load_texture("assets/images/box_repel.png");
   box_repel_direction =
       asw::assets::load_texture("assets/images/box_repel_direction.png");
@@ -743,19 +746,14 @@ void Editor::drawBox(const EditorBox& box) const {
     case ObjectType::Static:
       for (std::size_t corner = 0; corner < box.orientation.size(); corner++) {
         const int tile = box.orientation[corner];
-        if (tile < 0 || tile >= SHEET_TILES) {
+        if (tile < 0 || tile >= tile_sheet.get_frame_count()) {
           continue;
         }
 
-        const auto column = static_cast<float>(tile % SHEET_COLUMNS);
-        const auto row = static_cast<float>(tile / SHEET_COLUMNS);
-
-        asw::draw::stretch_sprite_blit(static_tiles,
-                    asw::Quad<float>(column * TILE_SIZE, row * TILE_SIZE,
-                                     TILE_SIZE, TILE_SIZE),
-                    asw::Quad<float>(box.x + ((corner % 2 == 1) ? TILE_SIZE : 0),
-                                     box.y + ((corner >= 2) ? TILE_SIZE : 0),
-                                     TILE_SIZE, TILE_SIZE));
+        tile_sheet.draw_frame(
+            tile, asw::Quad<float>(box.x + ((corner % 2 == 1) ? TILE_SIZE : 0),
+                                   box.y + ((corner >= 2) ? TILE_SIZE : 0),
+                                   TILE_SIZE, TILE_SIZE));
       }
       break;
 
@@ -764,13 +762,12 @@ void Editor::drawBox(const EditorBox& box) const {
       break;
 
     case ObjectType::Character:
-      asw::draw::stretch_sprite_blit(character, asw::Quad<float>(0, 0, CELL, CELL * 2),
-                  asw::Quad<float>(box.x, box.y, CELL, CELL * 2));
+      character_sheet.draw_frame(0,
+                                 asw::Quad<float>(box.x, box.y, CELL, CELL * 2));
       break;
 
     case ObjectType::Finish:
-      asw::draw::stretch_sprite_blit(goat, asw::Quad<float>(0, 0, CELL, CELL * 2),
-                  asw::Quad<float>(box.x, box.y, CELL, CELL * 2));
+      goat_sheet.draw_frame(0, asw::Quad<float>(box.x, box.y, CELL, CELL * 2));
       break;
 
     case ObjectType::Explosive: {
