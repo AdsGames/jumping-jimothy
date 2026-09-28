@@ -11,11 +11,11 @@
 #include <string>
 #include <vector>
 
+#include <asw/asw.h>
+
 #include "../State.h"
 #include "../game/Level.h"
-#include "../ui/Button.h"
-#include "../ui/CheckBox.h"
-#include "../ui/UIHandler.h"
+#include "ExplosiveButton.h"
 
 // A placed object, positions are in screen pixels
 struct EditorBox {
@@ -47,12 +47,19 @@ class Editor : public asw::scene::Scene<ProgramState> {
   enum class FileAction { None, Save, SaveAs, Load };
 
   void createUI();
-  void updateExplosiveButtons();
+  void setExplosiveOrientation(int orientation);
   void setTileType(ObjectType type);
   void setExplosiveUIVisible(bool visible);
 
-  void handleShortcutsAndButtons();
-  void handleToggles();
+  void handleShortcuts();
+  void undo();
+  void clear();
+
+  // Buttons that hide and show groups of buttons to free up room
+  void toggleLeftBottom();
+  void toggleRightBottom();
+  void toggleRightTop();
+  void toggleLeftTop();
   void handleFileChosen(FileAction action, const std::string& path);
   void placeTiles();
   void dragCollisionBox();
@@ -90,30 +97,22 @@ class Editor : public asw::scene::Scene<ProgramState> {
   asw::Font edit_font;
 
   // UI
-  UIHandler ui;
-  Button* btn_dynamic{nullptr};
-  Button* btn_static{nullptr};
-  Button* btn_player{nullptr};
-  Button* btn_goat{nullptr};
-  Button* btn_collision{nullptr};
-  Button* btn_explosive{nullptr};
-  Button* left_bottom_toggle{nullptr};
-  Button* right_bottom_toggle{nullptr};
-  Button* btn_undo{nullptr};
-  Button* btn_clear{nullptr};
-  Button* btn_save{nullptr};
-  Button* btn_save_as{nullptr};
-  Button* btn_load{nullptr};
-  Button* btn_grid{nullptr};
-  Button* btn_play{nullptr};
-  Button* right_top_toggle{nullptr};
-  Button* btn_help{nullptr};
-  Button* btn_back{nullptr};
-  CheckBox* chk_affects_char{nullptr};
-  Button* left_top_toggle{nullptr};
+  asw::ui::Root ui;
+  std::vector<asw::ui::Button*> type_buttons;
+  std::vector<asw::ui::Button*> file_buttons;
+  asw::ui::Button* left_bottom_toggle{nullptr};
+  asw::ui::Button* right_bottom_toggle{nullptr};
+  asw::ui::Button* right_top_toggle{nullptr};
+  asw::ui::Button* btn_help{nullptr};
+  asw::ui::Button* btn_back{nullptr};
+  asw::ui::Checkbox* chk_affects_char{nullptr};
+  asw::ui::Button* left_top_toggle{nullptr};
 
   // Explosive direction buttons, indexed by orientation
-  std::array<Button*, 5> explosive_buttons{};
+  std::array<ExplosiveButton*, 5> explosive_buttons{};
+
+  // The mouse is on the UI this tick, so it does not edit the level
+  bool ui_used{false};
 
   // Level
   std::vector<EditorBox> boxes;

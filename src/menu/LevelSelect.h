@@ -7,11 +7,9 @@
 
 #pragma once
 
-#include <vector>
+#include <asw/asw.h>
 
 #include "../State.h"
-#include "../ui/Button.h"
-#include "../ui/UIHandler.h"
 
 class LevelSelect : public asw::scene::Scene<ProgramState> {
  public:
@@ -23,14 +21,12 @@ class LevelSelect : public asw::scene::Scene<ProgramState> {
 
  private:
   void showResetConfirm(bool show);
+  void resetSave();
 
   asw::Font font;
   asw::Font font_large;
 
-  UIHandler ui;
-  std::vector<Button*> level_buttons;
-  Button* btn_back{nullptr};
-  Button* btn_reset{nullptr};
-  Button* btn_really_reset{nullptr};
-  Button* btn_cancel{nullptr};
+  asw::ui::Root ui;
+  asw::ui::Button* btn_really_reset{nullptr};
+  asw::ui::Button* btn_cancel{nullptr};
 };

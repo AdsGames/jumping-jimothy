@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include <asw/asw.h>
+
 #include "../State.h"
-#include "../ui/Button.h"
-#include "../ui/UIHandler.h"
 
 class Menu : public asw::scene::Scene<ProgramState> {
  public:
@@ -32,12 +32,7 @@ class Menu : public asw::scene::Scene<ProgramState> {
   asw::Font button_font;
   asw::Font credits_font;
 
-  UIHandler ui;
-  Button* btn_play{nullptr};
-  Button* btn_editor{nullptr};
-  Button* btn_settings{nullptr};
-  Button* btn_credits{nullptr};
-  Button* btn_exit{nullptr};
+  asw::ui::Root ui;
 
   bool credits_menu{false};
 

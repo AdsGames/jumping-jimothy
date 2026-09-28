@@ -66,6 +66,9 @@ void Controls::bind() {
   bindKey(SELECT, Key::Return);
   bindButton(SELECT, ControllerButton::A);
   bindButton(SELECT, ControllerButton::Start);
+
+  bindKey(BACK, Key::Escape);
+  bindButton(BACK, ControllerButton::B);
 }
 
 std::string Controls::describe(const std::string& text) {

@@ -5,6 +5,7 @@
 #include <numbers>
 
 #include "../Globals.h"
+#include "../ui/GameUi.h"
 #include "../util/Controls.h"
 #include "../util/Audio.h"
 #include "../util/Config.h"
@@ -91,12 +92,16 @@ void Game::init() {
   burst = asw::ParticleEmitter(burstConfig(), 128);
   camera.snap_to(asw::Vec2<float>(SCREEN_WIDTH / 2.0F, SCREEN_HEIGHT / 2.0F));
 
-  ui.clear();
-  back_button = nullptr;
+  // The game's actions play the game, the back button takes the mouse only
+  ui = asw::ui::Root();
+  GameUi::setup(ui, edit_font);
+  GameUi::pointerOnly(ui);
 
   if (session.editing_level) {
     level = 0;
-    back_button = &ui.add<Button>(966, 728, "Back", edit_font);
+    GameUi::addButton(ui, 966, 728, "Back").on_click = [this] {
+      changeScene(ProgramState::Editor);
+    };
   } else {
     level = session.level_to_start;
   }
@@ -111,8 +116,7 @@ void Game::cleanup() {
   goat = nullptr;
   boxes.clear();
   world.reset();
-  ui.clear();
-  back_button = nullptr;
+  ui.root.clear_children();
 
   asw::scene::Scene<ProgramState>::cleanup();
 }
@@ -227,10 +231,7 @@ void Game::update(float /*dt*/) {
   }
 
   ui.update();
-
-  // Back to the editor when testing a level
-  if (back_button != nullptr && back_button->clicked()) {
-    changeScene(ProgramState::Editor);
+  if (leaving) {
     return;
   }
 
@@ -350,7 +351,7 @@ void Game::nextLevel() {
 void Game::die() {
   if (character != nullptr) {
     const auto position = character->pixelPosition();
-    Audio::playAt(assets.death, position.x);
+    asw::sound::play_at(assets.death, position.x);
     burst.transform.position = position;
     burst.emit(60);
   } else {

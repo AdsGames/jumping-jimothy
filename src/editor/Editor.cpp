@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "../Globals.h"
+#include "../ui/GameUi.h"
 #include "../util/Audio.h"
 #include "../util/Config.h"
 
@@ -26,8 +27,8 @@ constexpr float TILE_SIZE = 16;
 constexpr int TILE_OPTIONS = 13;
 
 const asw::Color BLACK(0, 0, 0);
+const asw::Color GREY(200, 200, 200);
 const asw::Color SELECTED(0, 150, 0);
-const asw::Color UNSELECTED(200, 200, 200);
 const asw::Color COLLISION_FILL(0, 255, 0, 50);
 
 const std::vector<asw::dialog::FileFilter> LEVEL_FILTERS{
@@ -40,6 +41,28 @@ constexpr std::array<float, 5> EXPLOSIVE_BUTTON_X{152, 0, 38, 76, 114};
 
 std::string defaultFile() {
   return Config::savePath() + "untitled.xml";
+}
+
+constexpr float UI_PADDING = 10;
+
+// See through toggles, for when their group is hidden
+constexpr uint8_t FADED_ALPHA = 150;
+
+float rightOf(const asw::ui::Widget& widget) {
+  return widget.transform.position.x + widget.transform.size.x;
+}
+
+// Move a toggle, set its arrow and fade it when its group is hidden
+void setToggle(asw::ui::Button& toggle, float x, const std::string& text,
+               bool faded) {
+  toggle.transform.position.x = x;
+  toggle.text = text;
+
+  if (faded) {
+    toggle.style = GameUi::buttonStyle(GREY, BLACK, FADED_ALPHA);
+  } else {
+    toggle.style.reset();
+  }
 }
 
 // Snap a pixel position to the top left of its grid cell
@@ -149,7 +172,9 @@ void Editor::init() {
 }
 
 void Editor::cleanup() {
-  ui.clear();
+  ui.root.clear_children();
+  type_buttons.clear();
+  file_buttons.clear();
   boxes.clear();
   asw::scene::Scene<ProgramState>::cleanup();
 }
@@ -160,61 +185,111 @@ void Editor::changeScene(ProgramState state) {
 }
 
 void Editor::createUI() {
-  ui.clear();
+  ui = asw::ui::Root();
+  GameUi::setup(ui, edit_font);
+  ui.on_back = [this] { back(); };
+
+  // Left and right are shortcuts here, not navigation
+  ui.ctx.navigation.left = GameUi::NO_ACTION;
+  ui.ctx.navigation.right = GameUi::NO_ACTION;
 
   // Bottom left, object types
-  btn_dynamic = &ui.add<Button>(0, BAR_Y, "Dynamic", edit_font);
-  btn_static = &ui.addAfter<Button>(*btn_dynamic, "Static", edit_font);
-  btn_player = &ui.addAfter<Button>(*btn_static, "Player", edit_font);
-  btn_goat = &ui.addAfter<Button>(*btn_player, "Goat", edit_font);
-  btn_collision = &ui.addAfter<Button>(*btn_goat, "Collision", edit_font);
-  btn_explosive = &ui.addAfter<Button>(*btn_collision, "Explosive", edit_font);
-  left_bottom_toggle = &ui.addAfter<Button>(*btn_explosive, "<", edit_font);
+  type_buttons.clear();
+  float x = 0;
+  for (const auto& [text, type] : std::initializer_list<
+           std::pair<const char*, ObjectType>>{
+           {"Dynamic", ObjectType::Dynamic},
+           {"Static", ObjectType::Static},
+           {"Player", ObjectType::Character},
+           {"Goat", ObjectType::Finish},
+           {"Collision", ObjectType::Collision},
+           {"Explosive", ObjectType::Explosive},
+       }) {
+    auto& button = GameUi::addButton(ui, x, BAR_Y, text);
+    button.on_click = [this, type] { setTileType(type); };
+    type_buttons.push_back(&button);
+    x = rightOf(button);
+  }
+
+  left_bottom_toggle = &GameUi::addButton(ui, x, BAR_Y, "<");
+  left_bottom_toggle->on_click = [this] { toggleLeftBottom(); };
 
   // Bottom right, file actions
-  right_bottom_toggle = &ui.add<Button>(566, BAR_Y, ">", edit_font);
-  btn_undo = &ui.addAfter<Button>(*right_bottom_toggle, "Undo", edit_font);
-  btn_clear = &ui.addAfter<Button>(*btn_undo, "Clear", edit_font);
-  btn_save = &ui.addAfter<Button>(*btn_clear, "Save", edit_font);
-  btn_save_as = &ui.addAfter<Button>(*btn_save, "Save as", edit_font);
-  btn_load = &ui.addAfter<Button>(*btn_save_as, "Load", edit_font);
-  btn_grid = &ui.addAfter<Button>(*btn_load, "Grid", edit_font);
-  btn_play = &ui.addAfter<Button>(*btn_grid, "Play", edit_font);
+  right_bottom_toggle = &GameUi::addButton(ui, 566, BAR_Y, ">");
+  right_bottom_toggle->on_click = [this] { toggleRightBottom(); };
+
+  file_buttons.clear();
+  x = rightOf(*right_bottom_toggle);
+  for (const auto& [text, action] : std::initializer_list<
+           std::pair<const char*, void (Editor::*)()>>{
+           {"Undo", &Editor::undo},
+           {"Clear", &Editor::clear},
+           {"Save", &Editor::save},
+           {"Save as", &Editor::saveAs},
+           {"Load", &Editor::load},
+           {"Grid", nullptr},
+           {"Play", &Editor::play},
+       }) {
+    auto& button = GameUi::addButton(ui, x, BAR_Y, text);
+    if (action != nullptr) {
+      button.on_click = [this, action] { (this->*action)(); };
+    } else {
+      button.on_click = [this] { grid_on = !grid_on; };
+    }
+    file_buttons.push_back(&button);
+    x = rightOf(button);
+  }
 
   // Top right
-  right_top_toggle = &ui.add<Button>(882, 0, ">", edit_font);
-  btn_help = &ui.add<Button>(911, 0, "Help", edit_font);
-  btn_back = &ui.addAfter<Button>(*btn_help, "Back", edit_font);
+  right_top_toggle = &GameUi::addButton(ui, 882, 0, ">");
+  right_top_toggle->on_click = [this] { toggleRightTop(); };
 
-  // Top left, explosive settings
-  chk_affects_char =
-      &ui.add<CheckBox>(0, 60, "Block affects character", edit_font);
-  left_top_toggle = &ui.addAfter<Button>(*chk_affects_char, "<", edit_font);
+  btn_help = &GameUi::addButton(ui, 911, 0, "Help");
+  btn_help->on_click = [this] { display_help = !display_help; };
+
+  btn_back = &GameUi::addButton(ui, rightOf(*btn_help), 0, "Back");
+  btn_back->on_click = [this] { back(); };
+
+  // Top left, explosive settings. The box sits after the text.
+  const std::string affects_text = "Block affects character";
+  const auto text_size = GameUi::fitText(edit_font, affects_text, UI_PADDING);
+  const float box_size = text_size.y - (UI_PADDING * 2);
+
+  chk_affects_char = &ui.root.add_child<asw::ui::Checkbox>();
+  chk_affects_char->text = affects_text;
+  chk_affects_char->padding = UI_PADDING;
+  chk_affects_char->transform = asw::Quad<float>(
+      0, 60, text_size.x + ui.ctx.theme.gap + box_size, text_size.y);
+
+  left_top_toggle =
+      &GameUi::addButton(ui, rightOf(*chk_affects_char), 60, "<");
+  left_top_toggle->on_click = [this] { toggleLeftTop(); };
 
   for (std::size_t i = 0; i < explosive_buttons.size(); i++) {
-    auto& button = ui.add<Button>(EXPLOSIVE_BUTTON_X[i], 100, "", nullptr);
+    auto& button = i == 0
+                       ? ui.root.add_child<ExplosiveButton>(box_repel, 0.0F)
+                       : ui.root.add_child<ExplosiveButton>(
+                             box_repel_direction,
+                             (std::numbers::pi_v<float> / 2.0F) *
+                                 static_cast<float>(i - 1));
 
-    if (i == 0) {
-      button.setImage(box_repel);
-    } else {
-      button.setImage(box_repel_direction);
-      button.setImageRotation((std::numbers::pi_v<float> / 2.0F) *
-                              static_cast<float>(i - 1));
-    }
-
-    button.setPadding(2, 2);
+    button.transform.position = asw::Vec2<float>(EXPLOSIVE_BUTTON_X[i], 100);
+    button.on_click = [this, i] {
+      setExplosiveOrientation(static_cast<int>(i));
+    };
     explosive_buttons[i] = &button;
   }
 
+  setExplosiveOrientation(explosive_orientation);
   setExplosiveUIVisible(false);
 }
 
 void Editor::setExplosiveUIVisible(bool visible) {
-  chk_affects_char->setVisible(visible);
-  left_top_toggle->setVisible(visible);
+  chk_affects_char->visible = visible;
+  left_top_toggle->visible = visible;
 
   for (auto* button : explosive_buttons) {
-    button->setVisible(visible);
+    button->visible = visible;
   }
 }
 
@@ -223,22 +298,20 @@ void Editor::setTileType(ObjectType type) {
   setExplosiveUIVisible(type == ObjectType::Explosive);
 
   if (type == ObjectType::Explosive) {
-    left_top_toggle->setText("<");
-    left_top_toggle->setTransparency(255);
-    left_top_toggle->setPosition(257, 60);
+    setToggle(*left_top_toggle, rightOf(*chk_affects_char), "<", false);
   }
 }
 
-void Editor::updateExplosiveButtons() {
-  for (std::size_t i = 0; i < explosive_buttons.size(); i++) {
-    if (explosive_buttons[i]->clicked()) {
-      explosive_orientation = static_cast<int>(i);
-    }
-  }
+void Editor::setExplosiveOrientation(int orientation) {
+  explosive_orientation = orientation;
 
   for (std::size_t i = 0; i < explosive_buttons.size(); i++) {
-    explosive_buttons[i]->setBackgroundColour(
-        static_cast<int>(i) == explosive_orientation ? SELECTED : UNSELECTED);
+    auto& style = explosive_buttons[i]->style;
+    if (static_cast<int>(i) == orientation) {
+      style = GameUi::buttonStyle(SELECTED, BLACK);
+    } else {
+      style.reset();
+    }
   }
 }
 
@@ -260,15 +333,15 @@ void Editor::update(float /*dt*/) {
     return;
   }
 
-  ui.update();
-  updateExplosiveButtons();
-
-  handleShortcutsAndButtons();
+  ui_used = ui.update();
   if (leaving || pending_file_action != FileAction::None) {
     return;
   }
 
-  handleToggles();
+  handleShortcuts();
+  if (leaving || pending_file_action != FileAction::None) {
+    return;
+  }
 
   if (tile_type == ObjectType::Collision) {
     dragCollisionBox();
@@ -279,148 +352,134 @@ void Editor::update(float /*dt*/) {
   removeTiles();
 }
 
-void Editor::handleShortcutsAndButtons() {
+void Editor::handleShortcuts() {
+  using asw::input::get_key_down;
+
   // Object types
-  if (asw::input::get_key_down(Key::Q) || btn_dynamic->clicked()) {
+  if (get_key_down(Key::Q)) {
     setTileType(ObjectType::Dynamic);
   }
 
-  if (asw::input::get_key_down(Key::W) || btn_static->clicked()) {
+  if (get_key_down(Key::W)) {
     setTileType(ObjectType::Static);
   }
 
-  if (asw::input::get_key_down(Key::E) || btn_player->clicked()) {
+  if (get_key_down(Key::E)) {
     setTileType(ObjectType::Character);
   }
 
-  if (asw::input::get_key_down(Key::R) || btn_goat->clicked()) {
+  if (get_key_down(Key::R)) {
     setTileType(ObjectType::Finish);
   }
 
-  if (asw::input::get_key_down(Key::T) || btn_collision->clicked()) {
+  if (get_key_down(Key::T)) {
     setTileType(ObjectType::Collision);
   }
 
-  if (asw::input::get_key_down(Key::Y) || btn_explosive->clicked()) {
+  if (get_key_down(Key::Y)) {
     setTileType(ObjectType::Explosive);
   }
 
-  if (asw::input::get_key_down(Key::H) || btn_help->clicked()) {
+  if (get_key_down(Key::H)) {
     display_help = !display_help;
   }
 
-  if (asw::input::get_key_down(Key::G) || btn_grid->clicked()) {
+  if (get_key_down(Key::G)) {
     grid_on = !grid_on;
   }
 
-  if ((asw::input::get_key_down(Key::Z) || btn_undo->clicked()) && !boxes.empty()) {
-    boxes.pop_back();
-    modified = true;
-    calculateOrientations();
+  if (get_key_down(Key::Z)) {
+    undo();
   }
 
-  if (asw::input::get_key_down(Key::C) || btn_clear->clicked()) {
-    if (asw::dialog::confirm("Clear?",
-                        "Clear the map? There is no recovering this "
-                        "masterpiece.")) {
-      boxes.clear();
-      modified = true;
-    }
+  if (get_key_down(Key::C)) {
+    clear();
   }
 
-  if (asw::input::get_key_down(Key::S) || btn_save->clicked()) {
+  if (get_key_down(Key::Left)) {
+    toggleLeftBottom();
+  }
+
+  if (get_key_down(Key::Right)) {
+    toggleRightBottom();
+  }
+
+  if (get_key_down(Key::Up)) {
+    toggleRightTop();
+  }
+
+  // Escape is the UI back, see createUI
+  if (get_key_down(Key::S)) {
     save();
-  } else if (asw::input::get_key_down(Key::D) || btn_save_as->clicked()) {
+  } else if (get_key_down(Key::D)) {
     saveAs();
-  } else if (asw::input::get_key_down(Key::A) || btn_load->clicked()) {
+  } else if (get_key_down(Key::A)) {
     load();
-  } else if (asw::input::get_key_down(Key::F) || btn_play->clicked()) {
+  } else if (get_key_down(Key::F)) {
     play();
-  } else if (asw::input::get_key_down(Key::V) || asw::input::get_key_down(Key::Escape) ||
-             btn_back->clicked()) {
+  } else if (get_key_down(Key::V)) {
     back();
   }
 }
 
-// Buttons that hide and show groups of buttons to free up room
-void Editor::handleToggles() {
-  if (left_bottom_toggle->clicked() || asw::input::get_key_down(Key::Left)) {
-    const bool show = left_bottom_toggle->getText() != "<";
-
-    if (show) {
-      left_bottom_toggle->setPosition(489, BAR_Y);
-      left_bottom_toggle->setText("<");
-      left_bottom_toggle->setTransparency(255);
-    } else {
-      left_bottom_toggle->setPosition(0, BAR_Y);
-      left_bottom_toggle->setText(">");
-      left_bottom_toggle->setTransparency(150);
-    }
-
-    for (auto* button : {btn_collision, btn_static, btn_dynamic, btn_player,
-                         btn_goat, btn_explosive}) {
-      button->setVisible(show);
-    }
+void Editor::undo() {
+  if (boxes.empty()) {
+    return;
   }
 
-  if (right_bottom_toggle->clicked() || asw::input::get_key_down(Key::Right)) {
-    const bool show = right_bottom_toggle->getText() == "<";
+  boxes.pop_back();
+  modified = true;
+  calculateOrientations();
+}
 
-    if (show) {
-      right_bottom_toggle->setPosition(566, BAR_Y);
-      right_bottom_toggle->setText(">");
-      right_bottom_toggle->setTransparency(255);
-    } else {
-      right_bottom_toggle->setPosition(994, BAR_Y);
-      right_bottom_toggle->setText("<");
-      right_bottom_toggle->setTransparency(150);
-    }
-
-    for (auto* button : {btn_undo, btn_clear, btn_save, btn_save_as, btn_load,
-                         btn_play, btn_grid}) {
-      button->setVisible(show);
-    }
+void Editor::clear() {
+  if (asw::dialog::confirm("Clear?",
+                           "Clear the map? There is no recovering this "
+                           "masterpiece.")) {
+    boxes.clear();
+    modified = true;
   }
+}
 
-  if (right_top_toggle->clicked() || asw::input::get_key_down(Key::Up)) {
-    const bool show = right_top_toggle->getText() == "<";
+void Editor::toggleLeftBottom() {
+  const bool show = left_bottom_toggle->text != "<";
+  setToggle(*left_bottom_toggle, show ? 489 : 0, show ? "<" : ">", !show);
 
-    if (show) {
-      right_top_toggle->setPosition(882, 0);
-      right_top_toggle->setText(">");
-      right_top_toggle->setTransparency(255);
-    } else {
-      right_top_toggle->setPosition(994, 0);
-      right_top_toggle->setText("<");
-      right_top_toggle->setTransparency(150);
-    }
-
-    btn_back->setVisible(show);
-    btn_help->setVisible(show);
+  for (auto* button : type_buttons) {
+    button->visible = show;
   }
+}
 
-  if (left_top_toggle->clicked()) {
-    const bool show = left_top_toggle->getText() != "<";
+void Editor::toggleRightBottom() {
+  const bool show = right_bottom_toggle->text == "<";
+  setToggle(*right_bottom_toggle, show ? 566 : 994, show ? ">" : "<", !show);
 
-    if (show) {
-      left_top_toggle->setPosition(257, 60);
-      left_top_toggle->setText("<");
-      left_top_toggle->setTransparency(255);
-    } else {
-      left_top_toggle->setPosition(0, 60);
-      left_top_toggle->setText(">");
-      left_top_toggle->setTransparency(150);
-    }
+  for (auto* button : file_buttons) {
+    button->visible = show;
+  }
+}
 
-    chk_affects_char->setVisible(show);
-    for (auto* button : explosive_buttons) {
-      button->setVisible(show);
-    }
+void Editor::toggleRightTop() {
+  const bool show = right_top_toggle->text == "<";
+  setToggle(*right_top_toggle, show ? 882 : 994, show ? ">" : "<", !show);
+
+  btn_back->visible = show;
+  btn_help->visible = show;
+}
+
+void Editor::toggleLeftTop() {
+  const bool show = left_top_toggle->text != "<";
+  setToggle(*left_top_toggle, show ? rightOf(*chk_affects_char) : 0,
+            show ? "<" : ">", !show);
+
+  chk_affects_char->visible = show;
+  for (auto* button : explosive_buttons) {
+    button->visible = show;
   }
 }
 
 void Editor::placeTiles() {
-  if (!asw::input::get_mouse_button(MouseButton::Left) || ui.isHovering()) {
+  if (!asw::input::get_mouse_button(MouseButton::Left) || ui_used) {
     return;
   }
 
@@ -443,7 +502,7 @@ void Editor::placeTiles() {
   box.type = tile_type;
   box.x = snap(mouse.x);
   box.y = snap(mouse.y);
-  box.affect_character = chk_affects_char->getChecked();
+  box.affect_character = chk_affects_char->checked;
 
   if (tile_type == ObjectType::Explosive) {
     box.orientation[0] = explosive_orientation;
@@ -459,7 +518,7 @@ void Editor::dragCollisionBox() {
   const asw::Vec2<float> cell(snap(mouse.x), snap(mouse.y));
 
   if (!is_dragging_box) {
-    if (asw::input::get_mouse_button_down(MouseButton::Left) && !ui.isHovering()) {
+    if (asw::input::get_mouse_button_down(MouseButton::Left) && !ui_used) {
       is_dragging_box = true;
       drag_start = cell;
       drag_end = cell;
@@ -487,7 +546,7 @@ void Editor::dragCollisionBox() {
 }
 
 void Editor::removeTiles() {
-  if (!asw::input::get_mouse_button(MouseButton::Right) || ui.isHovering()) {
+  if (!asw::input::get_mouse_button(MouseButton::Right) || ui_used) {
     return;
   }
 

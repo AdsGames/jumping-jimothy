@@ -1,5 +1,9 @@
 #include "Options.h"
 
+#include <functional>
+#include <utility>
+
+#include "../ui/GameUi.h"
 #include "../util/Audio.h"
 #include "../util/Config.h"
 
@@ -7,6 +11,9 @@ namespace {
 constexpr float ROW_X = 100;
 constexpr float ROW_WIDTH = 180;
 constexpr float ROW_HEIGHT = 18;
+
+// Padding of a checkbox row, the box fills its height
+constexpr float ROW_PADDING = 9;
 
 const asw::Color WHITE(255, 255, 255);
 
@@ -25,53 +32,49 @@ void Options::init() {
   title_font = asw::assets::load_font("assets/fonts/munro.ttf", 36,
                                       asw::FontStyle::Pixel);
 
-  ui.clear();
+  ui = asw::ui::Root();
+  GameUi::setup(ui, options_font);
+  ui.on_back = [this] { back(); };
 
-  ui.add<Label>(25, 25, "Options", title_font).setTextColour(WHITE);
+  GameUi::addLabel(ui, 45, 35, "Options", title_font, WHITE);
+  lbl_gamepad = &GameUi::addLabel(ui, 420, 35, gamepadText(), options_font,
+                                  WHITE);
 
-  lbl_gamepad = &ui.add<Label>(400, 25, gamepadText(), options_font);
-  lbl_gamepad->setTextColour(WHITE);
-
-  auto add_checkbox = [this](float y, const std::string& text, bool checked) {
-    auto& checkbox = ui.add<CheckBox>(ROW_X, y, text, options_font);
-    checkbox.setSize(ROW_WIDTH, ROW_HEIGHT);
-    checkbox.setChecked(checked);
-    return &checkbox;
+  auto add_checkbox = [this](float y, const std::string& text, bool checked,
+                             std::function<void(bool)> on_change) {
+    auto& checkbox = ui.root.add_child<asw::ui::Checkbox>();
+    checkbox.transform = asw::Quad<float>(ROW_X, y, ROW_WIDTH + 20,
+                                          ROW_HEIGHT + 20);
+    checkbox.padding = ROW_PADDING;
+    checkbox.text = text;
+    checkbox.checked = checked;
+    checkbox.on_change = std::move(on_change);
   };
 
-  chk_sfx = add_checkbox(101, "SFX Enabled", Config::getBool("sfx_enabled"));
-  chk_music =
-      add_checkbox(151, "Music Enabled", Config::getBool("music_enabled"));
-  chk_fullscreen =
-      add_checkbox(201, "Fullscreen", Config::getBool("fullscreen"));
+  add_checkbox(101, "SFX Enabled", Config::getBool("sfx_enabled"),
+               [](bool checked) { Audio::setSfxEnabled(checked); });
+  add_checkbox(151, "Music Enabled", Config::getBool("music_enabled"),
+               [](bool checked) { Audio::setMusicEnabled(checked); });
+  add_checkbox(201, "Fullscreen", Config::getBool("fullscreen"),
+               [](bool checked) {
+                 Config::setBool("fullscreen", checked);
+                 asw::display::set_fullscreen(checked);
+               });
 
-  btn_back = &ui.add<Button>(ROW_X, 251, "Back", options_font);
-  btn_back->setSize(ROW_WIDTH, ROW_HEIGHT);
+  GameUi::addButton(ui, ROW_X, 251, "Back", ROW_WIDTH, ROW_HEIGHT).on_click =
+      [this] { back(); };
+}
+
+void Options::back() {
+  Config::save();
+  manager.set_next_scene(ProgramState::Menu);
 }
 
 void Options::update(float /*dt*/) {
-  ui.update();
-
-  if (chk_sfx->getToggled()) {
-    Audio::setSfxEnabled(chk_sfx->getChecked());
-  }
-
-  if (chk_music->getToggled()) {
-    Audio::setMusicEnabled(chk_music->getChecked());
-  }
-
-  if (chk_fullscreen->getToggled()) {
-    Config::setBool("fullscreen", chk_fullscreen->getChecked());
-    asw::display::set_fullscreen(chk_fullscreen->getChecked());
-  }
-
   // Controllers can be plugged in while the menu is open
-  lbl_gamepad->setText(gamepadText());
+  lbl_gamepad->text = gamepadText();
 
-  if (asw::input::get_key_down(asw::input::Key::Escape) || btn_back->clicked()) {
-    Config::save();
-    manager.set_next_scene(ProgramState::Menu);
-  }
+  ui.update();
 }
 
 void Options::draw() {

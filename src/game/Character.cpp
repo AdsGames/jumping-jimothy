@@ -5,7 +5,6 @@
 #include <utility>
 
 #include "../Globals.h"
-#include "../util/Audio.h"
 #include "../util/Controls.h"
 
 namespace {
@@ -127,7 +126,7 @@ void Character::update(b2World& /*world*/) {
   if (grounded && std::abs(relative_velocity.y) <= 0.01F &&
       velocity_old < -0.01F) {
     const float volume = std::min(-velocity_old / 20.0F, 1.0F);
-    Audio::playAt(assets.land, pixelPosition().x, {.volume = volume});
+    asw::sound::play_at(assets.land, pixelPosition().x, volume);
     landing_speed = -velocity_old;
     landed = true;
   }
@@ -178,8 +177,8 @@ void Character::update(b2World& /*world*/) {
     landed = false;
 
     if (timer_sound_delay > SOUND_DELAY) {
-      Audio::playAt(assets.jump, pixelPosition().x,
-                    {.pitch_variation = JUMP_PITCH_VARIATION});
+      asw::sound::play_at(assets.jump, pixelPosition().x,
+                          {.pitch_variation = JUMP_PITCH_VARIATION});
       timer_sound_delay = 0;
     }
   }

@@ -3,8 +3,7 @@
 #include <format>
 
 #include "../Globals.h"
-#include "../ui/Label.h"
-#include "../util/Controls.h"
+#include "../ui/GameUi.h"
 #include "../util/Config.h"
 
 namespace {
@@ -14,6 +13,7 @@ constexpr float ROW_HEIGHT = 18;
 constexpr float FIRST_ROW_Y = 66;
 constexpr float ROW_SPACING = 42;
 
+const asw::Color GREEN(0, 200, 0);
 const asw::Color WHITE(255, 255, 255);
 }  // namespace
 
@@ -23,91 +23,75 @@ void LevelSelect::init() {
   font_large = asw::assets::load_font("assets/fonts/munro.ttf", 48,
                                       asw::FontStyle::Pixel);
 
-  ui.clear();
-  level_buttons.clear();
+  ui = asw::ui::Root();
+  GameUi::setup(ui, font);
+  ui.on_back = [this] { manager.set_next_scene(ProgramState::Menu); };
 
-  ui.add<Label>(375, 5, "Select a level", font_large).setTextColour(WHITE);
+  GameUi::addLabel(ui, 395, 15, "Select a level", font_large, WHITE);
 
   // Buttons in a white outlined column
-  auto add_column_button = [this](float y, const std::string& text) {
-    auto& button = ui.add<Button>(COLUMN_X, y, text, font);
-    button.setSize(COLUMN_WIDTH, ROW_HEIGHT);
-    button.setTextJustification(TextJustify::Center);
-    return &button;
+  auto add_column_button = [this](int row, const std::string& text) -> auto& {
+    auto& button = GameUi::addButton(
+        ui, COLUMN_X, FIRST_ROW_Y + (ROW_SPACING * static_cast<float>(row)),
+        text, COLUMN_WIDTH, ROW_HEIGHT);
+    auto style = ui.ctx.theme.button;
+    style.text_align = asw::TextJustify::Center;
+    button.style = style;
+    return button;
   };
 
-  btn_back = add_column_button(FIRST_ROW_Y, "Back to main menu");
-  btn_back->setCellFillTransparent(true);
-  btn_back->setTextColour(WHITE);
+  auto& btn_back = add_column_button(0, "Back to main menu");
+  GameUi::setOutline(btn_back);
+  btn_back.style->text_align = asw::TextJustify::Center;
+  btn_back.on_click = [this] { manager.set_next_scene(ProgramState::Menu); };
 
   for (int level = 1; level <= LEVEL_COUNT; level++) {
-    auto* button = add_column_button(
-        FIRST_ROW_Y + (ROW_SPACING * static_cast<float>(level)),
-        std::format("Level {}", level));
+    auto& button = add_column_button(level, std::format("Level {}", level));
 
     if (Config::getBool(std::format("level_{}_completed", level))) {
-      button->setBackgroundColour(asw::Color(0, 200, 0));
-      button->setTextColour(WHITE);
+      button.style = GameUi::buttonStyle(GREEN, WHITE);
+      button.style->text_align = asw::TextJustify::Center;
     }
 
-    level_buttons.push_back(button);
+    button.on_click = [this, level] {
+      session.level_to_start = level;
+      session.editing_level = false;
+      manager.set_next_scene(ProgramState::Game);
+    };
   }
 
-  btn_reset = add_column_button(
-      FIRST_ROW_Y + (ROW_SPACING * static_cast<float>(LEVEL_COUNT + 1)),
-      "Reset Save Game");
-  btn_reset->setCellFillTransparent(true);
-  btn_reset->setTextColour(WHITE);
+  auto& btn_reset = add_column_button(LEVEL_COUNT + 1, "Reset Save Game");
+  GameUi::setOutline(btn_reset);
+  btn_reset.style->text_align = asw::TextJustify::Center;
+  btn_reset.on_click = [this] { showResetConfirm(true); };
 
-  btn_really_reset = &ui.add<Button>(700, 651, "Really reset?", font);
-  btn_really_reset->setSize(180, ROW_HEIGHT);
+  btn_really_reset =
+      &GameUi::addButton(ui, 700, 651, "Really reset?", 180, ROW_HEIGHT);
+  btn_really_reset->on_click = [this] { resetSave(); };
 
-  btn_cancel = &ui.add<Button>(700, 696, "Cancel", font);
-  btn_cancel->setSize(180, ROW_HEIGHT);
+  btn_cancel = &GameUi::addButton(ui, 700, 696, "Cancel", 180, ROW_HEIGHT);
+  btn_cancel->on_click = [this] { showResetConfirm(false); };
 
   showResetConfirm(false);
 }
 
 void LevelSelect::showResetConfirm(bool show) {
-  btn_really_reset->setVisible(show);
-  btn_cancel->setVisible(show);
+  btn_really_reset->visible = show;
+  btn_cancel->visible = show;
+}
+
+void LevelSelect::resetSave() {
+  for (int level = 0; level <= LEVEL_COUNT; level++) {
+    Config::setBool(std::format("level_{}_completed", level), false);
+  }
+  Config::save();
+
+  // Reload to show the cleared progress
+  manager.set_next_scene(ProgramState::LevelSelect);
 }
 
 void LevelSelect::update(float /*dt*/) {
   ui.update();
-
-  if (asw::input::get_action_down(Controls::FREEZE) || btn_back->clicked()) {
-    manager.set_next_scene(ProgramState::Menu);
-    return;
-  }
-
-  if (btn_reset->clicked()) {
-    showResetConfirm(true);
-  }
-
-  if (btn_really_reset->clicked()) {
-    for (int level = 0; level <= LEVEL_COUNT; level++) {
-      Config::setBool(std::format("level_{}_completed", level), false);
-    }
-    Config::save();
-
-    // Reload to show the cleared progress
-    manager.set_next_scene(ProgramState::LevelSelect);
-    return;
-  }
-
-  if (btn_cancel->clicked()) {
-    showResetConfirm(false);
-  }
-
-  for (std::size_t i = 0; i < level_buttons.size(); i++) {
-    if (level_buttons[i]->clicked()) {
-      session.level_to_start = static_cast<int>(i) + 1;
-      session.editing_level = false;
-      manager.set_next_scene(ProgramState::Game);
-      return;
-    }
-  }
 }
 
 void LevelSelect::draw() {

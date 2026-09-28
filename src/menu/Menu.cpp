@@ -1,8 +1,12 @@
 #include "Menu.h"
 
 #include <array>
+#include <functional>
+#include <utility>
 
+#include "../ui/GameUi.h"
 #include "../util/Audio.h"
+#include "../util/Controls.h"
 
 namespace {
 constexpr float BUTTON_X = 40;
@@ -32,23 +36,30 @@ void Menu::init() {
   credits_font = asw::assets::load_font("assets/fonts/munro.ttf", 32,
                                         asw::FontStyle::Pixel);
 
-  ui.clear();
+  ui = asw::ui::Root();
+  GameUi::setup(ui, button_font);
 
-  auto add_button = [this](float y, const std::string& text) {
-    auto& button = ui.add<Button>(BUTTON_X, y, text, button_font);
-    button.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+  auto add_button = [this](float y, const std::string& text,
+                           std::function<void()> on_click) {
+    auto& button =
+        GameUi::addButton(ui, BUTTON_X, y, text, BUTTON_WIDTH, BUTTON_HEIGHT);
+    button.on_click = std::move(on_click);
     return &button;
   };
 
-  btn_play = add_button(500, "Play");
-  btn_editor = add_button(550, "Level Editor");
-  btn_settings = add_button(600, "Settings");
-  btn_credits = add_button(650, "Credits");
-  btn_exit = add_button(700, "Exit");
+  add_button(500, "Play",
+             [this] { manager.set_next_scene(ProgramState::LevelSelect); });
+  [[maybe_unused]] auto* btn_editor = add_button(
+      550, "Level Editor",
+      [this] { manager.set_next_scene(ProgramState::Editor); });
+  add_button(600, "Settings",
+             [this] { manager.set_next_scene(ProgramState::Options); });
+  add_button(650, "Credits", [this] { credits_menu = true; });
+  add_button(700, "Exit", [] { asw::core::exit(); });
 
   // The editor needs native file choosers, which the browser does not have
 #ifdef __EMSCRIPTEN__
-  btn_editor->hide();
+  btn_editor->visible = false;
 #endif
 
   credits_menu = false;
@@ -62,25 +73,15 @@ void Menu::update(float /*dt*/) {
 
   if (credits_menu) {
     if (asw::input::get_keyboard().any_pressed ||
-        asw::input::get_mouse_button_down(asw::input::MouseButton::Left)) {
+        asw::input::get_mouse_button_down(asw::input::MouseButton::Left) ||
+        asw::input::get_action_down(Controls::SELECT) ||
+        asw::input::get_action_down(Controls::BACK)) {
       credits_menu = false;
     }
     return;
   }
 
   ui.update();
-
-  if (btn_play->clicked()) {
-    manager.set_next_scene(ProgramState::LevelSelect);
-  } else if (btn_editor->clicked()) {
-    manager.set_next_scene(ProgramState::Editor);
-  } else if (btn_settings->clicked()) {
-    manager.set_next_scene(ProgramState::Options);
-  } else if (btn_credits->clicked()) {
-    credits_menu = true;
-  } else if (btn_exit->clicked()) {
-    asw::core::exit();
-  }
 }
 
 void Menu::draw() {
