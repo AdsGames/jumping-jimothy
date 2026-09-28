@@ -2,9 +2,7 @@
 
 #include <utility>
 
-#include "../util/ActionBinder.h"
-#include "../util/Graphics.h"
-#include "../util/Input.h"
+#include "../util/Controls.h"
 
 UIElement::UIElement(float x, float y, std::string text, asw::Font font)
     : x(x), y(y), font(std::move(font)), text(std::move(text)) {
@@ -32,7 +30,7 @@ void UIElement::setText(const std::string& text) {
 
   if (font != nullptr) {
     width = static_cast<float>(asw::util::get_text_size(font, text).x);
-    height = gfx::lineHeight(font);
+    height = static_cast<float>(asw::util::get_font_height(font));
   }
 }
 
@@ -57,7 +55,7 @@ bool UIElement::hover() const {
     return false;
   }
 
-  const auto mouse = input::mousePosition();
+  const auto mouse = asw::input::get_mouse().position;
   return mouse.x >= x && mouse.x < x + getWidth() && mouse.y >= y &&
          mouse.y < y + getHeight();
 }
@@ -67,12 +65,14 @@ bool UIElement::clicked() const {
     return false;
   }
 
-  if (hover() && input::mouseReleased(asw::input::MouseButton::Left)) {
-    input::consumeMouseRelease(asw::input::MouseButton::Left);
+  // One element takes each click, even where elements overlap
+  if (!click_taken && hover() &&
+      asw::input::get_mouse_button_up(asw::input::MouseButton::Left)) {
+    click_taken = true;
     return true;
   }
 
-  return focused && ActionBinder::actionBegun(Action::Select);
+  return focused && asw::input::get_action_down(Controls::SELECT);
 }
 
 asw::Color UIElement::withAlpha(asw::Color colour) const {

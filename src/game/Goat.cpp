@@ -1,16 +1,14 @@
 #include "Goat.h"
 
-#include "../util/Graphics.h"
+#include "../Globals.h"
+
 
 namespace {
 constexpr float WIDTH = 1.6F;
 constexpr float HEIGHT = 3.2F;
 
-// Sprite sheet layout
 constexpr float FRAME_WIDTH = 32;
 constexpr float FRAME_HEIGHT = 64;
-constexpr int FRAMES = 15;
-constexpr int TICKS_PER_FRAME = 11;
 }  // namespace
 
 Goat::Goat(float x, float y, const GameAssets& assets, b2World& world)
@@ -19,18 +17,13 @@ Goat::Goat(float x, float y, const GameAssets& assets, b2World& world)
 }
 
 void Goat::update(b2World& /*world*/) {
-  tick++;
-  if (tick >= TICKS_PER_FRAME) {
-    frame = (frame + 1) % FRAMES;
-    tick = 0;
-  }
+  animation.update(TICK_SECONDS);
 }
 
-void Goat::draw() const {
-  gfx::region(assets.goat,
-              asw::Quad<float>(static_cast<float>(frame) * FRAME_WIDTH, 0,
-                               FRAME_WIDTH, FRAME_HEIGHT),
-              screenQuad(FRAME_WIDTH, FRAME_HEIGHT), screenAngle());
+void Goat::draw(const asw::Camera& camera) const {
+  asw::draw::stretch_sprite_rotate_blit(assets.goat,
+              assets.goat_sheet.get_frame(animation.get_frame()),
+              screenQuad(camera, FRAME_WIDTH, FRAME_HEIGHT), screenAngle());
 }
 
 bool Goat::getWinCondition() const {

@@ -12,24 +12,23 @@
 #include <string>
 #include <vector>
 
-#include "../FixedScene.h"
+#include "../State.h"
 #include "../ui/Button.h"
+#include "../Globals.h"
 #include "../ui/UIHandler.h"
 #include "Box.h"
 #include "Character.h"
 #include "GameAssets.h"
 #include "Goat.h"
 
-class Game : public FixedScene {
+class Game : public asw::scene::Scene<ProgramState> {
  public:
-  using FixedScene::FixedScene;
+  using asw::scene::Scene<ProgramState>::Scene;
 
   void init() override;
+  void update(float dt) override;
   void draw() override;
   void cleanup() override;
-
- protected:
-  void tick() override;
 
  private:
   // Reload the current level
@@ -49,6 +48,9 @@ class Game : public FixedScene {
 
   // Toggle frozen time
   void togglePause();
+
+  // Dust, shake and so on when the character lands hard
+  void updateEffects();
 
   // Leave for another scene, no more ticks run here
   void changeScene(ProgramState state);
@@ -70,6 +72,15 @@ class Game : public FixedScene {
   Goat* goat{nullptr};
 
   std::vector<std::string> help_text;
+
+  // Shakes the world on death and hard landings
+  asw::Camera camera{asw::Vec2<float>(SCREEN_WIDTH, SCREEN_HEIGHT)};
+
+  // Kicked up by hard landings
+  asw::ParticleEmitter dust;
+
+  // Left behind when the character dies
+  asw::ParticleEmitter burst;
 
   int level{1};
 

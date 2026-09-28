@@ -2,7 +2,6 @@
 
 #include <algorithm>
 
-#include "../util/Graphics.h"
 
 namespace {
 // Brighten a colour when the button is hovered or focused
@@ -30,14 +29,14 @@ void Button::draw() {
       asw::draw::rect_fill(bounds, withAlpha(fill));
     }
 
-    gfx::thickRect(bounds, border_thickness, withAlpha(asw::Color(0, 0, 0)));
+    asw::draw::rect(bounds, withAlpha(asw::Color(0, 0, 0)), border_thickness);
   }
 
   // Text
   if (font != nullptr && !text.empty()) {
     if (justification == TextJustify::Center) {
       const float text_y =
-          y + padding_y + ((height - gfx::lineHeight(font)) / 2.0F);
+          y + padding_y + ((height - static_cast<float>(asw::util::get_font_height(font))) / 2.0F);
       asw::draw::text(font, text,
                       asw::Vec2<float>(x + padding_x + (width / 2.0F), text_y),
                       withAlpha(text_colour), asw::TextJustify::Center);
@@ -50,7 +49,7 @@ void Button::draw() {
   // Image
   if (image != nullptr) {
     const auto size = asw::util::get_texture_size(image);
-    gfx::region(image, asw::Quad<float>(0, 0, size.x, size.y),
+    asw::draw::stretch_sprite_rotate_blit(image, asw::Quad<float>(0, 0, size.x, size.y),
                 asw::Quad<float>(x + padding_x, y + padding_y, size.x, size.y),
                 image_rotation);
   }

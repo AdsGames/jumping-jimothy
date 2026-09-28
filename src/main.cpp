@@ -17,17 +17,16 @@
 #include "menu/Options.h"
 #include "util/Audio.h"
 #include "util/Config.h"
+#include "util/Controls.h"
 
 int main() {
   asw::core::init(SCREEN_WIDTH, SCREEN_HEIGHT);
   asw::display::set_title("Jumping Jimothy");
 
-  // Let see through fills blend
-  asw::display::set_blend_mode(asw::BlendMode::Blend);
-
   Config::load();
   asw::display::set_fullscreen(Config::getBool("fullscreen"));
   Audio::init();
+  Controls::bind();
 
   auto app = asw::scene::SceneManager<ProgramState>();
   app.register_scene<Menu>(ProgramState::Menu, app);

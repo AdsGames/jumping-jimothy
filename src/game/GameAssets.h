@@ -18,6 +18,10 @@ struct GameAssets {
     goat = asw::assets::load_texture("assets/images/goat.png");
     character = asw::assets::load_texture("assets/images/character.png");
     static_tiles = asw::assets::load_texture("assets/images/StaticBlock.png");
+
+    character_sheet = asw::SpriteSheet(character, asw::Vec2<float>(32, 64));
+    goat_sheet = asw::SpriteSheet(goat, asw::Vec2<float>(32, 64));
+    tile_sheet = asw::SpriteSheet(static_tiles, asw::Vec2<float>(16, 16));
     play = asw::assets::load_texture("assets/images/play.png");
     pause = asw::assets::load_texture("assets/images/pause.png");
 
@@ -36,6 +40,11 @@ struct GameAssets {
   asw::Texture static_tiles;
   asw::Texture play;
   asw::Texture pause;
+
+  // Frames of the sheets above, read left to right then top to bottom
+  asw::SpriteSheet character_sheet;
+  asw::SpriteSheet goat_sheet;
+  asw::SpriteSheet tile_sheet;
 
   asw::Sample jump;
   asw::Sample land;

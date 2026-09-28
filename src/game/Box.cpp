@@ -73,13 +73,14 @@ float Box::getAngle() const {
   return body != nullptr ? body->GetAngle() : 0.0F;
 }
 
-asw::Vec2<float> Box::screenPosition() const {
+asw::Vec2<float> Box::pixelPosition() const {
   return {getX() * PIXELS_PER_METER, -getY() * PIXELS_PER_METER};
 }
 
-asw::Quad<float> Box::screenQuad(float w,
+asw::Quad<float> Box::screenQuad(const asw::Camera& camera,
+                                 float w,
                                  float h,
                                  asw::Vec2<float> offset) const {
-  const auto centre = screenPosition() + offset;
+  const auto centre = camera.world_to_screen(pixelPosition()) + offset;
   return {centre.x - (w / 2), centre.y - (h / 2), w, h};
 }

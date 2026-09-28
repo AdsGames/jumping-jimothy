@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "../FixedScene.h"
+#include "../State.h"
 #include "../game/Level.h"
 #include "../ui/Button.h"
 #include "../ui/CheckBox.h"
@@ -33,16 +33,14 @@ struct EditorBox {
   bool affect_character{false};
 };
 
-class Editor : public FixedScene {
+class Editor : public asw::scene::Scene<ProgramState> {
  public:
-  using FixedScene::FixedScene;
+  using asw::scene::Scene<ProgramState>::Scene;
 
   void init() override;
+  void update(float dt) override;
   void draw() override;
   void cleanup() override;
-
- protected:
-  void tick() override;
 
  private:
   // What to do with the file the chooser returns
@@ -82,9 +80,9 @@ class Editor : public FixedScene {
 
   // Images
   asw::Texture box_green;
-  asw::Texture static_tiles;
-  asw::Texture character;
-  asw::Texture goat;
+  asw::SpriteSheet tile_sheet;
+  asw::SpriteSheet character_sheet;
+  asw::SpriteSheet goat_sheet;
   asw::Texture box_repel;
   asw::Texture box_repel_direction;
   asw::Texture help_menu;

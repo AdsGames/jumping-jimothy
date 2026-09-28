@@ -1,7 +1,6 @@
 #include "CollisionBox.h"
 
 #include "../Globals.h"
-#include "../util/Input.h"
 
 CollisionBox::CollisionBox(float x,
                            float y,
@@ -12,12 +11,12 @@ CollisionBox::CollisionBox(float x,
   createBody(world, b2_kinematicBody);
 }
 
-void CollisionBox::draw() const {
-  if (!input::keyHeld(asw::input::Key::G)) {
+void CollisionBox::draw(const asw::Camera& camera) const {
+  if (!asw::input::get_key(asw::input::Key::G)) {
     return;
   }
 
-  asw::draw::rect_fill(screenQuad((getWidth() * PIXELS_PER_METER) - 2,
+  asw::draw::rect_fill(screenQuad(camera, (getWidth() * PIXELS_PER_METER) - 2,
                                   (getHeight() * PIXELS_PER_METER) - 2),
                        asw::Color(255, 0, 0));
 }

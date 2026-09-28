@@ -2,19 +2,27 @@
 
 #include <algorithm>
 #include <cmath>
+#include <utility>
 
-#include "../util/ActionBinder.h"
-#include "../util/Graphics.h"
+#include "../Globals.h"
+#include "../util/Audio.h"
+#include "../util/Controls.h"
 
 namespace {
 constexpr float WIDTH = 0.8F;
 constexpr float HEIGHT = 2.5F;
 
-// Sprite sheet layout
+// Sprite sheet layout, frames 0-13 run and frame 14 stands still
 constexpr float FRAME_WIDTH = 32;
 constexpr float FRAME_HEIGHT = 64;
-constexpr int RUN_FRAMES = 14;
 constexpr int IDLE_FRAME = 14;
+
+// Seconds per run frame, faster in the air
+constexpr float RUN_FRAME_GROUND = 5 * TICK_SECONDS;
+constexpr float RUN_FRAME_AIR = 2 * TICK_SECONDS;
+
+// Random pitch change of the jump sound
+constexpr float JUMP_PITCH_VARIATION = 0.1F;
 
 // Sprite is drawn slightly above the centre of the body
 const asw::Vec2<float> SPRITE_OFFSET{0, -6};
@@ -119,7 +127,8 @@ void Character::update(b2World& /*world*/) {
   if (grounded && std::abs(relative_velocity.y) <= 0.01F &&
       velocity_old < -0.01F) {
     const float volume = std::min(-velocity_old / 20.0F, 1.0F);
-    asw::sound::play(assets.land, volume);
+    Audio::playAt(assets.land, pixelPosition().x, {.volume = volume});
+    landing_speed = -velocity_old;
     landed = true;
   }
 
@@ -131,19 +140,14 @@ void Character::update(b2World& /*world*/) {
   }
 
   // Animation runs faster in the air
-  const int ticks_per_frame = grounded ? 5 : 2;
-
-  tick++;
-  if (tick >= ticks_per_frame) {
-    frame = (frame + 1) % RUN_FRAMES;
-    tick = 0;
-  }
+  run_animation.set_frame_duration(grounded ? RUN_FRAME_GROUND : RUN_FRAME_AIR);
+  run_animation.update(TICK_SECONDS);
 
   // Walk on the ground, push in the air. Ground speeds are relative to what
   // the character stands on, so it rides moving boxes.
   const auto position = body->GetPosition();
-  const bool left = ActionBinder::actionHeld(Action::Left);
-  const bool right = !left && ActionBinder::actionHeld(Action::Right);
+  const bool left = asw::input::get_action(Controls::LEFT);
+  const bool right = !left && asw::input::get_action(Controls::RIGHT);
 
   if (left || right) {
     direction = right;
@@ -166,7 +170,7 @@ void Character::update(b2World& /*world*/) {
   // Jumping Jimothy
   timer_jump_delay++;
 
-  if (ActionBinder::actionBegun(Action::A) && grounded &&
+  if (asw::input::get_action_down(Controls::JUMP) && grounded &&
       body->GetLinearVelocity().y - ground.velocity.y < 0.1F && landed &&
       timer_jump_delay > JUMP_DELAY) {
     timer_jump_delay = 0;
@@ -174,7 +178,8 @@ void Character::update(b2World& /*world*/) {
     landed = false;
 
     if (timer_sound_delay > SOUND_DELAY) {
-      asw::sound::play(assets.jump);
+      Audio::playAt(assets.jump, pixelPosition().x,
+                    {.pitch_variation = JUMP_PITCH_VARIATION});
       timer_sound_delay = 0;
     }
   }
@@ -182,13 +187,16 @@ void Character::update(b2World& /*world*/) {
   timer_sound_delay++;
 }
 
-void Character::draw() const {
-  const bool moving = body->GetLinearVelocity().Length() > 0.1F;
-  const int sprite_frame = moving ? frame : IDLE_FRAME;
+float Character::takeLanding() {
+  return std::exchange(landing_speed, 0.0F);
+}
 
-  gfx::region(assets.character,
-              asw::Quad<float>(static_cast<float>(sprite_frame) * FRAME_WIDTH,
-                               0, FRAME_WIDTH, FRAME_HEIGHT),
-              screenQuad(FRAME_WIDTH, FRAME_HEIGHT, SPRITE_OFFSET),
-              screenAngle(), !direction);
+void Character::draw(const asw::Camera& camera) const {
+  const bool moving = body->GetLinearVelocity().Length() > 0.1F;
+  const int sprite_frame = moving ? run_animation.get_frame() : IDLE_FRAME;
+
+  asw::draw::stretch_sprite_rotate_blit(
+      assets.character, assets.character_sheet.get_frame(sprite_frame),
+      screenQuad(camera, FRAME_WIDTH, FRAME_HEIGHT, SPRITE_OFFSET),
+      screenAngle(), !direction);
 }

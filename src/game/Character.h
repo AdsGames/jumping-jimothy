@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include "../Globals.h"
 #include "Box.h"
 #include "GameAssets.h"
 
@@ -15,11 +16,15 @@ class Character : public Box {
   Character(float x, float y, const GameAssets& assets, b2World& world);
 
   void update(b2World& world) override;
-  void draw() const override;
+  void draw(const asw::Camera& camera) const override;
   BoxType getType() const override { return BoxType::Character; }
 
   // Standing on something, updated each tick
   bool isGrounded() const { return ground.body != nullptr; }
+
+  // Falling speed of the last landing in metres per second, once. 0 if the
+  // character has not landed since the last call.
+  float takeLanding();
 
  private:
   // What the character stands on
@@ -41,9 +46,11 @@ class Character : public Box {
 
   Ground ground;
 
-  // Animation
-  int tick{0};
-  int frame{0};
+  // Run cycle, frames 0-13 of the sheet
+  asw::Animation run_animation{14, 5 * TICK_SECONDS};
+
+  // Falling speed of the last landing, 0 once taken
+  float landing_speed{0};
 
   // Ticks since the last jump and jump sound
   int timer_jump_delay{0};

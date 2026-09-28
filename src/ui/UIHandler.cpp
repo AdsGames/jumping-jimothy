@@ -2,8 +2,14 @@
 
 #include <algorithm>
 
-#include "../util/ActionBinder.h"
-#include "../util/Input.h"
+#include "../util/Controls.h"
+
+namespace {
+bool mouseMoved() {
+  const auto& change = asw::input::get_mouse().change;
+  return change.x != 0.0F || change.y != 0.0F;
+}
+}  // namespace
 
 void UIHandler::clear() {
   elements.clear();
@@ -11,6 +17,8 @@ void UIHandler::clear() {
 }
 
 void UIHandler::update() {
+  UIElement::resetClick();
+
   for (const auto& element : elements) {
     element->update();
   }
@@ -19,14 +27,14 @@ void UIHandler::update() {
     return;
   }
 
-  if (ActionBinder::actionBegun(Action::Up)) {
+  if (asw::input::get_action_down(Controls::UP)) {
     moveFocus(-1);
-  } else if (ActionBinder::actionBegun(Action::Down)) {
+  } else if (asw::input::get_action_down(Controls::DOWN)) {
     moveFocus(1);
   }
 
   // The mouse takes over from the keyboard
-  if (input::mouseMoved() && focused_element >= 0) {
+  if (mouseMoved() && focused_element >= 0) {
     elements[focused_element]->unfocus();
     focused_element = -1;
   }
