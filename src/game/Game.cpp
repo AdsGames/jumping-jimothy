@@ -350,7 +350,7 @@ void Game::nextLevel() {
 void Game::die() {
   if (character != nullptr) {
     const auto position = character->pixelPosition();
-    Audio::playAt(assets.death, position.x);
+    asw::sound::play_at(assets.death, position.x);
     burst.transform.position = position;
     burst.emit(60);
   } else {

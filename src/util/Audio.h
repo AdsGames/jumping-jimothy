@@ -22,11 +22,6 @@ void playMusic(Track track);
 // Stop the music
 void stopMusic();
 
-// Play a sound panned towards where it happens on screen
-void playAt(const asw::Sample& sample,
-            float screen_x,
-            asw::sound::PlayOptions options = {});
-
 // Turn sound effects on or off, saved in the config
 void setSfxEnabled(bool enabled);
 
