@@ -1,7 +1,6 @@
 #include "CollisionBox.h"
 
 #include "../Globals.h"
-#include "../util/Input.h"
 
 CollisionBox::CollisionBox(float x,
                            float y,
@@ -13,7 +12,7 @@ CollisionBox::CollisionBox(float x,
 }
 
 void CollisionBox::draw() const {
-  if (!input::keyHeld(asw::input::Key::G)) {
+  if (!asw::input::get_key(asw::input::Key::G)) {
     return;
   }
 

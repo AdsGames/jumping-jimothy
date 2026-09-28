@@ -4,11 +4,9 @@
 #include <format>
 
 #include "../Globals.h"
-#include "../util/ActionBinder.h"
+#include "../util/Controls.h"
 #include "../util/Audio.h"
 #include "../util/Config.h"
-#include "../util/Dialog.h"
-#include "../util/Input.h"
 #include "CollisionBox.h"
 #include "DynamicBox.h"
 #include "Explosive.h"
@@ -67,7 +65,7 @@ void Game::cleanup() {
   ui.clear();
   back_button = nullptr;
 
-  FixedScene::cleanup();
+  asw::scene::Scene<ProgramState>::cleanup();
 }
 
 void Game::changeScene(ProgramState state) {
@@ -174,7 +172,7 @@ void Game::loadLevel(const std::string& path) {
   }
 }
 
-void Game::tick() {
+void Game::update(float /*dt*/) {
   if (leaving) {
     return;
   }
@@ -187,12 +185,12 @@ void Game::tick() {
     return;
   }
 
-  if (session.editing_level && input::keyPressed(Key::P)) {
+  if (session.editing_level && asw::input::get_key_down(Key::P)) {
     changeScene(ProgramState::Editor);
     return;
   }
 
-  if (input::keyPressed(Key::Escape)) {
+  if (asw::input::get_key_down(Key::Escape)) {
     Audio::stopMusic();
     changeScene(ProgramState::Menu);
     return;
@@ -210,9 +208,9 @@ void Game::tick() {
   }
 
   // Skip level
-  if (input::keyPressed(Key::C)) {
+  if (asw::input::get_key_down(Key::C)) {
     if (session.editing_level) {
-      Dialog::info("Level complete!", "Opening editor");
+      asw::dialog::info("Level complete!", "Opening editor");
       changeScene(ProgramState::Editor);
       return;
     }
@@ -223,14 +221,14 @@ void Game::tick() {
   }
 
   // Previous level
-  if (input::keyPressed(Key::X) && !session.editing_level) {
+  if (asw::input::get_key_down(Key::X) && !session.editing_level) {
     asw::log::info("Level {} skipped back", level);
     level = std::max(level - 1, 1);
     reset();
     return;
   }
 
-  if (ActionBinder::actionBegun(Action::B)) {
+  if (asw::input::get_action_down(Controls::FREEZE)) {
     togglePause();
   }
 
@@ -246,14 +244,14 @@ void Game::tick() {
     }
   }
 
-  if (input::keyPressed(Key::R)) {
+  if (asw::input::get_key_down(Key::R)) {
     die();
   }
 }
 
 void Game::completeLevel() {
   if (session.editing_level) {
-    Dialog::info("Level complete!", "Opening editor");
+    asw::dialog::info("Level complete!", "Opening editor");
     changeScene(ProgramState::Editor);
     return;
   }

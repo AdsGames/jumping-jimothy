@@ -2,7 +2,6 @@
 
 #include "../util/Audio.h"
 #include "../util/Config.h"
-#include "../util/Input.h"
 
 namespace {
 constexpr float ROW_X = 100;
@@ -50,7 +49,7 @@ void Options::init() {
   btn_back->setSize(ROW_WIDTH, ROW_HEIGHT);
 }
 
-void Options::tick() {
+void Options::update(float /*dt*/) {
   ui.update();
 
   if (chk_sfx->getToggled()) {
@@ -69,7 +68,7 @@ void Options::tick() {
   // Controllers can be plugged in while the menu is open
   lbl_gamepad->setText(gamepadText());
 
-  if (input::keyPressed(asw::input::Key::Escape) || btn_back->clicked()) {
+  if (asw::input::get_key_down(asw::input::Key::Escape) || btn_back->clicked()) {
     Config::save();
     manager.set_next_scene(ProgramState::Menu);
   }

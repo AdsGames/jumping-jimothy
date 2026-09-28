@@ -1,7 +1,6 @@
 #include "DynamicBox.h"
 
 #include "../Globals.h"
-#include "../util/Graphics.h"
 
 namespace {
 constexpr float SIZE = 1.55F;
@@ -19,9 +18,9 @@ DynamicBox::DynamicBox(float x,
 void DynamicBox::draw() const {
   // Backing shows through the see through parts of the image
   const float fill = (SIZE * PIXELS_PER_METER) - 2;
-  gfx::rotatedRectFill(screenQuad(fill, fill), screenAngle(),
+  asw::draw::rect_fill_rotate(screenQuad(fill, fill), screenAngle(),
                        asw::Color(0, 255, 0));
 
-  gfx::region(image, asw::Quad<float>(0, 0, IMAGE_SIZE, IMAGE_SIZE),
+  asw::draw::stretch_sprite_rotate_blit(image, asw::Quad<float>(0, 0, IMAGE_SIZE, IMAGE_SIZE),
               screenQuad(IMAGE_SIZE, IMAGE_SIZE), screenAngle());
 }

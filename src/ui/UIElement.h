@@ -72,6 +72,9 @@ class UIElement {
   // Clicked with the mouse or selected while focused
   bool clicked() const;
 
+  // Let the next click be taken again, called once per update
+  static void resetClick() { click_taken = false; }
+
  protected:
   asw::Color withAlpha(asw::Color colour) const;
 
@@ -99,4 +102,8 @@ class UIElement {
   asw::Font font;
   std::string text;
   TextJustify justification{TextJustify::Left};
+
+ private:
+  // A mouse click this update was taken by an element
+  static inline bool click_taken{false};
 };

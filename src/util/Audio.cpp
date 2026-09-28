@@ -53,10 +53,4 @@ void Audio::setSfxEnabled(bool enabled) {
 void Audio::setMusicEnabled(bool enabled) {
   Config::setBool("music_enabled", enabled);
   asw::sound::set_music_volume(enabled ? 1.0F : 0.0F);
-
-  // asw applies the music volume when a track starts, so restart it
-  const auto track = current;
-  asw::sound::stop_music();
-  current = Track::None;
-  playMusic(track);
 }

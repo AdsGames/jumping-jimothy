@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-#include "../FixedScene.h"
+#include "../State.h"
 #include "../ui/Button.h"
 #include "../ui/UIHandler.h"
 #include "Box.h"
@@ -20,16 +20,14 @@
 #include "GameAssets.h"
 #include "Goat.h"
 
-class Game : public FixedScene {
+class Game : public asw::scene::Scene<ProgramState> {
  public:
-  using FixedScene::FixedScene;
+  using asw::scene::Scene<ProgramState>::Scene;
 
   void init() override;
+  void update(float dt) override;
   void draw() override;
   void cleanup() override;
-
- protected:
-  void tick() override;
 
  private:
   // Reload the current level

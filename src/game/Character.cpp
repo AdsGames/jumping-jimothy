@@ -3,8 +3,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "../util/ActionBinder.h"
-#include "../util/Graphics.h"
+#include "../util/Controls.h"
 
 namespace {
 constexpr float WIDTH = 0.8F;
@@ -142,8 +141,8 @@ void Character::update(b2World& /*world*/) {
   // Walk on the ground, push in the air. Ground speeds are relative to what
   // the character stands on, so it rides moving boxes.
   const auto position = body->GetPosition();
-  const bool left = ActionBinder::actionHeld(Action::Left);
-  const bool right = !left && ActionBinder::actionHeld(Action::Right);
+  const bool left = asw::input::get_action(Controls::LEFT);
+  const bool right = !left && asw::input::get_action(Controls::RIGHT);
 
   if (left || right) {
     direction = right;
@@ -166,7 +165,7 @@ void Character::update(b2World& /*world*/) {
   // Jumping Jimothy
   timer_jump_delay++;
 
-  if (ActionBinder::actionBegun(Action::A) && grounded &&
+  if (asw::input::get_action_down(Controls::JUMP) && grounded &&
       body->GetLinearVelocity().y - ground.velocity.y < 0.1F && landed &&
       timer_jump_delay > JUMP_DELAY) {
     timer_jump_delay = 0;
@@ -186,7 +185,7 @@ void Character::draw() const {
   const bool moving = body->GetLinearVelocity().Length() > 0.1F;
   const int sprite_frame = moving ? frame : IDLE_FRAME;
 
-  gfx::region(assets.character,
+  asw::draw::stretch_sprite_rotate_blit(assets.character,
               asw::Quad<float>(static_cast<float>(sprite_frame) * FRAME_WIDTH,
                                0, FRAME_WIDTH, FRAME_HEIGHT),
               screenQuad(FRAME_WIDTH, FRAME_HEIGHT, SPRITE_OFFSET),

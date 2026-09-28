@@ -4,7 +4,7 @@
 
 #include "../Globals.h"
 #include "../ui/Label.h"
-#include "../util/ActionBinder.h"
+#include "../util/Controls.h"
 #include "../util/Config.h"
 
 namespace {
@@ -73,10 +73,10 @@ void LevelSelect::showResetConfirm(bool show) {
   btn_cancel->setVisible(show);
 }
 
-void LevelSelect::tick() {
+void LevelSelect::update(float /*dt*/) {
   ui.update();
 
-  if (ActionBinder::actionBegun(Action::B) || btn_back->clicked()) {
+  if (asw::input::get_action_down(Controls::FREEZE) || btn_back->clicked()) {
     manager.set_next_scene(ProgramState::Menu);
     return;
   }

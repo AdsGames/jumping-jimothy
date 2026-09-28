@@ -1,6 +1,5 @@
 #include "Goat.h"
 
-#include "../util/Graphics.h"
 
 namespace {
 constexpr float WIDTH = 1.6F;
@@ -27,7 +26,7 @@ void Goat::update(b2World& /*world*/) {
 }
 
 void Goat::draw() const {
-  gfx::region(assets.goat,
+  asw::draw::stretch_sprite_rotate_blit(assets.goat,
               asw::Quad<float>(static_cast<float>(frame) * FRAME_WIDTH, 0,
                                FRAME_WIDTH, FRAME_HEIGHT),
               screenQuad(FRAME_WIDTH, FRAME_HEIGHT), screenAngle());

@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "../Globals.h"
-#include "../util/Graphics.h"
 
 namespace {
 constexpr float SIZE = 1.55F;
@@ -112,7 +111,7 @@ void Explosive::draw() const {
   const float fill = (SIZE * PIXELS_PER_METER) - 2;
   const auto colour =
       affect_character ? asw::Color(255, 0, 0) : asw::Color(0, 255, 0);
-  gfx::rotatedRectFill(screenQuad(fill, fill), screenAngle(), colour);
+  asw::draw::rect_fill_rotate(screenQuad(fill, fill), screenAngle(), colour);
 
   // Directional image points up, turn a quarter per orientation step
   const auto& image =
@@ -120,6 +119,6 @@ void Explosive::draw() const {
   const float angle = (std::numbers::pi_v<float> / 2.0F) *
                       static_cast<float>(orientation - 1);
 
-  gfx::region(image, asw::Quad<float>(0, 0, IMAGE_SIZE, IMAGE_SIZE),
+  asw::draw::stretch_sprite_rotate_blit(image, asw::Quad<float>(0, 0, IMAGE_SIZE, IMAGE_SIZE),
               screenQuad(IMAGE_SIZE, IMAGE_SIZE), angle + screenAngle());
 }

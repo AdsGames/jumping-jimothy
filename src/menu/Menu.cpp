@@ -3,7 +3,6 @@
 #include <array>
 
 #include "../util/Audio.h"
-#include "../util/Input.h"
 
 namespace {
 constexpr float BUTTON_X = 40;
@@ -58,12 +57,12 @@ void Menu::init() {
   Audio::playMusic(Audio::Track::Menu);
 }
 
-void Menu::tick() {
+void Menu::update(float /*dt*/) {
   counter_title = (counter_title + 1) % TITLE_CYCLE_TICKS;
 
   if (credits_menu) {
-    if (input::anyKeyPressed() ||
-        input::mousePressed(asw::input::MouseButton::Left)) {
+    if (asw::input::get_keyboard().any_pressed ||
+        asw::input::get_mouse_button_down(asw::input::MouseButton::Left)) {
       credits_menu = false;
     }
     return;

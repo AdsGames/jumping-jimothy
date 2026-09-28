@@ -7,19 +7,17 @@
 
 #pragma once
 
-#include "../FixedScene.h"
+#include "../State.h"
 #include "../ui/Button.h"
 #include "../ui/UIHandler.h"
 
-class Menu : public FixedScene {
+class Menu : public asw::scene::Scene<ProgramState> {
  public:
-  using FixedScene::FixedScene;
+  using asw::scene::Scene<ProgramState>::Scene;
 
   void init() override;
+  void update(float dt) override;
   void draw() override;
-
- protected:
-  void tick() override;
 
  private:
   void drawTitle() const;

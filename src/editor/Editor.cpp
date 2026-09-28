@@ -10,9 +10,6 @@
 #include "../Globals.h"
 #include "../util/Audio.h"
 #include "../util/Config.h"
-#include "../util/Dialog.h"
-#include "../util/Graphics.h"
-#include "../util/Input.h"
 
 namespace {
 using asw::input::Key;
@@ -35,6 +32,11 @@ const asw::Color BLACK(0, 0, 0);
 const asw::Color SELECTED(0, 150, 0);
 const asw::Color UNSELECTED(200, 200, 200);
 const asw::Color COLLISION_FILL(0, 255, 0, 50);
+
+const std::vector<asw::dialog::FileFilter> LEVEL_FILTERS{
+    {"Levels", "xml"},
+    {"All files", "*"},
+};
 
 // Explosive button order matches the orientation values
 constexpr std::array<float, 5> EXPLOSIVE_BUTTON_X{152, 0, 38, 76, 114};
@@ -146,7 +148,7 @@ void Editor::init() {
 void Editor::cleanup() {
   ui.clear();
   boxes.clear();
-  FixedScene::cleanup();
+  asw::scene::Scene<ProgramState>::cleanup();
 }
 
 void Editor::changeScene(ProgramState state) {
@@ -237,19 +239,19 @@ void Editor::updateExplosiveButtons() {
   }
 }
 
-void Editor::tick() {
+void Editor::update(float /*dt*/) {
   if (leaving) {
     return;
   }
 
   // Wait for the file chooser
   if (pending_file_action != FileAction::None) {
-    if (Dialog::filePending()) {
+    if (asw::dialog::is_file_pending()) {
       return;
     }
 
     const auto action = std::exchange(pending_file_action, FileAction::None);
-    if (const auto path = Dialog::takeFile()) {
+    if (const auto path = asw::dialog::take_file()) {
       handleFileChosen(action, *path);
     }
     return;
@@ -276,46 +278,46 @@ void Editor::tick() {
 
 void Editor::handleShortcutsAndButtons() {
   // Object types
-  if (input::keyPressed(Key::Q) || btn_dynamic->clicked()) {
+  if (asw::input::get_key_down(Key::Q) || btn_dynamic->clicked()) {
     setTileType(ObjectType::Dynamic);
   }
 
-  if (input::keyPressed(Key::W) || btn_static->clicked()) {
+  if (asw::input::get_key_down(Key::W) || btn_static->clicked()) {
     setTileType(ObjectType::Static);
   }
 
-  if (input::keyPressed(Key::E) || btn_player->clicked()) {
+  if (asw::input::get_key_down(Key::E) || btn_player->clicked()) {
     setTileType(ObjectType::Character);
   }
 
-  if (input::keyPressed(Key::R) || btn_goat->clicked()) {
+  if (asw::input::get_key_down(Key::R) || btn_goat->clicked()) {
     setTileType(ObjectType::Finish);
   }
 
-  if (input::keyPressed(Key::T) || btn_collision->clicked()) {
+  if (asw::input::get_key_down(Key::T) || btn_collision->clicked()) {
     setTileType(ObjectType::Collision);
   }
 
-  if (input::keyPressed(Key::Y) || btn_explosive->clicked()) {
+  if (asw::input::get_key_down(Key::Y) || btn_explosive->clicked()) {
     setTileType(ObjectType::Explosive);
   }
 
-  if (input::keyPressed(Key::H) || btn_help->clicked()) {
+  if (asw::input::get_key_down(Key::H) || btn_help->clicked()) {
     display_help = !display_help;
   }
 
-  if (input::keyPressed(Key::G) || btn_grid->clicked()) {
+  if (asw::input::get_key_down(Key::G) || btn_grid->clicked()) {
     grid_on = !grid_on;
   }
 
-  if ((input::keyPressed(Key::Z) || btn_undo->clicked()) && !boxes.empty()) {
+  if ((asw::input::get_key_down(Key::Z) || btn_undo->clicked()) && !boxes.empty()) {
     boxes.pop_back();
     modified = true;
     calculateOrientations();
   }
 
-  if (input::keyPressed(Key::C) || btn_clear->clicked()) {
-    if (Dialog::confirm("Clear?",
+  if (asw::input::get_key_down(Key::C) || btn_clear->clicked()) {
+    if (asw::dialog::confirm("Clear?",
                         "Clear the map? There is no recovering this "
                         "masterpiece.")) {
       boxes.clear();
@@ -323,15 +325,15 @@ void Editor::handleShortcutsAndButtons() {
     }
   }
 
-  if (input::keyPressed(Key::S) || btn_save->clicked()) {
+  if (asw::input::get_key_down(Key::S) || btn_save->clicked()) {
     save();
-  } else if (input::keyPressed(Key::D) || btn_save_as->clicked()) {
+  } else if (asw::input::get_key_down(Key::D) || btn_save_as->clicked()) {
     saveAs();
-  } else if (input::keyPressed(Key::A) || btn_load->clicked()) {
+  } else if (asw::input::get_key_down(Key::A) || btn_load->clicked()) {
     load();
-  } else if (input::keyPressed(Key::F) || btn_play->clicked()) {
+  } else if (asw::input::get_key_down(Key::F) || btn_play->clicked()) {
     play();
-  } else if (input::keyPressed(Key::V) || input::keyPressed(Key::Escape) ||
+  } else if (asw::input::get_key_down(Key::V) || asw::input::get_key_down(Key::Escape) ||
              btn_back->clicked()) {
     back();
   }
@@ -339,7 +341,7 @@ void Editor::handleShortcutsAndButtons() {
 
 // Buttons that hide and show groups of buttons to free up room
 void Editor::handleToggles() {
-  if (left_bottom_toggle->clicked() || input::keyPressed(Key::Left)) {
+  if (left_bottom_toggle->clicked() || asw::input::get_key_down(Key::Left)) {
     const bool show = left_bottom_toggle->getText() != "<";
 
     if (show) {
@@ -358,7 +360,7 @@ void Editor::handleToggles() {
     }
   }
 
-  if (right_bottom_toggle->clicked() || input::keyPressed(Key::Right)) {
+  if (right_bottom_toggle->clicked() || asw::input::get_key_down(Key::Right)) {
     const bool show = right_bottom_toggle->getText() == "<";
 
     if (show) {
@@ -377,7 +379,7 @@ void Editor::handleToggles() {
     }
   }
 
-  if (right_top_toggle->clicked() || input::keyPressed(Key::Up)) {
+  if (right_top_toggle->clicked() || asw::input::get_key_down(Key::Up)) {
     const bool show = right_top_toggle->getText() == "<";
 
     if (show) {
@@ -415,11 +417,11 @@ void Editor::handleToggles() {
 }
 
 void Editor::placeTiles() {
-  if (!input::mouseHeld(MouseButton::Left) || ui.isHovering()) {
+  if (!asw::input::get_mouse_button(MouseButton::Left) || ui.isHovering()) {
     return;
   }
 
-  const auto mouse = input::mousePosition();
+  const auto mouse = asw::input::get_mouse().position;
   if (mouse.x < 0 || mouse.y < 0 || mouse.x >= SCREEN_WIDTH ||
       mouse.y >= SCREEN_HEIGHT) {
     return;
@@ -450,11 +452,11 @@ void Editor::placeTiles() {
 }
 
 void Editor::dragCollisionBox() {
-  const auto mouse = input::mousePosition();
+  const auto mouse = asw::input::get_mouse().position;
   const asw::Vec2<float> cell(snap(mouse.x), snap(mouse.y));
 
   if (!is_dragging_box) {
-    if (input::mousePressed(MouseButton::Left) && !ui.isHovering()) {
+    if (asw::input::get_mouse_button_down(MouseButton::Left) && !ui.isHovering()) {
       is_dragging_box = true;
       drag_start = cell;
       drag_end = cell;
@@ -462,7 +464,7 @@ void Editor::dragCollisionBox() {
     return;
   }
 
-  if (input::mouseHeld(MouseButton::Left)) {
+  if (asw::input::get_mouse_button(MouseButton::Left)) {
     drag_end = cell;
     return;
   }
@@ -482,11 +484,11 @@ void Editor::dragCollisionBox() {
 }
 
 void Editor::removeTiles() {
-  if (!input::mouseHeld(MouseButton::Right) || ui.isHovering()) {
+  if (!asw::input::get_mouse_button(MouseButton::Right) || ui.isHovering()) {
     return;
   }
 
-  const auto mouse = input::mousePosition();
+  const auto mouse = asw::input::get_mouse().position;
   const auto removed = std::erase_if(boxes, [&mouse](const EditorBox& box) {
     return mouse.x > box.x && mouse.x < box.x + box.width &&
            mouse.y > box.y && mouse.y < box.y + box.height;
@@ -500,37 +502,39 @@ void Editor::removeTiles() {
 
 void Editor::save() {
   if (boxes.empty()) {
-    Dialog::error("Empty Map", "You can't save an empty map!");
+    asw::dialog::error("Empty Map", "You can't save an empty map!");
     return;
   }
 
   if (!is_saved) {
     pending_file_action = FileAction::Save;
-    Dialog::requestFile(Dialog::FileMode::Save, Config::savePath());
+    asw::dialog::request_file(asw::dialog::FileMode::Save, Config::savePath(),
+                             LEVEL_FILTERS);
     return;
   }
 
   if (saveMap(file_name)) {
     modified = false;
   } else {
-    Dialog::error("Error!", "Error saving map to: " + file_name);
+    asw::dialog::error("Error!", "Error saving map to: " + file_name);
   }
 }
 
 void Editor::saveAs() {
   if (boxes.empty()) {
-    Dialog::error("Empty Map", "You can't save an empty map!");
+    asw::dialog::error("Empty Map", "You can't save an empty map!");
     return;
   }
 
   pending_file_action = FileAction::SaveAs;
-  Dialog::requestFile(Dialog::FileMode::Save, Config::savePath());
+  asw::dialog::request_file(asw::dialog::FileMode::Save, Config::savePath(),
+                             LEVEL_FILTERS);
 }
 
 void Editor::load() {
   pending_file_action = FileAction::Load;
-  Dialog::requestFile(Dialog::FileMode::Open,
-                      asw::assets::get_path("assets/data/"));
+  asw::dialog::request_file(asw::dialog::FileMode::Open,
+                           asw::assets::get_path("assets/data/"), LEVEL_FILTERS);
 }
 
 void Editor::handleFileChosen(FileAction action, const std::string& path) {
@@ -540,7 +544,7 @@ void Editor::handleFileChosen(FileAction action, const std::string& path) {
       is_saved = true;
       modified = false;
     } else {
-      Dialog::error("Error!", "Error loading map from: " + path);
+      asw::dialog::error("Error!", "Error loading map from: " + path);
     }
     return;
   }
@@ -552,7 +556,7 @@ void Editor::handleFileChosen(FileAction action, const std::string& path) {
   }
 
   if (!saveMap(save_path.string())) {
-    Dialog::error("Error!", "Error saving map to: " + save_path.string());
+    asw::dialog::error("Error!", "Error saving map to: " + save_path.string());
     return;
   }
 
@@ -561,25 +565,25 @@ void Editor::handleFileChosen(FileAction action, const std::string& path) {
   modified = false;
 
   if (action == FileAction::SaveAs) {
-    Dialog::info("Saved map", "We've saved a map to: " + file_name);
+    asw::dialog::info("Saved map", "We've saved a map to: " + file_name);
   }
 }
 
 void Editor::play() {
   if (boxes.empty()) {
-    Dialog::info("Attempting to play an empty level",
+    asw::dialog::info("Attempting to play an empty level",
                  "That wouldn't be very fun would it?");
     return;
   }
 
   if (!hasPlayer()) {
-    Dialog::info("Missing player",
+    asw::dialog::info("Missing player",
                  "You must place a player spawn to test the level.");
     return;
   }
 
   if (!saveMap(file_name)) {
-    Dialog::error("Error!", "Error saving map to: " + file_name);
+    asw::dialog::error("Error!", "Error saving map to: " + file_name);
     return;
   }
 
@@ -589,7 +593,7 @@ void Editor::play() {
 }
 
 void Editor::back() {
-  if (modified && !Dialog::confirm("Main menu?",
+  if (modified && !asw::dialog::confirm("Main menu?",
                                    "Return to main menu? All unsaved changes "
                                    "will be lost.")) {
     return;
@@ -746,7 +750,7 @@ void Editor::drawBox(const EditorBox& box) const {
         const auto column = static_cast<float>(tile % SHEET_COLUMNS);
         const auto row = static_cast<float>(tile / SHEET_COLUMNS);
 
-        gfx::region(static_tiles,
+        asw::draw::stretch_sprite_blit(static_tiles,
                     asw::Quad<float>(column * TILE_SIZE, row * TILE_SIZE,
                                      TILE_SIZE, TILE_SIZE),
                     asw::Quad<float>(box.x + ((corner % 2 == 1) ? TILE_SIZE : 0),
@@ -760,12 +764,12 @@ void Editor::drawBox(const EditorBox& box) const {
       break;
 
     case ObjectType::Character:
-      gfx::region(character, asw::Quad<float>(0, 0, CELL, CELL * 2),
+      asw::draw::stretch_sprite_blit(character, asw::Quad<float>(0, 0, CELL, CELL * 2),
                   asw::Quad<float>(box.x, box.y, CELL, CELL * 2));
       break;
 
     case ObjectType::Finish:
-      gfx::region(goat, asw::Quad<float>(0, 0, CELL, CELL * 2),
+      asw::draw::stretch_sprite_blit(goat, asw::Quad<float>(0, 0, CELL, CELL * 2),
                   asw::Quad<float>(box.x, box.y, CELL, CELL * 2));
       break;
 
@@ -779,7 +783,7 @@ void Editor::drawBox(const EditorBox& box) const {
       if (orientation == 0) {
         asw::draw::sprite(box_repel, asw::Vec2<float>(box.x, box.y));
       } else {
-        gfx::region(box_repel_direction, asw::Quad<float>(0, 0, CELL, CELL),
+        asw::draw::stretch_sprite_rotate_blit(box_repel_direction, asw::Quad<float>(0, 0, CELL, CELL),
                     asw::Quad<float>(box.x, box.y, CELL, CELL),
                     (std::numbers::pi_v<float> / 2.0F) *
                         static_cast<float>(orientation - 1));

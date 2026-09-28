@@ -2,7 +2,6 @@
 
 #include <utility>
 
-#include "../util/Graphics.h"
 
 CheckBox::CheckBox(float x, float y, std::string text, asw::Font font)
     : UIElement(x, y, std::move(text), std::move(font)) {
@@ -31,14 +30,14 @@ void CheckBox::draw() {
   if (visible_background) {
     const asw::Quad<float> bounds(x, y, getWidth(), getHeight());
     asw::draw::rect_fill(bounds, withAlpha(asw::Color(shade, shade, shade)));
-    gfx::thickRect(bounds, 2, black);
+    asw::draw::rect(bounds, black, 2);
   }
 
   // Box
   const asw::Quad<float> box(x + width - checkbox_size, y + padding_y,
                              checkbox_size, checkbox_size);
   asw::draw::rect_fill(box, withAlpha(asw::Color(shade, shade, shade)));
-  gfx::thickRect(box, 2, black);
+  asw::draw::rect(box, black, 2);
 
   // Tick
   if (checked) {

@@ -7,21 +7,19 @@
 
 #pragma once
 
-#include "../FixedScene.h"
+#include "../State.h"
 #include "../ui/Button.h"
 #include "../ui/CheckBox.h"
 #include "../ui/Label.h"
 #include "../ui/UIHandler.h"
 
-class Options : public FixedScene {
+class Options : public asw::scene::Scene<ProgramState> {
  public:
-  using FixedScene::FixedScene;
+  using asw::scene::Scene<ProgramState>::Scene;
 
   void init() override;
+  void update(float dt) override;
   void draw() override;
-
- protected:
-  void tick() override;
 
  private:
   asw::Font options_font;
