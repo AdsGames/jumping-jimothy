@@ -76,7 +76,7 @@ void LevelSelect::showResetConfirm(bool show) {
 void LevelSelect::update(float /*dt*/) {
   ui.update();
 
-  if (asw::input::get_action_down(Controls::FREEZE) || btn_back->clicked()) {
+  if (asw::input::get_action_down(Controls::BACK) || btn_back->clicked()) {
     manager.set_next_scene(ProgramState::Menu);
     return;
   }

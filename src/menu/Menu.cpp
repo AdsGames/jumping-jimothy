@@ -3,6 +3,7 @@
 #include <array>
 
 #include "../util/Audio.h"
+#include "../util/Controls.h"
 
 namespace {
 constexpr float BUTTON_X = 40;
@@ -62,7 +63,9 @@ void Menu::update(float /*dt*/) {
 
   if (credits_menu) {
     if (asw::input::get_keyboard().any_pressed ||
-        asw::input::get_mouse_button_down(asw::input::MouseButton::Left)) {
+        asw::input::get_mouse_button_down(asw::input::MouseButton::Left) ||
+        asw::input::get_action_down(Controls::SELECT) ||
+        asw::input::get_action_down(Controls::BACK)) {
       credits_menu = false;
     }
     return;

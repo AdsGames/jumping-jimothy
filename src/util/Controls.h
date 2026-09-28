@@ -19,6 +19,7 @@ inline constexpr std::string_view DOWN = "down";
 inline constexpr std::string_view JUMP = "jump";
 inline constexpr std::string_view FREEZE = "freeze";
 inline constexpr std::string_view SELECT = "select";
+inline constexpr std::string_view BACK = "back";
 inline constexpr std::string_view RESTART = "restart";
 
 // Register the default bindings with asw, call once at start up

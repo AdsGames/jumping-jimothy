@@ -2,6 +2,7 @@
 
 #include "../util/Audio.h"
 #include "../util/Config.h"
+#include "../util/Controls.h"
 
 namespace {
 constexpr float ROW_X = 100;
@@ -68,7 +69,7 @@ void Options::update(float /*dt*/) {
   // Controllers can be plugged in while the menu is open
   lbl_gamepad->setText(gamepadText());
 
-  if (asw::input::get_key_down(asw::input::Key::Escape) || btn_back->clicked()) {
+  if (asw::input::get_action_down(Controls::BACK) || btn_back->clicked()) {
     Config::save();
     manager.set_next_scene(ProgramState::Menu);
   }
