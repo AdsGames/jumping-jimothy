@@ -13,9 +13,7 @@
 #include <vector>
 
 #include "../State.h"
-#include "../ui/Button.h"
 #include "../Globals.h"
-#include "../ui/UIHandler.h"
 #include "Box.h"
 #include "Character.h"
 #include "GameAssets.h"
@@ -61,8 +59,8 @@ class Game : public asw::scene::Scene<ProgramState> {
   asw::Font help_font;
   asw::Font edit_font;
 
-  UIHandler ui;
-  Button* back_button{nullptr};
+  // Back to the editor when testing a level
+  asw::ui::Root ui;
 
   // Declared before the boxes so the boxes go first
   std::unique_ptr<b2World> world;
