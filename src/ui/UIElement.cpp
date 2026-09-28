@@ -55,9 +55,8 @@ bool UIElement::hover() const {
     return false;
   }
 
-  const auto mouse = asw::input::get_mouse().position;
-  return mouse.x >= x && mouse.x < x + getWidth() && mouse.y >= y &&
-         mouse.y < y + getHeight();
+  return asw::Quad<float>(x, y, getWidth(), getHeight())
+      .contains(asw::input::get_mouse().position);
 }
 
 bool UIElement::clicked() const {
