@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/target)
 
 include(cmake/get_cpm.cmake)
-CPMAddPackage("gh:adsgames/asw@0.12.2")
+CPMAddPackage("gh:adsgames/asw@0.12.3")
 CPMAddPackage("gh:zeux/pugixml@1.16")
 CPMAddPackage(
   NAME box2d
